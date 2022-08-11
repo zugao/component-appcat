@@ -1,0 +1,4 @@
+parameters:
+  appcat:
+    =_metadata: {}
+    namespace: syn-appcat
