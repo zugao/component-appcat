@@ -1,8 +1,10 @@
-name: Pull Request
+name: Component
 on:
   pull_request:
     branches:
       - master
+    paths:
+      - component/**
 
 env:
   COMPONENT_NAME: appcat
@@ -10,6 +12,9 @@ env:
 jobs:
   linting:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./component
     strategy:
       matrix:
         command:
@@ -35,7 +40,7 @@ jobs:
           - defaults
     defaults:
       run:
-        working-directory: ${{ env.COMPONENT_NAME }}
+        working-directory: ${{ env.COMPONENT_NAME }}/component
     steps:
       - uses: actions/checkout@v3
         with:
@@ -50,7 +55,7 @@ jobs:
           - defaults
     defaults:
       run:
-        working-directory: ${{ env.COMPONENT_NAME }}
+        working-directory: ${{ env.COMPONENT_NAME }}/component
     steps:
       - uses: actions/checkout@v3
         with:
