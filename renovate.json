@@ -8,7 +8,7 @@
     "commands": [
       "make gen-golden-all"
     ],
-    "fileFilters": [ "tests/golden/**" ],
+    "fileFilters": [ "component/tests/golden/**" ],
     "executionMode": "update"
   },
   "suppressNotifications": [ "artifactErrors" ],
