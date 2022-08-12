@@ -7,8 +7,8 @@ rules:
     level: warning
 
 ignore: |
-  dependencies/
-  helmcharts/
-  manifests/
-  vendor/
-  compiled/
+  component/dependencies/
+  component/helmcharts/
+  component/manifests/
+  component/vendor/
+  component/compiled/
