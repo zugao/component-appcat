@@ -1,3 +1,15 @@
 # Overwrite parameters here
 
-# parameters: {...}
+parameters:
+  appcat:
+    secrets:
+      test-secret:
+        metadata:
+          namespace: test-namespace
+        stringData:
+          key: value
+
+    additionalResources:
+      test-namespace:
+        apiVersion: v1
+        kind: Namespace
