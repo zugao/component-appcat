@@ -10,25 +10,7 @@ env:
   COMPONENT_NAME: appcat
 
 jobs:
-  linting:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        command:
-          - lint_jsonnet
-          - lint_yaml
-          - lint_adoc
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run ${{ matrix.command }}
-        run: make ${{ matrix.command }}
-  editorconfig:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: snow-actions/eclint@v1.0.1
-        with:
-          args: 'check'
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -44,6 +26,7 @@ jobs:
           path: ${{ env.COMPONENT_NAME }}
       - name: Compile component
         run: make test -e instance=${{ matrix.instance }}
+
   golden:
     runs-on: ubuntu-latest
     strategy:
