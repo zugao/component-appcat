@@ -3,7 +3,7 @@ classes:
 
 parameters:
 
-  pkg.provider.cloudscale:
+  pkg.appcat.provider.cloudscale:
     images:
       provider-cloudscale:
         registry: ghcr.io
@@ -13,7 +13,7 @@ parameters:
   crossplane:
     providers:
       cloudscale:
-        package: ${pkg.provider.cloudscale:images:provider-cloudscale:registry}/${pkg.provider.cloudscale:images:provider-cloudscale:repository}:${pkg.provider.cloudscale:images:provider-cloudscale:tag}
+        package: ${pkg.appcat.provider.cloudscale:images:provider-cloudscale:registry}/${pkg.appcat.provider.cloudscale:images:provider-cloudscale:repository}:${pkg.appcat.provider.cloudscale:images:provider-cloudscale:tag}
     providerConfigs:
       cloudscale:
         apiVersion: cloudscale.crossplane.io/v1

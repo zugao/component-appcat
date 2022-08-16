@@ -51,7 +51,7 @@ vault kv patch "${parent}" token=<the-cloudscale-token>
 classes:
   - appcat.provider.cloudscale
 applications:
-  - pkg.provider.cloudscale <1>
+  - pkg.appcat.provider.cloudscale <1>
 
 parameters:
   packages:
