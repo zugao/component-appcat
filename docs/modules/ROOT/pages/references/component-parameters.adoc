@@ -1,0 +1,52 @@
+= Component Parameters
+
+The parent key for all of the following parameters is `appcat`.
+
+== secrets
+
+[horizontal]
+type:: dict
+default:: `{}`
+example::
+[source,yaml]
+----
+secrets:
+  my-secret: <1>
+    metadata:
+      namespace: syn-crossplane
+    stringData:
+      key: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/example}'
+----
+<1> `metadata.name` of the Secret
+
+Deploys Secrets as shown in the example.
+If a key under `secrets.*` is set to `null` (for example through hierarchy), then the Secret is removed.
+
+== additionalResources
+
+[horizontal]
+type:: dict
+default:: `{}`
+example::
+[source,yaml]
+----
+additionalResources:
+  my-secret: <1>
+    apiVersion: v1 <2>
+    kind: ConfigMap <3>
+    metadata:
+      namespace: syn-crossplane
+    data:
+      key: value
+----
+<1> `metadata.name` of the object
+<2> `apiVersion` of the object (_required_)
+<3> `kind` of the object (_required_)
+
+Similar to `secrets`, but able to deploy arbitrary static resources.
+This can be used to deploy single ad-hoc resources, but it's not intended to manage whole deployments.
+
+[TIP]
+====
+Consider adding dedicated parameters if there's a pattern of commonly deployed resources.
+====

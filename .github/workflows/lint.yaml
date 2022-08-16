@@ -1,0 +1,30 @@
+name: Lint
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - component/**
+      - packages/**
+
+jobs:
+
+  linting:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        command:
+          - lint_jsonnet
+          - lint_yaml
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run ${{ matrix.command }}
+        run: make ${{ matrix.command }}
+
+  editorconfig:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: snow-actions/eclint@v1.0.1
+        with:
+          args: 'check'

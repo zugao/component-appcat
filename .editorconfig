@@ -26,5 +26,5 @@ insert_final_newline = false
 indent_style = tab
 
 # Don't check for trailing newlines in golden tests output
-[component/tests/golden/**]
+[**/tests/golden/**]
 insert_final_newline = unset
