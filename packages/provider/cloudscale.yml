@@ -15,23 +15,22 @@ parameters:
       cloudscale:
         package: ${pkg.provider.cloudscale:images:provider-cloudscale:registry}/${pkg.provider.cloudscale:images:provider-cloudscale:repository}:${pkg.provider.cloudscale:images:provider-cloudscale:tag}
     providerConfigs:
-      cloudscale-lpg-2:
+      cloudscale:
         apiVersion: cloudscale.crossplane.io/v1
         spec:
           credentials:
             source: InjectedIdentity
             apiTokenSecretRef:
-              name: cloudscale-lpg-2
-              # This is not resolving when during "commodore package compile"
+              name: cloudscale-api-token
               namespace: ${crossplane:namespace}
 
   appcat:
     secrets:
-      cloudscale-lpg-2:
+      cloudscale-api-token:
         metadata:
           namespace: ${crossplane:namespace}
         stringData:
-          CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/cloudscale-lpg-2}'
+          CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}'
 
     additionalResources:
       provider-cloudscale-secrets-objectsuser:
