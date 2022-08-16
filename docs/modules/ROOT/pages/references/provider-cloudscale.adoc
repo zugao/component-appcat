@@ -1,0 +1,11 @@
+= Parameters For pkg.provider.cloudscale
+
+The parent key for all of the following parameters is `pkg.provider.cloudscale`.
+
+== `images:provider-cloudscale`
+
+[horizontal]
+type:: dict
+default:: see `packages/provider/cloudscale.yml`
+
+The package image repository for https://github.com/vshn/provider-cloudscale[provider-cloudscale].
