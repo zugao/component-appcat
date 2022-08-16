@@ -10,5 +10,5 @@ parameters:
 
     appcat:
       url: https://github.com/vshn/component-appcat.git
-      version: provider-cloudscale
+      version: master
       path: component
