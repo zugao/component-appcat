@@ -1,0 +1,68 @@
+= Install Cloudscale Stack
+
+This tutorial will guide you through the installation process of installing the following parts:
+
+- A Crossplane provider to manage cloudscale.ch resources.
+//- A Crossplane composite (XRD) which serves as the user's "interface" (API) for ordering S3 buckets.
+//- A Crossplane composition that "implements" an XRD using the cloudscale.ch provider.
+
+== Requirements
+
+- `commodore`
+- `vault`
+- A Syn-enabled cluster with ArgoCD
+- Vault instance to store credentials
+
+== Preparation
+
+. Prepare some variables
++
+[source,bash]
+----
+export CLUSTER_ID=c-appuio-cloudscale-lpg-2
+export TENANT_ID=t-falling-frog-2211
+export ZONE=cloudscale-lpg-2
+----
+
+. Login to Vault.
++
+[source,bash]
+----
+export VAULT_ADDR=https://vault-prod.syn.vshn.net
+vault login -method=oidc
+----
+
+. Create a project in control.cloudscale.ch.
+. Create a new API token within the new project, give it a memorable name and write access.
+
+. Save the token in Vault.
++
+[source,bash]
+----
+parent="clusters/kv/${TENANT_ID}/${CLUSTER_ID}/appcat/objectstorage/provider-cloudscale"
+vault kv patch "${parent}" ${ZONE}=<the-cloudscale-token>
+----
+
+== Configuration
+
+. Configure cluster catalog.
++
+[source,yaml,attributes="verbatim"]
+----
+classes:
+  - appcat.provider.cloudscale
+applications:
+  - pkg.provider.cloudscale <1>
+
+parameters:
+  packages:
+    appcat:
+      version: master <2>
+      url: {page-origin-url}
+      path: packages
+----
+<1> We need to enable the package as part of the applications.
+    This gives us access to the provided classes.
+<2> The version of the package.
+
+. Compile and push cluster catalog
