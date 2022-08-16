@@ -1,0 +1,10 @@
+applications:
+  - appcat
+
+parameters:
+  components:
+
+    appcat:
+      url: https://github.com/vshn/component-appcat.git
+      version: master
+      path: component
