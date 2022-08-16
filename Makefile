@@ -30,5 +30,13 @@ lint_kubent: ## Check for deprecated Kubernetes API versions
 docs-serve: ## Preview the documentation
 	$(ANTORA_PREVIEW_CMD)
 
-gen-golden-all: ## For Renovate
-	cd component && $(MAKE) $@
+.PHONY: gen-golden-component
+gen-golden-component:
+	cd component && $(MAKE) gen-golden-all
+
+.PHONY: gen-golden-packages
+gen-golden-packages:
+	cd packages && $(MAKE) gen-golden-all
+
+.PHONY: gen-golden-all
+gen-golden-all: gen-golden-component gen-golden-packages ## For Renovate

@@ -1,0 +1,8 @@
+classes:
+  - ..provider.cloudscale
+
+parameters:
+  facts:
+    cloud: cloudscale
+  crossplane:
+    namespace: syn-crossplane
