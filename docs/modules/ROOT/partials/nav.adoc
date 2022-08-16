@@ -1,2 +1,8 @@
 * xref:index.adoc[Home]
+
+.Tutorials
+* xref:tutorials/install-cloudscale.adoc[Install Cloudscale Stack]
+
+.Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
+* xref:references/provider-cloudscale.adoc[Parameters For pkg.provider.cloudscale]

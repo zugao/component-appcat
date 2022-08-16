@@ -16,5 +16,5 @@ DOCKER_ARGS ?= run --rm -u "$$(id -u):$$(id -g)" --userns=$(DOCKER_USERNS) -w /$
 COMMODORE_CMD  ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) docker.io/projectsyn/commodore:latest
 COMPILE_CMD    ?= $(COMMODORE_CMD) package compile . $(commodore_args)
 
-instance ?= defaults
-test_instances = tests/defaults.yml
+instance ?= provider-cloudscale
+test_instances = tests/provider-cloudscale.yml

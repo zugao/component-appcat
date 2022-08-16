@@ -1,0 +1,14 @@
+applications:
+  - crossplane
+  - appcat
+
+parameters:
+  components:
+    crossplane:
+      url: https://github.com/projectsyn/component-crossplane.git
+      version: v2.2.0
+
+    appcat:
+      url: https://github.com/vshn/component-appcat.git
+      version: master
+      path: component

@@ -1,0 +1,11 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: cloudscale
+  name: cloudscale
+spec:
+  package: ghcr.io/vshn/provider-cloudscale/provider:v0.3.0

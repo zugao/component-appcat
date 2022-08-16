@@ -42,7 +42,6 @@ gen-golden: clean .compile ## Update the reference version for target `golden-di
 	@cp -R compiled/. tests/golden/$(instance)/.
 
 .PHONY: golden-diff
-golden-diff: commodore_args += -f tests/$(instance).yml
 golden-diff: clean .compile ## Diff compile output against the reference version. Review output and run `make gen-golden golden-diff` if this target fails.
 	@git diff --exit-code --minimal --no-index -- tests/golden/$(instance) compiled/
 

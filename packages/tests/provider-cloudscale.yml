@@ -1,0 +1,9 @@
+classes:
+  - ..provider.cloudscale
+
+parameters:
+  facts:
+    cloud: cloudscale
+  crossplane:
+    # This is not resolving during "commodore package compile", so we provide it explicitly
+    namespace: syn-crossplane

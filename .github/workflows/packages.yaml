@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         instance:
-          - defaults
+          - provider-cloudscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix:
         instance:
-          - defaults
+          - provider-cloudscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
