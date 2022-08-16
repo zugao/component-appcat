@@ -5,4 +5,4 @@
 
 .Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
-* xref:references/provider-cloudscale.adoc[Parameters For pkg.provider.cloudscale]
+* xref:references/provider-cloudscale.adoc[Parameters For pkg.appcat.provider.cloudscale]
