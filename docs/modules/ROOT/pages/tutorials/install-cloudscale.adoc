@@ -3,7 +3,7 @@
 This tutorial will guide you through the installation process of installing the following parts:
 
 - A Crossplane provider to manage cloudscale.ch resources.
-//- A Crossplane composite (XRD) which serves as the user's "interface" (API) for ordering S3 buckets.
+- A Crossplane composite (XRD) which serves as the user's "interface" (API) for ordering S3 buckets.
 //- A Crossplane composition that "implements" an XRD using the cloudscale.ch provider.
 
 == Requirements
@@ -49,19 +49,23 @@ vault kv patch "${parent}" token=<the-cloudscale-token>
 [source,yaml,attributes="verbatim"]
 ----
 classes:
-  - appcat.provider.cloudscale
+  - appcat.provider.cloudscale <1>
+  - appcat.composite.objectstorage <2>
 applications:
-  - pkg.appcat.provider.cloudscale <1>
+  - pkg.appcat.provider.cloudscale <3>
+  - pkg.appcat.composite.objectstorage <3>
 
 parameters:
   packages:
     appcat:
-      version: master <2>
+      version: master <4>
       url: {page-origin-url}
       path: packages
 ----
-<1> We need to enable the package as part of the applications.
+<1> The config for the operator (provider) that talks to cloudscale.ch API.
+<2> The XRD is configured in this package.
+<3> We need to enable the package as part of the applications.
     This gives us access to the provided classes.
-<2> The version of the package.
+<4> The version of the package.
 
 . Compile and push cluster catalog

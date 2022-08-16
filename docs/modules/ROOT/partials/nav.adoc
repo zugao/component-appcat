@@ -6,3 +6,4 @@
 .Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
 * xref:references/provider-cloudscale.adoc[Parameters For pkg.appcat.provider.cloudscale]
+* xref:references/composite-objectstorage.adoc[Parameters For pkg.appcat.composite.objectstorage]
