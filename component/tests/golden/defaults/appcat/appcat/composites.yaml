@@ -1,0 +1,22 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: test.appcat.vshn.io
+  name: test.appcat.vshn.io
+spec:
+  claimNames:
+    kind: Test
+    plural: tests
+  group: appcat.vshn.io
+  names:
+    kind: XTest
+    plural: xtest
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          type: object
