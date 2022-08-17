@@ -6,6 +6,15 @@ local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.appcat;
 
+local sync_options = {
+  metadata+: {
+    annotations+: {
+      'argocd.argoproj.io/sync-options': 'SkipDryRunOnMissingResource=true',
+      'argocd.argoproj.io/sync-wave': '10',
+    },
+  },
+};
+
 // https://syn.tools/syn/explanations/commodore-components/secrets.html
 local secrets = [
   if params.secrets[s] != null then
@@ -20,8 +29,16 @@ local additionalResources = [
   for s in std.objectFields(params.additionalResources)
 ];
 
+local composites = [
+  if params.composites[name] != null then
+    local res = params.composites[name];
+    kube._Object('apiextensions.crossplane.io/v1', 'CompositeResourceDefinition', name) + sync_options + com.makeMergeable(res)
+  for name in std.objectFields(params.composites)
+];
+
 // Define outputs below
 {
   secrets: std.filter(function(it) it != null, secrets),
   additionalResources: std.filter(function(it) it != null, additionalResources),
+  composites: std.filter(function(it) it != null, composites),
 }

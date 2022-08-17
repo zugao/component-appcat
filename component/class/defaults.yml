@@ -3,3 +3,4 @@ parameters:
     =_metadata: {}
     secrets: {}
     additionalResources: {}
+    composites: {}

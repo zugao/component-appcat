@@ -2,7 +2,7 @@
 
 The parent key for all of the following parameters is `appcat`.
 
-== secrets
+== `secrets`
 
 [horizontal]
 type:: dict
@@ -22,7 +22,7 @@ secrets:
 Deploys Secrets as shown in the example.
 If a key under `secrets.*` is set to `null` (for example through hierarchy), then the Secret is removed.
 
-== additionalResources
+== `additionalResources`
 
 [horizontal]
 type:: dict
@@ -50,3 +50,31 @@ This can be used to deploy single ad-hoc resources, but it's not intended to man
 ====
 Consider adding dedicated parameters if there's a pattern of commonly deployed resources.
 ====
+
+== `composites`
+
+[horizontal]
+type:: dict
+default:: `{}`
+example::
+[source,yaml]
+----
+composites:
+  "xobjectbuckets.appcat.vshn.io": <1>
+    spec: <2>
+      group: appcat.vshn.io
+      names:
+        kind: XObjectBucket
+        plural: xobjectbuckets
+      claimNames:
+        kind: ObjectBucket
+        plural: objectbuckets
+      versions:
+        - name: v1
+          schema:
+            openAPIV3Schema: {...}
+----
+<1> `metadata.name` of the object
+<2> `spec` of a composite ("XRD") verbatim
+
+Deploys the composite resource definitions (XRDs) to the cluster.
