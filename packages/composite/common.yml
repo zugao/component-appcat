@@ -7,7 +7,7 @@ parameters:
 
     appcat:
       url: https://github.com/vshn/component-appcat.git
-      version: master
+      version: composition-helpers
       path: component
 
     crossplane:

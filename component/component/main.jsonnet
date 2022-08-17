@@ -1,7 +1,9 @@
 // main template for appcat
+local compositionHelpers = import 'lib/appcat-compositions.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
+
 local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.appcat;
@@ -42,7 +44,24 @@ local composites = std.filter(function(it) it != null, [
 local compositions = std.filter(function(it) it != null, [
   if params.compositions[name] != null then
     local composition = params.compositions[name];
-    kube._Object('apiextensions.crossplane.io/v1', 'Composition', name) + sync_options + com.makeMergeable(composition)
+
+    kube._Object('apiextensions.crossplane.io/v1', 'Composition', name) +
+    sync_options +
+    { spec+: com.makeMergeable(composition.spec) } +
+    { metadata+: com.makeMergeable(std.get(composition, 'metadata', {})) } +
+    {
+      spec+: {
+        patchSets+: [
+          compositionHelpers.PatchSet(name)
+          for name in std.objectFields(composition.commonPatchSets)
+        ],
+        resources+: [
+          compositionHelpers.CommonResource(name)
+          for name in std.objectFields(composition.commonResources)
+        ],
+      },
+    }
+
   for name in std.objectFields(params.compositions)
 ]);
 

@@ -15,10 +15,12 @@ spec:
     - name: annotations
       patches:
         - fromFieldPath: metadata.annotations
+          toFieldPath: metadata.annotations
           type: FromCompositeFieldPath
     - name: labels
       patches:
         - fromFieldPath: metadata.labels
+          toFieldPath: metadata.labels
           type: FromCompositeFieldPath
   resources:
     - base:
@@ -35,8 +37,9 @@ spec:
           providerConfigRef:
             name: provider-config
       patches:
-        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace
           toFieldPath: spec.forProvider.manifest.metadata.name
+          type: FromCompositeFieldPath
         - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
           toFieldPath: metadata.labels[appuio.io/organization]
           type: ToCompositeFieldPath
@@ -45,5 +48,7 @@ spec:
           transforms:
             - string:
                 fmt: '%s-ns-observer'
+                type: Format
               type: string
+          type: FromCompositeFieldPath
   writeConnectionSecretsToNamespace: crossplane-system
