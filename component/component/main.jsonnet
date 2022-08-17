@@ -17,16 +17,19 @@ local sync_options = {
 
 // https://syn.tools/syn/explanations/commodore-components/secrets.html
 local secrets = std.filter(function(it) it != null, [
-  if params.secrets[s] != null then
-    kube.Secret(s) {} + com.makeMergeable(params.secrets[s])
-  for s in std.objectFields(params.secrets)
+  if params.secrets[name] != null then
+    local secret = params.secrets[name];
+    assert std.objectHas(secret, 'metadata') : "missing `.metadata` in secret '%s'" % name;
+    assert std.get(secret.metadata, 'namespace', '') != '' : "`.metadata.namespace` in secret '%s' cannot be empty" % name;
+    kube.Secret(name) {} + com.makeMergeable(secret)
+  for name in std.objectFields(params.secrets)
 ]);
 
 local additionalResources = std.filter(function(it) it != null, [
-  if params.additionalResources[s] != null then
-    local res = params.additionalResources[s];
-    kube._Object(res.apiVersion, res.kind, s) + com.makeMergeable(res)
-  for s in std.objectFields(params.additionalResources)
+  if params.additionalResources[name] != null then
+    local res = params.additionalResources[name];
+    kube._Object(res.apiVersion, res.kind, name) + com.makeMergeable(res)
+  for name in std.objectFields(params.additionalResources)
 ]);
 
 local composites = std.filter(function(it) it != null, [
