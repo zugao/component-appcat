@@ -1,0 +1,11 @@
+= Parameters For pkg.appcat.composite.objectstorage
+
+The parent key for all of the following parameters is `pkg.appcat.composite.objectstorage`.
+
+== `defaultCompositionRef`
+
+[horizontal]
+type:: string
+default:: `objectstorage-${facts:cloud}`
+
+The default composition to use when a user creates a Claim of the composite resource.
