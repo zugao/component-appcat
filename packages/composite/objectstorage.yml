@@ -52,6 +52,3 @@ parameters:
                                 be created. The region must be available in the S3 endpoint. Accepted
                                 values are LPG and RMA.
                               type: string
-                              enum:
-                                - lpg
-                                - rma
