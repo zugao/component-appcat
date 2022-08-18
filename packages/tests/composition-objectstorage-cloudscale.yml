@@ -1,5 +1,7 @@
 classes:
   - ..composition.objectstorage.cloudscale
+  # composition requires provider-kubernetes as dependency
+  - ..provider.kubernetes
 
 parameters:
   crossplane:
