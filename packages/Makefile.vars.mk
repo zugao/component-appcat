@@ -17,4 +17,4 @@ COMMODORE_CMD  ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) docker.io/projects
 COMPILE_CMD    ?= $(COMMODORE_CMD) package compile . $(commodore_args)
 
 instance ?= provider-cloudscale
-test_instances = tests/provider-cloudscale.yml tests/composite-objectstorage.yml
+test_instances = tests/provider-cloudscale.yml tests/composite-objectstorage.yml tests/composition-cloudscale.yml

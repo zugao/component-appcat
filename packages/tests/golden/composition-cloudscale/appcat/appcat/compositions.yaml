@@ -1,0 +1,138 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: objectbucket-cloudscale
+  name: objectbucket-cloudscale
+spec:
+  compositeTypeRef:
+    apiVersion: appcat.vshn.io/v1
+    kind: XObjectBucket
+  patchSets:
+    - name: annotations
+      patches:
+        - fromFieldPath: metadata.annotations
+          toFieldPath: metadata.annotations
+          type: FromCompositeFieldPath
+    - name: labels
+      patches:
+        - fromFieldPath: metadata.labels
+          toFieldPath: metadata.labels
+          type: FromCompositeFieldPath
+  resources:
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: ''
+          managementPolicy: Observe
+          providerConfigRef:
+            name: provider-config
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
+          toFieldPath: metadata.labels[appuio.io/organization]
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ns-observer'
+              type: string
+    - base:
+        apiVersion: cloudscale.crossplane.io/v1
+        kind: ObjectsUser
+        metadata:
+          name: ''
+        spec:
+          forProvider:
+            displayName: ''
+            tags:
+              namespace: null
+              tenant: null
+          providerConfigRef:
+            name: provider-config
+          writeConnectionSecretToRef:
+            name: ''
+            namespace: provider-cloudscale-secrets
+      connectionDetails:
+        - fromConnectionSecretKey: AWS_ACCESS_KEY_ID
+          name: AWS_ACCESS_KEY_ID
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: AWS_SECRET_ACCESS_KEY
+          name: AWS_SECRET_ACCESS_KEY
+          type: FromConnectionSecretKey
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - patchSetName: labels
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.writeConnectionSecretToRef.name
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.displayName
+          type: CombineFromComposite
+        - fromFieldPath: metadata.labels[appuio.io/organization]
+          toFieldPath: spec.forProvider.tags.tenant
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.tags.namespace
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: cloudscale.crossplane.io/v1
+        kind: Bucket
+        metadata:
+          name: ''
+        spec:
+          forProvider:
+            bucketName: ''
+            credentialsSecretRef:
+              name: ''
+              namespace: provider-cloudscale-secrets
+            endpointURL: ''
+            region: ''
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - patchSetName: labels
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.bucketName
+          toFieldPath: spec.forProvider.bucketName
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.credentialsSecretRef.name
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.endpointURL
+          transforms:
+            - string:
+                fmt: objects.%s.cloudscale.ch
+              type: string
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region
+          transforms:
+            - map:
+                lpg: lpg
+                rma: rma
+              type: map
+  writeConnectionSecretsToNamespace: syn-crossplane
