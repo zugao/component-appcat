@@ -1,0 +1,49 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: test-composition
+  name: test-composition
+spec:
+  compositeTypeRef:
+    apiVersion: appcat.vshn.io/v1
+    kind: XTest
+  patchSets:
+    - name: annotations
+      patches:
+        - fromFieldPath: metadata.annotations
+          type: FromCompositeFieldPath
+    - name: labels
+      patches:
+        - fromFieldPath: metadata.labels
+          type: FromCompositeFieldPath
+  resources:
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: ''
+          managementPolicy: Observe
+          providerConfigRef:
+            name: provider-config
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
+          toFieldPath: metadata.labels[appuio.io/organization]
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ns-observer'
+              type: string
+  writeConnectionSecretsToNamespace: crossplane-system

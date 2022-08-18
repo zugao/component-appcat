@@ -4,3 +4,4 @@ parameters:
     secrets: {}
     additionalResources: {}
     composites: {}
+    compositions: {}

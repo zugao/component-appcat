@@ -36,9 +36,17 @@ local composites = [
   for name in std.objectFields(params.composites)
 ];
 
+local compositions = [
+  if params.compositions[name] != null then
+    local composition = params.compositions[name];
+    kube._Object('apiextensions.crossplane.io/v1', 'Composition', name) + sync_options + com.makeMergeable(composition)
+  for name in std.objectFields(params.compositions)
+];
+
 // Define outputs below
 {
   secrets: std.filter(function(it) it != null, secrets),
   additionalResources: std.filter(function(it) it != null, additionalResources),
   composites: std.filter(function(it) it != null, composites),
+  compositions: std.filter(function(it) it != null, compositions),
 }
