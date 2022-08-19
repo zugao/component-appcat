@@ -124,6 +124,16 @@ parameters:
                       namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
                     endpointURL: ""
                     region: ""
+              connectionDetails:
+                - fromFieldPath: spec.forProvider.endpointURL
+                  type: FromFieldPath
+                  name: ENDPOINT
+                - fromFieldPath: spec.forProvider.region
+                  type: FromFieldPath
+                  name: AWS_REGION
+                - fromFieldPath: status.atProvider.bucketName
+                  type: FromFieldPath
+                  name: BUCKET_NAME
               patches:
                 - type: PatchSet
                   patchSetName: annotations

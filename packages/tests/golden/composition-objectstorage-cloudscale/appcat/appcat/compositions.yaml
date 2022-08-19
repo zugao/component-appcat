@@ -109,6 +109,16 @@ spec:
               namespace: provider-cloudscale-secrets
             endpointURL: ''
             region: ''
+      connectionDetails:
+        - fromFieldPath: spec.forProvider.endpointURL
+          name: ENDPOINT
+          type: FromFieldPath
+        - fromFieldPath: spec.forProvider.region
+          name: AWS_REGION
+          type: FromFieldPath
+        - fromFieldPath: status.atProvider.bucketName
+          name: BUCKET_NAME
+          type: FromFieldPath
       patches:
         - patchSetName: annotations
           type: PatchSet

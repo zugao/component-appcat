@@ -14,6 +14,9 @@ spec:
   connectionSecretKeys:
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
+    - AWS_REGION
+    - ENDPOINT
+    - BUCKET_NAME
   defaultCompositionRef:
     name: objectbucket-cloudscale
   group: appcat.vshn.io
