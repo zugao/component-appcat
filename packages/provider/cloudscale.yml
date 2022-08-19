@@ -14,20 +14,3 @@ parameters:
     providers:
       cloudscale:
         package: ${pkg.appcat.provider.cloudscale:images:provider-cloudscale:registry}/${pkg.appcat.provider.cloudscale:images:provider-cloudscale:repository}:${pkg.appcat.provider.cloudscale:images:provider-cloudscale:tag}
-    providerConfigs:
-      cloudscale:
-        apiVersion: cloudscale.crossplane.io/v1
-        spec:
-          credentials:
-            source: InjectedIdentity
-            apiTokenSecretRef:
-              name: cloudscale-api-token
-              namespace: ${crossplane:namespace}
-
-  appcat:
-    secrets:
-      cloudscale-api-token:
-        metadata:
-          namespace: ${crossplane:namespace}
-        stringData:
-          CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}'
