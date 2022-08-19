@@ -6,6 +6,7 @@
 .Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
 * xref:references/provider-cloudscale.adoc[Parameters For provider.cloudscale]
+* xref:references/provider-kubernetes.adoc[Parameters For provider.kubernetes]
 * xref:references/composite-objectstorage.adoc[Parameters For composite.objectstorage]
 
 * Compositions
