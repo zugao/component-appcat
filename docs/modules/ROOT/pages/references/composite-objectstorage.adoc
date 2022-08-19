@@ -1,4 +1,4 @@
-= Parameters For pkg.appcat.composite.objectstorage
+= pkg.appcat.composite.objectstorage
 
 The parent key for all of the following parameters is `pkg.appcat.composite.objectstorage`.
 
