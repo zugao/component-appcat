@@ -2,7 +2,9 @@ classes:
   - .common
 
 parameters:
-  pkg.appcat.composition.objectstorage.cloudscale: {}
+  pkg.appcat.composition.objectstorage.cloudscale:
+    secretNamespaces:
+      objectsusers: provider-cloudscale-secrets
 
   appcat:
     compositions:
@@ -67,7 +69,7 @@ parameters:
                       tenant: # patched
                   writeConnectionSecretToRef:
                     name: ""
-                    namespace: provider-cloudscale-secrets
+                    namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
                   providerConfigRef:
                     name: provider-config
               connectionDetails:
@@ -119,7 +121,7 @@ parameters:
                     # That is why we need a duplicate secret that the provider-cloudscale manages (and not crossplane).
                     credentialsSecretRef:
                       name: ""
-                      namespace: provider-cloudscale-secrets
+                      namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
                     endpointURL: ""
                     region: ""
               patches:
@@ -152,3 +154,10 @@ parameters:
                       map:
                         rma: rma
                         lpg: lpg
+
+    additionalResources:
+      provider-cloudscale-secrets-objectsusers:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}

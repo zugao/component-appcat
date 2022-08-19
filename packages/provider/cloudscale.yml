@@ -31,8 +31,3 @@ parameters:
           namespace: ${crossplane:namespace}
         stringData:
           CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}'
-
-    additionalResources:
-      provider-cloudscale-secrets-objectsuser:
-        apiVersion: v1
-        kind: Namespace
