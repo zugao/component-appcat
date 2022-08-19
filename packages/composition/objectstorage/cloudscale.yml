@@ -5,6 +5,7 @@ parameters:
   pkg.appcat.composition.objectstorage.cloudscale:
     secretNamespaces:
       objectsusers: provider-cloudscale-secrets
+    bucketDeletionPolicy: DeleteAll
 
   appcat:
     compositions:
@@ -124,6 +125,7 @@ parameters:
                       namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
                     endpointURL: ""
                     region: ""
+                    bucketDeletionPolicy: ${pkg.appcat.composition.objectstorage.cloudscale:bucketDeletionPolicy}
               connectionDetails:
                 - fromFieldPath: spec.forProvider.endpointURL
                   type: FromFieldPath
