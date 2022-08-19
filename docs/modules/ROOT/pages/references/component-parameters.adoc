@@ -78,3 +78,18 @@ composites:
 <2> `spec` of a composite ("XRD") verbatim
 
 Deploys the composite resource definitions (XRDs) to the cluster.
+
+== `compositions`
+
+[horizontal]
+type:: dict
+default:: `{}`
+example::
+[source,yaml]
+----
+compositions:
+  test-composition: <1>
+    spec: {...} <2>
+----
+<1> `metadata.name` of the object
+<2> `spec` of a composition
