@@ -1,0 +1,11 @@
+= pkg.appcat.provider.kubernetes
+
+The parent key for all of the following parameters is `pkg.appcat.provider.kubernetes`.
+
+== `images:provider-kubernetes`
+
+[horizontal]
+type:: dict
+default:: see `packages/provider/kubernetes.yml`
+
+The package image repository for https://github.com/crossplane-contrib/provider-kubernetes[provider-kubernetes].
