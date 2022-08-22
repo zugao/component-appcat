@@ -3,5 +3,5 @@ kind: Namespace
 metadata:
   annotations: {}
   labels:
-    name: provider-cloudscale-secrets
-  name: provider-cloudscale-secrets
+    name: syn-provider-cloudscale-secrets
+  name: syn-provider-cloudscale-secrets
