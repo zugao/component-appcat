@@ -1,4 +1,4 @@
-= Parameters For pkg.appcat.provider.cloudscale
+= pkg.appcat.provider.cloudscale
 
 The parent key for all of the following parameters is `pkg.appcat.provider.cloudscale`.
 

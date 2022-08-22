@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations: {}
-  labels:
-    name: provider-cloudscale-secrets-objectsuser
-  name: provider-cloudscale-secrets-objectsuser

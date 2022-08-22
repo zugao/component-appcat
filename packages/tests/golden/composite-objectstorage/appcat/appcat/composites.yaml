@@ -14,6 +14,9 @@ spec:
   connectionSecretKeys:
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
+    - AWS_REGION
+    - ENDPOINT
+    - BUCKET_NAME
   defaultCompositionRef:
     name: objectbucket-cloudscale
   group: appcat.vshn.io
@@ -41,9 +44,6 @@ spec:
                       description: Region is the name of the region where the bucket
                         shall be created. The region must be available in the S3 endpoint.
                         Accepted values are LPG and RMA.
-                      enum:
-                        - lpg
-                        - rma
                       type: string
                   required:
                     - bucketName
