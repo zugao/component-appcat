@@ -1,0 +1,11 @@
+= pkg.appcat.provider.exoscale
+
+The parent key for all of the following parameters is `pkg.appcat.provider.exoscale`.
+
+== `images:provider-exoscale`
+
+[horizontal]
+type:: dict
+default:: see `packages/provider/exoscale.yml`
+
+The package image repository for https://github.com/vshn/provider-exoscale[provider-exoscale].
