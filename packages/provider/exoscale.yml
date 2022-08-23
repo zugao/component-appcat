@@ -1,0 +1,16 @@
+classes:
+  - .common
+
+parameters:
+
+  pkg.appcat.provider.exoscale:
+    images:
+      provider-exoscale:
+        registry: ghcr.io
+        repository: vshn/provider-exoscale/provider
+        tag: v0.1.0
+
+  crossplane:
+    providers:
+      exoscale:
+        package: ${pkg.appcat.provider.exoscale:images:provider-exoscale:registry}/${pkg.appcat.provider.exoscale:images:provider-exoscale:repository}:${pkg.appcat.provider.exoscale:images:provider-exoscale:tag}
