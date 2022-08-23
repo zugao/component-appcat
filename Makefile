@@ -32,10 +32,12 @@ docs-serve: ## Preview the documentation
 
 .PHONY: gen-golden-component
 gen-golden-component:
+	rm -rf component/tests/golden
 	cd component && $(MAKE) gen-golden-all
 
 .PHONY: gen-golden-packages
 gen-golden-packages:
+	rm -rf packages/tests/golden
 	cd packages && $(MAKE) gen-golden-all
 
 .PHONY: gen-golden-all
