@@ -55,3 +55,38 @@ parameters:
                                 be created. The region must be available in the S3 endpoint. Accepted
                                 values are LPG and RMA.
                               type: string
+
+  crossplane:
+    clusterRoles:
+      # Allow to view claims
+      "appcat:composite:objectstorage:claim-view":
+        metadata:
+          labels:
+            rbac.authorization.k8s.io/aggregate-to-view: 'true'
+        rules:
+          - apiGroups:
+              - appcat.vshn.io
+            resources:
+              - objectbuckets
+              - objectbuckets/status
+              - objectbuckets/finalizers
+            verbs:
+              - get
+              - list
+              - watch
+
+      # Allow to edit claims
+      "appcat:composite:objectstorage:claim-edit":
+        metadata:
+          labels:
+            rbac.authorization.k8s.io/aggregate-to-edit: 'true'
+            rbac.authorization.k8s.io/aggregate-to-admin: 'true'
+        rules:
+          - apiGroups:
+              - appcat.vshn.io
+            resources:
+              - objectbuckets
+              - objectbuckets/status
+              - objectbuckets/finalizers
+            verbs:
+              - '*'
