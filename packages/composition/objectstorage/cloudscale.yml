@@ -9,7 +9,7 @@ parameters:
 
   appcat:
     compositions:
-      objectbucket-cloudscale:
+      "cloudscale.objectbuckets.appcat.vshn.io":
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1

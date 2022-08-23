@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: objectbucket-cloudscale
-  name: objectbucket-cloudscale
+    name: cloudscale.objectbuckets.appcat.vshn.io
+  name: cloudscale.objectbuckets.appcat.vshn.io
 spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1
