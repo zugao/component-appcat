@@ -23,7 +23,7 @@ parameters:
             source: InjectedIdentity
 
     controllerConfigs:
-      provider-kubernetes:
+      kubernetes:
         spec:
           # We need to set a different SA name than the generated one, to allow RBAC permissions for reading namespaces.
           serviceAccountName: provider-kubernetes

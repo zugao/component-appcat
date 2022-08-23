@@ -4,12 +4,12 @@ classes:
 parameters:
   pkg.appcat.composition.objectstorage.cloudscale:
     secretNamespaces:
-      objectsusers: provider-cloudscale-secrets
+      objectsusers: syn-provider-cloudscale-secrets
     bucketDeletionPolicy: DeleteAll
 
   appcat:
     compositions:
-      objectbucket-cloudscale:
+      "cloudscale.objectbuckets.appcat.vshn.io":
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
@@ -37,31 +37,32 @@ parameters:
                     manifest:
                       apiVersion: v1
                       kind: Namespace
-                      metadata:
-                        name: '' # patched
+                      metadata: {} # patched
                   providerConfigRef:
-                    name: provider-config
+                    name: kubernetes
               patches:
                 # set which namespace to observe
-                - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+                - type: FromCompositeFieldPath
+                  fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
                   toFieldPath: spec.forProvider.manifest.metadata.name
                 # copy the appuio organization label to a label on the XR
                 - type: ToCompositeFieldPath
                   fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
                   toFieldPath: metadata.labels[appuio.io/organization]
                 # append suffix to the observer name
-                - fromFieldPath: metadata.labels[crossplane.io/composite]
+                - type: FromCompositeFieldPath
+                  fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: metadata.name
                   transforms:
                     - type: string
                       string:
                         fmt: "%s-ns-observer"
+                        type: Format
 
             - base:
                 apiVersion: cloudscale.crossplane.io/v1
                 kind: ObjectsUser
-                metadata:
-                  name: ""
+                metadata: {} # patched
                 spec:
                   forProvider:
                     displayName: "" # patched
@@ -72,7 +73,7 @@ parameters:
                     name: ""
                     namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
                   providerConfigRef:
-                    name: provider-config
+                    name: cloudscale
               connectionDetails:
                 - fromConnectionSecretKey: AWS_ACCESS_KEY_ID
                   type: FromConnectionSecretKey
@@ -88,7 +89,8 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: metadata.name
-                - fromFieldPath: metadata.labels[crossplane.io/composite]
+                - type: FromCompositeFieldPath
+                  fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.writeConnectionSecretToRef.name
                 # Set display name
                 - type: CombineFromComposite
@@ -112,8 +114,7 @@ parameters:
             - base:
                 apiVersion: cloudscale.crossplane.io/v1
                 kind: Bucket
-                metadata:
-                  name: ""
+                metadata: {} # patched
                 spec:
                   forProvider:
                     bucketName: ""
@@ -147,17 +148,21 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.bucketName
                   toFieldPath: spec.forProvider.bucketName
-                - fromFieldPath: metadata.labels[crossplane.io/composite]
+                - type: FromCompositeFieldPath
+                  fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.forProvider.credentialsSecretRef.name
                 # Set endpoint
-                - fromFieldPath: spec.parameters.region
+                - type: FromCompositeFieldPath
+                  fromFieldPath: spec.parameters.region
                   toFieldPath: spec.forProvider.endpointURL
                   transforms:
                     - type: string
                       string:
                         fmt: "objects.%s.cloudscale.ch"
+                        type: Format
                 # Set region
-                - fromFieldPath: spec.parameters.region
+                - type: FromCompositeFieldPath
+                  fromFieldPath: spec.parameters.region
                   toFieldPath: spec.forProvider.region
                   transforms:
                     # The Map transformation ensures we use only supported regions by cloudscale.

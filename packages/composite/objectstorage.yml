@@ -4,7 +4,7 @@ classes:
 parameters:
 
   pkg.appcat.composite.objectstorage:
-    defaultCompositionRef: objectbucket-${facts:cloud}
+    defaultCompositionRef: "${facts:cloud}.objectbuckets.appcat.vshn.io"
 
   appcat:
     composites:

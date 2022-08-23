@@ -39,7 +39,7 @@ vault login -method=oidc
 [source,bash]
 ----
 parent="clusters/kv/${TENANT_ID}/${CLUSTER_ID}/appcat/objectstorage/provider-cloudscale"
-vault kv patch "${parent}" token=<the-cloudscale-token>
+vault kv put "${parent}" token=<the-cloudscale-token>
 ----
 
 == Configuration
@@ -50,25 +50,25 @@ vault kv patch "${parent}" token=<the-cloudscale-token>
 ----
 classes:
   - appcat.provider.cloudscale <1>
-  - appcat.composite.objectstorage <2>
-  - appcat.composition.objectstorage.cloudscale <3>
-applications: <4>
-  - pkg.appcat.provider.cloudscale
-  - pkg.appcat.composite.objectstorage
-  - pkg.appcat.composition.objectstorage.cloudscale
+  - appcat.provider.kubernetes <2>
+  - appcat.composite.objectstorage <3>
+  - appcat.composition.objectstorage.cloudscale <4>
+applications: <5>
+  - pkg.appcat
 
 parameters:
   packages:
     appcat:
-      version: master <5>
+      version: master <6>
       url: {page-origin-url}
       path: packages
 ----
 <1> The config for the operator (provider) that talks to cloudscale.ch API.
-<2> The XRD is configured in this package.
-<3> The composition is configured in this package.
-<4> We need to enable the packages as part of the applications.
+<2> The config for the provider-kubernetes is required as a dependency.
+<3> The XRD is configured in this package.
+<4> The composition is configured in this package.
+<5> We need to enable the packages as part of the applications.
     This gives us access to the provided classes.
-<5> The version of the package (applies to all appcat packages!).
+<6> The version of the package (applies to all appcat packages!).
 
 . Compile and push cluster catalog

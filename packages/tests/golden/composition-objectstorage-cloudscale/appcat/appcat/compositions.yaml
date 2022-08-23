@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: objectbucket-cloudscale
-  name: objectbucket-cloudscale
+    name: cloudscale.objectbuckets.appcat.vshn.io
+  name: cloudscale.objectbuckets.appcat.vshn.io
 spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1
@@ -31,14 +31,14 @@ spec:
             manifest:
               apiVersion: v1
               kind: Namespace
-              metadata:
-                name: ''
+              metadata: {}
           managementPolicy: Observe
           providerConfigRef:
-            name: provider-config
+            name: kubernetes
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.manifest.metadata.name
+          type: FromCompositeFieldPath
         - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
           toFieldPath: metadata.labels[appuio.io/organization]
           type: ToCompositeFieldPath
@@ -47,12 +47,13 @@ spec:
           transforms:
             - string:
                 fmt: '%s-ns-observer'
+                type: Format
               type: string
+          type: FromCompositeFieldPath
     - base:
         apiVersion: cloudscale.crossplane.io/v1
         kind: ObjectsUser
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             displayName: ''
@@ -60,10 +61,10 @@ spec:
               namespace: null
               tenant: null
           providerConfigRef:
-            name: provider-config
+            name: cloudscale
           writeConnectionSecretToRef:
             name: ''
-            namespace: provider-cloudscale-secrets
+            namespace: syn-provider-cloudscale-secrets
       connectionDetails:
         - fromConnectionSecretKey: AWS_ACCESS_KEY_ID
           name: AWS_ACCESS_KEY_ID
@@ -81,6 +82,7 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.writeConnectionSecretToRef.name
+          type: FromCompositeFieldPath
         - combine:
             strategy: string
             string:
@@ -99,15 +101,14 @@ spec:
     - base:
         apiVersion: cloudscale.crossplane.io/v1
         kind: Bucket
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             bucketDeletionPolicy: DeleteAll
             bucketName: ''
             credentialsSecretRef:
               name: ''
-              namespace: provider-cloudscale-secrets
+              namespace: syn-provider-cloudscale-secrets
             endpointURL: ''
             region: ''
       connectionDetails:
@@ -133,12 +134,15 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.credentialsSecretRef.name
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.endpointURL
           transforms:
             - string:
                 fmt: objects.%s.cloudscale.ch
+                type: Format
               type: string
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.region
           transforms:
@@ -146,4 +150,5 @@ spec:
                 lpg: lpg
                 rma: rma
               type: map
+          type: FromCompositeFieldPath
   writeConnectionSecretsToNamespace: syn-crossplane
