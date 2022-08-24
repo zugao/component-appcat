@@ -17,8 +17,10 @@ jobs:
       matrix:
         instance:
           - provider-cloudscale
+          - provider-exoscale
           - composite-objectstorage
           - composition-objectstorage-cloudscale
+          - composition-objectstorage-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
@@ -35,8 +37,10 @@ jobs:
       matrix:
         instance:
           - provider-cloudscale
+          - provider-exoscale
           - composite-objectstorage
           - composition-objectstorage-cloudscale
+          - composition-objectstorage-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
