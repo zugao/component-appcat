@@ -2,12 +2,15 @@
 
 .Tutorials
 * xref:tutorials/install-cloudscale.adoc[Install Cloudscale Stack]
+* xref:tutorials/install-exoscale.adoc[Install Exoscale Stack]
 
 .Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
 * xref:references/provider-cloudscale.adoc[Parameters For provider.cloudscale]
+* xref:references/provider-exoscale.adoc[Parameters For provider.exoscale]
 * xref:references/provider-kubernetes.adoc[Parameters For provider.kubernetes]
 * xref:references/composite-objectstorage.adoc[Parameters For composite.objectstorage]
 
 * Compositions
 ** xref:references/composition/objectstorage/cloudscale.adoc[Parameters For composition.objectstorage.cloudscale]
+** xref:references/composition/objectstorage/exoscale.adoc[Parameters For composition.objectstorage.exoscale]

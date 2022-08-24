@@ -1,0 +1,4 @@
+classes:
+  - ..provider.exoscale
+
+# parameters: {}
