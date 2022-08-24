@@ -62,6 +62,10 @@ parameters:
       version: master <6>
       url: {page-origin-url}
       path: packages
+  crossplane:
+    helmValues:
+      rbacManager:
+        managementPolicy: Basic <7>
 ----
 <1> The config for the operator (provider) that talks to cloudscale.ch API.
 <2> The config for the provider-kubernetes is required as a dependency.
@@ -70,5 +74,6 @@ parameters:
 <5> We need to enable the packages as part of the applications.
     This gives us access to the provided classes.
 <6> The version of the package (applies to all appcat packages!).
+<7> Ensure that RBAC management policy is set to `Basic` only.
 
 . Compile and push cluster catalog
