@@ -29,7 +29,7 @@ parameters:
             resources:
               - compositions
               - compositionrevisions
-              - compositeresourcedefnitions
+              - compositeresourcedefinitions
             verbs:
               - get
               - list
