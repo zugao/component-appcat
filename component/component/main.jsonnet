@@ -65,10 +65,82 @@ local compositions = std.filter(function(it) it != null, [
   for name in std.objectFields(params.compositions)
 ]);
 
+local clusterRoles = std.flattenArrays(std.filter(function(it) it != null, [
+  if params.composites[name] != null then
+    local composite = params.composites[name];
+
+    if std.get(composite, 'createDefaultRBACRoles', true) then
+      [
+        kube.ClusterRole('appcat:composite:%s:claim-view' % name)
+        {
+          metadata+: {
+            labels: {
+              'rbac.authorization.k8s.io/aggregate-to-view': 'true',
+            },
+          },
+          rules+: [
+            {
+              apiGroups: [ composite.spec.group ],
+              resources: [
+                composite.spec.claimNames.plural,
+                '%s/status' % composite.spec.claimNames.plural,
+                '%s/finalizers' % composite.spec.claimNames.plural,
+              ],
+              verbs: [ 'get', 'list', 'watch' ],
+            },
+          ],
+        },
+        kube.ClusterRole('appcat:composite:%s:claim-edit' % name)
+        {
+          metadata+: {
+            labels: {
+              'rbac.authorization.k8s.io/aggregate-to-edit': 'true',
+              'rbac.authorization.k8s.io/aggregate-to-admin': 'true',
+            },
+          },
+          rules+: [
+            {
+              apiGroups: [ composite.spec.group ],
+              resources: [
+                composite.spec.claimNames.plural,
+                '%s/status' % composite.spec.claimNames.plural,
+                '%s/finalizers' % composite.spec.claimNames.plural,
+              ],
+              verbs: [ '*' ],
+            },
+          ],
+        },
+      ]
+
+  for name in std.objectFields(params.composites)
+]));
+
+local xrdBrowseRole = kube.ClusterRole('appcat:browse') + {
+  metadata+: {
+    labels: {
+      'rbac.authorization.k8s.io/aggregate-to-view': 'true',
+      'rbac.authorization.k8s.io/aggregate-to-edit': 'true',
+      'rbac.authorization.k8s.io/aggregate-to-admin': 'true',
+    },
+  },
+  rules+: [
+    {
+      apiGroups: [ 'apiextensions.crossplane.io' ],
+      resources: [
+        'compositions',
+        'compositionrevisions',
+        'compositeresourcedefinitions',
+      ],
+      verbs: [ 'get', 'list', 'watch' ],
+    },
+  ],
+};
+
 // Define outputs below
 {
   [if std.length(secrets) > 0 then 'secrets']: secrets,
   [if std.length(additionalResources) > 0 then 'additionalResources']: additionalResources,
   [if std.length(composites) > 0 then 'composites']: composites,
   [if std.length(compositions) > 0 then 'compositions']: compositions,
+  [if std.length(clusterRoles) > 0 then 'clusterRoles']: clusterRoles + [ xrdBrowseRole ],
 }
