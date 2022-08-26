@@ -15,18 +15,7 @@ help: ## Show this help
 all: lint
 
 .PHONY: lint
-lint: lint_jsonnet lint_yaml lint_adoc lint_kubent ## All-in-one linting
-
-.PHONY: lint_jsonnet
-lint_jsonnet: $(JSONNET_FILES) ## Lint jsonnet files
-	$(JSONNET_DOCKER) $(JSONNETFMT_ARGS) --test -- $?
-
-.PHONY: format
-format: format_jsonnet ## All-in-one formatting
-
-.PHONY: format_jsonnet
-format_jsonnet: $(JSONNET_FILES) ## Format jsonnet files
-	$(JSONNET_DOCKER) $(JSONNETFMT_ARGS) -- $?
+lint: lint_yaml lint_adoc lint_kubent ## All-in-one linting
 
 .PHONY: compile
 .compile:
@@ -59,4 +48,4 @@ $(test_instances):
 
 .PHONY: clean
 clean: ## Clean the project
-	rm -rf .cache compiled dependencies vendor helmcharts jsonnetfile*.json || true
+	rm -rf .cache compiled dependencies vendor helmcharts || true

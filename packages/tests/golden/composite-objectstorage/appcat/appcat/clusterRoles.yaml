@@ -3,18 +3,15 @@ kind: ClusterRole
 metadata:
   annotations: {}
   labels:
-    name: appcat-browse
-    rbac.authorization.k8s.io/aggregate-to-admin: 'true'
-    rbac.authorization.k8s.io/aggregate-to-edit: 'true'
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:browse
+  name: appcat:composite:xobjectbuckets.appcat.vshn.io:claim-view
 rules:
   - apiGroups:
-      - apiextensions.crossplane.io
+      - appcat.vshn.io
     resources:
-      - compositions
-      - compositionrevisions
-      - compositeresourcedefinitions
+      - objectbuckets
+      - objectbuckets/status
+      - objectbuckets/finalizers
     verbs:
       - get
       - list
@@ -25,10 +22,9 @@ kind: ClusterRole
 metadata:
   annotations: {}
   labels:
-    name: appcat-composite-objectstorage-claim-edit
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-  name: appcat:composite:objectstorage:claim-edit
+  name: appcat:composite:xobjectbuckets.appcat.vshn.io:claim-edit
 rules:
   - apiGroups:
       - appcat.vshn.io
@@ -44,16 +40,17 @@ kind: ClusterRole
 metadata:
   annotations: {}
   labels:
-    name: appcat-composite-objectstorage-claim-view
+    rbac.authorization.k8s.io/aggregate-to-admin: 'true'
+    rbac.authorization.k8s.io/aggregate-to-edit: 'true'
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:composite:objectstorage:claim-view
+  name: appcat:browse
 rules:
   - apiGroups:
-      - appcat.vshn.io
+      - apiextensions.crossplane.io
     resources:
-      - objectbuckets
-      - objectbuckets/status
-      - objectbuckets/finalizers
+      - compositions
+      - compositionrevisions
+      - compositeresourcedefinitions
     verbs:
       - get
       - list

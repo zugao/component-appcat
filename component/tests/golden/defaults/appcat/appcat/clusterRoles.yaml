@@ -4,14 +4,14 @@ metadata:
   annotations: {}
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:composite:test.appcat.vshn.io:claim-view
+  name: appcat:composite:test.appcat.vshn.io.2:claim-view
 rules:
   - apiGroups:
       - appcat.vshn.io
     resources:
-      - tests
-      - tests/status
-      - tests/finalizers
+      - tests-2
+      - tests-2/status
+      - tests-2/finalizers
     verbs:
       - get
       - list
@@ -24,14 +24,14 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-  name: appcat:composite:test.appcat.vshn.io:claim-edit
+  name: appcat:composite:test.appcat.vshn.io.2:claim-edit
 rules:
   - apiGroups:
       - appcat.vshn.io
     resources:
-      - tests
-      - tests/status
-      - tests/finalizers
+      - tests-2
+      - tests-2/status
+      - tests-2/finalizers
     verbs:
       - '*'
 ---
