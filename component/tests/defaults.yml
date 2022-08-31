@@ -15,15 +15,31 @@ parameters:
         kind: Namespace
 
     composites:
-      "test.appcat.vshn.io":
+      "test.appcat.vshn.io.1":
+        createDefaultRBACRoles: false
         spec:
           group: appcat.vshn.io
           names:
-            kind: XTest
-            plural: xtest
+            kind: XTest-1
+            plural: xtest-1
           claimNames:
-            kind: Test
-            plural: tests
+            kind: Test-1
+            plural: tests-1
+          versions:
+            - name: v1
+              schema:
+                openAPIV3Schema:
+                  type: object
+      "test.appcat.vshn.io.2":
+        createDefaultRBACRoles: true
+        spec:
+          group: appcat.vshn.io
+          names:
+            kind: XTest-2
+            plural: xtest-2
+          claimNames:
+            kind: Test-2
+            plural: tests-2
           versions:
             - name: v1
               schema:
@@ -31,48 +47,27 @@ parameters:
                   type: object
 
     compositions:
-      test-composition:
+      "test-composition-1":
+        commonPatchSets:
+          annotations: {}
+          labels: {}
+        commonResources:
+          observeClaimNamespace: {}
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
-            kind: XTest
+            kind: XTest-1
           writeConnectionSecretsToNamespace: crossplane-system
-          patchSets:
-            - name: annotations
-              patches:
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.annotations
-            - name: labels
-              patches:
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels
-          resources:
-
-            - base:
-                apiVersion: kubernetes.crossplane.io/v1alpha1
-                kind: Object
-                spec:
-                  managementPolicy: Observe
-                  forProvider:
-                    manifest:
-                      apiVersion: v1
-                      kind: Namespace
-                      metadata:
-                        name: '' # patched
-                  providerConfigRef:
-                    name: provider-config
-              patches:
-                # set which namespace to observe
-                - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-                  toFieldPath: spec.forProvider.manifest.metadata.name
-                # copy the appuio organization label to a label on the XR
-                - type: ToCompositeFieldPath
-                  fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
-                  toFieldPath: metadata.labels[appuio.io/organization]
-                # append suffix to the observer name
-                - fromFieldPath: metadata.labels[crossplane.io/composite]
-                  toFieldPath: metadata.name
-                  transforms:
-                    - type: string
-                      string:
-                        fmt: "%s-ns-observer"
+          resources: []
+      "test-composition-2":
+        commonPatchSets:
+          annotations: {}
+          labels: {}
+        commonResources:
+          observeClaimNamespace: {}
+        spec:
+          compositeTypeRef:
+            apiVersion: appcat.vshn.io/v1
+            kind: XTest-2
+          writeConnectionSecretsToNamespace: default
+          resources: []

@@ -2,4 +2,4 @@
 
 appcat is a Commodore component to manage appcat.
 
-See the xref:references/parameters.adoc[parameters] reference for further details.
+See the xref:references/component-parameters.adoc[parameters] reference for further details.

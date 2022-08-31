@@ -29,37 +29,6 @@ parameters:
           resources:
 
             - base:
-                apiVersion: kubernetes.crossplane.io/v1alpha1
-                kind: Object
-                spec:
-                  managementPolicy: Observe
-                  forProvider:
-                    manifest:
-                      apiVersion: v1
-                      kind: Namespace
-                      metadata: {} # patched
-                  providerConfigRef:
-                    name: kubernetes
-              patches:
-                # set which namespace to observe
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-                  toFieldPath: spec.forProvider.manifest.metadata.name
-                # copy the appuio organization label to a label on the XR
-                - type: ToCompositeFieldPath
-                  fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
-                  toFieldPath: metadata.labels[appuio.io/organization]
-                # append suffix to the observer name
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels[crossplane.io/composite]
-                  toFieldPath: metadata.name
-                  transforms:
-                    - type: string
-                      string:
-                        fmt: "%s-ns-observer"
-                        type: Format
-
-            - base:
                 apiVersion: exoscale.crossplane.io/v1
                 kind: IAMKey
                 metadata: {} # patched

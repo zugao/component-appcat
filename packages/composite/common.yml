@@ -1,5 +1,4 @@
 applications:
-  - crossplane
   - appcat
 
 parameters:
@@ -9,28 +8,3 @@ parameters:
       url: https://github.com/vshn/component-appcat.git
       version: master
       path: component
-
-    crossplane:
-      url: https://github.com/projectsyn/component-crossplane.git
-      version: v2.2.0
-
-  crossplane:
-    clusterRoles:
-      # Allow to discover which compositions and xrds are available
-      "appcat:browse":
-        metadata:
-          labels:
-            rbac.authorization.k8s.io/aggregate-to-view: 'true'
-            rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-            rbac.authorization.k8s.io/aggregate-to-admin: 'true'
-        rules:
-          - apiGroups:
-              - apiextensions.crossplane.io
-            resources:
-              - compositions
-              - compositionrevisions
-              - compositeresourcedefinitions
-            verbs:
-              - get
-              - list
-              - watch

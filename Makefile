@@ -42,3 +42,8 @@ gen-golden-packages:
 
 .PHONY: gen-golden-all
 gen-golden-all: gen-golden-component gen-golden-packages ## For Renovate
+
+.PHONY: clean-all
+clean-all:
+	make -C packages clean
+	make -C component clean
