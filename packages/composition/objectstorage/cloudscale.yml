@@ -10,6 +10,8 @@ parameters:
   appcat:
     compositions:
       "cloudscale.objectbuckets.appcat.vshn.io":
+        commonPatchSets: {}
+        commonResources: {}
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
