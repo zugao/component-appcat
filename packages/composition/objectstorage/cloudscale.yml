@@ -52,6 +52,9 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: metadata.name
+                - type: ToCompositeFieldPath
+                  fromFieldPath: status.conditions
+                  toFieldPath: status.accessUserConditions
                 - type: FromCompositeFieldPath
                   fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.writeConnectionSecretToRef.name
@@ -108,6 +111,9 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: metadata.name
+                - type: ToCompositeFieldPath
+                  fromFieldPath: status.conditions
+                  toFieldPath: status.bucketConditions
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.bucketName
                   toFieldPath: spec.forProvider.bucketName
