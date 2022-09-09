@@ -6,6 +6,10 @@ SHELL := bash
 .SUFFIXES:
 
 include Makefile.vars.mk
+# Optional kind module
+-include kind/kind.mk
+# Local Env & testing
+-include tests/local.mk
 
 .PHONY: help
 help: ## Show this help
@@ -43,7 +47,9 @@ gen-golden-packages:
 .PHONY: gen-golden-all
 gen-golden-all: gen-golden-component gen-golden-packages ## For Renovate
 
-.PHONY: clean-all
-clean-all:
+.PHONY: clean
+clean: kind-clean
+clean:
+	rm -rf .work
 	make -C packages clean
 	make -C component clean
