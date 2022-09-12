@@ -15,7 +15,7 @@ parameters:
         kind: Namespace
 
     composites:
-      "test.appcat.vshn.io.1":
+      "test.no.default.rbac.rules":
         createDefaultRBACRoles: false
         spec:
           group: appcat.vshn.io
@@ -30,8 +30,7 @@ parameters:
               schema:
                 openAPIV3Schema:
                   type: object
-      "test.appcat.vshn.io.2":
-        createDefaultRBACRoles: true
+      "test.with.default.rbac.rules":
         spec:
           group: appcat.vshn.io
           names:
@@ -47,27 +46,14 @@ parameters:
                   type: object
 
     compositions:
-      "test-composition-1":
+      "test-common-resources":
         commonPatchSets:
           annotations: {}
           labels: {}
         commonResources:
           observeClaimNamespace: {}
         spec:
-          compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
-            kind: XTest-1
-          writeConnectionSecretsToNamespace: crossplane-system
           resources: []
-      "test-composition-2":
-        commonPatchSets:
-          annotations: {}
-          labels: {}
-        commonResources:
-          observeClaimNamespace: {}
+      "test-no-common-resources":
         spec:
-          compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
-            kind: XTest-2
-          writeConnectionSecretsToNamespace: default
           resources: []
