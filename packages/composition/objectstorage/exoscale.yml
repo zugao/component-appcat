@@ -10,24 +10,16 @@ parameters:
   appcat:
     compositions:
       "exoscale.objectbuckets.appcat.vshn.io":
-        commonPatchSets: {}
-        commonResources: {}
+        commonPatchSets:
+          annotations: {}
+          labels: {}
+        commonResources:
+          observeClaimNamespace: {}
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
             kind: XObjectBucket
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
-          patchSets:
-            - name: annotations
-              patches:
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.annotations
-                  toFieldPath: metadata.annotations
-            - name: labels
-              patches:
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels
-                  toFieldPath: metadata.labels
           resources:
 
             - base:
