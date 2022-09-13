@@ -6,11 +6,17 @@
 
 .Technical reference
 * xref:references/component-parameters.adoc[Component Parameters]
-* xref:references/provider-cloudscale.adoc[Parameters For provider.cloudscale]
-* xref:references/provider-exoscale.adoc[Parameters For provider.exoscale]
-* xref:references/provider-kubernetes.adoc[Parameters For provider.kubernetes]
-* xref:references/composite-objectstorage.adoc[Parameters For composite.objectstorage]
 
-* Compositions
-** xref:references/composition/objectstorage/cloudscale.adoc[Parameters For composition.objectstorage.cloudscale]
-** xref:references/composition/objectstorage/exoscale.adoc[Parameters For composition.objectstorage.exoscale]
+* Provider Parameters
+** xref:references/provider-cloudscale.adoc[provider.cloudscale]
+** xref:references/provider-exoscale.adoc[provider.exoscale]
+** xref:references/provider-kubernetes.adoc[provider.kubernetes]
+
+* XRD Parameters
+** xref:references/composite/common.adoc[Common Parameters]
+** xref:references/composite/objectstorage.adoc[composite.objectstorage]
+
+* Composition Parameters
+** xref:references/composition/objectstorage/common.adoc[Common Parameters]
+** xref:references/composition/objectstorage/cloudscale.adoc[composition.objectstorage.cloudscale]
+** xref:references/composition/objectstorage/exoscale.adoc[composition.objectstorage.exoscale]

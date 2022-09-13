@@ -59,8 +59,8 @@ applications: <5>
 parameters:
   packages:
     appcat:
-      version: master <6>
       url: {page-origin-url}
+      version: master <6>
       path: packages
 ----
 <1> The config for the operator (provider) that talks to exoscale.com API.
