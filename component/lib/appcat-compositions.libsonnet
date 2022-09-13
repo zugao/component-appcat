@@ -53,7 +53,7 @@ local commonResources = {
       },
     },
     patches: [
-      fromCompositeFieldPath(from='metadata.labels[crossplane.io/claim-namespace', to='spec.forProvider.manifest.metadata.name'),
+      fromCompositeFieldPath(from='metadata.labels[crossplane.io/claim-namespace]', to='spec.forProvider.manifest.metadata.name'),
       toCompositeFieldPath(from='status.atProvider.manifest.metadata.labels[appuio.io/organization]', to='metadata.labels[appuio.io/organization]'),
       fromCompositeFieldPath(from='metadata.labels[crossplane.io/composite]', to='metadata.name') + {
         transforms: [ {
