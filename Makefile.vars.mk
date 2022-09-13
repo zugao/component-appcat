@@ -1,5 +1,9 @@
 root_volume     ?= -v "$${PWD}/:/component"
 
+PROJECT_ROOT_DIR = .
+PROJECT_NAME ?= component-appcat
+PROJECT_OWNER ?= vshn
+
 ifneq "$(shell which docker 2>/dev/null)" ""
 	DOCKER_CMD    ?= $(shell which docker)
 	DOCKER_USERNS ?= ""
@@ -28,3 +32,13 @@ KUBENT_DOCKER   ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) --entrypoint=/app
 
 instance ?= defaults
 test_instances = tests/defaults.yml
+
+# https://hub.docker.com/r/kindest/node/tags
+KIND_NODE_VERSION ?= v1.24.0
+KIND_IMAGE ?= docker.io/kindest/node:$(KIND_NODE_VERSION)
+KIND_KUBECONFIG ?= $(kind_dir)/kind-kubeconfig-$(KIND_NODE_VERSION)
+KIND_CLUSTER ?= $(PROJECT_NAME)-$(KIND_NODE_VERSION)
+
+go_bin ?= $(PWD)/.work/bin
+$(go_bin):
+	@mkdir -p $@
