@@ -48,12 +48,18 @@ spec:
                   fieldPath: metadata.namespace
             - name: LEADER_ELECTION
               value: 'true'
+            - name: WEBHOOK_TLS_SECRET_NAME
+              value: webhook-tls-secret
+            - name: WEBHOOK_TLS_CERT_DIR
+              value: /webhook/tls
           image: docker.io/crossplane/crossplane:v1.9.0
           imagePullPolicy: IfNotPresent
           name: crossplane
           ports:
             - containerPort: 8080
               name: metrics
+            - containerPort: 9443
+              name: webhooks
           resources:
             limits:
               cpu: 1000m
@@ -69,6 +75,8 @@ spec:
           volumeMounts:
             - mountPath: /cache
               name: package-cache
+            - mountPath: /webhook/tls
+              name: webhook-tls-secret
       initContainers:
         - args:
             - core
@@ -78,6 +86,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: WEBHOOK_TLS_SECRET_NAME
+              value: webhook-tls-secret
+            - name: WEBHOOK_SERVICE_NAME
+              value: crossplane-webhooks
+            - name: WEBHOOK_SERVICE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WEBHOOK_SERVICE_PORT
+              value: '9443'
           image: docker.io/crossplane/crossplane:v1.9.0
           imagePullPolicy: IfNotPresent
           name: crossplane-init
@@ -100,3 +118,6 @@ spec:
             medium: null
             sizeLimit: 5Mi
           name: package-cache
+        - name: webhook-tls-secret
+          secret:
+            secretName: webhook-tls-secret
