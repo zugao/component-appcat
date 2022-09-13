@@ -1,0 +1,37 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+---
+apiVersion: exoscale.crossplane.io/v1
+kind: IAMKey
+metadata:
+  annotations:
+    kuttl: 01-install
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    keyName: default.exoscale-storage-bucket
+    services:
+      sos:
+        buckets:
+          - my-bucket-change-name
+    zone: rma
+  providerConfigRef:
+    name: exoscale
+  writeConnectionSecretToRef:
+    namespace: syn-provider-exoscale-secrets
+---
+apiVersion: exoscale.crossplane.io/v1
+kind: Bucket
+metadata:
+  annotations:
+    kuttl: 01-install
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    bucketDeletionPolicy: DeleteAll
+    bucketName: my-bucket-change-name
+    endpointURL: sos-rma.exo.io
+    zone: rma
+  providerConfigRef:
+    name: exoscale

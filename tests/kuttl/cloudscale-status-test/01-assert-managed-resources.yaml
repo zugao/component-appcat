@@ -1,0 +1,35 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+---
+apiVersion: cloudscale.crossplane.io/v1
+kind: Bucket
+metadata:
+  annotations:
+    kuttl: 01-install
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    bucketDeletionPolicy: DeleteAll
+    bucketName: my-bucket-change-name
+    credentialsSecretRef:
+      namespace: syn-provider-cloudscale-secrets
+    endpointURL: objects.rma.cloudscale.ch
+    region: rma
+  providerConfigRef:
+    name: default
+---
+apiVersion: cloudscale.crossplane.io/v1
+kind: ObjectsUser
+metadata:
+  annotations:
+    kuttl: 01-install
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    displayName: default.cloudscale-storage-bucket
+    tags:
+      namespace: default
+  providerConfigRef:
+    name: cloudscale
+  writeConnectionSecretToRef:
+    namespace: syn-provider-cloudscale-secrets

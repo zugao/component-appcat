@@ -158,4 +158,4 @@ spec:
                 type: Format
               type: string
           type: FromCompositeFieldPath
-  writeConnectionSecretsToNamespace: syn-crossplane
+  writeConnectionSecretsToNamespace: default

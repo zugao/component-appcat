@@ -18,7 +18,8 @@ jobs:
         instance:
           - provider-cloudscale
           - provider-exoscale
-          - composite-objectstorage
+          - composite-objectstorage-cloudscale
+          - composite-objectstorage-exoscale
           - composition-objectstorage-cloudscale
           - composition-objectstorage-exoscale
     defaults:
@@ -38,7 +39,8 @@ jobs:
         instance:
           - provider-cloudscale
           - provider-exoscale
-          - composite-objectstorage
+          - composite-objectstorage-cloudscale
+          - composite-objectstorage-exoscale
           - composition-objectstorage-cloudscale
           - composition-objectstorage-exoscale
     defaults:

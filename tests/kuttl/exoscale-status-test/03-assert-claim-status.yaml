@@ -1,0 +1,26 @@
+apiVersion: appcat.vshn.io/v1
+kind: ObjectBucket
+metadata:
+  name: exoscale-storage-bucket
+  namespace: default
+spec:
+  parameters:
+    bucketName: my-bucket-change-name
+    region: rma
+  writeConnectionSecretToRef:
+    name: objectbucket-crds
+status:
+  conditions:
+    - type: Ready
+      reason: Composite resource claim is waiting for composite resource to become Ready
+      status: "False"
+  accessUserConditions:
+    - type: Synced
+      status: "False"
+      reason: Unavailable
+      message: "Something is wrong with underlying access user"
+  bucketConditions:
+    - type: Ready
+      status: "False"
+      reason: Unavailable
+      message: "Something is wrong with the bucket"
