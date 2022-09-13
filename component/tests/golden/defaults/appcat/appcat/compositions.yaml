@@ -5,12 +5,9 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: test-composition-1
-  name: test-composition-1
+    name: test-common-resources
+  name: test-common-resources
 spec:
-  compositeTypeRef:
-    apiVersion: appcat.vshn.io/v1
-    kind: XTest-1
   patchSets:
     - name: annotations
       patches:
@@ -51,7 +48,6 @@ spec:
                 type: Format
               type: string
           type: FromCompositeFieldPath
-  writeConnectionSecretsToNamespace: crossplane-system
 ---
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
@@ -60,50 +56,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: test-composition-2
-  name: test-composition-2
+    name: test-no-common-resources
+  name: test-no-common-resources
 spec:
-  compositeTypeRef:
-    apiVersion: appcat.vshn.io/v1
-    kind: XTest-2
-  patchSets:
-    - name: annotations
-      patches:
-        - fromFieldPath: metadata.annotations
-          toFieldPath: metadata.annotations
-          type: FromCompositeFieldPath
-    - name: labels
-      patches:
-        - fromFieldPath: metadata.labels
-          toFieldPath: metadata.labels
-          type: FromCompositeFieldPath
-  resources:
-    - base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          forProvider:
-            manifest:
-              apiVersion: v1
-              kind: Namespace
-              metadata:
-                name: ''
-          managementPolicy: Observe
-          providerConfigRef:
-            name: provider-config
-      patches:
-        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace
-          toFieldPath: spec.forProvider.manifest.metadata.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
-          toFieldPath: metadata.labels[appuio.io/organization]
-          type: ToCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-ns-observer'
-                type: Format
-              type: string
-          type: FromCompositeFieldPath
-  writeConnectionSecretsToNamespace: default
+  patchSets: []
+  resources: []

@@ -51,14 +51,14 @@ local compositions = std.filter(function(it) it != null, [
     { metadata+: com.makeMergeable(std.get(composition, 'metadata', {})) } +
     {
       spec+: {
-        patchSets+: [
+        patchSets+: if std.objectHas(composition, 'commonPatchSets') then [
           compositionHelpers.PatchSet(name)
           for name in std.objectFields(composition.commonPatchSets)
-        ],
-        resources+: [
+        ] else [],
+        resources+: if std.objectHas(composition, 'commonResources') then [
           compositionHelpers.CommonResource(name)
           for name in std.objectFields(composition.commonResources)
-        ],
+        ] else [],
       },
     }
 

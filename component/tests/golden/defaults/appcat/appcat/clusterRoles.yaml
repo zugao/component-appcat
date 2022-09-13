@@ -4,7 +4,7 @@ metadata:
   annotations: {}
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:composite:test.appcat.vshn.io.2:claim-view
+  name: appcat:composite:test.with.default.rbac.rules:claim-view
 rules:
   - apiGroups:
       - appcat.vshn.io
@@ -24,7 +24,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-  name: appcat:composite:test.appcat.vshn.io.2:claim-edit
+  name: appcat:composite:test.with.default.rbac.rules:claim-edit
 rules:
   - apiGroups:
       - appcat.vshn.io
