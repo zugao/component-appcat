@@ -11,7 +11,7 @@ type:: string
 default:: see https://github.com/vshn/component-appcat/blob/master/packages/composition/objectstorage/common.yml
 
 The components used by all `composition.objectstorage` packages.
-It follows the exact same structure as the root `paramaters:components` key.
+It follows the exact same structure as the root `parameters:components` key.
 
 [NOTE]
 ====
