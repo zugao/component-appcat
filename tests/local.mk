@@ -6,7 +6,7 @@ crossplane_sentinel = $(kind_dir)/crossplane_sentinel
 registry_sentinel = $(kind_dir)/registry_sentinel
 
 cloudscale_version = $(shell yq -e '.parameters."pkg.appcat.provider.cloudscale".images.provider-cloudscale.tag' packages/provider/cloudscale.yml)
-exoscale_version = master
+exoscale_version = $(shell yq -e '.parameters."pkg.appcat.provider.exoscale".images.provider-exoscale.tag' packages/provider/exoscale.yml)
 
 golden_dir = packages/tests/golden
 
