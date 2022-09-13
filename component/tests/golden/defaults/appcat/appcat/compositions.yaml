@@ -34,7 +34,7 @@ spec:
           providerConfigRef:
             name: provider-config
       patches:
-        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.manifest.metadata.name
           type: FromCompositeFieldPath
         - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
