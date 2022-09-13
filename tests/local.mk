@@ -8,7 +8,7 @@ registry_sentinel = $(kind_dir)/registry_sentinel
 cloudscale_version = $(shell yq -e '.parameters."pkg.appcat.provider.cloudscale".images.provider-cloudscale.tag' packages/provider/cloudscale.yml)
 exoscale_version = master
 
-golden_folder = packages/tests/golden
+golden_dir = packages/tests/golden
 
 .PHONY: local-install
 local-install: export KUBECONFIG = $(KIND_KUBECONFIG)
@@ -39,16 +39,16 @@ install-crds: kind-setup # install cloudscale and exoscale CRDs
 	@kubectl apply -f "https://raw.githubusercontent.com/vshn/provider-exoscale/"${exoscale_version}"/package/crds/exoscale.crossplane.io_iamkeys.yaml"
 
 .exoscale-composition:
-	$(MAKE)	.prepare-integration-tests -e instance=exoscale
+	$(MAKE) .prepare-integration-tests -e instance=exoscale
 
 .cloudscale-composition:
-	$(MAKE)	.prepare-integration-tests -e instance=cloudscale
+	$(MAKE) .prepare-integration-tests -e instance=cloudscale
 
 .PHONY: .prepare-integration-tests
 .prepare-integration-tests:
 	rm -rf .cache compiled dependencies vendor
-	cp $(golden_folder)/composite-objectstorage-$(instance)/appcat/appcat/composites.yaml tests/kuttl/$(instance)-status-test/00-install-$(instance)-composite.yaml
-	yq e '.spec.writeConnectionSecretsToNamespace = "default"' $(golden_folder)/composition-objectstorage-$(instance)/appcat/appcat/compositions.yaml > tests/kuttl/$(instance)-status-test/00-install-$(instance)-composition.yaml
+	cp $(golden_dir)/composite-objectstorage-$(instance)/appcat/appcat/composites.yaml tests/kuttl/$(instance)-status-test/00-install-$(instance)-composite.yaml
+	yq e '.spec.writeConnectionSecretsToNamespace = "default"' $(golden_dir)/composition-objectstorage-$(instance)/appcat/appcat/compositions.yaml > tests/kuttl/$(instance)-status-test/00-install-$(instance)-composition.yaml
 
 .PHONY: generate-integration-compositions
 generate-integration-compositions: export KUBECONFIG = $(KIND_KUBECONFIG)
@@ -65,7 +65,7 @@ $(kuttl_bin): | $(go_bin)
 	go install github.com/kudobuilder/kuttl/cmd/kubectl-kuttl@latest
 
 test-integration: export KUBECONFIG = $(KIND_KUBECONFIG)
-test-integration: $(kuttl_bin) local-install generate-integration-compositions
+test-integration: $(kuttl_bin) local-install generate-integration-compositions ## Run integration tests with kuttl
 	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/kuttl --config ./tests/kuttl/kuttl-test.yaml
 	@rm -f kubeconfig
 # kuttle leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
