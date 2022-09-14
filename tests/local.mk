@@ -5,8 +5,9 @@ kind_bin = $(go_bin)/kind
 crossplane_sentinel = $(kind_dir)/crossplane_sentinel
 registry_sentinel = $(kind_dir)/registry_sentinel
 
-cloudscale_version = $(shell yq -e '.parameters."pkg.appcat.provider.cloudscale".images.provider-cloudscale.tag' packages/provider/cloudscale.yml)
-exoscale_version = $(shell yq -e '.parameters."pkg.appcat.provider.exoscale".images.provider-exoscale.tag' packages/provider/exoscale.yml)
+provider_cloudscale_version ?= $(shell yq -e '.parameters."pkg.appcat.provider.cloudscale".images.provider-cloudscale.tag' packages/provider/cloudscale.yml)
+provider_exoscale_version ?= $(shell yq -e '.parameters."pkg.appcat.provider.exoscale".images.provider-exoscale.tag' packages/provider/exoscale.yml)
+provider_kubernetes_version ?= $(shell yq -e '.parameters."pkg.appcat.provider.kubernetes".images.provider-kubernetes.tag' packages/provider/kubernetes.yml)
 
 golden_dir = packages/tests/golden
 
@@ -32,11 +33,13 @@ $(crossplane_sentinel): $(KIND_KUBECONFIG)
 
 .PHONY: install-crds
 install-crds: export KUBECONFIG = $(KIND_KUBECONFIG)
-install-crds: kind-setup # install cloudscale and exoscale CRDs
-	@kubectl apply -f "https://raw.githubusercontent.com/vshn/provider-cloudscale/"$(cloudscale_version)"/package/crds/cloudscale.crossplane.io_buckets.yaml"
-	@kubectl apply -f "https://raw.githubusercontent.com/vshn/provider-cloudscale/"${cloudscale_version}"/package/crds/cloudscale.crossplane.io_objectsusers.yaml"
-	@kubectl apply -f "https://raw.githubusercontent.com/vshn/provider-exoscale/"${exoscale_version}"/package/crds/exoscale.crossplane.io_buckets.yaml"
-	@kubectl apply -f "https://raw.githubusercontent.com/vshn/provider-exoscale/"${exoscale_version}"/package/crds/exoscale.crossplane.io_iamkeys.yaml"
+install-crds: kind-setup ## Install CRDs of providers in kind cluster.
+	@kubectl apply \
+		-f "https://raw.githubusercontent.com/vshn/provider-cloudscale/$(provider_cloudscale_version)/package/crds/cloudscale.crossplane.io_buckets.yaml" \
+		-f "https://raw.githubusercontent.com/vshn/provider-cloudscale/$(provider_cloudscale_version)/package/crds/cloudscale.crossplane.io_objectsusers.yaml" \
+		-f "https://raw.githubusercontent.com/vshn/provider-exoscale/$(provider_exoscale_version)/package/crds/exoscale.crossplane.io_buckets.yaml" \
+		-f "https://raw.githubusercontent.com/vshn/provider-exoscale/$(provider_exoscale_version)/package/crds/exoscale.crossplane.io_iamkeys.yaml" \
+		-f "https://raw.githubusercontent.com/crossplane-contrib/provider-kubernetes/$(provider_kubernetes_version)/package/crds/kubernetes.crossplane.io_objects.yaml" \
 
 .exoscale-composition:
 	$(MAKE) .prepare-integration-tests -e instance=exoscale
@@ -68,7 +71,7 @@ test-integration: export KUBECONFIG = $(KIND_KUBECONFIG)
 test-integration: $(kuttl_bin) local-install generate-integration-compositions ## Run integration tests with kuttl
 	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/kuttl --config ./tests/kuttl/kuttl-test.yaml
 	@rm -f kubeconfig
-# kuttle leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
+# kuttl leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
 
 .PHONY: kuttl-clean
 kuttl-clean:

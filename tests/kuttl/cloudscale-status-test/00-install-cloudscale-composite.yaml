@@ -111,12 +111,6 @@ spec:
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string
-                    required:
-                      - lastTransitionTime
-                      - message
-                      - reason
-                      - status
-                      - type
                     type: object
                   type: array
                 bucketConditions:
@@ -173,12 +167,6 @@ spec:
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string
-                    required:
-                      - lastTransitionTime
-                      - message
-                      - reason
-                      - status
-                      - type
                     type: object
                   type: array
               type: object

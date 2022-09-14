@@ -30,6 +30,10 @@ lint_adoc: ## Lint documentation
 lint_kubent: ## Check for deprecated Kubernetes API versions
 	$(KUBENT_DOCKER) $(KUBENT_ARGS) -f $(KUBENT_FILES)
 
+.PHONY: lint_test
+lint_test: generate-integration-compositions ## Check that test artifacts are up-to-date
+	@git diff --exit-code
+
 .PHONY: docs-serve
 docs-serve: ## Preview the documentation
 	$(ANTORA_PREVIEW_CMD)
