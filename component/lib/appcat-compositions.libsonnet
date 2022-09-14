@@ -48,7 +48,7 @@ local commonResources = {
           },
         },
         providerConfigRef: {
-          name: 'provider-config',
+          name: 'kubernetes',
         },
       },
     },

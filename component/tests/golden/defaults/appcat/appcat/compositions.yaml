@@ -32,7 +32,7 @@ spec:
                 name: ''
           managementPolicy: Observe
           providerConfigRef:
-            name: provider-config
+            name: kubernetes
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.manifest.metadata.name
