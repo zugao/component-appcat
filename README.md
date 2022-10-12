@@ -5,6 +5,21 @@ This is a [Commodore][commodore] Component for appcat.
 This repository is part of Project Syn.
 For documentation on Project Syn and this component, see https://syn.tools.
 
+## Getting started for developers
+
+This component can be compiled with commodore like this:
+
+```
+$ cd component
+$ commodore component compile -n appcat .
+```
+
+The resulting compiled component can be found in `component/compiled/`.
+
+There is currently no easy way to run it locally. You need to apply the compiled component to a test cluster to see if it works as expected.
+
+This process is not suitable for installing the component on a production system. In order to do that please follow the documentation found in the next paragraph.
+
 ## Documentation
 
 The rendered documentation for this component is available on the [Commodore Components Hub](https://hub.syn.tools/appcat).
