@@ -11,7 +11,7 @@ This component can be compiled with commodore like this:
 
 ```
 $ cd component
-$ commodore component compile -n appcat .
+$ commodore component compile . --search-paths . -n appcat -f tests/defaults.yml
 ```
 
 The resulting compiled component can be found in `component/compiled/`.
