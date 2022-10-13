@@ -90,13 +90,17 @@ parameters:
                     credentialsSecretRef:
                       name: ""
                       namespace: ${pkg.appcat.composition.objectstorage.cloudscale:secretNamespaces:objectsusers}
+                    endpoint: ""
                     endpointURL: ""
                     region: ""
                     bucketDeletionPolicy: ${pkg.appcat.composition.objectstorage.cloudscale:bucketDeletionPolicy}
               connectionDetails:
-                - fromFieldPath: spec.forProvider.endpointURL
+                - fromFieldPath: spec.forProvider.endpoint
                   type: FromFieldPath
                   name: ENDPOINT
+                - fromFieldPath: spec.forProvider.endpointURL
+                  type: FromFieldPath
+                  name: ENDPOINT_URL
                 - fromFieldPath: spec.forProvider.region
                   type: FromFieldPath
                   name: AWS_REGION
@@ -123,11 +127,19 @@ parameters:
                 # Set endpoint
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.region
-                  toFieldPath: spec.forProvider.endpointURL
+                  toFieldPath: spec.forProvider.endpoint
                   transforms:
                     - type: string
                       string:
                         fmt: "objects.%s.cloudscale.ch"
+                        type: Format
+                - type: FromCompositeFieldPath
+                  fromFieldPath: spec.parameters.region
+                  toFieldPath: spec.forProvider.endpointURL
+                  transforms:
+                    - type: string
+                      string:
+                        fmt: "https://objects.%s.cloudscale.ch"
                         type: Format
                 # Set region
                 - type: FromCompositeFieldPath
