@@ -87,16 +87,18 @@ parameters:
                 spec:
                   forProvider:
                     bucketName: "" # patched
-                    endpointURL: "" # patched
                     # The zone is exposed as region in XRD
                     zone: "" # patched
                     bucketDeletionPolicy: ${pkg.appcat.composition.objectstorage.exoscale:bucketDeletionPolicy}
                   providerConfigRef:
                     name: exoscale
               connectionDetails:
-                - fromFieldPath: spec.forProvider.endpointURL
+                - fromFieldPath: status.endpoint
                   type: FromFieldPath
                   name: ENDPOINT
+                - fromFieldPath: status.endpointURL
+                  type: FromFieldPath
+                  name: ENDPOINT_URL
                 - fromFieldPath: spec.forProvider.zone
                   type: FromFieldPath
                   name: AWS_REGION
@@ -117,15 +119,6 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.bucketName
                   toFieldPath: spec.forProvider.bucketName
-                # Set endpoint
-                - type: FromCompositeFieldPath
-                  fromFieldPath: spec.parameters.region
-                  toFieldPath: spec.forProvider.endpointURL
-                  transforms:
-                    - type: string
-                      string:
-                        fmt: "sos-%s.exo.io"
-                        type: Format
                 # Set region
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.region

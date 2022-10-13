@@ -88,8 +88,11 @@ spec:
             endpointURL: ''
             region: ''
       connectionDetails:
-        - fromFieldPath: spec.forProvider.endpointURL
+        - fromFieldPath: status.endpoint
           name: ENDPOINT
+          type: FromFieldPath
+        - fromFieldPath: status.endpointURL
+          name: ENDPOINT_URL
           type: FromFieldPath
         - fromFieldPath: spec.forProvider.region
           name: AWS_REGION
@@ -113,14 +116,6 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.credentialsSecretRef.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.forProvider.endpointURL
-          transforms:
-            - string:
-                fmt: objects.%s.cloudscale.ch
-                type: Format
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.region

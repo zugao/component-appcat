@@ -84,13 +84,15 @@ spec:
           forProvider:
             bucketDeletionPolicy: DeleteAll
             bucketName: ''
-            endpointURL: ''
             zone: ''
           providerConfigRef:
             name: exoscale
       connectionDetails:
-        - fromFieldPath: spec.forProvider.endpointURL
+        - fromFieldPath: status.endpoint
           name: ENDPOINT
+          type: FromFieldPath
+        - fromFieldPath: status.endpointURL
+          name: ENDPOINT_URL
           type: FromFieldPath
         - fromFieldPath: spec.forProvider.zone
           name: AWS_REGION
@@ -111,14 +113,6 @@ spec:
           type: ToCompositeFieldPath
         - fromFieldPath: spec.parameters.bucketName
           toFieldPath: spec.forProvider.bucketName
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.forProvider.endpointURL
-          transforms:
-            - string:
-                fmt: sos-%s.exo.io
-                type: Format
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.zone

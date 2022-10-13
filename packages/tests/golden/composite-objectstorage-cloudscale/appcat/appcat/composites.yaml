@@ -16,6 +16,7 @@ spec:
     - AWS_SECRET_ACCESS_KEY
     - AWS_REGION
     - ENDPOINT
+    - ENDPOINT_URL
     - BUCKET_NAME
   defaultCompositionRef:
     name: cloudscale.objectbuckets.appcat.vshn.io

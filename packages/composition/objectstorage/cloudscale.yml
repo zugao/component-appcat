@@ -94,9 +94,12 @@ parameters:
                     region: ""
                     bucketDeletionPolicy: ${pkg.appcat.composition.objectstorage.cloudscale:bucketDeletionPolicy}
               connectionDetails:
-                - fromFieldPath: spec.forProvider.endpointURL
+                - fromFieldPath: status.endpoint
                   type: FromFieldPath
                   name: ENDPOINT
+                - fromFieldPath: status.endpointURL
+                  type: FromFieldPath
+                  name: ENDPOINT_URL
                 - fromFieldPath: spec.forProvider.region
                   type: FromFieldPath
                   name: AWS_REGION
@@ -120,15 +123,6 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.forProvider.credentialsSecretRef.name
-                # Set endpoint
-                - type: FromCompositeFieldPath
-                  fromFieldPath: spec.parameters.region
-                  toFieldPath: spec.forProvider.endpointURL
-                  transforms:
-                    - type: string
-                      string:
-                        fmt: "objects.%s.cloudscale.ch"
-                        type: Format
                 # Set region
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.region
