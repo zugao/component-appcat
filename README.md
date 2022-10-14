@@ -7,6 +7,13 @@ For documentation on Project Syn and this component, see https://syn.tools.
 
 ## Getting started for developers
 
+This repository contains:
+
+* `packages`: SYN Commodore "packages" (which are actually just bundles of SYN configuration files, no code)
+** `composite`: SYN Configuration containing the user-facing Crossplane/K8s kind "ObjectBucket"
+** `composition`: SYN Configuration containing the Crossplane "composition", which translates between the user-facing K8s kind "ObjectBucket" and Crossplane's internal K8s kinds "Bucket" and "ObjectsUser"
+* `component`: SYN Commodore component for installing AppCat features
+
 This component can be compiled with commodore like this:
 
 ```
