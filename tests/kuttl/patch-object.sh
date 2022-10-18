@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eo pipefail
-set -x
+#set -x
 
 user_type=${1}
 bucket_type=${2}

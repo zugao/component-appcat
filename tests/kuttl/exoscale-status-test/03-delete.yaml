@@ -1,0 +1,7 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+delete:
+# This will wait until resources are really gone
+  - apiVersion: appcat.vshn.io/v1
+    kind: ObjectBucket
+    name: exoscale-storage-bucket

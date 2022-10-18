@@ -69,7 +69,7 @@ $(kuttl_bin): | $(go_bin)
 
 test-integration: export KUBECONFIG = $(KIND_KUBECONFIG)
 test-integration: $(kuttl_bin) local-install generate-integration-compositions ## Run integration tests with kuttl
-	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/kuttl --config ./tests/kuttl/kuttl-test.yaml
+	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/kuttl --config ./tests/kuttl/kuttl-test.yaml --suppress-log=Events
 	@rm -f kubeconfig
 # kuttl leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
 

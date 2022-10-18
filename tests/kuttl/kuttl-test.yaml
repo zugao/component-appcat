@@ -3,5 +3,4 @@ kind: TestSuite
 testDirs:
   - ./tests/kuttl
 namespace: default
-timeout: 30
-parallel: 1
+timeout: 120

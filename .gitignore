@@ -6,3 +6,6 @@
 # Additional entries
 .work
 .kind
+
+# kuttl
+kubeconfig
