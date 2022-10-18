@@ -20,7 +20,8 @@ crossplane-setup: $(crossplane_sentinel) ## Installs Crossplane in kind cluster.
 
 $(crossplane_sentinel): export KUBECONFIG = $(KIND_KUBECONFIG)
 $(crossplane_sentinel): $(KIND_KUBECONFIG)
-	helm repo add crossplane https://charts.crossplane.io/stable
+	helm repo add --force-update crossplane https://charts.crossplane.io/stable
+	helm repo update
 	helm upgrade --install crossplane crossplane/crossplane \
 		--create-namespace \
 		--namespace crossplane-system \
