@@ -20,3 +20,5 @@
 ** xref:references/composition/objectstorage/common.adoc[Common Parameters]
 ** xref:references/composition/objectstorage/cloudscale.adoc[composition.objectstorage.cloudscale]
 ** xref:references/composition/objectstorage/exoscale.adoc[composition.objectstorage.exoscale]
+** xref:references/composition/dbaas/exoscale/common.adoc[Common Parameters]
+** xref:references/composition/dbaas/exoscale/postgres.adoc[composition.dbaas.exoscale.postgres]
