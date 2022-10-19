@@ -22,6 +22,7 @@ jobs:
           - composite-objectstorage-exoscale
           - composition-objectstorage-cloudscale
           - composition-objectstorage-exoscale
+          - composition-dbaas-postgres-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
@@ -43,6 +44,7 @@ jobs:
           - composite-objectstorage-exoscale
           - composition-objectstorage-cloudscale
           - composition-objectstorage-exoscale
+          - composition-dbaas-postgres-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
