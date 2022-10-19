@@ -32,6 +32,19 @@ There is currently no easy way to run it locally. You need to apply the compiled
 
 This process is not suitable for installing the component on a production system. In order to do that please follow the documentation found in the next paragraph.
 
+## Integration Testing with Kuttl
+
+Some packages are tested with the Kubernetes E2E testing tool [Kuttl](https://kuttl.dev/docs).
+Kuttl is basically comparing the installed manifests (usually files named `##-install*.yaml`) with observed objects and compares the desired output (files named `##-assert*.yaml`).
+
+To execute tests, run `make test-integration` from the root dir.
+
+The tests are executed in parallel to save test time, but it makes reading errors and output harder.
+If a test fails, kuttl leaves the resources in the kind-cluster intact, so you can inspect the resources and events if necessary.
+Please note that Kubernetes Events from cluster-scoped resources appear in the `default` namespace only, but `kubectl describe ...` should show you the events.
+
+If tests succeed, the relevant resources are deleted to not use up costs on the cloud providers.
+
 ## Documentation
 
 The rendered documentation for this component is available on the [Commodore Components Hub](https://hub.syn.tools/appcat).

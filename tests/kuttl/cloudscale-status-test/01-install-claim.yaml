@@ -10,4 +10,7 @@ spec:
     bucketName: my-bucket-change-name
     region: rma
   writeConnectionSecretToRef:
-    name: objectbucket-crds
+    name: cloudscale-objectbucket-crds
+  # to enable parallel kuttl tests we specify which composition
+  compositionRef:
+    name: cloudscale.objectbuckets.appcat.vshn.io
