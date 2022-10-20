@@ -11,6 +11,8 @@ include Makefile.vars.mk
 # Local Env & testing
 -include tests/local.mk
 
+-include apis/generate.mk
+
 .PHONY: help
 help: ## Show this help
 	@grep -E -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: ).*?## "}; {gsub(/\\:/,":", $$1)}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -31,7 +33,10 @@ lint_kubent: ## Check for deprecated Kubernetes API versions
 	$(KUBENT_DOCKER) $(KUBENT_ARGS) -f $(KUBENT_FILES)
 
 .PHONY: lint_test
-lint_test: generate-integration-compositions ## Check that test artifacts are up-to-date
+lint_test: generate-integration-compositions git-diff ## Check that test artifacts are up-to-date
+
+.PHONY: git-diff
+git-diff: ## Checks that there are no uncommitted changes
 	@git diff --exit-code
 
 .PHONY: docs-serve
