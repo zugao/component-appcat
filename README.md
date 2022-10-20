@@ -13,6 +13,7 @@ This repository contains:
   * `composite`: SYN Configuration containing the user-facing Crossplane/K8s kind "ObjectBucket"
   * `composition`: SYN Configuration containing the Crossplane "composition", which translates between the user-facing K8s kind "ObjectBucket" and Crossplane's internal K8s kinds "Bucket" and "ObjectsUser"
 * `component`: SYN Commodore component for installing AppCat features
+* `apis`: The code that describes the Composites (XRDs) and generates their YAML in `/packages/composite/`
 
 This component can be compiled with commodore like this:
 
@@ -44,6 +45,20 @@ If a test fails, kuttl leaves the resources in the kind-cluster intact, so you c
 Please note that Kubernetes Events from cluster-scoped resources appear in the `default` namespace only, but `kubectl describe ...` should show you the events.
 
 If tests succeed, the relevant resources are deleted to not use up costs on the cloud providers.
+
+## Generate XRDs with Go / KubeBuilder
+
+In `/apis` there is code in Go to generate the XRDs (composites) as this is in OpenAPI.
+This code generates the OpenAPI scheme using [Kubebuilder](https://kubebuilder.io/).
+
+See following pages for learning how to do that:
+- https://kubebuilder.io/reference/generating-crd.html
+- https://kubebuilder.io/reference/markers.html
+
+To run the composition generator, run `make generate-xrd generate-integration-compositions`.
+You need to have `go` installed for this to work.
+
+After that, you are able to update the golden files for the packages: `make gen-golden-packages`.
 
 ## Documentation
 
