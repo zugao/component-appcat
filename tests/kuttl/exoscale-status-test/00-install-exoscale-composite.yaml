@@ -24,14 +24,38 @@ spec:
     kind: XObjectBucket
     plural: xobjectbuckets
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .status.parameters.bucketName
+          name: Bucket Name
+          type: string
+        - jsonPath: .spec.parameters.region
+          name: Region
+          type: string
+      name: v1
       referenceable: true
       schema:
         openAPIV3Schema:
+          description: ObjectBucket is the API for creating S3 buckets.
           properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource
+                this object represents. Servers may infer this from the endpoint the
+                client submits requests to. Cannot be updated. In CamelCase. More
+                info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
             spec:
+              description: ObjectBucketSpec defines the desired state of a ObjectBucket.
               properties:
                 parameters:
+                  description: ObjectBucketParameters are the configurable fields
+                    of a ObjectBucket.
                   properties:
                     bucketName:
                       description: BucketName is the name of the bucket to create.
@@ -43,39 +67,32 @@ spec:
                     region:
                       description: Region is the name of the region where the bucket
                         shall be created. The region must be available in the S3 endpoint.
-                        Accepted values are LPG and RMA.
                       type: string
                   required:
                     - bucketName
                     - region
                   type: object
-              required:
-                - parameters
               type: object
             status:
-              description: An ObjectBucketStatus reflects the observed state of a
-                ObjectBucket.
+              description: ObjectBucketStatus reflects the observed state of a ObjectBucket.
               properties:
                 accessUserConditions:
+                  description: AccessUserConditions contains a copy of the claim's
+                    underlying user account conditions.
                   items:
-                    description: Access user condition contains details for one aspect
-                      of this claim's underlying cloudscale ObjectsUser or exoscale
-                      IAMKey state.
                     properties:
                       lastTransitionTime:
-                        description: lastTransitionTime is the last time the condition
-                          transitioned from one status to another. This should be
-                          when the underlying condition changed.  If that is not known,
-                          then using the time when the API field changed is acceptable.
+                        description: LastTransitionTime is the last time the condition
+                          transitioned from one status to another.
                         format: date-time
                         type: string
                       message:
-                        description: message is a human readable message indicating
-                          details about the transition. This may be an empty string.
+                        description: Message is a human-readable message indicating
+                          details about the transition.
                         maxLength: 32768
                         type: string
                       observedGeneration:
-                        description: observedGeneration represents the .metadata.generation
+                        description: ObservedGeneration represents the .metadata.generation
                           that the condition was set based upon. For instance, if
                           .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
                           is 9, the condition is out of date with respect to the current
@@ -84,18 +101,13 @@ spec:
                         minimum: 0
                         type: integer
                       reason:
-                        description: reason contains a programmatic identifier indicating
-                          the reason for the condition's last transition. Producers
-                          of specific condition types may define expected values and
-                          meanings for this field, and whether the values are considered
-                          a guaranteed API. The value should be a CamelCase string.
-                          This field may not be empty.
+                        description: Reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
                         maxLength: 1024
-                        minLength: 1
                         pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
                         type: string
                       status:
-                        description: status of the condition, one of True, False,
+                        description: Status of the condition, one of True, False,
                           Unknown.
                         enum:
                           - 'True'
@@ -103,35 +115,29 @@ spec:
                           - Unknown
                         type: string
                       type:
-                        description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                          --- Many .condition.type values are consistent across resources
-                          like Available, but because arbitrary conditions can be
-                          useful (see .node.status.conditions), the ability to deconflict
-                          is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                        description: Type of condition.
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string
                     type: object
                   type: array
                 bucketConditions:
+                  description: BucketConditions contains a copy of the claim's underlying
+                    bucket conditions.
                   items:
-                    description: Bucket condition contains details for one aspect
-                      of this claim's cloudscale or exoscale Bucket state.
                     properties:
                       lastTransitionTime:
-                        description: lastTransitionTime is the last time the condition
-                          transitioned from one status to another. This should be
-                          when the underlying condition changed.  If that is not known,
-                          then using the time when the API field changed is acceptable.
+                        description: LastTransitionTime is the last time the condition
+                          transitioned from one status to another.
                         format: date-time
                         type: string
                       message:
-                        description: message is a human readable message indicating
-                          details about the transition. This may be an empty string.
+                        description: Message is a human-readable message indicating
+                          details about the transition.
                         maxLength: 32768
                         type: string
                       observedGeneration:
-                        description: observedGeneration represents the .metadata.generation
+                        description: ObservedGeneration represents the .metadata.generation
                           that the condition was set based upon. For instance, if
                           .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
                           is 9, the condition is out of date with respect to the current
@@ -140,18 +146,13 @@ spec:
                         minimum: 0
                         type: integer
                       reason:
-                        description: reason contains a programmatic identifier indicating
-                          the reason for the condition's last transition. Producers
-                          of specific condition types may define expected values and
-                          meanings for this field, and whether the values are considered
-                          a guaranteed API. The value should be a CamelCase string.
-                          This field may not be empty.
+                        description: Reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
                         maxLength: 1024
-                        minLength: 1
                         pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
                         type: string
                       status:
-                        description: status of the condition, one of True, False,
+                        description: Status of the condition, one of True, False,
                           Unknown.
                         enum:
                           - 'True'
@@ -159,16 +160,16 @@ spec:
                           - Unknown
                         type: string
                       type:
-                        description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                          --- Many .condition.type values are consistent across resources
-                          like Available, but because arbitrary conditions can be
-                          useful (see .node.status.conditions), the ability to deconflict
-                          is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                        description: Type of condition.
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string
                     type: object
                   type: array
               type: object
+          required:
+            - spec
           type: object
       served: true
+      storage: true
+      subresources: {}

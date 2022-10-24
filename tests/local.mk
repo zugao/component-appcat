@@ -56,7 +56,7 @@ install-crds: kind-setup ## Install CRDs of providers in kind cluster.
 
 .PHONY: generate-integration-compositions
 generate-integration-compositions: export KUBECONFIG = $(KIND_KUBECONFIG)
-generate-integration-compositions: .cloudscale-composition .exoscale-composition
+generate-integration-compositions: .cloudscale-composition .exoscale-composition ## Generate artifacts for integration tests
 
 ##
 ### Integration Tests
