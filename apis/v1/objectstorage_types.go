@@ -5,8 +5,8 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 // Patch the XRD with this generated CRD scheme
 //go:generate yq -i e ".parameters.appcat.composites.\"xobjectbuckets.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_objectbuckets.yaml\").spec.versions" ../../packages/composite/objectstorage.yml
 
-// This additional property is required by Crossplane
-//go:generate yq -i e ".parameters.appcat.composites.\"xobjectbuckets.appcat.vshn.io\".spec.versions[].referenceable=true" ../../packages/composite/objectstorage.yml
+// Some properties need to be added and removed by Crossplane (https://doc.crds.dev/github.com/crossplane/crossplane/apiextensions.crossplane.io/CompositeResourceDefinition/v1@v1.10.0)
+//go:generate yq -i e "with(.parameters.appcat.composites.\"xobjectbuckets.appcat.vshn.io\".spec.versions[]; .referenceable=true, del(.storage), del(.subresources))" ../../packages/composite/objectstorage.yml
 
 // +kubebuilder:object:root=true
 // +kubebuilder:printcolumn:name="Bucket Name",type="string",JSONPath=".status.parameters.bucketName"
