@@ -45,6 +45,7 @@ parameters:
                                   description: MajorVersion is the major version identifier for the
                                     instance.
                                   type: string
+                                  default: "14"
                                 pgSettings:
                                   description: PGSettings contains additional PostgreSQL settings.
                                   type: object
@@ -60,6 +61,7 @@ parameters:
                                     - at-vie-1
                                     - bg-sof-1
                                   type: string
+                                  default: ch-gva-2
                               type: object
                             network:
                               description: Network contains any network related settings.
@@ -72,6 +74,8 @@ parameters:
                                   items:
                                     type: string
                                   type: array
+                                  default:
+                                    - 0.0.0.0/0
                             backup:
                               description: Backup contains settings to control the backups
                                 of an instance.
@@ -81,6 +85,7 @@ parameters:
                                     "hh:mm:ss".'
                                   pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
                                   type: string
+                                  default: 22:00:00
                               type: object
                             maintenance:
                               description: MaintenanceSpec contains settings to control the
@@ -100,17 +105,20 @@ parameters:
                                     - sunday
                                     - never
                                   type: string
+                                  default: tuesday
                                 timeOfDay:
                                   description: 'TimeOfDay for installing updates in UTC. Format:
                                     "hh:mm:ss".'
                                   pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
                                   type: string
+                                  default: 22:00:00
                               type: object
                             size:
                               description: Size contains the service capacity settings.
                               properties:
                                 plan:
                                   type: string
+                                  default: standard-4
                               type: object
                     status:
                       description: A PostgreSQLStatus reflects the observed state of a ExoscalePostgreSQL.
