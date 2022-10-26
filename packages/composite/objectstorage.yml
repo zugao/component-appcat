@@ -19,6 +19,7 @@ parameters:
             - AWS_SECRET_ACCESS_KEY
             - AWS_REGION
             - ENDPOINT
+            - ENDPOINT_URL
             - BUCKET_NAME
           defaultCompositionRef:
             name: ${pkg.appcat.composite.objectstorage:defaultCompositionRef}

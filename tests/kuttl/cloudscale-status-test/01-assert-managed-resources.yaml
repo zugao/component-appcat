@@ -13,7 +13,6 @@ spec:
     bucketName: my-bucket-change-name
     credentialsSecretRef:
       namespace: syn-provider-cloudscale-secrets
-    endpointURL: objects.rma.cloudscale.ch
     region: rma
   providerConfigRef:
     name: default

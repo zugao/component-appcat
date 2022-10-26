@@ -31,7 +31,6 @@ spec:
   forProvider:
     bucketDeletionPolicy: DeleteAll
     bucketName: my-bucket-change-name
-    endpointURL: sos-rma.exo.io
     zone: rma
   providerConfigRef:
     name: exoscale
