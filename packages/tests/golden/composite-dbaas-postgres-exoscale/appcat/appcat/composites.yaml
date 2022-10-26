@@ -40,6 +40,7 @@ spec:
                         of an instance.
                       properties:
                         timeOfDay:
+                          default: 79200
                           description: 'TimeOfDay for doing daily backups, in UTC.
                             Format: "hh:mm:ss".'
                           pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
@@ -50,6 +51,7 @@ spec:
                         maintenance of an instance.
                       properties:
                         dayOfWeek:
+                          default: tuesday
                           description: DayOfWeek specifies at which weekday the maintenance
                             is held place. Allowed values are [monday, tuesday, wednesday,
                             thursday, friday, saturday, sunday, never]
@@ -64,6 +66,7 @@ spec:
                             - never
                           type: string
                         timeOfDay:
+                          default: 79200
                           description: 'TimeOfDay for installing updates in UTC. Format:
                             "hh:mm:ss".'
                           pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
@@ -73,6 +76,8 @@ spec:
                       description: Network contains any network related settings.
                       properties:
                         ipFilter:
+                          default:
+                            - 0.0.0.0/0
                           description: IPFilter is a list of allowed IPv4 CIDR ranges
                             that can access the service. If no IP Filter is set, you
                             may not be able to reach the service. A value of `0.0.0.0/0`
@@ -85,6 +90,7 @@ spec:
                         properties
                       properties:
                         majorVersion:
+                          default: '14'
                           description: MajorVersion is the major version identifier
                             for the instance.
                           type: string
@@ -93,6 +99,7 @@ spec:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
                         zone:
+                          default: ch-gva-2
                           description: Zone is the datacenter identifier in which
                             the instance runs in.
                           enum:
@@ -108,6 +115,7 @@ spec:
                       description: Size contains the service capacity settings.
                       properties:
                         plan:
+                          default: standard-4
                           type: string
                       type: object
                   type: object
