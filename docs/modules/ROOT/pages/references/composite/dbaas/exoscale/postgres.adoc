@@ -1,3 +1,8 @@
 = pkg.appcat.composite.dbaas.exoscale.postgres
 
 The parent key for all of the following parameters is`pkg.appcat.composite.dbaas.exoscale.postgres`.
+
+[NOTE]
+====
+Currently, there's nothing to configure.
+====
