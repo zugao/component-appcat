@@ -16,6 +16,7 @@
 ** xref:references/composite/common.adoc[Common Parameters]
 ** xref:references/composite/objectstorage.adoc[composite.objectstorage]
 ** xref:references/composite/dbaas/exoscale/postgres.adoc[composite.dbaas.exoscale.postgres]
+** xref:references/composite/dbaas/exoscale/mysql.adoc[composite.dbaas.exoscale.mysql]
 
 * Composition Parameters
 ** xref:references/composition/objectstorage/common.adoc[Common Parameters]
