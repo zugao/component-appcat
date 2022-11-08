@@ -1,6 +1,6 @@
 = pkg.appcat.composite.dbaas.exoscale.mysql
 
-The parent key for all of the following parameters is`pkg.appcat.composite.dbaas.exoscale.mysql`.
+The parent key for all of the following parameters is `pkg.appcat.composite.dbaas.exoscale.mysql`.
 
 [NOTE]
 ====

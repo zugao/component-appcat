@@ -52,6 +52,12 @@ type ExoscaleMySQLParameters struct {
 
 type ExoscaleMySQLServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
+
+	// +kubebuilder:validation:Required
+
+	// MajorVersion is the major version identifier for the instance.
+	MajorVersion string `json:"majorVersion,omitempty"`
+
 	// MySQLSettings contains additional MySQL settings.
 	MySQLSettings runtime.RawExtension `json:"mysqlSettings,omitempty"`
 }
