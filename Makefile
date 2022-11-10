@@ -8,8 +8,6 @@ SHELL := bash
 include Makefile.vars.mk
 # Optional kind module
 -include kind/kind.mk
-# Local Env & testing
--include tests/local.mk
 
 -include apis/generate.mk
 
@@ -31,9 +29,6 @@ lint_adoc: ## Lint documentation
 .PHONY: lint_kubent
 lint_kubent: ## Check for deprecated Kubernetes API versions
 	$(KUBENT_DOCKER) $(KUBENT_ARGS) -f $(KUBENT_FILES)
-
-.PHONY: lint_test
-lint_test: generate-integration-compositions git-diff ## Check that test artifacts are up-to-date
 
 .PHONY: git-diff
 git-diff: ## Checks that there are no uncommitted changes
