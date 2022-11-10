@@ -70,7 +70,7 @@ The [Divio documentation structure](https://documentation.divio.com/) is used to
 
 Run the `make docs-serve` command in the root of the project, and then browse to http://localhost:2020 to see a preview of the current state of the documentation.
 
-After writing the documentation, please use the `make docs-vale` command and correct any warnings raised by the tool.
+After writing the documentation, please use the `make lint_adoc` command and correct any warnings raised by the tool.
 
 ## Contributing and license
 

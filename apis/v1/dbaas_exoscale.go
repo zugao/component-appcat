@@ -1,11 +1,6 @@
 package v1
 
 type ExoscaleDBaaSServiceSpec struct {
-	// +kubebuilder:validation:Required
-
-	// MajorVersion is the major version identifier for the instance.
-	MajorVersion string `json:"majorVersion,omitempty"`
-
 	// +kubebuilder:validation:Enum=ch-gva-2;ch-dk-2;de-fra-1;de-muc-1;at-vie-1;bg-sof-1
 	// +kubebuilder:default="ch-gva-2"
 

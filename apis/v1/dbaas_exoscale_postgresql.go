@@ -52,6 +52,12 @@ type ExoscalePostgreSQLParameters struct {
 
 type ExoscalePostgreSQLServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
+
+	// +kubebuilder:validation:Required
+
+	// MajorVersion is the major version identifier for the instance.
+	MajorVersion string `json:"majorVersion,omitempty"`
+
 	// PGSettings contains additional PostgreSQL settings.
 	PostgreSQLSettings runtime.RawExtension `json:"pgSettings,omitempty"`
 }
