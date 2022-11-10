@@ -1,3 +1,7 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+timeout: 60
+---
 apiVersion: appcat.vshn.io/v1
 kind: ObjectBucket
 metadata:
