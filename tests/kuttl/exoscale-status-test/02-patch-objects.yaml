@@ -1,5 +1,0 @@
-apiVersion: kuttl.dev/v1beta1
-kind: TestStep
-commands:
-  # Args: $access_user_type $bucket_type
-  - command: ../patch-object.sh iamkey buckets.exoscale.crossplane.io

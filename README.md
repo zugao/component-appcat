@@ -33,19 +33,6 @@ There is currently no easy way to run it locally. You need to apply the compiled
 
 This process is not suitable for installing the component on a production system. In order to do that please follow the documentation found in the next paragraph.
 
-## Integration Testing with Kuttl
-
-Some packages are tested with the Kubernetes E2E testing tool [Kuttl](https://kuttl.dev/docs).
-Kuttl is basically comparing the installed manifests (usually files named `##-install*.yaml`) with observed objects and compares the desired output (files named `##-assert*.yaml`).
-
-To execute tests, run `make test-integration` from the root dir.
-
-The tests are executed in parallel to save test time, but it makes reading errors and output harder.
-If a test fails, kuttl leaves the resources in the kind-cluster intact, so you can inspect the resources and events if necessary.
-Please note that Kubernetes Events from cluster-scoped resources appear in the `default` namespace only, but `kubectl describe ...` should show you the events.
-
-If tests succeed, the relevant resources are deleted to not use up costs on the cloud providers.
-
 ## Generate XRDs with Go / KubeBuilder
 
 In `/apis` there is code in Go to generate the XRDs (composites) as this is in OpenAPI.
@@ -55,7 +42,7 @@ See following pages for learning how to do that:
 - https://kubebuilder.io/reference/generating-crd.html
 - https://kubebuilder.io/reference/markers.html
 
-To run the composition generator, run `make generate-xrd generate-integration-compositions`.
+To run the composition generator, run `make generate-xrd`.
 You need to have `go` installed for this to work.
 
 After that, you are able to update the golden files for the packages: `make gen-golden-packages`.

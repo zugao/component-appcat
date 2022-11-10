@@ -7,9 +7,6 @@
 .work
 .kind
 
-# kuttl
-kubeconfig
-
 # Kubebuilder
 /apis/generated/
 /apis/**/zz_generated.deepcopy.go

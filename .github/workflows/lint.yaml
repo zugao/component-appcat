@@ -18,7 +18,6 @@ jobs:
         command:
           - lint_jsonnet
           - lint_yaml
-          - lint_test
     steps:
       - uses: actions/checkout@v3
       - name: Run ${{ matrix.command }}
