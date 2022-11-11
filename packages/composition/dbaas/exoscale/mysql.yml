@@ -17,7 +17,7 @@ parameters:
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
-            kind: XMySQL
+            kind: XExoscaleMySQL
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:
 

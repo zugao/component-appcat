@@ -4,7 +4,7 @@ metadata:
   annotations: {}
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:composite:exoscaleredis.appcat.vshn.io:claim-view
+  name: appcat:composite:xexoscaleredis.appcat.vshn.io:claim-view
 rules:
   - apiGroups:
       - appcat.vshn.io
@@ -24,7 +24,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-  name: appcat:composite:exoscaleredis.appcat.vshn.io:claim-edit
+  name: appcat:composite:xexoscaleredis.appcat.vshn.io:claim-edit
 rules:
   - apiGroups:
       - appcat.vshn.io

@@ -10,7 +10,7 @@ metadata:
 spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1
-    kind: XPostgreSQL
+    kind: XExoscalePostgreSQL
   patchSets:
     - name: annotations
       patches:

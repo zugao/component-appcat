@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: exoscaleredis.appcat.vshn.io
-  name: exoscaleredis.appcat.vshn.io
+    name: xexoscaleredis.appcat.vshn.io
+  name: xexoscaleredis.appcat.vshn.io
 spec:
   claimNames:
     kind: ExoscaleRedis
@@ -26,10 +26,10 @@ spec:
     plural: xexoscaleredis
   versions:
     - additionalPrinterColumns:
-        - jsonPath: .status.parameters.size.plan
+        - jsonPath: .spec.parameters.size.plan
           name: Plan
           type: string
-        - jsonPath: .spec.parameters.zone
+        - jsonPath: .spec.parameters.service.zone
           name: Zone
           type: string
       name: v1
