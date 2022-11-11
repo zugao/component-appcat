@@ -130,22 +130,3 @@ parameters:
         kind: Namespace
         metadata:
           name: ${pkg.appcat.composition.objectstorage.exoscale:secretNamespaces:iamkeys}
-
-    secrets:
-      exoscale-api-access:
-        metadata:
-          namespace: ${crossplane:namespace}
-        stringData:
-          EXOSCALE_API_KEY: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-exoscale/access-key}'
-          EXOSCALE_API_SECRET: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-exoscale/secret-key}'
-
-  crossplane:
-    providerConfigs:
-      exoscale:
-        apiVersion: exoscale.crossplane.io/v1
-        spec:
-          credentials:
-            source: InjectedIdentity
-            apiSecretRef:
-              name: exoscale-api-access
-              namespace: ${crossplane:namespace}

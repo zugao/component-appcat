@@ -116,22 +116,3 @@ parameters:
         kind: Namespace
         metadata:
           name: ${pkg.appcat.composition.dbaas.exoscale:secretNamespaces:mysql}
-
-    secrets:
-      exoscale-dbaas-api-access:
-        metadata:
-          namespace: ${crossplane:namespace}
-        stringData:
-          EXOSCALE_API_KEY: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/dbaas/provider-exoscale/access-key}'
-          EXOSCALE_API_SECRET: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/dbaas/provider-exoscale/secret-key}'
-
-  crossplane:
-    providerConfigs:
-      exoscale-dbaas:
-        apiVersion: exoscale.crossplane.io/v1
-        spec:
-          credentials:
-            source: InjectedIdentity
-            apiSecretRef:
-              name: exoscale-dbaas-api-access
-              namespace: ${crossplane:namespace}

@@ -10,7 +10,7 @@ metadata:
 spec:
   credentials:
     apiSecretRef:
-      name: exoscale-dbaas-api-access
+      name: exoscale-api-access
       namespace: syn-crossplane
     source: InjectedIdentity
 ---
