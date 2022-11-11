@@ -14,8 +14,8 @@ import (
 //go:generate yq -i e ../../packages/composite/dbaas/exoscale/mysql.yml --expression ".parameters.appcat.composites.\"exoscalemysqls.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscalemysqls.yaml\").spec.versions"
 
 // +kubebuilder:object:root=true
-// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".status.parameters.size.plan"
-// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.zone"
+// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
+// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
 
 // ExoscaleMySQL is the API for creating MySQL on Exoscale.
 type ExoscaleMySQL struct {

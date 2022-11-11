@@ -23,10 +23,10 @@ parameters:
             name: exoscale.redis.appcat.vshn.io
           versions:
             - additionalPrinterColumns:
-                - jsonPath: .status.parameters.size.plan
+                - jsonPath: .spec.parameters.size.plan
                   name: Plan
                   type: string
-                - jsonPath: .spec.parameters.zone
+                - jsonPath: .spec.parameters.service.zone
                   name: Zone
                   type: string
               name: v1

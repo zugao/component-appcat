@@ -14,8 +14,8 @@ import (
 //go:generate yq -i e ../../packages/composite/dbaas/exoscale/postgres.yml --expression ".parameters.appcat.composites.\"exoscalepostgresqls.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscalepostgresqls.yaml\").spec.versions"
 
 // +kubebuilder:object:root=true
-// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".status.parameters.size.plan"
-// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.zone"
+// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
+// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
 
 // ExoscalePostgreSQL is the API for creating PostgreSQL on Exoscale.
 type ExoscalePostgreSQL struct {

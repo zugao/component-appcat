@@ -14,8 +14,8 @@ import (
 //go:generate yq -i e ../../packages/composite/dbaas/exoscale/redis.yml --expression ".parameters.appcat.composites.\"exoscaleredis.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscaleredis.yaml\").spec.versions"
 
 // +kubebuilder:object:root=true
-// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".status.parameters.size.plan"
-// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.zone"
+// +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
+// +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
 
 // ExoscaleRedis is the API for creating Redis instances on Exoscale.
 type ExoscaleRedis struct {
