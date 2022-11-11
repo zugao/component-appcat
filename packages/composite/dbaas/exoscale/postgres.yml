@@ -3,7 +3,7 @@ classes:
 parameters:
   appcat:
     composites:
-      "exoscalepostgresqls.appcat.vshn.io":
+      "xexoscalepostgresqls.appcat.vshn.io":
         spec:
           group: appcat.vshn.io
           names:

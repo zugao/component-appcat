@@ -3,7 +3,7 @@ classes:
 parameters:
   appcat:
     composites:
-      "exoscaleredis.appcat.vshn.io":
+      "xexoscaleredis.appcat.vshn.io":
         spec:
           group: appcat.vshn.io
           names:

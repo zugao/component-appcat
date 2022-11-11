@@ -3,7 +3,7 @@ classes:
 parameters:
   appcat:
     composites:
-      "exoscalemysqls.appcat.vshn.io":
+      "xexoscalemysqls.appcat.vshn.io":
         spec:
           group: appcat.vshn.io
           names:

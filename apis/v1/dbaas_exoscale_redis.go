@@ -11,7 +11,7 @@ import (
 //go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
 
 // Patch the XRD with this generated CRD scheme
-//go:generate yq -i e ../../packages/composite/dbaas/exoscale/redis.yml --expression ".parameters.appcat.composites.\"exoscaleredis.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscaleredis.yaml\").spec.versions"
+//go:generate yq -i e ../../packages/composite/dbaas/exoscale/redis.yml --expression ".parameters.appcat.composites.\"xexoscaleredis.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscaleredis.yaml\").spec.versions"
 
 // +kubebuilder:object:root=true
 // +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
