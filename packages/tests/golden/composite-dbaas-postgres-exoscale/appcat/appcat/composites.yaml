@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: exoscalepostgresqls.appcat.vshn.io
-  name: exoscalepostgresqls.appcat.vshn.io
+    name: xexoscalepostgresqls.appcat.vshn.io
+  name: xexoscalepostgresqls.appcat.vshn.io
 spec:
   claimNames:
     kind: ExoscalePostgreSQL
@@ -27,10 +27,10 @@ spec:
     plural: xexoscalepostgresqls
   versions:
     - additionalPrinterColumns:
-        - jsonPath: .status.parameters.size.plan
+        - jsonPath: .spec.parameters.size.plan
           name: Plan
           type: string
-        - jsonPath: .spec.parameters.zone
+        - jsonPath: .spec.parameters.service.zone
           name: Zone
           type: string
       name: v1
