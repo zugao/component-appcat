@@ -26,3 +26,4 @@
 ** xref:references/composition/dbaas/exoscale/common.adoc[Common Parameters]
 ** xref:references/composition/dbaas/exoscale/postgres.adoc[composition.dbaas.exoscale.postgres]
 ** xref:references/composition/dbaas/exoscale/mysql.adoc[composition.dbaas.exoscale.mysql]
+** xref:references/composition/dbaas/exoscale/redis.adoc[composition.dbaas.exoscale.redis]

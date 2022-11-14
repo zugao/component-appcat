@@ -10,3 +10,6 @@
 # Kubebuilder
 /apis/generated/
 /apis/**/zz_generated.deepcopy.go
+
+# jsonnet builder
+component/jsonnetfile.json
