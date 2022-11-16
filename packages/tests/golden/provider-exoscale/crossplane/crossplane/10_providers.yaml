@@ -8,4 +8,4 @@ metadata:
     name: exoscale
   name: exoscale
 spec:
-  package: ghcr.io/vshn/provider-exoscale/provider:v0.3.0
+  package: ghcr.io/vshn/provider-exoscale/provider:v0.4.0

@@ -8,7 +8,7 @@ parameters:
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale/provider
-        tag: v0.3.0
+        tag: v0.4.0
 
   crossplane:
     providers:
