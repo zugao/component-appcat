@@ -10,6 +10,14 @@ import (
 //go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[].schema.openAPIV3Schema.properties; del(.metadata), del(.kind), del(.apiVersion))"
 //go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
 
+// Workaround to make nested defaulting work.
+// kubebuilder is unable to set a {} default
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscalekafkas.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.network.default={})"
+
 // Patch the XRD with this generated CRD scheme
 //go:generate yq -i e ../../packages/composite/dbaas/exoscale/kafka.yml --expression ".parameters.appcat.composites.\"xexoscalekafkas.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscalekafkas.yaml\").spec.versions"
 
@@ -34,6 +42,7 @@ type ExoscaleKafkaSpec struct {
 }
 
 type ExoscaleKafkaParameters struct {
+
 	// Service contains Exoscale Kafka DBaaS specific properties
 	Service ExoscaleKafkaServiceSpec `json:"service,omitempty"`
 
@@ -41,10 +50,17 @@ type ExoscaleKafkaParameters struct {
 	Maintenance ExoscaleDBaaSMaintenanceScheduleSpec `json:"maintenance,omitempty"`
 
 	// Size contains settings to control the sizing of a service.
-	Size ExoscaleDBaaSSizeSpec `json:"size,omitempty"`
+	Size ExoscaleKafkaDBaaSSizeSpec `json:"size,omitempty"`
 
 	// Network contains any network related settings.
 	Network ExoscaleDBaaSNetworkSpec `json:"network,omitempty"`
+}
+
+type ExoscaleKafkaDBaaSSizeSpec struct {
+	// +kubebuilder:default="startup-2"
+
+	// Plan is the name of the resource plan that defines the compute resources.
+	Plan string `json:"plan,omitempty"`
 }
 
 type ExoscaleKafkaServiceSpec struct {
