@@ -30,7 +30,7 @@ parameters:
                     maintenance:
                       dayOfWeek: "" # patched
                       timeOfDay: "" # patched
-                    redisSettings: {} # patched
+                    kafkaSettings: {} # patched
                     size:
                       plan: "" # patched
                     zone: "" # patched
