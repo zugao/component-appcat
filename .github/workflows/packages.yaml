@@ -49,6 +49,7 @@ jobs:
           - composition-objectstorage-exoscale
           - composition-dbaas-postgres-exoscale
           - composition-dbaas-mysql-exoscale
+          - composition-dbaas-redis-exoscale
           - composition-dbaas-kafka-exoscale
     defaults:
       run:
