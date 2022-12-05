@@ -100,8 +100,8 @@ spec:
                           x-kubernetes-preserve-unknown-fields: true
                         version:
                           description: Version contains the minor version for Kafka.
-                            Currently only "3.2" is supported. You can leave it empty
-                            to always get the latest supported version.
+                            Currently only "3.2" is supported. Leave it empty to always
+                            get the latest supported version.
                           enum:
                             - '3.2'
                           type: string

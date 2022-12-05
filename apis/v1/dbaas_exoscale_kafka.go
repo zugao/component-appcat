@@ -72,7 +72,7 @@ type ExoscaleKafkaServiceSpec struct {
 	// +kubebuilder:validation:Enum="3.2"
 
 	// Version contains the minor version for Kafka.
-	// Currently only "3.2" is supported. You can leave it empty to always get the latest supported version.
+	// Currently only "3.2" is supported. Leave it empty to always get the latest supported version.
 	Version string `json:"version,omitempty"`
 }
 
