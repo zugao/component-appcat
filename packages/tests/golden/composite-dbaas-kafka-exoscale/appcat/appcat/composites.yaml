@@ -31,6 +31,9 @@ spec:
         - jsonPath: .spec.parameters.service.zone
           name: Zone
           type: string
+        - jsonPath: .status.version
+          name: Version
+          type: string
       name: v1
       referenceable: true
       schema:
@@ -95,6 +98,13 @@ spec:
                           description: KafkaSettings contains additional Kafka settings.
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
+                        version:
+                          description: Version contains the minor version for Kafka.
+                            Currently only "3.2" is supported. You can leave it empty
+                            to always get the latest supported version.
+                          enum:
+                            - '3.2'
+                          type: string
                         zone:
                           default: ch-gva-2
                           description: Zone is the datacenter identifier in which
@@ -169,6 +179,9 @@ spec:
                         type: string
                     type: object
                   type: array
+                version:
+                  description: The actual observed Kafka version.
+                  type: string
               type: object
           type: object
       served: true

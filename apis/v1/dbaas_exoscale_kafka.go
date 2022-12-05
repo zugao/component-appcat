@@ -24,6 +24,7 @@ import (
 // +kubebuilder:object:root=true
 // +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
 // +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
+// +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".status.version"
 
 // ExoscaleKafka is the API for creating Kafka instances on Exoscale.
 type ExoscaleKafka struct {
@@ -67,9 +68,18 @@ type ExoscaleKafkaServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
 	// KafkaSettings contains additional Kafka settings.
 	KafkaSettings runtime.RawExtension `json:"kafkaSettings,omitempty"`
+
+	// +kubebuilder:validation:Enum="3.2"
+
+	// Version contains the minor version for Kafka.
+	// Currently only "3.2" is supported. You can leave it empty to always get the latest supported version.
+	Version string `json:"version,omitempty"`
 }
 
 type ExoscaleKafkaStatus struct {
 	// KafkaConditions contains the status conditions of the backing object.
 	KafkaConditions []Condition `json:"kafkaConditions,omitempty"`
+
+	// The actual observed Kafka version.
+	Version string `json:"version,omitempty"`
 }

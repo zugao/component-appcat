@@ -37,6 +37,7 @@ spec:
             size:
               plan: ''
             terminationProtection: false
+            version: ''
             zone: ''
           providerConfigRef:
             name: exoscale-dbaas
@@ -94,6 +95,12 @@ spec:
         - fromFieldPath: spec.parameters.maintenance.timeOfDay
           toFieldPath: spec.forProvider.maintenance.timeOfDay
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.service.version
+          toFieldPath: spec.forProvider.version
+          type: FromCompositeFieldPath
+        - fromFieldPath: status.atProvider.version
+          toFieldPath: status.version
+          type: ToCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object

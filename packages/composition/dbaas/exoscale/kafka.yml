@@ -34,6 +34,7 @@ parameters:
                     size:
                       plan: "" # patched
                     zone: "" # patched
+                    version: "" # patched
                     terminationProtection: false
                   writeConnectionSecretToRef:
                     name: "" # patched
@@ -97,6 +98,14 @@ parameters:
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.maintenance.timeOfDay
                   toFieldPath: spec.forProvider.maintenance.timeOfDay
+                # Set kafka version
+                - type: FromCompositeFieldPath
+                  fromFieldPath: spec.parameters.service.version
+                  toFieldPath: spec.forProvider.version
+                - type: ToCompositeFieldPath
+                  fromFieldPath: status.atProvider.version
+                  toFieldPath: status.version
+
 
     additionalResources:
       provider-exoscale-secrets-kafka:
