@@ -53,9 +53,10 @@ type ExoscaleMySQLParameters struct {
 type ExoscaleMySQLServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
 
-	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Enum="8"
 
-	// MajorVersion is the major version identifier for the instance.
+	// MajorVersion contains the major version for MySQL.
+	// Currently only "8" is supported. Leave it empty to always get the latest supported version.
 	MajorVersion string `json:"majorVersion,omitempty"`
 
 	// MySQLSettings contains additional MySQL settings.

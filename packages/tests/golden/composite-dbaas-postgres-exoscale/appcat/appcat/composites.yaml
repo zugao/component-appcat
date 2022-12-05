@@ -101,8 +101,11 @@ spec:
                         properties
                       properties:
                         majorVersion:
-                          description: MajorVersion is the major version identifier
-                            for the instance.
+                          description: MajorVersion contains the major version for
+                            PostgreSQL. Currently only "14" is supported. Leave it
+                            empty to always get the latest supported version.
+                          enum:
+                            - '14'
                           type: string
                         pgSettings:
                           description: PGSettings contains additional PostgreSQL settings.
