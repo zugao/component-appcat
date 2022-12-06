@@ -18,7 +18,6 @@ parameters:
             - REDIS_USERNAME
             - REDIS_PASSWORD
             - REDIS_URL
-            - ca.crt
           defaultCompositionRef:
             name: exoscale.redis.appcat.vshn.io
           versions:
