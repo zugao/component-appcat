@@ -25,6 +25,7 @@ jobs:
           - composition-dbaas-postgres-exoscale
           - composition-dbaas-mysql-exoscale
           - composition-dbaas-redis-exoscale
+          - composition-dbaas-kafka-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
@@ -49,6 +50,7 @@ jobs:
           - composition-dbaas-postgres-exoscale
           - composition-dbaas-mysql-exoscale
           - composition-dbaas-redis-exoscale
+          - composition-dbaas-kafka-exoscale
     defaults:
       run:
         working-directory: ${{ env.PACKAGE_SUBDIR }}
