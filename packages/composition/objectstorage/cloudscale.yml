@@ -13,8 +13,6 @@ parameters:
         commonPatchSets:
           annotations: {}
           labels: {}
-        commonResources:
-          observeClaimNamespace: {}
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
@@ -68,14 +66,6 @@ parameters:
                     strategy: string
                     string:
                       fmt: "%s.%s"
-                # Set tenant tag
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels[appuio.io/organization]
-                  toFieldPath: spec.forProvider.tags.tenant
-                # Set namespace tag
-                - type: FromCompositeFieldPath
-                  fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-                  toFieldPath: spec.forProvider.tags.namespace
 
             - base:
                 apiVersion: cloudscale.crossplane.io/v1
