@@ -59,9 +59,6 @@ spec:
         - fromConnectionSecretKey: REDIS_URL
           name: REDIS_URL
           type: FromConnectionSecretKey
-        - fromConnectionSecretKey: ca.crt
-          name: ca.crt
-          type: FromConnectionSecretKey
       patches:
         - patchSetName: annotations
           type: PatchSet
