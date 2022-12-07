@@ -13,8 +13,6 @@ parameters:
         commonPatchSets:
           annotations: {}
           labels: {}
-        commonResources:
-          observeClaimNamespace: {}
         spec:
           compositeTypeRef:
             apiVersion: appcat.vshn.io/v1
