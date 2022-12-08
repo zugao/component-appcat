@@ -1,0 +1,19 @@
+apiVersion: appcat.vshn.io/v1
+kind: ExoscaleOpensearch
+metadata:
+  name: test-opensearch-66
+spec: {}
+#  parameters:
+#    network:
+#      ipFilter:
+#        - 0.0.0.0/0
+#    backup:
+#      timeOfDay: "12:00:00"
+#    maintenance:
+#      timeOfDay: "12:10:00"
+#      dayOfWeek: "tuesday"
+#    service:
+#      version: "2"
+#      zone: "ch-gva-2"
+#    size:
+#      plan: "startup-4"
