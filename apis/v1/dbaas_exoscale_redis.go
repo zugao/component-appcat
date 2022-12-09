@@ -10,6 +10,14 @@ import (
 //go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[].schema.openAPIV3Schema.properties; del(.metadata), del(.kind), del(.apiVersion))"
 //go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
 
+// Workaround to make nested defaulting work.
+// kubebuilder is unable to set a {} default
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_exoscaleredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.network.default={})"
+
 // Patch the XRD with this generated CRD scheme
 //go:generate yq -i e ../../packages/composite/dbaas/exoscale/redis.yml --expression ".parameters.appcat.composites.\"xexoscaleredis.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscaleredis.yaml\").spec.versions"
 

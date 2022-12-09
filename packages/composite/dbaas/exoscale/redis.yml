@@ -61,6 +61,7 @@ parameters:
                                   pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
                                   type: string
                               type: object
+                              default: {}
                             network:
                               description: Network contains any network related settings.
                               properties:
@@ -72,6 +73,7 @@ parameters:
                                     type: string
                                   type: array
                               type: object
+                              default: {}
                             service:
                               description: Service contains Exoscale Redis DBaaS specific properties
                               properties:
@@ -91,6 +93,7 @@ parameters:
                                     - bg-sof-1
                                   type: string
                               type: object
+                              default: {}
                             size:
                               description: Size contains settings to control the sizing of a service.
                               properties:
@@ -99,7 +102,9 @@ parameters:
                                   description: Plan is the name of the resource plan that defines the compute resources.
                                   type: string
                               type: object
+                              default: {}
                           type: object
+                          default: {}
                       type: object
                     status:
                       description: Status reflects the observed state of a ExoscaleRedis.
