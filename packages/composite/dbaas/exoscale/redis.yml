@@ -3,9 +3,9 @@ classes:
 parameters:
   appcat:
     composites:
-      "xexoscaleredis.appcat.vshn.io":
+      "xexoscaleredis.exoscale.appcat.vshn.io":
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscaleRedis
             plural: xexoscaleredis
@@ -19,7 +19,7 @@ parameters:
             - REDIS_PASSWORD
             - REDIS_URL
           defaultCompositionRef:
-            name: exoscale.redis.appcat.vshn.io
+            name: exoscaleredis.exoscale.appcat.vshn.io
           versions:
             - additionalPrinterColumns:
                 - jsonPath: .spec.parameters.size.plan

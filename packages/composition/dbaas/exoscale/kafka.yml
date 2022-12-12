@@ -8,13 +8,13 @@ parameters:
 
   appcat:
     compositions:
-      "exoscale.kafka.appcat.vshn.io":
+      "exoscalekafka.exoscale.appcat.vshn.io":
         commonPatchSets:
           annotations: {}
           labels: {}
         spec:
           compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
+            apiVersion: exoscale.appcat.vshn.io/v1
             kind: XExoscaleKafka
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:

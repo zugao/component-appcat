@@ -3,9 +3,9 @@ classes:
 parameters:
   appcat:
     composites:
-      "xexoscalepostgresqls.appcat.vshn.io":
+      "xexoscalepostgresqls.exoscale.appcat.vshn.io":
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscalePostgreSQL
             plural: xexoscalepostgresqls
@@ -21,7 +21,7 @@ parameters:
             - POSTGRESQL_PASSWORD
             - ca.crt
           defaultCompositionRef:
-            name: exoscale.postgres.appcat.vshn.io
+            name: exoscalepostgres.exoscale.appcat.vshn.io
           versions:
             - additionalPrinterColumns:
                 - jsonPath: .spec.parameters.size.plan

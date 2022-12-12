@@ -4,10 +4,10 @@ metadata:
   annotations: {}
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
-  name: appcat:composite:xexoscalepostgresqls.appcat.vshn.io:claim-view
+  name: appcat:composite:xexoscalepostgresqls.exoscale.appcat.vshn.io:claim-view
 rules:
   - apiGroups:
-      - appcat.vshn.io
+      - exoscale.appcat.vshn.io
     resources:
       - exoscalepostgresqls
       - exoscalepostgresqls/status
@@ -24,10 +24,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'
-  name: appcat:composite:xexoscalepostgresqls.appcat.vshn.io:claim-edit
+  name: appcat:composite:xexoscalepostgresqls.exoscale.appcat.vshn.io:claim-edit
 rules:
   - apiGroups:
-      - appcat.vshn.io
+      - exoscale.appcat.vshn.io
     resources:
       - exoscalepostgresqls
       - exoscalepostgresqls/status

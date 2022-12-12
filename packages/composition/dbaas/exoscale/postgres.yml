@@ -8,13 +8,13 @@ parameters:
 
   appcat:
     compositions:
-      "exoscale.postgres.appcat.vshn.io":
+      "exoscalepostgres.exoscale.appcat.vshn.io":
         commonPatchSets:
           annotations: {}
           labels: {}
         spec:
           compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
+            apiVersion: exoscale.appcat.vshn.io/v1
             kind: XExoscalePostgreSQL
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:

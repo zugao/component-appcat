@@ -8,13 +8,13 @@ parameters:
 
   appcat:
     compositions:
-      "exoscale.mysql.appcat.vshn.io":
+      "exoscalemysql.exoscale.appcat.vshn.io":
         commonPatchSets:
           annotations: {}
           labels: {}
         spec:
           compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
+            apiVersion: exoscale.appcat.vshn.io/v1
             kind: XExoscaleMySQL
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:

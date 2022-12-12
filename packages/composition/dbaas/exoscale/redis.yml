@@ -8,13 +8,13 @@ parameters:
 
   appcat:
     compositions:
-      "exoscale.redis.appcat.vshn.io":
+      "exoscaleredis.exoscale.appcat.vshn.io":
         commonPatchSets:
           annotations: {}
           labels: {}
         spec:
           compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
+            apiVersion: exoscale.appcat.vshn.io/v1
             kind: XExoscaleRedis
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:

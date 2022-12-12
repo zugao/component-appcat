@@ -1,11 +1,11 @@
 classes:
-  - '...common'
+  - "...common"
 parameters:
   appcat:
     composites:
-      xexoscaleopensearches.appcat.vshn.io:
+      xexoscaleopensearches.exoscale.appcat.vshn.io:
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscaleOpensearch
             plural: xexoscaleopensearches
@@ -18,7 +18,7 @@ parameters:
             - OPENSEARCH_PASSWORD
             - OPENSEARCH_DASHBOARD_URI
           defaultCompositionRef:
-            name: exoscale.opensearch.appcat.vshn.io
+            name: exoscaleopensearch.exoscale.appcat.vshn.io
           versions:
             - name: v1
               schema:

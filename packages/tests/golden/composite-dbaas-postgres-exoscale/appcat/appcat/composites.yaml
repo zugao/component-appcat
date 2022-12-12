@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: xexoscalepostgresqls.appcat.vshn.io
-  name: xexoscalepostgresqls.appcat.vshn.io
+    name: xexoscalepostgresqls.exoscale.appcat.vshn.io
+  name: xexoscalepostgresqls.exoscale.appcat.vshn.io
 spec:
   claimNames:
     kind: ExoscalePostgreSQL
@@ -20,8 +20,8 @@ spec:
     - POSTGRESQL_PASSWORD
     - ca.crt
   defaultCompositionRef:
-    name: exoscale.postgres.appcat.vshn.io
-  group: appcat.vshn.io
+    name: exoscalepostgres.exoscale.appcat.vshn.io
+  group: exoscale.appcat.vshn.io
   names:
     kind: XExoscalePostgreSQL
     plural: xexoscalepostgresqls

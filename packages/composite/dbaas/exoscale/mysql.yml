@@ -3,9 +3,9 @@ classes:
 parameters:
   appcat:
     composites:
-      "xexoscalemysqls.appcat.vshn.io":
+      "xexoscalemysqls.exoscale.appcat.vshn.io":
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscaleMySQL
             plural: xexoscalemysqls
@@ -21,7 +21,7 @@ parameters:
             - MYSQL_PASSWORD
             - ca.crt
           defaultCompositionRef:
-            name: exoscale.mysql.appcat.vshn.io
+            name: exoscalemysql.exoscale.appcat.vshn.io
           versions:
             - additionalPrinterColumns:
                 - jsonPath: .spec.parameters.size.plan

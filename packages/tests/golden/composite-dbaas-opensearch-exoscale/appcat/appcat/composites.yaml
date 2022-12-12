@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: xexoscaleopensearches.appcat.vshn.io
-  name: xexoscaleopensearches.appcat.vshn.io
+    name: xexoscaleopensearches.exoscale.appcat.vshn.io
+  name: xexoscaleopensearches.exoscale.appcat.vshn.io
 spec:
   claimNames:
     kind: ExoscaleOpensearch
@@ -17,8 +17,8 @@ spec:
     - OPENSEARCH_PASSWORD
     - OPENSEARCH_DASHBOARD_URI
   defaultCompositionRef:
-    name: exoscale.opensearch.appcat.vshn.io
-  group: appcat.vshn.io
+    name: exoscaleopensearch.exoscale.appcat.vshn.io
+  group: exoscale.appcat.vshn.io
   names:
     kind: XExoscaleOpensearch
     plural: xexoscaleopensearches

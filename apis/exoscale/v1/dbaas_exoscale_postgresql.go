@@ -3,23 +3,25 @@ package v1
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+
+	appcatv1 "github.com/vshn/component-appcat/apis/v1"
 )
 
 // Remove some fields that are removed by Crossplane anyway.
 // Some properties need to be added and removed by Crossplane (https://doc.crds.dev/github.com/crossplane/crossplane/apiextensions.crossplane.io/CompositeResourceDefinition/v1@v1.10.0)
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[].schema.openAPIV3Schema.properties; del(.metadata), del(.kind), del(.apiVersion))"
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[].schema.openAPIV3Schema.properties; del(.metadata), del(.kind), del(.apiVersion))"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
 
 // Workaround to make nested defaulting work.
 // kubebuilder is unable to set a {} default
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
-//go:generate yq -i e ../generated/appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.network.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.network.default={})"
 
 // Patch the XRD with this generated CRD scheme
-//go:generate yq -i e ../../packages/composite/dbaas/exoscale/postgres.yml --expression ".parameters.appcat.composites.\"xexoscalepostgresqls.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_exoscalepostgresqls.yaml\").spec.versions"
+//go:generate yq -i e ../../../packages/composite/dbaas/exoscale/postgres.yml --expression ".parameters.appcat.composites.\"xexoscalepostgresqls.exoscale.appcat.vshn.io\".spec.versions=load(\"../../generated/exoscale.appcat.vshn.io_exoscalepostgresqls.yaml\").spec.versions"
 
 // +kubebuilder:object:root=true
 // +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
@@ -73,5 +75,5 @@ type ExoscalePostgreSQLServiceSpec struct {
 
 type ExoscalePostgreSQLStatus struct {
 	// PostgreSQLConditions contains the status conditions of the backing object.
-	PostgreSQLConditions []Condition `json:"postgresqlConditions,omitempty"`
+	PostgreSQLConditions []appcatv1.Condition `json:"postgresqlConditions,omitempty"`
 }
