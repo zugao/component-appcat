@@ -23,61 +23,21 @@ spec:
     kind: XExoscaleOpensearch
     plural: xexoscaleopensearches
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .spec.parameters.size.plan
-          name: Plan
-          type: string
-        - jsonPath: .spec.parameters.service.zone
-          name: Zone
-          type: string
-      name: v1
+    - name: v1
       referenceable: true
       schema:
         openAPIV3Schema:
           description: ExoscaleOpensearch is the api for creating OpenSearch on Exoscale
           properties:
             spec:
-              default:
-                parameters:
-                  backup:
-                    timeOfDay: '12:00:00'
-                  maintenance:
-                    dayOfWeek: tuesday
-                    timeOfDay: '12:10:00'
-                  network:
-                    ipFilter:
-                      - 0.0.0.0/0
-                  service:
-                    opensearchSettings:
-                      indices_fielddata_cache_size: null
-                    version: '2'
-                    zone: ch-gva-2
-                  size:
-                    plan: startup-4
               description: Spec defines the desired state of an ExoscaleOpensearch
               properties:
                 parameters:
-                  default:
-                    backup:
-                      timeOfDay: '12:00:00'
-                    maintenance:
-                      dayOfWeek: tuesday
-                      timeOfDay: '12:10:00'
-                    network:
-                      ipFilter:
-                        - 0.0.0.0/0
-                    service:
-                      opensearchSettings:
-                        indices_fielddata_cache_size: null
-                      version: '2'
-                      zone: ch-gva-2
-                    size:
-                      plan: startup-4
+                  default: {}
                   description: Parameters are the configurable fields of a ExoscaleOpensearch.
                   properties:
                     backup:
-                      default:
-                        timeOfDay: '21:35:00'
+                      default: {}
                       description: Backup contains settings to control the backups
                         of an instance.
                       properties:
@@ -89,9 +49,7 @@ spec:
                           type: string
                       type: object
                     maintenance:
-                      default:
-                        dayOfWeek: sunday
-                        timeOfDay: 04:00:45
+                      default: {}
                       description: Maintenance contains settings to control the maintenance
                         of an instance.
                       properties:
@@ -118,9 +76,7 @@ spec:
                           type: string
                       type: object
                     network:
-                      default:
-                        ipFilter:
-                          - 0.0.0.0/0
+                      default: {}
                       description: Network contains any network related settings.
                       properties:
                         ipFilter:
@@ -135,17 +91,11 @@ spec:
                           type: array
                       type: object
                     service:
-                      default:
-                        opensearchSettings:
-                          indices_fielddata_cache_size: null
-                        version: '2'
-                        zone: ch-gva-2
+                      default: {}
                       description: Service contains Exoscale Opensearch DBaaS specific
                         properties
                       properties:
                         opensearchSettings:
-                          default:
-                            indices_fielddata_cache_size: null
                           description: OpensearchSettings contains additional Opensearch
                             settings.
                           type: object
@@ -173,8 +123,7 @@ spec:
                           type: string
                       type: object
                     size:
-                      default:
-                        plan: startup-4
+                      default: {}
                       description: Size contains settings to control the sizing of
                         a service.
                       properties:

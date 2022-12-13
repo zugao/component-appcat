@@ -1,8 +1,10 @@
 apiVersion: appcat.vshn.io/v1
 kind: ExoscaleOpensearch
 metadata:
-  name: test-opensearch-66
-spec: {}
+  name: test-opensearch-44
+spec:
+  writeConnectionSecretToRef:
+    name: "hello-world-opensearch-44"
 #  parameters:
 #    network:
 #      ipFilter:
