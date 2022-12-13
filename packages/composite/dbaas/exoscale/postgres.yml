@@ -114,7 +114,7 @@ parameters:
                               description: Size contains settings to control the sizing of a service.
                               properties:
                                 plan:
-                                  default: standard-4
+                                  default: startup-4
                                   description: Plan is the name of the resource plan that defines the compute resources.
                                   type: string
                               type: object
