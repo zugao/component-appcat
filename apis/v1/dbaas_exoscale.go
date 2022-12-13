@@ -25,7 +25,7 @@ type ExoscaleDBaaSMaintenanceScheduleSpec struct {
 }
 
 type ExoscaleDBaaSSizeSpec struct {
-	// +kubebuilder:default="standard-4"
+	// +kubebuilder:default="startup-4"
 
 	// Plan is the name of the resource plan that defines the compute resources.
 	Plan string `json:"plan,omitempty"`

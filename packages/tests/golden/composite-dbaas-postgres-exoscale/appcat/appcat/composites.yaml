@@ -43,6 +43,7 @@ spec:
               description: Spec defines the desired state of a ExoscalePostgreSQL.
               properties:
                 parameters:
+                  default: {}
                   description: Parameters are the configurable fields of a ExoscalePostgreSQL.
                   properties:
                     backup:
@@ -57,6 +58,7 @@ spec:
                           type: string
                       type: object
                     maintenance:
+                      default: {}
                       description: Maintenance contains settings to control the maintenance
                         of an instance.
                       properties:
@@ -83,6 +85,7 @@ spec:
                           type: string
                       type: object
                     network:
+                      default: {}
                       description: Network contains any network related settings.
                       properties:
                         ipFilter:
@@ -97,6 +100,7 @@ spec:
                           type: array
                       type: object
                     service:
+                      default: {}
                       description: Service contains Exoscale PostgreSQL DBaaS specific
                         properties
                       properties:
@@ -125,11 +129,12 @@ spec:
                           type: string
                       type: object
                     size:
+                      default: {}
                       description: Size contains settings to control the sizing of
                         a service.
                       properties:
                         plan:
-                          default: standard-4
+                          default: startup-4
                           description: Plan is the name of the resource plan that
                             defines the compute resources.
                           type: string
