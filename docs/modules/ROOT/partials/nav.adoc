@@ -19,6 +19,7 @@
 ** xref:references/composite/dbaas/exoscale/mysql.adoc[composite.dbaas.exoscale.mysql]
 ** xref:references/composite/dbaas/exoscale/redis.adoc[composite.dbaas.exoscale.redis]
 ** xref:references/composite/dbaas/exoscale/kafka.adoc[composite.dbaas.exoscale.kafka]
+** xref:references/composite/dbaas/exoscale/opensearch.adoc[composite.dbaas.exoscale.opensearch]
 
 * Composition Parameters
 ** xref:references/composition/objectstorage/common.adoc[Common Parameters]
@@ -29,3 +30,4 @@
 ** xref:references/composition/dbaas/exoscale/mysql.adoc[composition.dbaas.exoscale.mysql]
 ** xref:references/composition/dbaas/exoscale/redis.adoc[composition.dbaas.exoscale.redis]
 ** xref:references/composition/dbaas/exoscale/kafka.adoc[composition.dbaas.exoscale.kafka]
+** xref:references/composition/dbaas/exoscale/opensearch.adoc[composition.dbaas.exoscale.opensearch]
