@@ -58,10 +58,3 @@ clean:
 	make -C packages clean
 	make -C component clean
 
-load-opensearch-locally:
-	kubectl apply -f packages/tests/golden/composite-dbaas-opensearch-exoscale/appcat/appcat/composites.yaml
-	kubectl apply -f packages/tests/golden/composition-dbaas-opensearch-exoscale/appcat/appcat/compositions.yaml
-	kubectl apply -f packages/tests/golden/composition-dbaas-opensearch-exoscale/appcat/appcat/additionalResources.yaml
-	kubectl apply -f packages/tests/golden/composite-dbaas-opensearch-exoscale/appcat/appcat/clusterRoles.yaml
-	sleep 5
-	kubectl apply -f packages/tests/sample.yaml
