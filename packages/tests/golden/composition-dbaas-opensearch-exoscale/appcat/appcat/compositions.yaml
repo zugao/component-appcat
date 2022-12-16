@@ -70,8 +70,8 @@ spec:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.writeConnectionSecretToRef.name
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.service.version
-          toFieldPath: spec.forProvider.version
+        - fromFieldPath: spec.parameters.service.majorVersion
+          toFieldPath: spec.forProvider.majorVersion
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.opensearchSettings
           toFieldPath: spec.forProvider.openSearchSettings

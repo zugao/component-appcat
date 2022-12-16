@@ -67,8 +67,8 @@ parameters:
                   toFieldPath: spec.writeConnectionSecretToRef.name
                 # Set opensearch database version
                 - type: FromCompositeFieldPath
-                  fromFieldPath: spec.parameters.service.version
-                  toFieldPath: spec.forProvider.version
+                  fromFieldPath: spec.parameters.service.majorVersion
+                  toFieldPath: spec.forProvider.majorVersion
                 # Set opensearch settings
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.service.opensearchSettings
