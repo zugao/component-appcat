@@ -95,12 +95,7 @@ spec:
                       description: Service contains Exoscale Opensearch DBaaS specific
                         properties
                       properties:
-                        opensearchSettings:
-                          description: OpensearchSettings contains additional Opensearch
-                            settings.
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        version:
+                        majorVersion:
                           default: '2'
                           description: MajorVersion contains the version for Opensearch.
                             Currently only "2" and "1" is supported. Leave it empty
@@ -109,6 +104,11 @@ spec:
                             - '1'
                             - '2'
                           type: string
+                        opensearchSettings:
+                          description: OpensearchSettings contains additional Opensearch
+                            settings.
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
                         zone:
                           default: ch-gva-2
                           description: Zone is the datacenter identifier in which

@@ -35,7 +35,7 @@ type ExoscaleOpensearchServiceSpec struct {
 	// +kubebuilder:default="2"
 	// MajorVersion contains the version for Opensearch.
 	// Currently only "2" and "1" is supported. Leave it empty to always get the latest supported version.
-	MajorVersion string `json:"version,omitempty"`
+	MajorVersion string `json:"majorVersion,omitempty"`
 
 	// OpensearchSettings contains additional Opensearch settings.
 	OpensearchSettings runtime.RawExtension `json:"opensearchSettings,omitempty"`
