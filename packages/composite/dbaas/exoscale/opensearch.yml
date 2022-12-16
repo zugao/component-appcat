@@ -1,11 +1,11 @@
 classes:
-  - '...common'
+  - "...common"
 parameters:
   appcat:
     composites:
-      xexoscaleopensearches.appcat.vshn.io:
+      xexoscaleopensearches.exoscale.appcat.vshn.io:
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscaleOpensearch
             plural: xexoscaleopensearches
@@ -18,7 +18,7 @@ parameters:
             - OPENSEARCH_PASSWORD
             - OPENSEARCH_DASHBOARD_URI
           defaultCompositionRef:
-            name: exoscale.opensearch.appcat.vshn.io
+            name: exoscaleopensearch.exoscale.appcat.vshn.io
           versions:
             - name: v1
               schema:
@@ -79,17 +79,17 @@ parameters:
                             service:
                               description: Service contains Exoscale Opensearch DBaaS specific properties
                               properties:
-                                opensearchSettings:
-                                  description: OpensearchSettings contains additional Opensearch settings.
-                                  type: object
-                                  x-kubernetes-preserve-unknown-fields: true
-                                version:
+                                majorVersion:
                                   default: "2"
                                   description: MajorVersion contains the version for Opensearch. Currently only "2" and "1" is supported. Leave it empty to always get the latest supported version.
                                   enum:
                                     - "1"
                                     - "2"
                                   type: string
+                                opensearchSettings:
+                                  description: OpensearchSettings contains additional Opensearch settings.
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
                                 zone:
                                   default: ch-gva-2
                                   description: Zone is the datacenter identifier in which the instance runs in.

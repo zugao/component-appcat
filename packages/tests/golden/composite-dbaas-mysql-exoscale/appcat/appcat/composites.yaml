@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: xexoscalemysqls.appcat.vshn.io
-  name: xexoscalemysqls.appcat.vshn.io
+    name: xexoscalemysqls.exoscale.appcat.vshn.io
+  name: xexoscalemysqls.exoscale.appcat.vshn.io
 spec:
   claimNames:
     kind: ExoscaleMySQL
@@ -20,8 +20,8 @@ spec:
     - MYSQL_PASSWORD
     - ca.crt
   defaultCompositionRef:
-    name: exoscale.mysql.appcat.vshn.io
-  group: appcat.vshn.io
+    name: exoscalemysql.exoscale.appcat.vshn.io
+  group: exoscale.appcat.vshn.io
   names:
     kind: XExoscaleMySQL
     plural: xexoscalemysqls

@@ -1,4 +1,4 @@
-module github.com/vshn/component-appcat
+module github.com/vshn/component-appcat/apis
 
 go 1.19
 

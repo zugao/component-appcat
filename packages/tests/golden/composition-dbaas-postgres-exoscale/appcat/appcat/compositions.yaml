@@ -5,11 +5,11 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: exoscale.postgres.appcat.vshn.io
-  name: exoscale.postgres.appcat.vshn.io
+    name: exoscalepostgres.exoscale.appcat.vshn.io
+  name: exoscalepostgres.exoscale.appcat.vshn.io
 spec:
   compositeTypeRef:
-    apiVersion: appcat.vshn.io/v1
+    apiVersion: exoscale.appcat.vshn.io/v1
     kind: XExoscalePostgreSQL
   patchSets:
     - name: annotations

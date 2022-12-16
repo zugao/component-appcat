@@ -8,17 +8,16 @@ parameters:
 
   appcat:
     compositions:
-      "exoscale.opensearch.appcat.vshn.io":
+      "exoscaleopensearch.exoscale.appcat.vshn.io":
         commonPatchSets:
           annotations: {}
           labels: {}
         spec:
           compositeTypeRef:
-            apiVersion: appcat.vshn.io/v1
+            apiVersion: exoscale.appcat.vshn.io/v1
             kind: XExoscaleOpensearch
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:
-
             - base:
                 apiVersion: exoscale.crossplane.io/v1
                 kind: OpenSearch
@@ -68,8 +67,8 @@ parameters:
                   toFieldPath: spec.writeConnectionSecretToRef.name
                 # Set opensearch database version
                 - type: FromCompositeFieldPath
-                  fromFieldPath: spec.parameters.service.version
-                  toFieldPath: spec.forProvider.version
+                  fromFieldPath: spec.parameters.service.majorVersion
+                  toFieldPath: spec.forProvider.majorVersion
                 # Set opensearch settings
                 - type: FromCompositeFieldPath
                   fromFieldPath: spec.parameters.service.opensearchSettings

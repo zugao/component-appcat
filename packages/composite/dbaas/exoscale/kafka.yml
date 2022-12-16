@@ -3,9 +3,9 @@ classes:
 parameters:
   appcat:
     composites:
-      xexoscalekafkas.appcat.vshn.io:
+      xexoscalekafkas.exoscale.appcat.vshn.io:
         spec:
-          group: appcat.vshn.io
+          group: exoscale.appcat.vshn.io
           names:
             kind: XExoscaleKafka
             plural: xexoscalekafkas

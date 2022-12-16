@@ -5,11 +5,11 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: exoscale.mysql.appcat.vshn.io
-  name: exoscale.mysql.appcat.vshn.io
+    name: exoscalemysql.exoscale.appcat.vshn.io
+  name: exoscalemysql.exoscale.appcat.vshn.io
 spec:
   compositeTypeRef:
-    apiVersion: appcat.vshn.io/v1
+    apiVersion: exoscale.appcat.vshn.io/v1
     kind: XExoscaleMySQL
   patchSets:
     - name: annotations
