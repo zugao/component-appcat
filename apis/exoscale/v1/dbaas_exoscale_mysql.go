@@ -16,6 +16,7 @@ import (
 // kubebuilder is unable to set a {} default
 //go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
 //go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
+//go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.backup.default={})"
 //go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
 //go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
 //go:generate yq -i e ../../generated/exoscale.appcat.vshn.io_exoscalemysqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.network.default={})"
@@ -64,6 +65,7 @@ type ExoscaleMySQLServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
 
 	// +kubebuilder:validation:Enum="8"
+	// +kubebuilder:default="8"
 
 	// MajorVersion contains the major version for MySQL.
 	// Currently only "8" is supported. Leave it empty to always get the latest supported version.
