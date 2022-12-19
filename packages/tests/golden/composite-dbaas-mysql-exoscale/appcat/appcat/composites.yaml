@@ -47,6 +47,7 @@ spec:
                   description: Parameters are the configurable fields of a ExoscaleMySQL.
                   properties:
                     backup:
+                      default: {}
                       description: Backup contains settings to control the backups
                         of an instance.
                       properties:
@@ -105,6 +106,7 @@ spec:
                         properties
                       properties:
                         majorVersion:
+                          default: '8'
                           description: MajorVersion contains the major version for
                             MySQL. Currently only "8" is supported. Leave it empty
                             to always get the latest supported version.
