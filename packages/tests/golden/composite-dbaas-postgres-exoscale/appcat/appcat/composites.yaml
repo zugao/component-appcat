@@ -47,6 +47,7 @@ spec:
                   description: Parameters are the configurable fields of a ExoscalePostgreSQL.
                   properties:
                     backup:
+                      default: {}
                       description: Backup contains settings to control the backups
                         of an instance.
                       properties:
@@ -105,6 +106,7 @@ spec:
                         properties
                       properties:
                         majorVersion:
+                          default: '14'
                           description: MajorVersion contains the major version for
                             PostgreSQL. Currently only "14" is supported. Leave it
                             empty to always get the latest supported version.
