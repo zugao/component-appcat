@@ -14,10 +14,10 @@ spec:
   connectionSecretKeys:
     - OPENSEARCH_USER
     - OPENSEARCH_PASSWORD
+    - OPENSEARCH_DASHBOARD_URI
+    - OPENSEARCH_URI
     - OPENSEARCH_HOST
     - OPENSEARCH_PORT
-    - OPENSEARCH_URI
-    - OPENSEARCH_DASHBOARD_URI
   defaultCompositionRef:
     name: exoscaleopensearch.exoscale.appcat.vshn.io
   group: exoscale.appcat.vshn.io
