@@ -5,38 +5,46 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: xexoscaleopensearches.exoscale.appcat.vshn.io
-  name: xexoscaleopensearches.exoscale.appcat.vshn.io
+    name: xexoscalepostgresqls.exoscale.appcat.vshn.io
+  name: xexoscalepostgresqls.exoscale.appcat.vshn.io
 spec:
   claimNames:
-    kind: ExoscaleOpenSearch
-    plural: exoscaleopensearches
+    kind: ExoscalePostgreSQL
+    plural: exoscalepostgresqls
   connectionSecretKeys:
-    - OPENSEARCH_USER
-    - OPENSEARCH_PASSWORD
-    - OPENSEARCH_HOST
-    - OPENSEARCH_PORT
-    - OPENSEARCH_URI
-    - OPENSEARCH_DASHBOARD_URI
+    - POSTGRESQL_URL
+    - POSTGRESQL_DB
+    - POSTGRESQL_HOST
+    - POSTGRESQL_PORT
+    - POSTGRESQL_USER
+    - POSTGRESQL_PASSWORD
+    - ca.crt
   defaultCompositionRef:
-    name: exoscaleopensearch.exoscale.appcat.vshn.io
+    name: exoscalepostgres.exoscale.appcat.vshn.io
   group: exoscale.appcat.vshn.io
   names:
-    kind: XExoscaleOpenSearch
-    plural: xexoscaleopensearches
+    kind: XExoscalePostgreSQL
+    plural: xexoscalepostgresqls
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .spec.parameters.size.plan
+          name: Plan
+          type: string
+        - jsonPath: .spec.parameters.service.zone
+          name: Zone
+          type: string
+      name: v1
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
+          description: ExoscalePostgreSQL is the API for creating PostgreSQL on Exoscale.
           properties:
             spec:
-              description: Spec defines the desired state of an ExoscaleOpenSearch
+              description: Spec defines the desired state of a ExoscalePostgreSQL.
               properties:
                 parameters:
                   default: {}
-                  description: Parameters are the configurable fields of a ExoscaleOpenSearch.
+                  description: Parameters are the configurable fields of a ExoscalePostgreSQL.
                   properties:
                     backup:
                       default: {}
@@ -94,21 +102,19 @@ spec:
                       type: object
                     service:
                       default: {}
-                      description: Service contains Exoscale OpenSearch DBaaS specific
+                      description: Service contains Exoscale PostgreSQL DBaaS specific
                         properties
                       properties:
                         majorVersion:
-                          default: '2'
-                          description: MajorVersion contains the version for OpenSearch.
-                            Currently only "2" and "1" is supported. Leave it empty
-                            to always get the latest supported version.
+                          default: '14'
+                          description: MajorVersion contains the major version for
+                            PostgreSQL. Currently only "14" is supported. Leave it
+                            empty to always get the latest supported version.
                           enum:
-                            - '1'
-                            - '2'
+                            - '14'
                           type: string
-                        opensearchSettings:
-                          description: OpenSearchSettings contains additional OpenSearch
-                            settings.
+                        pgSettings:
+                          description: PGSettings contains additional PostgreSQL settings.
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
                         zone:
@@ -138,10 +144,10 @@ spec:
                   type: object
               type: object
             status:
-              description: Status reflects the observed state of a ExoscaleOpenSearch
+              description: Status reflects the observed state of a ExoscalePostgreSQL.
               properties:
-                opensearchConditions:
-                  description: OpenSearchConditions contains the status conditions
+                postgresqlConditions:
+                  description: PostgreSQLConditions contains the status conditions
                     of the backing object.
                   items:
                     properties:

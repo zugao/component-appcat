@@ -9,7 +9,7 @@ parameters:
       version: v2.3.0
     appcat:
       url: https://github.com/vshn/component-appcat.git
-      version: refactor-v1/mysql
+      version: refactor-v1/postgres
 
   facts:
     cloud: cloudscale
