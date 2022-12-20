@@ -1,11 +1,5 @@
 parameters:
   appcat:
-    # Legacy
-    secrets: {}
-    additionalResources: {}
-    composites: {}
-    compositions: {}
-
     images:
       provider-kubernetes:
         registry: docker.io
