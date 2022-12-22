@@ -10,6 +10,7 @@ parameters:
         repository: vshn/provider-exoscale/provider
         tag: v0.8.0
 
+
   crossplane:
     providers:
       exoscale:
