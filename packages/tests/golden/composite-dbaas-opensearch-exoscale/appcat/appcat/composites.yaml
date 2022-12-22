@@ -9,32 +9,34 @@ metadata:
   name: xexoscaleopensearches.exoscale.appcat.vshn.io
 spec:
   claimNames:
-    kind: ExoscaleOpensearch
+    kind: ExoscaleOpenSearch
     plural: exoscaleopensearches
   connectionSecretKeys:
-    - OPENSEARCH_URI
     - OPENSEARCH_USER
     - OPENSEARCH_PASSWORD
+    - OPENSEARCH_HOST
+    - OPENSEARCH_PORT
+    - OPENSEARCH_URI
     - OPENSEARCH_DASHBOARD_URI
   defaultCompositionRef:
     name: exoscaleopensearch.exoscale.appcat.vshn.io
   group: exoscale.appcat.vshn.io
   names:
-    kind: XExoscaleOpensearch
+    kind: XExoscaleOpenSearch
     plural: xexoscaleopensearches
   versions:
     - name: v1
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: ExoscaleOpensearch is the api for creating OpenSearch on Exoscale
+          description: ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
           properties:
             spec:
-              description: Spec defines the desired state of an ExoscaleOpensearch
+              description: Spec defines the desired state of an ExoscaleOpenSearch
               properties:
                 parameters:
                   default: {}
-                  description: Parameters are the configurable fields of a ExoscaleOpensearch.
+                  description: Parameters are the configurable fields of a ExoscaleOpenSearch.
                   properties:
                     backup:
                       default: {}
@@ -92,12 +94,12 @@ spec:
                       type: object
                     service:
                       default: {}
-                      description: Service contains Exoscale Opensearch DBaaS specific
+                      description: Service contains Exoscale OpenSearch DBaaS specific
                         properties
                       properties:
                         majorVersion:
                           default: '2'
-                          description: MajorVersion contains the version for Opensearch.
+                          description: MajorVersion contains the version for OpenSearch.
                             Currently only "2" and "1" is supported. Leave it empty
                             to always get the latest supported version.
                           enum:
@@ -105,7 +107,7 @@ spec:
                             - '2'
                           type: string
                         opensearchSettings:
-                          description: OpensearchSettings contains additional Opensearch
+                          description: OpenSearchSettings contains additional OpenSearch
                             settings.
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
@@ -136,10 +138,10 @@ spec:
                   type: object
               type: object
             status:
-              description: Status reflects the observed state of a ExoscaleOpensearch
+              description: Status reflects the observed state of a ExoscaleOpenSearch
               properties:
                 opensearchConditions:
-                  description: OpensearchConditions contains the status conditions
+                  description: OpenSearchConditions contains the status conditions
                     of the backing object.
                   items:
                     properties:

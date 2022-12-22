@@ -7,15 +7,17 @@ parameters:
         spec:
           group: exoscale.appcat.vshn.io
           names:
-            kind: XExoscaleOpensearch
+            kind: XExoscaleOpenSearch
             plural: xexoscaleopensearches
           claimNames:
-            kind: ExoscaleOpensearch
+            kind: ExoscaleOpenSearch
             plural: exoscaleopensearches
           connectionSecretKeys:
-            - OPENSEARCH_URI
             - OPENSEARCH_USER
             - OPENSEARCH_PASSWORD
+            - OPENSEARCH_HOST
+            - OPENSEARCH_PORT
+            - OPENSEARCH_URI
             - OPENSEARCH_DASHBOARD_URI
           defaultCompositionRef:
             name: exoscaleopensearch.exoscale.appcat.vshn.io
@@ -23,13 +25,13 @@ parameters:
             - name: v1
               schema:
                 openAPIV3Schema:
-                  description: ExoscaleOpensearch is the api for creating OpenSearch on Exoscale
+                  description: ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
                   properties:
                     spec:
-                      description: Spec defines the desired state of an ExoscaleOpensearch
+                      description: Spec defines the desired state of an ExoscaleOpenSearch
                       properties:
                         parameters:
-                          description: Parameters are the configurable fields of a ExoscaleOpensearch.
+                          description: Parameters are the configurable fields of a ExoscaleOpenSearch.
                           properties:
                             backup:
                               description: Backup contains settings to control the backups of an instance.
@@ -77,17 +79,17 @@ parameters:
                               type: object
                               default: {}
                             service:
-                              description: Service contains Exoscale Opensearch DBaaS specific properties
+                              description: Service contains Exoscale OpenSearch DBaaS specific properties
                               properties:
                                 majorVersion:
                                   default: "2"
-                                  description: MajorVersion contains the version for Opensearch. Currently only "2" and "1" is supported. Leave it empty to always get the latest supported version.
+                                  description: MajorVersion contains the version for OpenSearch. Currently only "2" and "1" is supported. Leave it empty to always get the latest supported version.
                                   enum:
                                     - "1"
                                     - "2"
                                   type: string
                                 opensearchSettings:
-                                  description: OpensearchSettings contains additional Opensearch settings.
+                                  description: OpenSearchSettings contains additional OpenSearch settings.
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
                                 zone:
@@ -116,10 +118,10 @@ parameters:
                           default: {}
                       type: object
                     status:
-                      description: Status reflects the observed state of a ExoscaleOpensearch
+                      description: Status reflects the observed state of a ExoscaleOpenSearch
                       properties:
                         opensearchConditions:
-                          description: OpensearchConditions contains the status conditions of the backing object.
+                          description: OpenSearchConditions contains the status conditions of the backing object.
                           items:
                             properties:
                               lastTransitionTime:
