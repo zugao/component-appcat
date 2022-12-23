@@ -15,7 +15,7 @@ parameters:
         spec:
           compositeTypeRef:
             apiVersion: exoscale.appcat.vshn.io/v1
-            kind: XExoscaleOpensearch
+            kind: XExoscaleOpenSearch
           writeConnectionSecretsToNamespace: ${crossplane:namespace}
           resources:
             - base:
@@ -54,6 +54,12 @@ parameters:
                 - fromConnectionSecretKey: OPENSEARCH_DASHBOARD_URI
                   type: FromConnectionSecretKey
                   name: OPENSEARCH_DASHBOARD_URI
+                - fromConnectionSecretKey: OPENSEARCH_HOST
+                  type: FromConnectionSecretKey
+                  name: OPENSEARCH_HOST
+                - fromConnectionSecretKey: OPENSEARCH_PORT
+                  type: FromConnectionSecretKey
+                  name: OPENSEARCH_PORT
               patches:
                 - type: PatchSet
                   patchSetName: annotations

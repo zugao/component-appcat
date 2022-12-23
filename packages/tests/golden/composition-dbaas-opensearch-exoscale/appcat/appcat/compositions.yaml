@@ -10,7 +10,7 @@ metadata:
 spec:
   compositeTypeRef:
     apiVersion: exoscale.appcat.vshn.io/v1
-    kind: XExoscaleOpensearch
+    kind: XExoscaleOpenSearch
   patchSets:
     - name: annotations
       patches:
@@ -58,6 +58,12 @@ spec:
           type: FromConnectionSecretKey
         - fromConnectionSecretKey: OPENSEARCH_DASHBOARD_URI
           name: OPENSEARCH_DASHBOARD_URI
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: OPENSEARCH_HOST
+          name: OPENSEARCH_HOST
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: OPENSEARCH_PORT
+          name: OPENSEARCH_PORT
           type: FromConnectionSecretKey
       patches:
         - patchSetName: annotations

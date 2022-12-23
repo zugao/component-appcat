@@ -28,22 +28,22 @@ import (
 // +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
 // +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
 
-type ExoscaleOpensearchServiceSpec struct {
+type ExoscaleOpenSearchServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
 
 	// +kubebuilder:validation:Enum="1";"2";
 	// +kubebuilder:default="2"
-	// MajorVersion contains the version for Opensearch.
+	// MajorVersion contains the version for OpenSearch.
 	// Currently only "2" and "1" is supported. Leave it empty to always get the latest supported version.
 	MajorVersion string `json:"majorVersion,omitempty"`
 
-	// OpensearchSettings contains additional Opensearch settings.
-	OpensearchSettings runtime.RawExtension `json:"opensearchSettings,omitempty"`
+	// OpenSearchSettings contains additional OpenSearch settings.
+	OpenSearchSettings runtime.RawExtension `json:"opensearchSettings,omitempty"`
 }
 
-type ExoscaleOpensearchParameters struct {
-	// Service contains Exoscale Opensearch DBaaS specific properties
-	Service ExoscaleOpensearchServiceSpec `json:"service,omitempty"`
+type ExoscaleOpenSearchParameters struct {
+	// Service contains Exoscale OpenSearch DBaaS specific properties
+	Service ExoscaleOpenSearchServiceSpec `json:"service,omitempty"`
 
 	// Maintenance contains settings to control the maintenance of an instance.
 	Maintenance ExoscaleDBaaSMaintenanceScheduleSpec `json:"maintenance,omitempty"`
@@ -58,22 +58,22 @@ type ExoscaleOpensearchParameters struct {
 	Backup ExoscaleDBaaSBackupSpec `json:"backup,omitempty"`
 }
 
-type ExoscaleOpensearchSpec struct {
-	// Parameters are the configurable fields of a ExoscaleOpensearch.
-	Parameters ExoscaleOpensearchParameters `json:"parameters,omitempty"`
+type ExoscaleOpenSearchSpec struct {
+	// Parameters are the configurable fields of a ExoscaleOpenSearch.
+	Parameters ExoscaleOpenSearchParameters `json:"parameters,omitempty"`
 }
-type ExoscaleOpensearchStatus struct {
-	// OpensearchConditions contains the status conditions of the backing object.
-	OpensearchConditions []appcatv1.Condition `json:"opensearchConditions,omitempty"`
+type ExoscaleOpenSearchStatus struct {
+	// OpenSearchConditions contains the status conditions of the backing object.
+	OpenSearchConditions []appcatv1.Condition `json:"opensearchConditions,omitempty"`
 }
 
-// ExoscaleOpensearch is the api for creating OpenSearch on Exoscale
-type ExoscaleOpensearch struct {
+// ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
+type ExoscaleOpenSearch struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	//Spec defines the desired state of an ExoscaleOpensearch
-	Spec ExoscaleOpensearchSpec `json:"spec,omitempty"`
-	// Status reflects the observed state of a ExoscaleOpensearch
-	Status ExoscaleOpensearchStatus `json:"status,omitempty"`
+	//Spec defines the desired state of an ExoscaleOpenSearch
+	Spec ExoscaleOpenSearchSpec `json:"spec,omitempty"`
+	// Status reflects the observed state of a ExoscaleOpenSearch
+	Status ExoscaleOpenSearchStatus `json:"status,omitempty"`
 }
