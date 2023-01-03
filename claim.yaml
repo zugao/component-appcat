@@ -1,0 +1,9 @@
+apiVersion: appcat.vshn.io/v1
+kind: VSHNPostgreSQL
+metadata:
+  name: test1
+spec:
+  parameters: {}
+  writeConnectionSecretToRef:
+    name: opensearch-test1-db-connection-details
+

@@ -1,0 +1,28 @@
+classes:
+  - ..common
+
+parameters:
+  appcat:
+    compositions:
+      vshnpostgresql.appcat.vshn.io:
+        commonPatchSets:
+          annotations: {}
+          labels: {}
+        spec:
+          compositeTypeRef:
+            apiVersion: appcat.vshn.io/v1
+            kind: XVSHNPostgreSQL
+          writeConnectionSecretsToNamespace: ${crossplane:namespace}
+          resources:
+            - base:
+                apiVersion: stackgres.io/v1
+                kind: SGCluster
+                metadata: {} # patched
+                spec:
+                  forProvider:
+                    instances: 2
+                    postgres:
+                      version: 'latest'
+                    pods:
+                      persistentVolume:
+                        size: 5Gi

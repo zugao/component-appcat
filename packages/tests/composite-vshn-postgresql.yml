@@ -1,0 +1,6 @@
+classes:
+  - ..composite.vshn.postgresql
+
+parameters:
+  facts:
+    cloud: exoscale
