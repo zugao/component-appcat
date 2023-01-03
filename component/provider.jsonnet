@@ -22,6 +22,24 @@ local providerSecret(credentials) =
   };
 
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local openshiftControllerConfig =
+  (if isOpenshift then {
+     podSecurityContext: {},
+     securityContext: {},
+   }
+   else {});
+
+local controllerConfig(name, config) =
+  local spec = config + openshiftControllerConfig;
+  if spec != {} then
+    [
+      crossplane.ControllerConfig(name) {
+        spec+: spec,
+      },
+    ]
+  else [];
+
 {
   [if params.providers.cloudscale.enabled then '10_provider_cloudscale']:
     local provider = params.providers.cloudscale;
@@ -42,6 +60,11 @@ local providerSecret(credentials) =
           }
         ),
       },
+    ]
+    +
+    controllerConfig('cloudscale', provider.controllerConfig)
+    +
+    [
       providerSecret(provider.credentials),
       kube.Namespace(provider.connectionSecretNamespace),
     ],
@@ -64,6 +87,11 @@ local providerSecret(credentials) =
           }
         ),
       },
+    ]
+    +
+    controllerConfig('exoscale', provider.controllerConfig)
+    +
+    [
       providerSecret(provider.credentials),
       kube.Namespace(provider.connectionSecretNamespace),
     ],
@@ -105,9 +133,12 @@ local providerSecret(credentials) =
           },
         } + provider.spec,
       },
-      crossplane.ControllerConfig('kubernetes') {
-        spec+: provider.controllerConfig,
-      },
+    ]
+    +
+    controllerConfig('kubernetes', provider.controllerConfig)
+    +
+    [
+
       crossplane.ProviderConfig('kubernetes') {
         apiVersion: 'exoscale.crossplane.io/v1',
         spec+: addCredentials(

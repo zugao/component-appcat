@@ -25,6 +25,7 @@ parameters:
             CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}'
         spec:
           package: ${appcat:images:provider-cloudscale:registry}/${appcat:images:provider-cloudscale:repository}:${appcat:images:provider-cloudscale:tag}
+        controllerConfig: {}
         config: {}
 
 
@@ -39,6 +40,7 @@ parameters:
             EXOSCALE_API_SECRET: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/secret-key}'
         spec:
           package: ${appcat:images:provider-exoscale:registry}/${appcat:images:provider-exoscale:repository}:${appcat:images:provider-exoscale:tag}
+        controllerConfig: {}
         config: {}
 
       kubernetes:
