@@ -8,6 +8,8 @@ metadata:
     name: exoscale
   name: exoscale
 spec:
+  controllerConfigRef:
+    name: exoscale
   package: ghcr.io/vshn/provider-exoscale/provider:v0.8.1
 ---
 apiVersion: exoscale.crossplane.io/v1

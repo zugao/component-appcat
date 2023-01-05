@@ -30,6 +30,7 @@ local openshiftControllerConfig =
    }
    else {});
 
+
 local controllerConfig(name, config) =
   local spec = config + openshiftControllerConfig;
   if spec != {} then
@@ -40,12 +41,23 @@ local controllerConfig(name, config) =
     ]
   else [];
 
+local controllerConfigRef(config) =
+  if config != [] then
+    {
+      controllerConfigRef: {
+        name: config[0].metadata.name,
+      },
+    }
+  else {};
+
 {
   [if params.providers.cloudscale.enabled then '10_provider_cloudscale']:
     local provider = params.providers.cloudscale;
+
+    local controllerConf = controllerConfig('cloudscale', provider.controllerConfig);
     [
       crossplane.Provider('cloudscale') {
-        spec+: provider.spec,
+        spec+: provider.spec + controllerConfigRef(controllerConf),
       },
       crossplane.ProviderConfig('cloudscale') {
         apiVersion: 'cloudscale.crossplane.io/v1',
@@ -62,7 +74,7 @@ local controllerConfig(name, config) =
       },
     ]
     +
-    controllerConfig('cloudscale', provider.controllerConfig)
+    controllerConf
     +
     [
       providerSecret(provider.credentials),
@@ -70,9 +82,11 @@ local controllerConfig(name, config) =
     ],
   [if params.providers.exoscale.enabled then '10_provider_exoscale']:
     local provider = params.providers.exoscale;
+
+    local controllerConf = controllerConfig('exoscale', provider.controllerConfig);
     [
       crossplane.Provider('exoscale') {
-        spec+: provider.spec,
+        spec+: provider.spec + controllerConfigRef(controllerConf),
       },
       crossplane.ProviderConfig('exoscale') {
         apiVersion: 'exoscale.crossplane.io/v1',
@@ -89,7 +103,7 @@ local controllerConfig(name, config) =
       },
     ]
     +
-    controllerConfig('exoscale', provider.controllerConfig)
+    controllerConf
     +
     [
       providerSecret(provider.credentials),
@@ -97,6 +111,7 @@ local controllerConfig(name, config) =
     ],
   [if params.providers.kubernetes.enabled then '10_provider_kubernetes']:
     local provider = params.providers.kubernetes;
+
     local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
       metadata+: {
         namespace: provider.namespace,
@@ -125,17 +140,17 @@ local controllerConfig(name, config) =
       roleRef_: role,
       subjects_: [ sa ],
     };
+
+
+    local controllerConf = controllerConfig('kubernetes', provider.controllerConfig);
+
     [
       crossplane.Provider('kubernetes') {
-        spec+: {
-          controllerConfigRef: {
-            name: 'kubernetes',
-          },
-        } + provider.spec,
+        spec+: provider.spec + controllerConfigRef(controllerConf),
       },
     ]
     +
-    controllerConfig('kubernetes', provider.controllerConfig)
+    controllerConf
     +
     [
 

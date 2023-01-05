@@ -8,6 +8,8 @@ metadata:
     name: cloudscale
   name: cloudscale
 spec:
+  controllerConfigRef:
+    name: cloudscale
   package: ghcr.io/vshn/provider-cloudscale/provider:v0.5.0
 ---
 apiVersion: cloudscale.crossplane.io/v1
