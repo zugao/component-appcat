@@ -140,7 +140,7 @@ local controllerConfig(name, config) =
     [
 
       crossplane.ProviderConfig('kubernetes') {
-        apiVersion: 'exoscale.crossplane.io/v1',
+        apiVersion: 'kubernetes.crossplane.io/v1alpha1',
         spec+: addCredentials(
           provider.config,
           {

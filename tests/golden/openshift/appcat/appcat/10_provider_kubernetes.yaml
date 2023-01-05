@@ -26,7 +26,7 @@ spec:
   securityContext: {}
   serviceAccountName: provider-kubernetes
 ---
-apiVersion: exoscale.crossplane.io/v1
+apiVersion: kubernetes.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
   annotations:
