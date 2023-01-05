@@ -35,7 +35,7 @@ metadata:
   name: kubernetes
 spec:
   credentials:
-    source: InjectIdentity
+    source: InjectedIdentity
 ---
 apiVersion: v1
 kind: ServiceAccount

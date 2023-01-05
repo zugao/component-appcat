@@ -24,7 +24,7 @@ spec:
     apiTokenSecretRef:
       name: cloudscale-api-token
       namespace: syn-crossplane
-    source: InjectIdentity
+    source: InjectedIdentity
 ---
 apiVersion: v1
 data: {}

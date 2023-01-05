@@ -52,7 +52,7 @@ local controllerConfig(name, config) =
         spec+: addCredentials(
           provider.config,
           {
-            source: 'InjectIdentity',
+            source: 'InjectedIdentity',
             apiTokenSecretRef: {
               name: provider.credentials.name,
               namespace: provider.credentials.namespace,
@@ -79,7 +79,7 @@ local controllerConfig(name, config) =
         spec+: addCredentials(
           provider.config,
           {
-            source: 'InjectIdentity',
+            source: 'InjectedIdentity',
             apiSecretRef: {
               name: provider.credentials.name,
               namespace: provider.credentials.namespace,
@@ -144,7 +144,7 @@ local controllerConfig(name, config) =
         spec+: addCredentials(
           provider.config,
           {
-            source: 'InjectIdentity',
+            source: 'InjectedIdentity',
           }
         ),
       },

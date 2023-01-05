@@ -24,7 +24,7 @@ spec:
     apiSecretRef:
       name: exoscale-api-access
       namespace: syn-crossplane
-    source: InjectIdentity
+    source: InjectedIdentity
 ---
 apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
