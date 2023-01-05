@@ -1,3 +1,12 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: exoscale.objectbuckets.appcat.vshn.io
+  name: exoscale.objectbuckets.appcat.vshn.io
 spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1

@@ -143,7 +143,7 @@ local compositionCloudscale =
   };
 
 
-local compositionExsoscale =
+local compositionExoscale =
   local compParams = objStoParams.compositions.exoscale;
 
   local IAMKeyBase = {
@@ -187,7 +187,7 @@ local compositionExsoscale =
     },
   };
 
-  {
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscale.objectbuckets.appcat.vshn.io') + common.SyncOptions + {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
@@ -255,5 +255,5 @@ if objStoParams.enabled then {
   '20_xrd_objectstorage': xrd,
   '20_rbac_objectstorage': xrds.CompositeClusterRoles(xrd),
   [if objStoParams.compositions.cloudscale.enabled then '21_composition_objectstorage_cloudscale']: compositionCloudscale,
-  [if objStoParams.compositions.exoscale.enabled then '21_composition_objectstorage_exoscale']: compositionExsoscale,
+  [if objStoParams.compositions.exoscale.enabled then '21_composition_objectstorage_exoscale']: compositionExoscale,
 } else {}
