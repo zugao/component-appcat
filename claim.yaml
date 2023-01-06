@@ -1,9 +1,14 @@
 apiVersion: appcat.vshn.io/v1
 kind: VSHNPostgreSQL
-metadata:
-  name: test1
-spec:
-  parameters: {}
-  writeConnectionSecretToRef:
-    name: opensearch-test1-db-connection-details
-
+metadata: 
+  name: pg-db
+spec: 
+  parameters: 
+    size: 
+      cpu: 500m
+      memory: 88Mi
+      disk: 1Gi
+    service: 
+      majorVersion: "15"
+      pgSettings:
+        work_mem: '166MB'

@@ -1,0 +1,181 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: vshnpostgresql.appcat.vshn.io
+  name: vshnpostgresql.appcat.vshn.io
+spec:
+  compositeTypeRef:
+    apiVersion: appcat.vshn.io/v1
+    kind: XVSHNPostgreSQL
+  patchSets:
+    - name: annotations
+      patches:
+        - fromFieldPath: metadata.annotations
+          toFieldPath: metadata.annotations
+          type: FromCompositeFieldPath
+    - name: labels
+      patches:
+        - fromFieldPath: metadata.labels
+          toFieldPath: metadata.labels
+          type: FromCompositeFieldPath
+  resources:
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: ''
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-namespace'
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: stackgres.io/v1
+              kind: SGInstanceProfile
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                cpu: ''
+                memory: ''
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-profile'
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: spec.parameters.size.memory
+          toFieldPath: spec.forProvider.manifest.spec.memory
+        - fromFieldPath: spec.parameters.size.cpu
+          toFieldPath: spec.forProvider.manifest.spec.cpu
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: stackgres.io/v1
+              kind: SGPostgresConfig
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                postgresVersion: '14'
+                postgresql.conf: {}
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-pgconf'
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: spec.parameters.service.majorVersion
+          toFieldPath: spec.forProvider.manifest.spec.postgresVersion
+        - fromFieldPath: spec.parameters.service.pgSettings
+          toFieldPath: spec.forProvider.manifest.spec[postgresql.conf]
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: stackgres.io/v1
+              kind: SGCluster
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                configurations:
+                  sgPostgresConfig: ''
+                instances: 2
+                pods:
+                  persistentVolume:
+                    size: 5Gi
+                postgres:
+                  version: ''
+          writeConnectionSecretToRef:
+            name: ''
+            namespace: ''
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.writeConnectionSecretToRef.name
+          transforms:
+            - string:
+                fmt: secret-postgresql-%s
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-cluster'
+              type: string
+        - fromFieldPath: spec.parameters.size.disk
+          toFieldPath: spec.forProvider.manifest.spec.pods.persistentVolume.size
+        - fromFieldPath: spec.parameters.service.majorVersion
+          toFieldPath: spec.forProvider.manifest.spec.postgres.version
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.sgInstanceProfile
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.configurations.sgPostgresConfig
+  writeConnectionSecretsToNamespace: syn-crossplane

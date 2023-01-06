@@ -10,6 +10,12 @@ import (
 //go:generate yq -i e ../generated/appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[].schema.openAPIV3Schema.properties; del(.metadata), del(.kind), del(.apiVersion))"
 //go:generate yq -i e ../generated/appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .referenceable=true, del(.storage), del(.subresources))"
 
+// Workaround to make nested defaulting work.
+// kubebuilder is unable to set a {} default
+//go:generate yq -i e ../generated/appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
+//go:generate yq -i e ../generated/appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
+
 // Patch the XRD with this generated CRD scheme
 //go:generate yq -i e ".parameters.appcat.composites.\"xvshnpostgresqls.appcat.vshn.io\".spec.versions=load(\"../generated/appcat.vshn.io_vshnpostgresqls.yaml\").spec.versions" ../../packages/composite/vshn/postgresql.yml
 
@@ -47,11 +53,11 @@ type VSHNPostgreSQLParameters struct {
 	Backup DBaaSBackupSpec `json:"backup,omitempty"`
 }
 type PostgreSQLServiceSpec struct {
-	// +kubebuilder:validation:Enum="14"
-	// +kubebuilder:default="14"
+	// +kubebuilder:validation:Enum="12";"13";"14";"15"
+	// +kubebuilder:default="15"
 
-	// MajorVersion contains the major version for PostgreSQL.
-	// Currently only "14" is supported. Leave it empty to always get the latest supported version.
+	// majorVersion contains supported version of PostgreSQL.
+	// "15" is default version
 	MajorVersion string `json:"majorVersion,omitempty"`
 
 	// PGSettings contains additional PostgreSQL settings.
@@ -83,10 +89,12 @@ type DBaaSMaintenanceScheduleSpec struct {
 }
 
 type DBaaSSizeSpec struct {
-	// +kubebuilder:default="startup-4"
-
-	// Plan is the name of the resource plan that defines the compute resources.
-	Plan string `json:"plan,omitempty"`
+	// +kubebuilder:default="500m"
+	Cpu string `json:"cpu,omitempty"`
+	// +kubebuilder:default="128Mi"
+	Memory string `json:"memory,omitempty"`
+	// +kubebuilder:default="5Gi"
+	Disk string `json:"disk,omitempty"`
 }
 
 type DBaaSNetworkSpec struct {
