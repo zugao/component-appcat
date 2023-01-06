@@ -38,7 +38,8 @@ kind-install-crossplane:
 .PHONY: kind-install-provider-kubernetes
 kind-install-provider-kubernetes:
 	kubectl crossplane install provider crossplane/provider-kubernetes:main
-
+	kubectl wait --for condition=Healthy provider.pkg.crossplane.io/crossplane-provider-kubernetes --timeout 60s
+	kubectl create clusterrolebinding crossplane:provider-kubernetes-admin --clusterrole cluster-admin --serviceaccount crossplane-system:$$(kubectl get sa -n crossplane-system -o custom-columns=NAME:.metadata.name --no-headers | grep provider-kubernetes)
 .PHONY: kind-install-provider-stackgres
 kind-install-provider-stackgres:
 	kubectl apply -f https://stackgres.io/downloads/stackgres-k8s/stackgres/1.4.0/stackgres-operator-demo.yml
