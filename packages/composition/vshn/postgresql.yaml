@@ -187,7 +187,7 @@ parameters:
                     - type: string
                       string:
                         fmt: "vshn-postgresql-%s"
-                # secret ref to correct namespace
+                # secret ref to correct name and namespace
                 - fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.writeConnectionSecretToRef.name
                   transforms:
@@ -251,15 +251,19 @@ parameters:
                 - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
                   toFieldPath: spec.forProvider.manifest.metadata.namespace
               # name of the wrapping object resource
-                - fromFieldPath: spec.writeConnectionSecretToRef.name
+                - fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: metadata.name
                   transforms:
                     - type: string
                       string:
                         fmt: "%s-connection"
               # name of the target secret
-                - fromFieldPath: spec.writeConnectionSecretToRef.name
+                - fromFieldPath: metadata.labels[crossplane.io/claim-name]
                   toFieldPath: spec.forProvider.manifest.metadata.name
+                  transforms:
+                    - type: string
+                      string:
+                        fmt: "%s-connection"
               # namespace of source secret
                 - fromFieldPath: metadata.labels[crossplane.io/composite]
                   toFieldPath: spec.references[0].patchesFrom.namespace
@@ -279,4 +283,4 @@ parameters:
                       - fromFieldPath: metadata.labels[crossplane.io/composite]
                     strategy: string
                     string:
-                      fmt: "%s.sv-postgresql-%s.svc.cluster.local"
+                      fmt: "%s.vshn-postgresql-%s.svc.cluster.local"

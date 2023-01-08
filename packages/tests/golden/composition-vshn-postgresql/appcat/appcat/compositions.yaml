@@ -206,14 +206,18 @@ spec:
           type: PatchSet
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.manifest.metadata.namespace
-        - fromFieldPath: spec.writeConnectionSecretToRef.name
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
             - string:
                 fmt: '%s-connection'
               type: string
-        - fromFieldPath: spec.writeConnectionSecretToRef.name
+        - fromFieldPath: metadata.labels[crossplane.io/claim-name]
           toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-connection'
+              type: string
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.references[0].patchesFrom.namespace
           transforms:
@@ -225,7 +229,7 @@ spec:
         - combine:
             strategy: string
             string:
-              fmt: '%s.sv-postgresql-%s.svc.cluster.local'
+              fmt: '%s.vshn-postgresql-%s.svc.cluster.local'
             variables:
               - fromFieldPath: metadata.labels[crossplane.io/composite]
               - fromFieldPath: metadata.labels[crossplane.io/composite]

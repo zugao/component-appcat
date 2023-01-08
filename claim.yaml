@@ -4,4 +4,4 @@ metadata:
   name: pg-db
 spec:
   writeConnectionSecretToRef:
-    name: 19ruch201
+    name: fix-this-field
