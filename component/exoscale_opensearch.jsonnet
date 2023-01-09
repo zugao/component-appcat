@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local osParams = params.exoscale.opensearch;
+local osParams = params.services.exoscale.opensearch;
 
 local connectionSecretKeys = [
   'OPENSEARCH_USER',
@@ -97,7 +97,7 @@ local composition =
   };
 
 
-if params.exoscale.enabled && osParams.enabled then {
+if params.services.exoscale.enabled && osParams.enabled then {
   '20_xrd_exoscale_opensearch': xrd,
   '20_rbac_exoscale_opensearch': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_opensearch': composition,

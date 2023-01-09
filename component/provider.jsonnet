@@ -62,7 +62,7 @@ local controllerConfigRef(config) =
       crossplane.ProviderConfig('cloudscale') {
         apiVersion: 'cloudscale.crossplane.io/v1',
         spec+: addCredentials(
-          provider.config,
+          provider.providerConfig,
           {
             source: 'InjectedIdentity',
             apiTokenSecretRef: {
@@ -91,7 +91,7 @@ local controllerConfigRef(config) =
       crossplane.ProviderConfig('exoscale') {
         apiVersion: 'exoscale.crossplane.io/v1',
         spec+: addCredentials(
-          provider.config,
+          provider.providerConfig,
           {
             source: 'InjectedIdentity',
             apiSecretRef: {
@@ -157,7 +157,7 @@ local controllerConfigRef(config) =
       crossplane.ProviderConfig('kubernetes') {
         apiVersion: 'kubernetes.crossplane.io/v1alpha1',
         spec+: addCredentials(
-          provider.config,
+          provider.providerConfig,
           {
             source: 'InjectedIdentity',
           }

@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local objStoParams = params.converged.objectstorage;
+local objStoParams = params.services.generic.objectstorage;
 
 local xrd = xrds.XRDFromCRD(
   'xobjectbuckets.appcat.vshn.io',

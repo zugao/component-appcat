@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local redisParams = params.exoscale.redis;
+local redisParams = params.services.exoscale.redis;
 
 local connectionSecretKeys = [
   'REDIS_HOST',
@@ -90,7 +90,7 @@ local composition =
   };
 
 
-if params.exoscale.enabled && redisParams.enabled then {
+if params.services.exoscale.enabled && redisParams.enabled then {
   '20_xrd_exoscale_redis': xrd,
   '20_rbac_exoscale_redis': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_redis': composition,

@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local kafkaParams = params.exoscale.kafka;
+local kafkaParams = params.services.exoscale.kafka;
 
 local connectionSecretKeys = [
   'KAFKA_URI',
@@ -94,7 +94,7 @@ local composition =
   };
 
 
-if params.exoscale.enabled && kafkaParams.enabled then {
+if params.services.exoscale.enabled && kafkaParams.enabled then {
   '20_xrd_exoscale_kafka': xrd,
   '20_rbac_exoscale_kafka': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_kafka': composition,

@@ -20,11 +20,13 @@ parameters:
         enabled: true
       kubernetes:
         enabled: true
-    converged:
-      objectstorage:
+
+    services:
+      generic:
+        objectstorage:
+          enabled: true
+          compositions:
+            cloudscale:
+              enabled: false
+      exoscale:
         enabled: true
-        compositions:
-          cloudscale:
-            enabled: false
-    exoscale:
-      enabled: true

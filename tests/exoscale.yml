@@ -9,7 +9,6 @@ parameters:
     cloud: exoscale
 
   crossplane:
-    # This is not resolving during "commodore package compile", so we provide it explicitly
     namespace: syn-crossplane
 
   appcat:
@@ -18,11 +17,15 @@ parameters:
         enabled: true
       kubernetes:
         enabled: true
-    converged:
-      objectstorage:
+
+
+    services:
+      exoscale:
         enabled: true
-        compositions:
-          cloudscale:
-            enabled: false
-    exoscale:
-      enabled: true
+
+      generic:
+        objectstorage:
+          enabled: true
+          compositions:
+            cloudscale:
+              enabled: false

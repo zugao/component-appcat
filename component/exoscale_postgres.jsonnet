@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local pgParams = params.exoscale.postgres;
+local pgParams = params.services.exoscale.postgres;
 
 local connectionSecretKeys = [
   'POSTGRESQL_URL',
@@ -98,7 +98,7 @@ local composition =
   };
 
 
-if params.exoscale.enabled && pgParams.enabled then {
+if params.services.exoscale.enabled && pgParams.enabled then {
   '20_xrd_exoscale_postgres': xrd,
   '20_rbac_exoscale_postgres': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_postgres': composition,

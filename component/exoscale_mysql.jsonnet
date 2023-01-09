@@ -10,7 +10,7 @@ local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
-local mysqlParams = params.exoscale.mysql;
+local mysqlParams = params.services.exoscale.mysql;
 
 local connectionSecretKeys = [
   'MYSQL_URL',
@@ -98,7 +98,7 @@ local composition =
   };
 
 
-if params.exoscale.enabled && mysqlParams.enabled then {
+if params.services.exoscale.enabled && mysqlParams.enabled then {
   '20_xrd_exoscale_mysql': xrd,
   '20_rbac_exoscale_mysql': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_mysql': composition,
