@@ -1,11 +1,19 @@
 # Commodore takes the root dir name as the component name
 COMPONENT_NAME ?= appcat
-COMPONENT_SUBDIR ?= $(shell basename ${PWD})
 
+git_dir         ?= $(shell git rev-parse --git-common-dir)
 compiled_path   ?= compiled/$(COMPONENT_NAME)/$(COMPONENT_NAME)
 root_volume     ?= -v "$${PWD}/../:/$(COMPONENT_NAME)"
 compiled_volume ?= -v "$${PWD}/$(compiled_path):/$(COMPONENT_NAME)"
 commodore_args  ?= --search-paths . -n $(COMPONENT_NAME)
+
+ifneq "$(git_dir)" ".git"
+	git_volume        ?= -v "$(git_dir):$(git_dir):ro"
+	antora_git_volume ?= -v "$(git_dir):/preview/antora/.git:ro"
+else
+	git_volume        ?=
+	antora_git_volume ?= -v "${PWD}/.git:/preview/antora/.git:ro"
+endif
 
 ifneq "$(shell which docker 2>/dev/null)" ""
 	DOCKER_CMD    ?= $(shell which docker)
