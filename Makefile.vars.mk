@@ -3,9 +3,9 @@ COMPONENT_NAME ?= appcat
 
 git_dir         ?= $(shell git rev-parse --git-common-dir)
 compiled_path   ?= compiled/$(COMPONENT_NAME)/$(COMPONENT_NAME)
-root_volume     ?= -v "$${PWD}/../:/$(COMPONENT_NAME)"
+root_volume     ?= -v "$${PWD}/:/$(COMPONENT_NAME)"
 compiled_volume ?= -v "$${PWD}/$(compiled_path):/$(COMPONENT_NAME)"
-commodore_args  ?= --search-paths . -n $(COMPONENT_NAME)
+commodore_args  ?= --search-paths ./dependencies --search-paths . -n $(COMPONENT_NAME)
 
 ifneq "$(git_dir)" ".git"
 	git_volume        ?= -v "$(git_dir):$(git_dir):ro"
@@ -22,7 +22,7 @@ else
 	DOCKER_CMD    ?= podman
 	DOCKER_USERNS ?= keep-id
 endif
-DOCKER_ARGS ?= run --rm -u "$$(id -u):$$(id -g)" --userns=$(DOCKER_USERNS) -w /$(COMPONENT_NAME)/$(COMPONENT_SUBDIR) -e HOME="/$(COMPONENT_NAME)"
+DOCKER_ARGS ?= run --rm -u "$$(id -u):$$(id -g)" --userns=$(DOCKER_USERNS) -w /$(COMPONENT_NAME) -e HOME="/$(COMPONENT_NAME)"
 
 JSONNET_FILES   ?= $(shell find . -type f -not -path './vendor/*' \( -name '*.*jsonnet' -or -name '*.libsonnet' \))
 JSONNETFMT_ARGS ?= --in-place --pad-arrays
