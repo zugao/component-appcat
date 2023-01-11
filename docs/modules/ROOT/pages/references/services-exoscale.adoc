@@ -43,7 +43,7 @@ type:: dict
 Configuration option for Exoscale MySQL.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
-It is enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 
 == `postgres`
 [horizontal]
@@ -52,7 +52,7 @@ type:: dict
 Configuration option for Exoscale PostgrSQL.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
-It is enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 
 
 == `redis`
@@ -62,7 +62,7 @@ type:: dict
 Configuration option for Exoscale Redis.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
-It is enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 
 
 == `kafka`
@@ -72,7 +72,7 @@ type:: dict
 Configuration option for Exoscale Kafka.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
-It is enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 
 
 == `opensearch`
@@ -82,5 +82,5 @@ type:: dict
 Configuration option for Exoscale OpenSearch.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
-It is enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 

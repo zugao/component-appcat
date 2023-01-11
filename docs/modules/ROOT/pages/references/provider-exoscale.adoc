@@ -22,7 +22,7 @@ The namespace will be created and managed by this component.
 type:: dict
 
 Credentials to connect to the Exoscale API.
-You can specify the name and namespace of the created secret, as well as the `stringData` in the `data` field.
+You can specify the name and namespace of the created secret and the `stringData` in the `data` field.
 
 
 == `spec`

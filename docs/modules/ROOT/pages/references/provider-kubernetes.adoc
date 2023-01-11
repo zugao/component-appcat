@@ -15,7 +15,7 @@ type:: string
 default:: `${crossplane:namespace}`
 
 The namespace the provider kubernetes will be running in.
-This is in almost all cases the same namespace crossplane itself is running and will not need to be changed.
+This is in almost all cases the same namespace crossplane itself is running and won't need to be changed.
 
 == `spec`
 [horizontal]

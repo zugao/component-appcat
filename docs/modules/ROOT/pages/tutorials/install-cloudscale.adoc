@@ -72,7 +72,7 @@ parameters:
 <1> Enable the `appcat` and `crossplane` components
 <2> Enable the provider cloudscale
 <3> Enable the AppCat Objectstorage service
-<4> Explicitly disable the exoscale implementation at we do not deploy the provider exoscale
+<4> Explicitly disable the exoscale implementation at we don't deploy the provider exoscale
 <5> Ensure that RBAC management policy is set to `Basic` only.
 
 . Compile and push cluster catalog
