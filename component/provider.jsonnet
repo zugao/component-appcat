@@ -132,7 +132,12 @@ local controllerConfigRef(config) =
         {
           apiGroups: [ '' ],
           resources: [ 'namespaces' ],
-          verbs: [ 'get', 'list', 'watch' ],
+          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'update' ],
+        },
+        {
+          apiGroups: [ 'stackgres.io' ],
+          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
         },
       ],
     };
