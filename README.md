@@ -19,7 +19,6 @@ $ commodore component compile . --search-paths . -n appcat -f tests/defaults.yml
 #
 # Alternative:
 #
-$ cd component
 $ make test
 ```
 
