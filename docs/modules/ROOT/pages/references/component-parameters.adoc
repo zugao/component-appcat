@@ -52,6 +52,11 @@ reference:: xref:references/services-exoscale.adoc[See service parameters]
 
 This parameter allows enabling and configuring exoscale specific AppCat services.
 
+=== `services.generic`
+[horizontal]
+type:: dict
+
+The `generic` parameter contains configuration for AppCat services that aren't specific to one provider, but are implemented by multiple different providers.
 
 === `services.generic.objectstorage`
 [horizontal]
