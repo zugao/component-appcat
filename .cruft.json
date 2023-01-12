@@ -1,0 +1,25 @@
+{
+  "template": "https://github.com/projectsyn/commodore-component-template.git",
+  "commit": "a0e67cd96f1b2368a15af8300216c812da1d2a4c",
+  "checkout": "main",
+  "context": {
+    "cookiecutter": {
+      "name": "AppCat",
+      "slug": "appcat",
+      "parameter_key": "appcat",
+      "test_cases": "defaults exoscale cloudscale openshift",
+      "add_lib": "n",
+      "add_pp": "n",
+      "add_golden": "y",
+      "add_matrix": "y",
+      "add_go_unit": "n",
+      "copyright_holder": "VSHN AG <info@vshn.ch>",
+      "copyright_year": "2023",
+      "github_owner": "vshn",
+      "github_name": "component-appcat",
+      "github_url": "https://github.com/vshn/component-appcat",
+      "_template": "https://github.com/projectsyn/commodore-component-template.git"
+    }
+  },
+  "directory": null
+}
