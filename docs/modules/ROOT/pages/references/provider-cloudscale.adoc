@@ -2,6 +2,11 @@
 
 The parent key for all of the following parameters is `appcat.provider.cloudscale`.
 
+[NOTE]
+====
+You can also have a look at the xref:tutorials/install-cloudscale.adoc[tutorial for installing the cloudscale.ch stack.]
+====
+
 == `enabled`
 [horizontal]
 type:: bool
@@ -24,6 +29,7 @@ type:: dict
 Credentials to connect to the cloudscale.ch API.
 You can specify the name and namespace of the created secret, and the `stringData` in the `data` field.
 
+The `data` field should contain a valid API token `CLOUDSCALE_API_TOKEN`.
 
 == `spec`
 [horizontal]
