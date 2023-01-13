@@ -36,6 +36,7 @@ jobs:
           - exoscale
           - cloudscale
           - openshift
+          - vshn
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}
@@ -54,6 +55,7 @@ jobs:
           - exoscale
           - cloudscale
           - openshift
+          - vshn
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}

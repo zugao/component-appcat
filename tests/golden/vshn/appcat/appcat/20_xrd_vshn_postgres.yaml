@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: xvshnpostgresqls.appcat.vshn.io
-  name: xvshnpostgresqls.appcat.vshn.io
+    name: xvshnpostgresqls.vshn.appcat.vshn.io
+  name: xvshnpostgresqls.vshn.appcat.vshn.io
 spec:
   claimNames:
     kind: VSHNPostgreSQL
@@ -20,8 +20,8 @@ spec:
     - POSTGRESQL_PASSWORD
     - ca.crt
   defaultCompositionRef:
-    name: vshnpostgres.appcat.vshn.io
-  group: appcat.vshn.io
+    name: vshnpostgres.vshn.appcat.vshn.io
+  group: vshn.appcat.vshn.io
   names:
     kind: XVSHNPostgreSQL
     plural: xvshnpostgresqls

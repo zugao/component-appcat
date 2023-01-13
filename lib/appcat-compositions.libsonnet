@@ -106,10 +106,10 @@ local commonResources = {
       fromCompositeFieldPath(from='metadata.labels[crossplane.io/claim-namespace]', to='spec.forProvider.manifest.metadata.name'),
       toCompositeFieldPath(from='status.atProvider.manifest.metadata.labels[appuio.io/organization]', to='metadata.labels[appuio.io/organization]'),
       fromCompositeFieldPath(from='metadata.labels[crossplane.io/composite]', to='metadata.name') + {
-        transforms: [{
+        transforms: [ {
           type: 'string',
           string: { fmt: '%s-ns-observer', type: 'Format' },
-        }],
+        } ],
       },
     ],
 
@@ -182,7 +182,7 @@ local kubeObject(apiVersion, kind) = {
     FromSecretKey(name, from=name):
       connFromSecretKey(name, from=name),
     AllFromSecretKeys(keys):
-      [connFromSecretKey(key, from=key) for key in keys],
+      [ connFromSecretKey(key, from=key) for key in keys ],
     FromFieldPath(name, field):
       connFromFieldPath(name, field),
   },

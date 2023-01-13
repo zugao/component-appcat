@@ -5,11 +5,11 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: vshnpostgres.appcat.vshn.io
-  name: vshnpostgres.appcat.vshn.io
+    name: vshnpostgres.vshn.appcat.vshn.io
+  name: vshnpostgres.vshn.appcat.vshn.io
 spec:
   compositeTypeRef:
-    apiVersion: appcat.vshn.io/v1
+    apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNPostgreSQL
   patchSets:
     - name: annotations
@@ -42,13 +42,6 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-namespace'
-              type: string
-          type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:

@@ -28,125 +28,125 @@ local connectionSecretKeys = [
 ];
 
 local xrd = xrds.XRDFromCRD(
-  'xvshnpostgresqls.appcat.vshn.io',
-  xrds.LoadCRD('appcat.vshn.io_vshnpostgresqls.yaml'),
-  defaultComposition='vshnpostgres.appcat.vshn.io',
+  'xvshnpostgresqls.vshn.appcat.vshn.io',
+  xrds.LoadCRD('vshn.appcat.vshn.io_vshnpostgresqls.yaml'),
+  defaultComposition='vshnpostgres.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
 );
 
 
 local composition =
   local namespace = comp.KubeObject('v1', 'Namespace') +
-    {
-      spec+: {
-        forProvider+: {
-          manifest+: {
-            metadata: {
-              name: '',
-            },
-          },
-        },
-      },
-    };
+                    {
+                      spec+: {
+                        forProvider+: {
+                          manifest+: {
+                            metadata: {
+                              name: '',
+                            },
+                          },
+                        },
+                      },
+                    };
 
   local sgInstanceProfile = comp.KubeObject('stackgres.io/v1', 'SGInstanceProfile') +
-    {
-      spec+: {
-        forProvider+: {
-          manifest+: {
-            metadata: {
-              name: '',
-              namespace: '',
-            },
-            spec: {
-              cpu: '',
-              memory: '',
-            },
-          },
-        },
-      },
-    };
+                            {
+                              spec+: {
+                                forProvider+: {
+                                  manifest+: {
+                                    metadata: {
+                                      name: '',
+                                      namespace: '',
+                                    },
+                                    spec: {
+                                      cpu: '',
+                                      memory: '',
+                                    },
+                                  },
+                                },
+                              },
+                            };
 
   local sgPostgresConfig = comp.KubeObject('stackgres.io/v1', 'SGPostgresConfig') +
-    {
-      spec+: {
-        forProvider+: {
-          manifest+: {
-            metadata: {
-              name: '',
-              namespace: '',
-            },
-            spec: {
-              postgresVersion: '',
-              'postgresql.conf': {},
-            },
-          },
-        },
-      },
-    };
+                           {
+                             spec+: {
+                               forProvider+: {
+                                 manifest+: {
+                                   metadata: {
+                                     name: '',
+                                     namespace: '',
+                                   },
+                                   spec: {
+                                     postgresVersion: '',
+                                     'postgresql.conf': {},
+                                   },
+                                 },
+                               },
+                             },
+                           };
 
   local sgCluster = comp.KubeObject('stackgres.io/v1', 'SGCluster') +
-    {
-      spec+: {
-        forProvider+: {
-          manifest+: {
-            metadata: {
-              name: '',
-              namespace: '',
-            },
-            spec: {
-              instances: 1,
-              sgInstanceProfile: '',
-              configurations: {
-                sgPostgresConfig: '',
-              },
-              postgres: {
-                version: '',
-              },
-              pods: {
-                persistentVolume: {
-                  size: '',
-                },
-              },
-            },
-          },
-        },
-      },
-    };
+                    {
+                      spec+: {
+                        forProvider+: {
+                          manifest+: {
+                            metadata: {
+                              name: '',
+                              namespace: '',
+                            },
+                            spec: {
+                              instances: 1,
+                              sgInstanceProfile: '',
+                              configurations: {
+                                sgPostgresConfig: '',
+                              },
+                              postgres: {
+                                version: '',
+                              },
+                              pods: {
+                                persistentVolume: {
+                                  size: '',
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    };
 
   local secret = comp.KubeObject('v1', 'Secret') +
-    {
-      spec+: {
-        forProvider+: {
-          manifest+: {
-            metadata: {
-              name: '',
-              namespace: '',
-            },
-            stringData: {
-              POSTGRESQL_USER: defaultUser,
-              POSTGRESQL_PORT: defaultPort,
-              POSTGRESQL_DB: defaultDB,
-              POSTGRESQL_HOST: '',
-            },
-          },
-        },
-        references: [
-          {
-            patchesFrom: {
-              apiVersion: 'v1',
-              kind: 'Secret',
-              namespace: '',
-              name: '',
-              fieldPath: 'data.superuser-password',
-            },
-            toFieldPath: 'data.POSTGRESQL_PASSWORD',
-          },
-        ],
-      },
-    };
+                 {
+                   spec+: {
+                     forProvider+: {
+                       manifest+: {
+                         metadata: {
+                           name: '',
+                           namespace: '',
+                         },
+                         stringData: {
+                           POSTGRESQL_USER: defaultUser,
+                           POSTGRESQL_PORT: defaultPort,
+                           POSTGRESQL_DB: defaultDB,
+                           POSTGRESQL_HOST: '',
+                         },
+                       },
+                     },
+                     references: [
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           namespace: '',
+                           name: '',
+                           fieldPath: 'data.superuser-password',
+                         },
+                         toFieldPath: 'data.POSTGRESQL_PASSWORD',
+                       },
+                     ],
+                   },
+                 };
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnpostgres.appcat.vshn.io') + common.SyncOptions +
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnpostgres.vshn.appcat.vshn.io') + common.SyncOptions +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
