@@ -76,6 +76,9 @@ spec:
         - fromFieldPath: spec.parameters.bucketName
           toFieldPath: spec.forProvider.services.sos.buckets[0]
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.deletionPolicy
+          toFieldPath: spec.forProvider.bucketDeletionPolicy
+          type: FromCompositeFieldPath
     - base:
         apiVersion: exoscale.crossplane.io/v1
         kind: Bucket
@@ -116,5 +119,8 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.zone
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.deletionPolicy
+          toFieldPath: spec.forProvider.bucketDeletionPolicy
           type: FromCompositeFieldPath
   writeConnectionSecretsToNamespace: syn-crossplane
