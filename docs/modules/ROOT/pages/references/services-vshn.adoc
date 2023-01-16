@@ -1,0 +1,37 @@
+= VSHN Services
+
+The parent key for all of the following parameters is `appcat.services.vshn`.
+
+[IMPORTANT]
+====
+If you enable any of the VSHN service, make sure that the necessary providers are deployed.
+Either by enabling it in `appcat.providers` or separately from this component.
+
+====
+
+=== `enabled`
+[horizontal]
+type:: bool
+default:: `false`
+
+If VSHN services should be available at all.
+When set to false no VSHN services will be deployed, even if a specific service was enabled.
+
+=== `secretNamespace`
+[horizontal]
+type:: string
+default:: `${crossplane:namespace}`
+
+In which namespace an XR's connection secret is written to.
+
+Defaults to the crossplane namespace.
+
+
+== `postgres`
+[horizontal]
+type:: dict
+
+Configuration option for VSHN PostgrSQL.
+You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
+
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.

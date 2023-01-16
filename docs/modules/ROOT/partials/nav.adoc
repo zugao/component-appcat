@@ -14,4 +14,5 @@
 
 * Service Parameters
 ** xref:references/services-exoscale.adoc[Exoscale Services]
+** xref:references/services-vshn.adoc[VSHN Services]
 ** xref:references/service-objectstorage.adoc[Objectstorage Service]

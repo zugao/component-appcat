@@ -17,5 +17,6 @@ parameters:
           - ${_base_directory}/component/exoscale_mysql.jsonnet
           - ${_base_directory}/component/exoscale_postgres.jsonnet
           - ${_base_directory}/component/exoscale_opensearch.jsonnet
+          - ${_base_directory}/component/vshn_postgres.jsonnet
         input_type: jsonnet
         output_path: appcat/

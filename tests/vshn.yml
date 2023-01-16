@@ -1,0 +1,18 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
+        output_path: vendor/lib/crossplane.libsonnet
+
+  crossplane:
+    namespace: syn-crossplane
+
+  appcat:
+    providers:
+      kubernetes:
+        enabled: true
+
+    services:
+      vshn:
+        enabled: true

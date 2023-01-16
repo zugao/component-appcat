@@ -52,8 +52,14 @@ parameters:
           serviceAccountName: provider-kubernetes
         providerConfig: {}
 
-
     services:
+      vshn:
+        enabled: false
+        secretNamespace: ${crossplane:namespace}
+        postgres:
+          enabled: true
+          secretNamespace: ${appcat:services:vshn:secretNamespace}
+
       # Config for exoscale composites
       exoscale:
         enabled: false

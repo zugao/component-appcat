@@ -7,6 +7,51 @@ local fromCompositeFieldPath(from, to) = {
   toFieldPath: to,
 };
 
+local fromCompositeFieldPathWithTransformSuffix(from, to, suffix) = fromCompositeFieldPath(from, to) + {
+  // this is an enhanced patch type with a transform function that adds the 3rd argument as a suffix
+  transforms: [
+    {
+      type: 'string',
+      string: {
+        fmt: '%s-' + suffix,
+      },
+    },
+  ],
+};
+
+local fromCompositeFieldPathWithTransformPrefix(from, to, prefix) = fromCompositeFieldPath(from, to) + {
+  // this is an enhanced patch type with a transform function that adds the 3rd argument as a prefix
+  transforms: [
+    {
+      type: 'string',
+      string: {
+        fmt: prefix + '-%s',
+      },
+    },
+  ],
+};
+
+local combineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format) = {
+  // this is the default combine patch type
+  // This type patches from a two field within the XR to a field within the composed resource using format function.
+  type: 'CombineFromComposite',
+  toFieldPath: to,
+  combine: {
+    variables: [
+      {
+        fromFieldPath: fromOne,
+      },
+      {
+        fromFieldPath: fromTwo,
+      },
+    ],
+    strategy: 'string',
+    string: {
+      fmt: format,
+    },
+  },
+};
+
 local toCompositeFieldPath(from, to) = {
   //  This type patches from a field within the composed resource to a field within the XR.
   // It’s commonly used to derive an XR status field from a composed resource status field.
@@ -91,6 +136,25 @@ local connFromFieldPath(name, field) = {
   name: name,
 };
 
+local kubeObject(apiVersion, kind) = {
+  apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+  kind: 'Object',
+  metadata: {
+    name: '',
+  },
+  spec: {
+    providerConfigRef: {
+      name: 'kubernetes',
+    },
+    forProvider: {
+      manifest: {
+        apiVersion: apiVersion,
+        kind: kind,
+      },
+    },
+  },
+};
+
 {
   PatchSet(name):
     assert std.objectHas(availablePatchSets, name) : "common patch set '%s' doesn't exist" % name;
@@ -100,12 +164,20 @@ local connFromFieldPath(name, field) = {
     commonResources[name],
   FromCompositeFieldPath(from, to):
     fromCompositeFieldPath(from, to),
+  FromCompositeFieldPathWithTransformSuffix(from, to, suffix):
+    fromCompositeFieldPathWithTransformSuffix(from, to, suffix),
+  FromCompositeFieldPathWithTransformPrefix(from, to, prefix):
+    fromCompositeFieldPathWithTransformPrefix(from, to, prefix),
+  CombineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format):
+    combineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format),
   ToCompositeFieldPath(from, to):
     toCompositeFieldPath(from, to),
   PatchSetRef(name):
     patchSetRef(name),
   CompositeRef(xrd, version=''):
     compositeRef(xrd, version=version),
+  KubeObject(apiVersion, kind):
+    kubeObject(apiVersion, kind),
   conn: {
     FromSecretKey(name, from=name):
       connFromSecretKey(name, from=name),
