@@ -61,6 +61,28 @@ local composition =
                                     spec: {
                                       cpu: '',
                                       memory: '',
+                                      initContainers: {
+                                        'pgbouncer-auth-file': {
+                                          cpu: '100m',
+                                          memory: '100Mi',
+                                        },
+                                        'relocate-binaries': {
+                                          cpu: '100m',
+                                          memory: '100Mi',
+                                        },
+                                        'setup-scripts': {
+                                          cpu: '100m',
+                                          memory: '100Mi',
+                                        },
+                                        'setup-arbitrary-user': {
+                                          cpu: '100m',
+                                          memory: '100Mi',
+                                        },
+                                        'cluster-reconciliation-cycle': {
+                                          cpu: '100m',
+                                          memory: '100Mi',
+                                        },
+                                      },
                                     },
                                   },
                                 },
@@ -146,6 +168,39 @@ local composition =
                    },
                  };
 
+  local networkPolicy = comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
+                        {
+                          spec+: {
+                            forProvider+: {
+                              manifest+: {
+                                metadata: {
+                                  name: '',
+                                  namespace: '',
+                                },
+                                spec: {
+                                  policyTypes: [
+                                    'Ingress',
+                                  ],
+                                  podSelector: {},
+                                  ingress: [
+                                    {
+                                      from: [
+                                        {
+                                          namespaceSelector: {
+                                            matchLabels: {
+                                              'kubernetes.io/metadata.name': '',
+                                            },
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                },
+                              },
+                            },
+                          },
+                        };
+
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnpostgres.vshn.appcat.vshn.io') + common.SyncOptions +
   {
     spec: {
@@ -187,7 +242,7 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
 
             comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgresVersion'),
-            comp.FromCompositeFieldPath('spec.parameters.service.pgSettings', 'spec.forProvider.manifest.spec.[postgresql.conf]'),
+            comp.FromCompositeFieldPath('spec.parameters.service.pgSettings', 'spec.forProvider.manifest.spec[postgresql.conf]'),
           ],
         },
         {
@@ -219,7 +274,20 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
           ],
         },
-      ],
+      ] + if pgParams.enableNetworkPolicy == true then [
+        {
+          base: networkPolicy,
+          patches: [
+            comp.PatchSetRef('annotations'),
+            comp.PatchSetRef('labels'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
+
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
+          ],
+        },
+      ] else [],
     },
   };
 

@@ -139,6 +139,11 @@ local controllerConfigRef(config) =
           resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
         },
+        {
+          apiGroups: [ 'networking.k8s.io' ],
+          resources: [ 'networkpolicies' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
