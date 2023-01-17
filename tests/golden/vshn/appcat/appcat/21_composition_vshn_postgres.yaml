@@ -64,6 +64,22 @@ spec:
                 namespace: ''
               spec:
                 cpu: ''
+                initContainers:
+                  cluster-reconciliation-cycle:
+                    cpu: 100m
+                    memory: 100Mi
+                  pgbouncer-auth-file:
+                    cpu: 100m
+                    memory: 100Mi
+                  relocate-binaries:
+                    cpu: 100m
+                    memory: 100Mi
+                  setup-arbitrary-user:
+                    cpu: 100m
+                    memory: 100Mi
+                  setup-scripts:
+                    cpu: 100m
+                    memory: 100Mi
                 memory: ''
           providerConfigRef:
             name: kubernetes
@@ -139,7 +155,7 @@ spec:
           toFieldPath: spec.forProvider.manifest.spec.postgresVersion
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.pgSettings
-          toFieldPath: spec.forProvider.manifest.spec.[postgresql.conf]
+          toFieldPath: spec.forProvider.manifest.spec[postgresql.conf]
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -268,5 +284,58 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.references[0].patchesFrom.name
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: ''
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: networking.k8s.io/v1
+              kind: NetworkPolicy
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                ingress:
+                  - from:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: ''
+                podSelector: {}
+                policyTypes:
+                  - Ingress
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - patchSetName: annotations
+          type: PatchSet
+        - patchSetName: labels
+          type: PatchSet
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-network-policy'
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: allow-from-claim-namespace-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]
           type: FromCompositeFieldPath
   writeConnectionSecretsToNamespace: syn-crossplane

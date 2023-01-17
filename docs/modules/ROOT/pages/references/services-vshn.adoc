@@ -31,7 +31,14 @@ Defaults to the crossplane namespace.
 [horizontal]
 type:: dict
 
-Configuration option for VSHN PostgrSQL.
+Configuration option for VSHN PostgreSQL.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
 It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+
+
+=== `postgres.enableNetworkPolicy`
+type:: bool
+default:: `true`
+
+Whether to enable NetworkPolicy in the PostgreSQL instance namespace. This allows to establish connections from claim's namespace to the PostgreSQL instance.

@@ -58,6 +58,7 @@ parameters:
         secretNamespace: ${crossplane:namespace}
         postgres:
           enabled: true
+          enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
 
       # Config for exoscale composites
