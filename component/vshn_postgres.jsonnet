@@ -17,6 +17,9 @@ local defaultUser = 'postgres';
 local defaultPort = '5432';
 
 
+local serviceNameLabelKey = 'appcat.vshn.io/servicename';
+local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
+
 local connectionSecretKeys = [
   'POSTGRESQL_URL',
   'POSTGRESQL_DB',
@@ -43,6 +46,10 @@ local composition =
                           manifest+: {
                             metadata: {
                               name: '',
+                              labels: {
+                                [serviceNameLabelKey]: 'postgresql-standalone',
+                                [serviceNamespaceLabelKey]: '',
+                              },
                             },
                           },
                         },
@@ -217,6 +224,7 @@ local composition =
             comp.PatchSetRef('annotations'),
             comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
           ],
         },
         {

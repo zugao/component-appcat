@@ -34,6 +34,9 @@ spec:
               apiVersion: v1
               kind: Namespace
               metadata:
+                labels:
+                  appcat.vshn.io/claim-namespace: ''
+                  appcat.vshn.io/servicename: postgresql-standalone
                 name: ''
           providerConfigRef:
             name: kubernetes
@@ -48,6 +51,9 @@ spec:
             - string:
                 fmt: vshn-postgresql-%s
               type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.metadata.labels[appcat.vshn.io/claim-namespace]
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
