@@ -86,6 +86,7 @@ rules:
       - watch
       - create
       - watch
+      - patch
       - update
       - delete
   - apiGroups:
