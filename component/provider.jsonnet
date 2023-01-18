@@ -122,7 +122,7 @@ local controllerConfigRef(config) =
         {
           apiGroups: [ 'kubernetes.crossplane.io' ],
           resources: [ '*' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
           apiGroups: [ '', 'coordination.k8s.io' ],
@@ -132,17 +132,17 @@ local controllerConfigRef(config) =
         {
           apiGroups: [ '' ],
           resources: [ 'namespaces' ],
-          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'update' ],
+          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'update', 'delete' ],
         },
         {
           apiGroups: [ 'stackgres.io' ],
           resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
           apiGroups: [ 'networking.k8s.io' ],
           resources: [ 'networkpolicies' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
       ],
     };
