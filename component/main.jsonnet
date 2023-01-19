@@ -26,6 +26,31 @@ local xrdBrowseRole = kube.ClusterRole('appcat:browse') + {
   ],
 };
 
+
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local finalizerRole = kube.ClusterRole('crossplane:appcat:finalizer') {
+  metadata+: {
+    labels: {
+      'rbac.crossplane.io/aggregate-to-crossplane': 'true',
+    },
+  },
+  rules+: [
+    {
+      apiGroups: [
+        'appcat.vshn.io',
+        'vshn.appcat.vshn.io',
+        'exoscale.appcat.vshn.io',
+      ],
+      resources: [
+        '*/finalizers',
+      ],
+      verbs: [ '*' ],
+    },
+  ],
+
+};
+
 {
   '10_clusterrole_view': xrdBrowseRole,
+  [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
 }
