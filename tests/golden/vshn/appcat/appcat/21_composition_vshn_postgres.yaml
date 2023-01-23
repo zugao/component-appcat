@@ -34,6 +34,41 @@ spec:
               apiVersion: v1
               kind: Namespace
               metadata:
+                labels:
+                  appcat.vshn.io/claim-namespace: ''
+                  appcat.vshn.io/servicename: postgresql-standalone
+                name: ''
+          managementPolicy: Observe
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: ns-observer-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: status.atProvider.manifest.metadata.labels[appuio.io/organization]
+          toFieldPath: metadata.labels[appuio.io/organization]
+          type: ToCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: ''
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                labels:
+                  appcat.vshn.io/claim-namespace: ''
+                  appcat.vshn.io/servicename: postgresql-standalone
                 name: ''
           providerConfigRef:
             name: kubernetes
@@ -48,6 +83,12 @@ spec:
             - string:
                 fmt: vshn-postgresql-%s
               type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+          toFieldPath: spec.forProvider.manifest.metadata.labels[appcat.vshn.io/claim-namespace]
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[appuio.io/organization]
+          toFieldPath: spec.forProvider.manifest.metadata.labels[appuio.io/organization]
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
