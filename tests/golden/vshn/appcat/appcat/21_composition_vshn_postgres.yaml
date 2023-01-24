@@ -285,6 +285,31 @@ spec:
                 name: ''
                 namespace: ''
               toFieldPath: data.POSTGRESQL_PASSWORD
+          writeConnectionSecretToRef:
+            name: ''
+            namespace: ''
+      connectionDetails:
+        - fromConnectionSecretKey: POSTGRESQL_URL
+          name: POSTGRESQL_URL
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: POSTGRESQL_DB
+          name: POSTGRESQL_DB
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: POSTGRESQL_HOST
+          name: POSTGRESQL_HOST
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: POSTGRESQL_PORT
+          name: POSTGRESQL_PORT
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: POSTGRESQL_USER
+          name: POSTGRESQL_USER
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: POSTGRESQL_PASSWORD
+          name: POSTGRESQL_PASSWORD
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: ca.crt
+          name: ca.crt
+          type: FromConnectionSecretKey
       patches:
         - patchSetName: annotations
           type: PatchSet
@@ -297,8 +322,12 @@ spec:
                 fmt: '%s-connection'
               type: string
           type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/claim-name]
           toFieldPath: spec.forProvider.manifest.metadata.name
@@ -325,6 +354,20 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.references[0].patchesFrom.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.writeConnectionSecretToRef.name
+          transforms:
+            - string:
+                fmt: '%s-connection'
+              type: string
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
