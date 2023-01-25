@@ -119,6 +119,14 @@ local composition =
                               sgInstanceProfile: '',
                               configurations: {
                                 sgPostgresConfig: '',
+                                backups:
+                                  [
+                                    {
+                                      sgObjectStorage: '',
+                                      cronSchedule: '0 22 * * *',
+                                      retention: 6,
+                                    },
+                                  ],
                               },
                               postgres: {
                                 version: '',
@@ -197,6 +205,64 @@ local composition =
                             },
                           },
                         };
+  local objectBucket = comp.KubeObject('appcat.vshn.io/v1', 'XObjectBucket') +
+                       {
+                         spec+: {
+                           forProvider+: {
+                             manifest+: {
+                               metadata: {
+                                 name: '',
+                                 namespace: '',
+                               },
+                               spec: {
+                                 parameters: {
+                                   bucketName: '',
+                                   region: pgParams.bucket_region,
+                                 },
+                                 writeConnectionSecretToRef: {
+                                   namespace: '',
+                                   name: '',
+                                 },
+                               },
+                             },
+                           },
+                         },
+                       };
+
+  local sgObjectStorage = comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
+                          {
+                            spec+: {
+                              forProvider+: {
+                                manifest+: {
+                                  metadata: {
+                                    name: '',
+                                    namespace: '',
+                                  },
+                                  spec: {
+                                    type: 's3Compatible',
+                                    s3Compatible: {
+                                      bucket: '',
+                                      enablePathStyleAddressing: true,
+                                      region: pgParams.bucket_region,
+                                      endpoint: pgParams.bucket_endpoint,
+                                      awsCredentials: {
+                                        secretKeySelectors: {
+                                          accessKeyId: {
+                                            name: '',
+                                            key: 'AWS_ACCESS_KEY_ID',
+                                          },
+                                          secretAccessKey: {
+                                            name: '',
+                                            key: 'AWS_SECRET_ACCESS_KEY',
+                                          },
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          };
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnpostgres.vshn.appcat.vshn.io') +
   common.SyncOptions +
@@ -271,6 +337,11 @@ local composition =
             comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
+
+            comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
+            comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
+            // add backup configuration
           ],
         },
         {
@@ -288,6 +359,38 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.writeConnectionSecretToRef.name', 'connection'),
+          ],
+        },
+        // s3 bucket creation for backup purposes
+        {
+          base: objectBucket,
+          patches: [
+            comp.PatchSetRef('annotations'),
+            comp.PatchSetRef('labels'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 's3-bucket'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 's3-bucket'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.parameters.bucketName', 's3-bucket'),
+
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.writeConnectionSecretToRef.name', 's3-bucket'),
+          ],
+        },
+        // s3 bucket creation for backup purposes
+        {
+          base: sgObjectStorage,
+          patches: [
+            comp.PatchSetRef('annotations'),
+            comp.PatchSetRef('labels'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.bucket', 's3-bucket'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.spec.writeConnectionSecretToRef.namespace'),
+
+            //
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 's3-bucket'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 's3-bucket'),
           ],
         },
       ] + if pgParams.enableNetworkPolicy == true then [

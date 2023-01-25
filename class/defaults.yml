@@ -45,7 +45,7 @@ parameters:
 
       kubernetes:
         enabled: false
-        namespace:  ${crossplane:namespace}
+        namespace: ${crossplane:namespace}
         spec:
           package: ${appcat:images:provider-kubernetes:registry}/${appcat:images:provider-kubernetes:repository}:${appcat:images:provider-kubernetes:tag}
         controllerConfig:
@@ -57,6 +57,10 @@ parameters:
         enabled: false
         secretNamespace: ${crossplane:namespace}
         postgres:
+          # bucket_region: 'lpg' || 'ch-gva-2'
+          bucket_region: ''
+          # bucket_endpoint: 'https://objects.lpg.cloudscale.ch' || 'https://sos-ch-gva-2.exo.io'
+          bucket_endpoint: ''
           enabled: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
