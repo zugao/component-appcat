@@ -160,6 +160,7 @@ local composition =
                          toFieldPath: 'data.POSTGRESQL_PASSWORD',
                        },
                      ],
+                     // Make crossplane aware of the connection secret we are creating in this object
                      writeConnectionSecretToRef: {
                        name: '',
                        namespace: '',
