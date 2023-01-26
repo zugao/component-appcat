@@ -139,9 +139,7 @@ local connFromFieldPath(name, field) = {
 local kubeObject(apiVersion, kind) = {
   apiVersion: 'kubernetes.crossplane.io/v1alpha1',
   kind: 'Object',
-  metadata: {
-    name: '',
-  },
+  metadata: {},
   spec: {
     providerConfigRef: {
       name: 'kubernetes',

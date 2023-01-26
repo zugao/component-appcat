@@ -61,10 +61,7 @@ local composition =
                               spec+: {
                                 forProvider+: {
                                   manifest+: {
-                                    metadata: {
-                                      name: '',
-                                      namespace: '',
-                                    },
+                                    metadata: {},
                                     spec: {
                                       cpu: '',
                                       memory: '',
@@ -101,10 +98,7 @@ local composition =
                              spec+: {
                                forProvider+: {
                                  manifest+: {
-                                   metadata: {
-                                     name: '',
-                                     namespace: '',
-                                   },
+                                   metadata: {},
                                    spec: {
                                      postgresVersion: '',
                                      'postgresql.conf': {},
@@ -119,10 +113,7 @@ local composition =
                       spec+: {
                         forProvider+: {
                           manifest+: {
-                            metadata: {
-                              name: '',
-                              namespace: '',
-                            },
+                            metadata: {},
                             spec: {
                               instances: 1,
                               sgInstanceProfile: '',
@@ -148,10 +139,7 @@ local composition =
                    spec+: {
                      forProvider+: {
                        manifest+: {
-                         metadata: {
-                           name: '',
-                           namespace: '',
-                         },
+                         metadata: {},
                          stringData: {
                            POSTGRESQL_USER: defaultUser,
                            POSTGRESQL_PORT: defaultPort,
@@ -184,10 +172,7 @@ local composition =
                           spec+: {
                             forProvider+: {
                               manifest+: {
-                                metadata: {
-                                  name: '',
-                                  namespace: '',
-                                },
+                                metadata: {},
                                 spec: {
                                   policyTypes: [
                                     'Ingress',

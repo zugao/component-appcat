@@ -26,8 +26,7 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
@@ -58,8 +57,7 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
@@ -93,16 +91,13 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
               apiVersion: stackgres.io/v1
               kind: SGInstanceProfile
-              metadata:
-                name: ''
-                namespace: ''
+              metadata: {}
               spec:
                 cpu: ''
                 initContainers:
@@ -155,16 +150,13 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
               apiVersion: stackgres.io/v1
               kind: SGPostgresConfig
-              metadata:
-                name: ''
-                namespace: ''
+              metadata: {}
               spec:
                 postgresVersion: ''
                 postgresql.conf: {}
@@ -201,16 +193,13 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
               apiVersion: stackgres.io/v1
               kind: SGCluster
-              metadata:
-                name: ''
-                namespace: ''
+              metadata: {}
               spec:
                 configurations:
                   sgPostgresConfig: ''
@@ -260,16 +249,13 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
               apiVersion: v1
               kind: Secret
-              metadata:
-                name: ''
-                namespace: ''
+              metadata: {}
               stringData:
                 POSTGRESQL_DB: postgres
                 POSTGRESQL_HOST: ''
@@ -372,16 +358,13 @@ spec:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
-        metadata:
-          name: ''
+        metadata: {}
         spec:
           forProvider:
             manifest:
               apiVersion: networking.k8s.io/v1
               kind: NetworkPolicy
-              metadata:
-                name: ''
-                namespace: ''
+              metadata: {}
               spec:
                 ingress:
                   - from:
