@@ -60,7 +60,9 @@ local composition =
       },
     };
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscalekafka.exoscale.appcat.vshn.io') + common.SyncOptions +
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscalekafka.exoscale.appcat.vshn.io') +
+  common.SyncOptions +
+  common.VshnMetaDBaaSExoscale('Kafka') +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
