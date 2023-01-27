@@ -4,7 +4,15 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
+    metadata.appcat.vshn.io/description: Kafka DBaaS instances by Exoscale
+    metadata.appcat.vshn.io/displayname: Exoscale Kafka
+    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/exoscale-dbaas/kafka/create.html
+    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/exoscale_dbaas.html
+    metadata.appcat.vshn.io/zone: 'Exoscale zones: de-fra-1, de-muc-1, at-vie-1, ch-gva-2,
+      ch-dk-2, bg-sof-1'
   labels:
+    metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/serviceID: exoscale-kafka
     name: exoscalekafka.exoscale.appcat.vshn.io
   name: exoscalekafka.exoscale.appcat.vshn.io
 spec:

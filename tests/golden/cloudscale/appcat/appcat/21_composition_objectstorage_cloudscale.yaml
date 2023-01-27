@@ -4,7 +4,14 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
+    metadata.appcat.vshn.io/description: S3 compatible object storage hosted by cloudscale.ch
+    metadata.appcat.vshn.io/displayname: cloudscale.ch Object Storage
+    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/object-storage/create.html
+    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/objectstorage.html
+    metadata.appcat.vshn.io/zone: 'cloudscale.ch zones: lpgandrma'
   labels:
+    metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/serviceID: cloudscale-objectbucket
     name: cloudscale.objectbuckets.appcat.vshn.io
   name: cloudscale.objectbuckets.appcat.vshn.io
 spec:
