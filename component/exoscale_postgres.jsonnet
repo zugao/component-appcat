@@ -64,7 +64,9 @@ local composition =
       },
     };
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscalepostgres.exoscale.appcat.vshn.io') + common.SyncOptions +
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscalepostgres.exoscale.appcat.vshn.io') +
+  common.SyncOptions +
+  common.VshnMetaDBaaSExoscale('PostgreSQL') +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),

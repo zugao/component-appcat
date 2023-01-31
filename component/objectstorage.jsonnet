@@ -69,7 +69,10 @@ local compositionCloudscale =
     },
   };
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'cloudscale.objectbuckets.appcat.vshn.io') + common.SyncOptions + {
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'cloudscale.objectbuckets.appcat.vshn.io') +
+  common.SyncOptions +
+  common.VshnMetaObjectStorage('cloudscale.ch') +
+  {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
@@ -187,7 +190,10 @@ local compositionExoscale =
     },
   };
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscale.objectbuckets.appcat.vshn.io') + common.SyncOptions + {
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscale.objectbuckets.appcat.vshn.io') +
+  common.SyncOptions +
+  common.VshnMetaObjectStorage('Exoscale') +
+  {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
