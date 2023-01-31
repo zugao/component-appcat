@@ -16,9 +16,6 @@ local defaultDB = 'postgres';
 local defaultUser = 'postgres';
 local defaultPort = '5432';
 
-assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
-assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
-
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
@@ -413,8 +410,11 @@ local composition =
   };
 
 
-if params.services.vshn.enabled && pgParams.enabled then {
-  '20_xrd_vshn_postgres': xrd,
-  '20_rbac_vshn_postgres': xrds.CompositeClusterRoles(xrd),
-  '21_composition_vshn_postgres': composition,
-} else {}
+if params.services.vshn.enabled && pgParams.enabled then
+  assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
+  assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
+  {
+    '20_xrd_vshn_postgres': xrd,
+    '20_rbac_vshn_postgres': xrds.CompositeClusterRoles(xrd),
+    '21_composition_vshn_postgres': composition,
+  } else {}
