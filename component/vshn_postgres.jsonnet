@@ -16,6 +16,8 @@ local defaultDB = 'postgres';
 local defaultUser = 'postgres';
 local defaultPort = '5432';
 
+assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
+assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
 
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
