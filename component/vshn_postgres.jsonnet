@@ -122,7 +122,7 @@ local composition =
                                   [
                                     {
                                       sgObjectStorage: '',
-                                      cronSchedule: '0 22 * * *',
+                                      cronSchedule: '',
                                       retention: 6,
                                     },
                                   ],

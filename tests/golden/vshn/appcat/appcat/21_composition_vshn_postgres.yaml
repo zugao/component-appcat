@@ -211,7 +211,7 @@ spec:
               spec:
                 configurations:
                   backups:
-                    - cronSchedule: 0 22 * * *
+                    - cronSchedule: ''
                       retention: 6
                       sgObjectStorage: ''
                   sgPostgresConfig: ''
