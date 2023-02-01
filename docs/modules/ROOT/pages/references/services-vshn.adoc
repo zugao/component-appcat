@@ -54,7 +54,7 @@ Bucket region, required for xObjectBucket and PostreSQL managed by VSHN backup, 
 * Cloudscale
 ** 'lpg'
 * Exoscale
-** 'ch-gva-2' 
+** 'ch-gva-2'
 
 === `postgres.bucket_endpoint`
 type:: string
@@ -65,5 +65,5 @@ Bucket endpoint, required for xObjectBucket and PostreSQL managed by VSHN backup
 .Examples
 * Cloudscale
 ** 'https://objects.lpg.cloudscale.ch'
-* Exoscale  
+* Exoscale
 ** 'https://sos-ch-gva-2.exo.io'
