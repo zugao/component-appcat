@@ -59,7 +59,9 @@ type VSHNPostgreSQLServiceSpec struct {
 	// Multiple versions are supported. The latest version "15" is the default version.
 	MajorVersion string `json:"majorVersion,omitempty"`
 
-	// PGSettings contains additional PostgreSQL settings.
+	// PGSettings contains additional PostgreSQL settings, where the keys are valid names for the `postgresql.conf`
+	// configuration file parameters of the given `MajorVersion`.
+	// You can find the valid parameters for a given `MajorVersion` at https://postgresqlco.nf/doc/en/param/
 	PostgreSQLSettings runtime.RawExtension `json:"pgSettings,omitempty"`
 }
 

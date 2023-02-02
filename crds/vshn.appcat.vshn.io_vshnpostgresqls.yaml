@@ -89,7 +89,7 @@ spec:
                             - "15"
                           type: string
                         pgSettings:
-                          description: PGSettings contains additional PostgreSQL settings.
+                          description: PGSettings contains additional PostgreSQL settings, where the keys are valid names for the `postgresql.conf` configuration file parameters of the given `MajorVersion`. You can find the valid parameters for a given `MajorVersion` at https://postgresqlco.nf/doc/en/param/
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
                       type: object
