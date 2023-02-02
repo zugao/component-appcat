@@ -43,6 +43,24 @@ local fromCompositeFieldPathWithTransformPrefix(from, to, prefix) = fromComposit
   ],
 };
 
+local combineCompositeFromOneFieldPath(fromOne, to, format) = {
+  // this is the default combine patch type
+  // This type patches from a field within the XR to a field within the composed resource using format function.
+  type: 'CombineFromComposite',
+  toFieldPath: to,
+  combine: {
+    variables: [
+      {
+        fromFieldPath: fromOne,
+      },
+    ],
+    strategy: 'string',
+    string: {
+      fmt: format,
+    },
+  },
+};
+
 local combineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format) = {
   // this is the default combine patch type
   // This type patches from a two field within the XR to a field within the composed resource using format function.
@@ -157,6 +175,8 @@ local kubeObject(apiVersion, kind) = {
     fromCompositeFieldPathWithTransformSuffix(from, to, suffix),
   FromCompositeFieldPathWithTransformPrefix(from, to, prefix):
     fromCompositeFieldPathWithTransformPrefix(from, to, prefix),
+  CombineCompositeFromOneFieldPath(fromOne, to, format):
+    combineCompositeFromOneFieldPath(fromOne, to, format),
   CombineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format):
     combineCompositeFromTwoFieldPaths(fromOne, fromTwo, to, format),
   FromCompositeFieldPathWithTransform(from, to, prefix, suffix):

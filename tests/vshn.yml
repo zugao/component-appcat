@@ -12,6 +12,8 @@ parameters:
     providers:
       kubernetes:
         enabled: true
+      helm:
+        enabled: true
 
     services:
       vshn:

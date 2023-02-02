@@ -1,10 +1,18 @@
 parameters:
   appcat:
+    charts:
+      redis:
+        source: https://charts.bitnami.com/bitnami
+        version: 17.6.0
     images:
       provider-kubernetes:
         registry: docker.io
         repository: crossplane/provider-kubernetes
         tag: v0.4.0
+      provider-helm:
+        registry: docker.io
+        repository: crossplane/provider-helm
+        tag: v0.11.1
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale/provider
@@ -22,12 +30,11 @@ parameters:
           name: cloudscale-api-token
           namespace: ${crossplane:namespace}
           data:
-            CLOUDSCALE_API_TOKEN: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}'
+            CLOUDSCALE_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}"
         spec:
           package: ${appcat:images:provider-cloudscale:registry}/${appcat:images:provider-cloudscale:repository}:${appcat:images:provider-cloudscale:tag}
         controllerConfig: {}
         providerConfig: {}
-
 
       exoscale:
         enabled: false
@@ -36,8 +43,8 @@ parameters:
           name: exoscale-api-access
           namespace: ${crossplane:namespace}
           data:
-            EXOSCALE_API_KEY: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/access-key}'
-            EXOSCALE_API_SECRET: '?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/secret-key}'
+            EXOSCALE_API_KEY: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/access-key}"
+            EXOSCALE_API_SECRET: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/secret-key}"
         spec:
           package: ${appcat:images:provider-exoscale:registry}/${appcat:images:provider-exoscale:repository}:${appcat:images:provider-exoscale:tag}
         controllerConfig: {}
@@ -52,18 +59,33 @@ parameters:
           serviceAccountName: provider-kubernetes
         providerConfig: {}
 
+      helm:
+        enabled: false
+        namespace: ${crossplane:namespace}
+        spec:
+          package: ${appcat:images:provider-helm:registry}/${appcat:images:provider-helm:repository}:${appcat:images:provider-helm:tag}
+        controllerConfig:
+          serviceAccountName: provider-helm
+        providerConfig: {}
+
     services:
       vshn:
         enabled: false
         secretNamespace: ${crossplane:namespace}
         postgres:
           # bucket_region: 'lpg' || 'ch-gva-2'
-          bucket_region: ''
+          bucket_region: ""
           # bucket_endpoint: 'https://objects.lpg.cloudscale.ch' || 'https://sos-ch-gva-2.exo.io'
-          bucket_endpoint: ''
+          bucket_endpoint: ""
           enabled: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
+        redis:
+          enabled: true
+          enableNetworkPolicy: true
+          secretNamespace: ${appcat:services:vshn:secretNamespace}
+          helmChartVersion: ${appcat:charts:redis:version}
+          imageRegistry: ""
 
       # Config for exoscale composites
       exoscale:
