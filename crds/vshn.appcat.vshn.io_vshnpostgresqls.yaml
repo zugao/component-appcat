@@ -99,7 +99,7 @@ spec:
                       properties:
                         cpu:
                           default: 500m
-                          description: CPU defines the amount of Kubernetes CPUs for an instance.
+                          description: CPU defines the amount of Kubernetes CPUs for an instance (will set requests and limits to this value).
                           type: string
                         disk:
                           default: 5Gi
@@ -107,7 +107,7 @@ spec:
                           type: string
                         memory:
                           default: 128Mi
-                          description: Memory defines the amount of memory in units of bytes for an instance.
+                          description: Memory defines the amount of memory in units of bytes for an instance (will set requests and limits to this value).
                           type: string
                       type: object
                       default: {}

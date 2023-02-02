@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/vshn/component-appcat/apis/v1"
+	v1 "github.com/vshn/component-appcat/apis/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -84,12 +84,12 @@ type VSHNDBaaSMaintenanceScheduleSpec struct {
 type VSHNDBaaSSizeSpec struct {
 	// +kubebuilder:default="500m"
 
-	// CPU defines the amount of Kubernetes CPUs for an instance.
+	// CPU defines the amount of Kubernetes CPUs for an instance (will set requests and limits to this value).
 	CPU string `json:"cpu,omitempty"`
 
 	// +kubebuilder:default="128Mi"
 
-	// Memory defines the amount of memory in units of bytes for an instance.
+	// Memory defines the amount of memory in units of bytes for an instance (will set requests and limits to this value).
 	Memory string `json:"memory,omitempty"`
 
 	// +kubebuilder:default="5Gi"
