@@ -25,7 +25,14 @@ spec:
     kind: XObjectBucket
     plural: xobjectbuckets
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .spec.parameters.bucketName
+          name: Bucket Name
+          type: string
+        - jsonPath: .spec.parameters.region
+          name: Region
+          type: string
+      name: v1
       referenceable: true
       schema:
         openAPIV3Schema:

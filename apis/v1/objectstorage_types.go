@@ -2,10 +2,6 @@ package v1
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-// +kubebuilder:object:root=true
-// +kubebuilder:printcolumn:name="Bucket Name",type="string",JSONPath=".spec.parameters.bucketName"
-// +kubebuilder:printcolumn:name="Region",type="string",JSONPath=".spec.parameters.region"
-
 const (
 	// DeleteAll recursively deletes all objects in the object bucket and then removes it.
 	DeleteAll DeletionPolicy = "DeleteAll"
@@ -15,6 +11,10 @@ const (
 
 // DeletionPolicy determines how object buckets should be deleted.
 type DeletionPolicy string
+
+// +kubebuilder:object:root=true
+// +kubebuilder:printcolumn:name="Bucket Name",type="string",JSONPath=".spec.parameters.bucketName"
+// +kubebuilder:printcolumn:name="Region",type="string",JSONPath=".spec.parameters.region"
 
 // ObjectBucket is the API for creating S3 buckets.
 type ObjectBucket struct {

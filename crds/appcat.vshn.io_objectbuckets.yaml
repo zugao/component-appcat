@@ -15,7 +15,14 @@ spec:
     singular: objectbucket
   scope: Namespaced
   versions:
-  - name: v1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.parameters.bucketName
+      name: Bucket Name
+      type: string
+    - jsonPath: .spec.parameters.region
+      name: Region
+      type: string
+    name: v1
     schema:
       openAPIV3Schema:
         description: ObjectBucket is the API for creating S3 buckets.
@@ -161,3 +168,4 @@ spec:
         type: object
     served: true
     storage: true
+    subresources: {}
