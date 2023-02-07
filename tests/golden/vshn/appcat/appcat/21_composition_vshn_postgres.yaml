@@ -381,26 +381,17 @@ spec:
               type: string
           type: FromCompositeFieldPath
     - base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata: {}
+        apiVersion: appcat.vshn.io/v1
+        kind: XObjectBucket
+        metadata:
+          name: ''
         spec:
-          forProvider:
-            manifest:
-              apiVersion: appcat.vshn.io/v1
-              kind: XObjectBucket
-              metadata:
-                name: ''
-                namespace: ''
-              spec:
-                parameters:
-                  bucketName: ''
-                  region: ch-gva-2
-                writeConnectionSecretToRef:
-                  name: ''
-                  namespace: ''
-          providerConfigRef:
-            name: kubernetes
+          parameters:
+            bucketName: ''
+            region: ch-gva-2
+          writeConnectionSecretToRef:
+            name: ''
+            namespace: ''
       patches:
         - patchSetName: annotations
           type: PatchSet
@@ -408,33 +399,19 @@ spec:
           type: PatchSet
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-pgbucket'
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.metadata.name
+          toFieldPath: spec.parameters.bucketName
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
           transforms:
             - string:
                 fmt: vshn-postgresql-%s
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.parameters.bucketName
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.writeConnectionSecretToRef.namespace
-          transforms:
-            - string:
-                fmt: vshn-postgresql-%s
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.writeConnectionSecretToRef.name
+          toFieldPath: spec.writeConnectionSecretToRef.name
           transforms:
             - string:
                 fmt: pgbucket-%s

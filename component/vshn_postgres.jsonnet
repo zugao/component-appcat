@@ -204,28 +204,23 @@ local composition =
                             },
                           },
                         };
-  local objectBucket = comp.KubeObject('appcat.vshn.io/v1', 'XObjectBucket') +
+  local xobjectBucket =
                        {
-                         spec+: {
-                           forProvider+: {
-                             manifest+: {
-                               metadata: {
-                                 name: '',
-                                 namespace: '',
-                               },
-                               spec: {
-                                 parameters: {
-                                   bucketName: '',
-                                   region: pgParams.bucket_region,
-                                 },
-                                 writeConnectionSecretToRef: {
-                                   namespace: '',
-                                   name: '',
-                                 },
-                               },
-                             },
-                           },
-                         },
+                        apiVersion: "appcat.vshn.io/v1",
+                        kind: "XObjectBucket",
+                        metadata: {
+                          name: '',
+                        },
+                        spec: {
+                          parameters: {
+                            bucketName: '',
+                            region: pgParams.bucket_region,
+                          },
+                          writeConnectionSecretToRef: {
+                            namespace: '',
+                            name: '',
+                          },
+                        },
                        };
 
   local sgObjectStorage = comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
@@ -362,17 +357,15 @@ local composition =
         },
         // s3 bucket creation for backup purposes
         {
-          base: objectBucket,
+          base: xobjectBucket,
           patches: [
             comp.PatchSetRef('annotations'),
             comp.PatchSetRef('labels'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgbucket'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.parameters.bucketName'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
 
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.writeConnectionSecretToRef.name', 'pgbucket'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'pgbucket'),
           ],
         },
         // s3 bucket creation for backup purposes
