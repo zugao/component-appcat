@@ -205,23 +205,23 @@ local composition =
                           },
                         };
   local xobjectBucket =
-                       {
-                        apiVersion: "appcat.vshn.io/v1",
-                        kind: "XObjectBucket",
-                        metadata: {
-                          name: '',
-                        },
-                        spec: {
-                          parameters: {
-                            bucketName: '',
-                            region: pgParams.bucket_region,
-                          },
-                          writeConnectionSecretToRef: {
-                            namespace: '',
-                            name: '',
-                          },
-                        },
-                       };
+    {
+      apiVersion: 'appcat.vshn.io/v1',
+      kind: 'XObjectBucket',
+      metadata: {
+        name: '',
+      },
+      spec: {
+        parameters: {
+          bucketName: '',
+          region: pgParams.bucket_region,
+        },
+        writeConnectionSecretToRef: {
+          namespace: '',
+          name: '',
+        },
+      },
+    };
 
   local sgObjectStorage = comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
                           {
