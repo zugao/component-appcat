@@ -415,10 +415,6 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.metadata.name
-          transforms:
-            - string:
-                fmt: s3-bucket-%s
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.metadata.namespace
@@ -429,10 +425,6 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.parameters.bucketName
-          transforms:
-            - string:
-                fmt: s3-bucket-%s
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.writeConnectionSecretToRef.namespace
@@ -505,10 +497,6 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.s3Compatible.bucket
-          transforms:
-            - string:
-                fmt: s3-bucket-%s
-              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.spec.writeConnectionSecretToRef.namespace
