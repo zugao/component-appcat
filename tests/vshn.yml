@@ -16,3 +16,6 @@ parameters:
     services:
       vshn:
         enabled: true
+        postgres:
+          bucket_region: 'ch-gva-2'
+          bucket_endpoint: 'https://sos-ch-gva-2.exo.io'

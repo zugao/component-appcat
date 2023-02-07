@@ -42,3 +42,28 @@ type:: bool
 default:: `true`
 
 Whether to enable NetworkPolicy in the PostgreSQL instance namespace. This allows to establish connections from claim's namespace to the PostgreSQL instance.
+
+
+=== `postgres.bucket_region`
+type:: string
+default:: `''`
+
+Bucket region, required for xObjectBucket and PostreSQL managed by VSHN backup, should be cloud specific.
+
+.Examples
+* Cloudscale
+** 'lpg'
+* Exoscale
+** 'ch-gva-2'
+
+=== `postgres.bucket_endpoint`
+type:: string
+default:: `''`
+
+Bucket endpoint, required for xObjectBucket and PostreSQL managed by VSHN backup, should be cloud specific.
+
+.Examples
+* Cloudscale
+** 'https://objects.lpg.cloudscale.ch'
+* Exoscale
+** 'https://sos-ch-gva-2.exo.io'

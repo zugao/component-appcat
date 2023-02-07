@@ -95,6 +95,7 @@ rules:
       - sginstanceprofiles
       - sgclusters
       - sgpgconfigs
+      - sgobjectstorages
     verbs:
       - get
       - list
@@ -107,6 +108,18 @@ rules:
       - networking.k8s.io
     resources:
       - networkpolicies
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - appcat.vshn.io
+    resources:
+      - xobjectbuckets
     verbs:
       - get
       - list
