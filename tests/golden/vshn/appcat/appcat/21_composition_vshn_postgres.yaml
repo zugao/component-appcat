@@ -410,7 +410,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-s3-bucket'
+                fmt: '%s-pgbucket'
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -437,7 +437,7 @@ spec:
           toFieldPath: spec.forProvider.manifest.spec.writeConnectionSecretToRef.name
           transforms:
             - string:
-                fmt: s3-bucket-%s
+                fmt: pgbucket-%s
               type: string
           type: FromCompositeFieldPath
     - base:
@@ -505,14 +505,14 @@ spec:
           toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name
           transforms:
             - string:
-                fmt: s3-bucket-%s
+                fmt: pgbucket-%s
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name
           transforms:
             - string:
-                fmt: s3-bucket-%s
+                fmt: pgbucket-%s
               type: string
           type: FromCompositeFieldPath
     - base:
