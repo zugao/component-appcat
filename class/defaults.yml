@@ -8,7 +8,7 @@ parameters:
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale/provider
-        tag: v0.8.2
+        tag: v0.9.0
       provider-cloudscale:
         registry: ghcr.io
         repository: vshn/provider-cloudscale/provider

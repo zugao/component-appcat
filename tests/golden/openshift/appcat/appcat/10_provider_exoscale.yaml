@@ -10,7 +10,7 @@ metadata:
 spec:
   controllerConfigRef:
     name: exoscale
-  package: ghcr.io/vshn/provider-exoscale/provider:v0.8.2
+  package: ghcr.io/vshn/provider-exoscale/provider:v0.9.0
 ---
 apiVersion: exoscale.crossplane.io/v1
 kind: ProviderConfig
