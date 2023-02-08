@@ -83,6 +83,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.namespaceDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -132,6 +135,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.profileDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -175,6 +181,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.pgconfigDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -229,6 +238,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.pgclusterDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -326,6 +338,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.secretDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -397,6 +412,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.s3BucketDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           type: FromCompositeFieldPath
@@ -451,6 +469,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.s3BackupConfigDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -518,6 +539,9 @@ spec:
           type: PatchSet
         - patchSetName: labels
           type: PatchSet
+        - fromFieldPath: status.conditions
+          toFieldPath: status.networkPolicyDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
