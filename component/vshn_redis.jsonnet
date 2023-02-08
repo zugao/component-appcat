@@ -26,6 +26,9 @@ local connectionSecretKeys = [
   'REDIS_URL',
 ];
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local securityContext = if isOpenshift then false else true;
+
 local xrd = xrds.XRDFromCRD(
   'xvshnredis.vshn.appcat.vshn.io',
   xrds.LoadCRD('vshn.appcat.vshn.io_vshnredis.yaml'),
@@ -114,6 +117,12 @@ local composition =
             master: {
               persistence: {
                 size: '',
+              },
+              podSecurityContext: {
+                enabled: securityContext,
+              },
+              containerSecurityContext: {
+                enabled: securityContext,
               },
               resources: {
                 requests: {

@@ -194,8 +194,12 @@ spec:
                 repository: bitnami/redis
                 tag: ''
               master:
+                containerSecurityContext:
+                  enabled: true
                 persistence:
                   size: ''
+                podSecurityContext:
+                  enabled: true
                 resources:
                   limits:
                     cpu: ''
