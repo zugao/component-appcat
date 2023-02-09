@@ -72,15 +72,6 @@ local toCompositeFieldPath(from, to) = {
   toFieldPath: to,
 };
 
-local availablePatchSets = {
-
-};
-
-local patchSetRef(name) = {
-  type: 'PatchSet',
-  patchSetName: name,
-};
-
 local commonResources = {
   observeClaimNamespace: {
     // This resource "observes" the namespace of the Claim.
@@ -157,9 +148,6 @@ local kubeObject(apiVersion, kind) = {
 };
 
 {
-  PatchSet(name):
-    assert std.objectHas(availablePatchSets, name) : "common patch set '%s' doesn't exist" % name;
-    availablePatchSets[name] { name: name },
   CommonResource(name):
     assert std.objectHas(commonResources, name) : "common resources set '%s' doesn't exist" % name;
     commonResources[name],
@@ -175,8 +163,6 @@ local kubeObject(apiVersion, kind) = {
     fromCompositeFieldPathWithTransform(from, to, prefix, suffix),
   ToCompositeFieldPath(from, to):
     toCompositeFieldPath(from, to),
-  PatchSetRef(name):
-    patchSetRef(name),
   CompositeRef(xrd, version=''):
     compositeRef(xrd, version=version),
   KubeObject(apiVersion, kind):
