@@ -18,17 +18,6 @@ spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1
     kind: XObjectBucket
-  patchSets:
-    - name: annotations
-      patches:
-        - fromFieldPath: metadata.annotations
-          toFieldPath: metadata.annotations
-          type: FromCompositeFieldPath
-    - name: labels
-      patches:
-        - fromFieldPath: metadata.labels
-          toFieldPath: metadata.labels
-          type: FromCompositeFieldPath
   resources:
     - base:
         apiVersion: cloudscale.crossplane.io/v1
@@ -53,10 +42,6 @@ spec:
           name: AWS_SECRET_ACCESS_KEY
           type: FromConnectionSecretKey
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           type: FromCompositeFieldPath
@@ -102,10 +87,6 @@ spec:
           name: BUCKET_NAME
           type: FromFieldPath
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           type: FromCompositeFieldPath

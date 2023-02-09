@@ -19,17 +19,6 @@ spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNPostgreSQL
-  patchSets:
-    - name: annotations
-      patches:
-        - fromFieldPath: metadata.annotations
-          toFieldPath: metadata.annotations
-          type: FromCompositeFieldPath
-    - name: labels
-      patches:
-        - fromFieldPath: metadata.labels
-          toFieldPath: metadata.labels
-          type: FromCompositeFieldPath
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -79,6 +68,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -86,6 +76,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.namespaceDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -131,6 +123,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -138,6 +131,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.profileDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -177,6 +172,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -184,6 +180,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgconfigDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -234,6 +232,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -241,6 +240,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgclusterDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -334,6 +335,7 @@ spec:
           name: ca.crt
           type: FromConnectionSecretKey
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -341,6 +343,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.secretDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -408,6 +412,7 @@ spec:
             name: ''
             namespace: ''
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -415,6 +420,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.s3BucketDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           type: FromCompositeFieldPath
@@ -465,6 +472,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -472,6 +480,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.s3BackupConfigDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -535,6 +545,7 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+<<<<<<< HEAD
         - patchSetName: annotations
           type: PatchSet
         - patchSetName: labels
@@ -542,6 +553,8 @@ spec:
         - fromFieldPath: status.conditions
           toFieldPath: status.networkPolicyDebug
           type: ToCompositeFieldPath
+=======
+>>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:

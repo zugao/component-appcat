@@ -73,16 +73,7 @@ local toCompositeFieldPath(from, to) = {
 };
 
 local availablePatchSets = {
-  annotations: {
-    patches: [
-      fromCompositeFieldPath('metadata.annotations', 'metadata.annotations'),
-    ],
-  },
-  labels: {
-    patches: [
-      fromCompositeFieldPath('metadata.labels', 'metadata.labels'),
-    ],
-  },
+
 };
 
 local patchSetRef(name) = {

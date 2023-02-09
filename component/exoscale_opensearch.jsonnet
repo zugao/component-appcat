@@ -70,17 +70,11 @@ local composition =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: osParams.secretNamespace,
-      patchSets: [
-        comp.PatchSet('annotations'),
-        comp.PatchSet('labels'),
-      ],
       resources: [
         {
           base: osBase,
           connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
 
