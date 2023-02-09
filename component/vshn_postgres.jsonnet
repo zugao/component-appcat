@@ -205,10 +205,6 @@ local composition =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
-      patchSets: [
-        comp.PatchSet('annotations'),
-        comp.PatchSet('labels'),
-      ],
       resources: [
         {
           base: namespace {
@@ -225,8 +221,6 @@ local composition =
         {
           base: namespace,
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
             comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
@@ -235,8 +229,6 @@ local composition =
         {
           base: sgInstanceProfile,
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'profile'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -248,8 +240,6 @@ local composition =
         {
           base: sgPostgresConfig,
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgconf'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -261,8 +251,6 @@ local composition =
         {
           base: sgCluster,
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -277,8 +265,6 @@ local composition =
           base: secret,
           connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.manifest.metadata.name', 'connection'),
@@ -294,8 +280,6 @@ local composition =
         {
           base: networkPolicy,
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
