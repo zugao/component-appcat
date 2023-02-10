@@ -68,25 +68,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.namespaceDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.namespaceDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -132,25 +113,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.profileDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.profileDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -190,25 +152,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.pgconfigDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.pgconfigDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -255,25 +198,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.pgclusterDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.pgclusterDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -354,25 +278,6 @@ spec:
           name: ca.crt
           type: FromConnectionSecretKey
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.secretDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.secretDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -428,119 +333,6 @@ spec:
               type: string
           type: FromCompositeFieldPath
     - base:
-<<<<<<< HEAD
-=======
-        apiVersion: appcat.vshn.io/v1
-        kind: XObjectBucket
-        metadata:
-          name: ''
-        spec:
-          parameters:
-            bucketName: ''
-            region: ch-gva-2
-          writeConnectionSecretToRef:
-            name: ''
-            namespace: ''
-      patches:
-        - fromFieldPath: status.conditions
-          toFieldPath: status.s3BucketDebug
-          type: ToCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.parameters.bucketName
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.writeConnectionSecretToRef.namespace
-          transforms:
-            - string:
-                fmt: vshn-postgresql-%s
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.writeConnectionSecretToRef.name
-          transforms:
-            - string:
-                fmt: pgbucket-%s
-              type: string
-          type: FromCompositeFieldPath
-    - base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata: {}
-        spec:
-          forProvider:
-            manifest:
-              apiVersion: stackgres.io/v1beta1
-              kind: SGObjectStorage
-              metadata:
-                name: ''
-                namespace: ''
-              spec:
-                s3Compatible:
-                  awsCredentials:
-                    secretKeySelectors:
-                      accessKeyId:
-                        key: AWS_ACCESS_KEY_ID
-                        name: ''
-                      secretAccessKey:
-                        key: AWS_SECRET_ACCESS_KEY
-                        name: ''
-                  bucket: ''
-                  enablePathStyleAddressing: true
-                  endpoint: https://sos-ch-gva-2.exo.io
-                  region: ch-gva-2
-                type: s3Compatible
-          providerConfigRef:
-            name: kubernetes
-      patches:
-        - fromFieldPath: status.conditions
-          toFieldPath: status.s3BackupConfigDebug
-          type: ToCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-object-storage'
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.metadata.name
-          transforms:
-            - string:
-                fmt: sgbackup-%s
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
-          transforms:
-            - string:
-                fmt: vshn-postgresql-%s
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.s3Compatible.bucket
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-          toFieldPath: spec.forProvider.spec.writeConnectionSecretToRef.namespace
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name
-          transforms:
-            - string:
-                fmt: pgbucket-%s
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name
-          transforms:
-            - string:
-                fmt: pgbucket-%s
-              type: string
-          type: FromCompositeFieldPath
-    - base:
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         metadata: {}
@@ -562,25 +354,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
-<<<<<<< HEAD
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.networkPolicyDebug
-          type: ToCompositeFieldPath
-=======
->>>>>>> 60f0c0a (Remove harmful annotation and label patchsets)
->>>>>>> 7c2aabd (Remove harmful annotation and label patchsets)
-=======
-        - fromFieldPath: status.conditions
-          toFieldPath: status.networkPolicyDebug
-          type: ToCompositeFieldPath
->>>>>>> 0e335d5 (Remove patchset functions)
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
