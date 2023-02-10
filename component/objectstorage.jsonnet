@@ -76,10 +76,6 @@ local compositionCloudscale =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
-      patchSets: [
-        comp.PatchSet('annotations'),
-        comp.PatchSet('labels'),
-      ],
       resources: [
         {
           base: baseUser,
@@ -88,8 +84,6 @@ local compositionCloudscale =
             comp.conn.FromSecretKey('AWS_SECRET_ACCESS_KEY'),
           ],
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.accessUserConditions'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
@@ -122,8 +116,6 @@ local compositionCloudscale =
             comp.conn.FromFieldPath('BUCKET_NAME', 'status.atProvider.bucketName'),
           ],
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.bucketConditions'),
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),
@@ -197,10 +189,6 @@ local compositionExoscale =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
-      patchSets: [
-        comp.PatchSet('annotations'),
-        comp.PatchSet('labels'),
-      ],
       resources: [
         {
           base: IAMKeyBase,
@@ -209,8 +197,6 @@ local compositionExoscale =
             comp.conn.FromSecretKey('AWS_SECRET_ACCESS_KEY'),
           ],
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.accessUserConditions'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
@@ -245,8 +231,6 @@ local compositionExoscale =
             comp.conn.FromFieldPath('BUCKET_NAME', 'status.atProvider.bucketName'),
           ],
           patches: [
-            comp.PatchSetRef('annotations'),
-            comp.PatchSetRef('labels'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.bucketConditions'),
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),

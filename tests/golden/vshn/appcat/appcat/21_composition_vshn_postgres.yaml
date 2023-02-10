@@ -19,17 +19,6 @@ spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNPostgreSQL
-  patchSets:
-    - name: annotations
-      patches:
-        - fromFieldPath: metadata.annotations
-          toFieldPath: metadata.annotations
-          type: FromCompositeFieldPath
-    - name: labels
-      patches:
-        - fromFieldPath: metadata.labels
-          toFieldPath: metadata.labels
-          type: FromCompositeFieldPath
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -79,10 +68,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.namespaceDebug
           type: ToCompositeFieldPath
@@ -131,10 +116,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.profileDebug
           type: ToCompositeFieldPath
@@ -177,10 +158,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.pgconfigDebug
           type: ToCompositeFieldPath
@@ -234,10 +211,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.pgclusterDebug
           type: ToCompositeFieldPath
@@ -334,10 +307,6 @@ spec:
           name: ca.crt
           type: FromConnectionSecretKey
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.secretDebug
           type: ToCompositeFieldPath
@@ -408,10 +377,6 @@ spec:
             name: ''
             namespace: ''
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.s3BucketDebug
           type: ToCompositeFieldPath
@@ -465,10 +430,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.s3BackupConfigDebug
           type: ToCompositeFieldPath
@@ -535,10 +496,6 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
-        - patchSetName: annotations
-          type: PatchSet
-        - patchSetName: labels
-          type: PatchSet
         - fromFieldPath: status.conditions
           toFieldPath: status.networkPolicyDebug
           type: ToCompositeFieldPath
