@@ -67,3 +67,20 @@ Bucket endpoint, required for xObjectBucket and PostreSQL managed by VSHN backup
 ** 'https://objects.lpg.cloudscale.ch'
 * Exoscale
 ** 'https://sos-ch-gva-2.exo.io'
+
+
+== `redis`
+[horizontal]
+type:: dict
+
+Configuration option for VSHN Redis.
+You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
+
+It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+
+
+=== `redis.enableNetworkPolicy`
+type:: bool
+default:: `true`
+
+Whether to enable NetworkPolicy in the Redis instance namespace. This allows to establish connections from claim's namespace to the Redis instance.

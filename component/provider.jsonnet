@@ -182,4 +182,67 @@ local controllerConfigRef(config) =
       role,
       rolebinding,
     ],
+  [if params.providers.helm.enabled then '10_provider_helm']:
+    local provider = params.providers.helm;
+
+    local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
+      metadata+: {
+        namespace: provider.namespace,
+      },
+    };
+    local role = kube.ClusterRole('crossplane:provider:provider-helm:system:custom') {
+      rules: [
+        {
+          apiGroups: [ 'helm.crossplane.io' ],
+          resources: [ '*' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ '' ],
+          resources: [ 'namespaces', 'serviceaccounts', 'services' ],
+          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
+        },
+        {
+          apiGroups: [ 'apps' ],
+          resources: [ 'statefulsets' ],
+          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
+        },
+        {
+          apiGroups: [ 'networking.k8s.io' ],
+          resources: [ 'networkpolicies' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+      ],
+    };
+    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-helm:system:custom') {
+      roleRef_: role,
+      subjects_: [ sa ],
+    };
+
+
+    local controllerConf = controllerConfig('helm', provider.controllerConfig);
+
+    [
+      crossplane.Provider('helm') {
+        spec+: provider.spec + controllerConfigRef(controllerConf),
+      },
+    ]
+    +
+    controllerConf
+    +
+    [
+
+      crossplane.ProviderConfig('helm') {
+        apiVersion: 'helm.crossplane.io/v1beta1',
+        spec+: addCredentials(
+          provider.providerConfig,
+          {
+            source: 'InjectedIdentity',
+          }
+        ),
+      },
+      sa,
+      role,
+      rolebinding,
+    ],
 }
