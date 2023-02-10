@@ -83,12 +83,12 @@ type VSHNDBaaSMaintenanceScheduleSpec struct {
 
 // VSHNDBaaSSizeSpec contains settings to control the sizing of a service.
 type VSHNDBaaSSizeSpec struct {
-	// +kubebuilder:default="500m"
+	// +kubebuilder:default="600m"
 
 	// CPU defines the amount of Kubernetes CPUs for an instance.
 	CPU string `json:"cpu,omitempty"`
 
-	// +kubebuilder:default="128Mi"
+	// +kubebuilder:default="3500Mi"
 
 	// Memory defines the amount of memory in units of bytes for an instance.
 	Memory string `json:"memory,omitempty"`

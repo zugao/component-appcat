@@ -104,7 +104,7 @@ spec:
                       description: Size contains settings to control the sizing of a service.
                       properties:
                         cpu:
-                          default: 500m
+                          default: 600m
                           description: CPU defines the amount of Kubernetes CPUs for an instance.
                           type: string
                         disk:
@@ -112,7 +112,7 @@ spec:
                           description: Disk defines the amount of disk space for an instance.
                           type: string
                         memory:
-                          default: 128Mi
+                          default: 3500Mi
                           description: Memory defines the amount of memory in units of bytes for an instance.
                           type: string
                       type: object
