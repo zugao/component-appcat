@@ -149,6 +149,11 @@ local controllerConfigRef(config) =
           resources: [ 'xobjectbuckets' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'cert-manager.io' ],
+          resources: [ 'issuers', 'certificates' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
