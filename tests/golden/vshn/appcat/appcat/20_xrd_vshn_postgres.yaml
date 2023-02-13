@@ -123,7 +123,7 @@ spec:
                         a service.
                       properties:
                         cpu:
-                          default: 500m
+                          default: 600m
                           description: CPU defines the amount of Kubernetes CPUs for
                             an instance.
                           type: string
@@ -133,7 +133,7 @@ spec:
                             instance.
                           type: string
                         memory:
-                          default: 128Mi
+                          default: 3500Mi
                           description: Memory defines the amount of memory in units
                             of bytes for an instance.
                           type: string

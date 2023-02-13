@@ -64,6 +64,28 @@ local composition =
                                     spec: {
                                       cpu: '',
                                       memory: '',
+                                      containers: {
+                                        'cluster-controller': {
+                                          cpu: '100m',
+                                          memory: '256Mi',
+                                        },
+                                        envoy: {
+                                          cpu: '100m',
+                                          memory: '64Mi',
+                                        },
+                                        pgbouncer: {
+                                          cpu: '100m',
+                                          memory: '64Mi',
+                                        },
+                                        'postgres-util': {
+                                          cpu: '100m',
+                                          memory: '256Mi',
+                                        },
+                                        'prometheus-postgres-exporter': {
+                                          cpu: '100m',
+                                          memory: '256Mi',
+                                        },
+                                      },
                                       initContainers: {
                                         'pgbouncer-auth-file': {
                                           cpu: '100m',
