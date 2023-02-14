@@ -42,6 +42,7 @@ spec:
                   description: Parameters are the configurable fields of a VSHNPostgreSQL.
                   properties:
                     backup:
+                      default: {}
                       description: Backup contains settings to control the backups
                         of an instance.
                       properties:
@@ -98,8 +99,6 @@ spec:
                           type: array
                       type: object
                     service:
-                      backup:
-                        default: {}
                       default: {}
                       description: Service contains PostgreSQL DBaaS specific properties
                       properties:
