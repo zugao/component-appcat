@@ -132,4 +132,6 @@ type VSHNPostgreSQLStatus struct {
 	S3BucketDebug        []v1.Condition `json:"s3BucketDebug,omitempty"`
 	S3BackupConfigDebug  []v1.Condition `json:"s3BackupConfigDebug,omitempty"`
 	NetworkPolicyDebug   []v1.Condition `json:"networkPolicyDebug,omitempty"`
+	LocalCADebug         []v1.Condition `json:"localCADebug,omitempty"`
+	CertificateDebug     []v1.Condition `json:"certificateDebug,omitempty"`
 }

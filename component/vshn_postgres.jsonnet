@@ -16,17 +16,21 @@ local defaultDB = 'postgres';
 local defaultUser = 'postgres';
 local defaultPort = '5432';
 
+local certificateSecretName = 'tls-certificate';
+
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
 local connectionSecretKeys = [
+  'ca.crt',
+  'tls.crt',
+  'tls.key',
   'POSTGRESQL_URL',
   'POSTGRESQL_DB',
   'POSTGRESQL_HOST',
   'POSTGRESQL_PORT',
   'POSTGRESQL_USER',
   'POSTGRESQL_PASSWORD',
-  'ca.crt',
 ];
 
 local xrd = xrds.XRDFromCRD(
@@ -54,7 +58,65 @@ local composition =
                         },
                       },
                     };
-
+  local localca = comp.KubeObject('cert-manager.io/v1', 'Issuer') +
+                  {
+                    spec+: {
+                      forProvider+: {
+                        manifest+: {
+                          metadata: {
+                            name: '',
+                            namespace: '',
+                          },
+                          spec: {
+                            selfSigned: {
+                              crlDistributionPoints: [],
+                            },
+                          },
+                        },
+                      },
+                    },
+                  };
+  local certificate = comp.KubeObject('cert-manager.io/v1', 'Certificate') +
+                      {
+                        spec+: {
+                          forProvider+: {
+                            manifest+: {
+                              metadata: {
+                                name: '',
+                                namespace: '',
+                              },
+                              spec: {
+                                secretName: certificateSecretName,
+                                duration: '87600h',
+                                renewBefore: '2400h',
+                                subject: {
+                                  organizations: [
+                                    'vshn-appcat',
+                                  ],
+                                },
+                                isCA: false,
+                                privateKey: {
+                                  algorithm: 'RSA',
+                                  encoding: 'PKCS1',
+                                  size: 4096,
+                                },
+                                usages: [
+                                  'server auth',
+                                  'client auth',
+                                ],
+                                dnsNames: [
+                                  'vshn.appcat.vshn.ch',
+                                ],
+                                issuerRef: {
+                                  name: '',
+                                  kind: 'Issuer',
+                                  group: 'cert-manager.io',
+                                },
+                              },
+                            },
+                          },
+                        },
+                      };
   local sgInstanceProfile = comp.KubeObject('stackgres.io/v1', 'SGInstanceProfile') +
                             {
                               spec+: {
@@ -151,6 +213,17 @@ local composition =
                               },
                               postgres: {
                                 version: '',
+                                ssl: {
+                                  enabled: true,
+                                  certificateSecretKeySelector: {
+                                    name: certificateSecretName,
+                                    key: 'tls.crt',
+                                  },
+                                  privateKeySecretKeySelector: {
+                                    name: certificateSecretName,
+                                    key: 'tls.key',
+                                  },
+                                },
                               },
                               pods: {
                                 persistentVolume: {
@@ -187,6 +260,36 @@ local composition =
                            fieldPath: 'data.superuser-password',
                          },
                          toFieldPath: 'data.POSTGRESQL_PASSWORD',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: certificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[ca.crt]',
+                         },
+                         toFieldPath: 'data[ca.crt]',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: certificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[tls.crt]',
+                         },
+                         toFieldPath: 'data[tls.crt]',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: certificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[tls.key]',
+                         },
+                         toFieldPath: 'data[tls.key]',
                        },
                      ],
                      // Make crossplane aware of the connection secret we are creating in this object
@@ -310,6 +413,25 @@ local composition =
           ],
         },
         {
+          base: localca,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'localca'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+          ],
+        },
+        {
+          base: certificate,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.certificateDebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'certificate'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+          ],
+        },
+        {
           base: sgInstanceProfile,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.profileDebug'),
@@ -366,6 +488,10 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.writeConnectionSecretToRef.name', 'connection'),
+
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-postgresql'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-postgresql'),
           ],
         },
         // s3 bucket creation for backup purposes

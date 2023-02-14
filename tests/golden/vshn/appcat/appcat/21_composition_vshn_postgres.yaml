@@ -91,6 +91,103 @@ spec:
         spec:
           forProvider:
             manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Issuer
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                selfSigned:
+                  crlDistributionPoints: []
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.localCADebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-localca'
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                dnsNames:
+                  - vshn.appcat.vshn.ch
+                duration: 87600h
+                isCA: false
+                issuerRef:
+                  group: cert-manager.io
+                  kind: Issuer
+                  name: ''
+                privateKey:
+                  algorithm: RSA
+                  encoding: PKCS1
+                  size: 4096
+                renewBefore: 2400h
+                secretName: tls-certificate
+                subject:
+                  organizations:
+                    - vshn-appcat
+                usages:
+                  - server auth
+                  - client auth
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.certificateDebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-certificate'
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
               apiVersion: stackgres.io/v1
               kind: SGInstanceProfile
               metadata: {}
@@ -222,6 +319,14 @@ spec:
                   persistentVolume:
                     size: ''
                 postgres:
+                  ssl:
+                    certificateSecretKeySelector:
+                      key: tls.crt
+                      name: tls-certificate
+                    enabled: true
+                    privateKeySecretKeySelector:
+                      key: tls.key
+                      name: tls-certificate
                   version: ''
                 sgInstanceProfile: ''
           providerConfigRef:
@@ -297,10 +402,40 @@ spec:
                 name: ''
                 namespace: ''
               toFieldPath: data.POSTGRESQL_PASSWORD
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[ca.crt]
+                kind: Secret
+                name: tls-certificate
+                namespace: ''
+              toFieldPath: data[ca.crt]
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[tls.crt]
+                kind: Secret
+                name: tls-certificate
+                namespace: ''
+              toFieldPath: data[tls.crt]
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[tls.key]
+                kind: Secret
+                name: tls-certificate
+                namespace: ''
+              toFieldPath: data[tls.key]
           writeConnectionSecretToRef:
             name: ''
             namespace: ''
       connectionDetails:
+        - fromConnectionSecretKey: ca.crt
+          name: ca.crt
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: tls.crt
+          name: tls.crt
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: tls.key
+          name: tls.key
+          type: FromConnectionSecretKey
         - fromConnectionSecretKey: POSTGRESQL_URL
           name: POSTGRESQL_URL
           type: FromConnectionSecretKey
@@ -318,9 +453,6 @@ spec:
           type: FromConnectionSecretKey
         - fromConnectionSecretKey: POSTGRESQL_PASSWORD
           name: POSTGRESQL_PASSWORD
-          type: FromConnectionSecretKey
-        - fromConnectionSecretKey: ca.crt
-          name: ca.crt
           type: FromConnectionSecretKey
       patches:
         - fromFieldPath: status.conditions
@@ -378,6 +510,27 @@ spec:
           transforms:
             - string:
                 fmt: '%s-connection'
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[1].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[2].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[3].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
               type: string
           type: FromCompositeFieldPath
     - base:
