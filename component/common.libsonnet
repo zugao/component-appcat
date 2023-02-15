@@ -76,6 +76,16 @@ local vshnMetaObjectStorage(provider) = {
   },
 };
 
+local mergeArgs(args, additional) =
+  local foldFn =
+    function(acc, arg)
+      local ap = std.splitLimit(arg, '=', 1);
+      acc { [ap[0]]: ap[1] };
+  local base = std.foldl(foldFn, args, {});
+  local final = std.foldl(foldFn, additional, base);
+  [ '%s=%s' % [ k, final[k] ] for k in std.objectFields(final) ];
+
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -84,4 +94,6 @@ local vshnMetaObjectStorage(provider) = {
     vshnMetaObjectStorage(provider),
   VshnMetaVshn(dbname, flavor):
     vshnMetaVshn(dbname, flavor),
+  MergeArgs(args, additional):
+    mergeArgs(args, additional),
 }

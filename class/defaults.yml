@@ -21,6 +21,22 @@ parameters:
         registry: ghcr.io
         repository: vshn/provider-cloudscale/provider
         tag: v0.5.0
+      apiserver:
+        registry: ghcr.io
+        repository: vshn/appcat-apiserver
+        tag: adjust-config
+
+    apiserver:
+      enabled: false
+      namespace: appcat-apiserver
+      extraArgs: []
+      extraEnv: {}
+      apiservice:
+        insecureSkipTLSVerify: false
+      tls:
+        certSecretName: appcat-apiserver-tls
+        serverCert: ""
+        serverKey: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/apiserver/apiserver-key}"
 
     providers:
       cloudscale:

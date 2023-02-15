@@ -1,13 +1,13 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "f51b1864cdac0d1ab7fede3b27da83515a168655",
+  "commit": "73f964d1a9b834a772169d1ffe2b4406f90b2472",
   "checkout": "main",
   "context": {
     "cookiecutter": {
       "name": "AppCat",
       "slug": "appcat",
       "parameter_key": "appcat",
-      "test_cases": "defaults exoscale cloudscale openshift vshn",
+      "test_cases": "defaults exoscale cloudscale openshift vshn apiserver",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",

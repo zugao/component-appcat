@@ -1,5 +1,11 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: git
+        output_path: dependencies/appcat/manifests/${appcat:images:apiserver:tag}
+        source: https://github.com/vshn/appcat-apiserver.git
+        subdir: config
+        ref: ${appcat:images:apiserver:tag}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
@@ -11,6 +17,7 @@ parameters:
         output_path: appcat/
       - input_paths:
           - ${_base_directory}/component/provider.jsonnet
+          - ${_base_directory}/component/appcat_apiserver.jsonnet
           - ${_base_directory}/component/objectstorage.jsonnet
           - ${_base_directory}/component/exoscale_kafka.jsonnet
           - ${_base_directory}/component/exoscale_redis.jsonnet
