@@ -1,7 +1,6 @@
 package v1
 
 import (
-	v1 "github.com/vshn/component-appcat/apis/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
