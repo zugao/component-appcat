@@ -4,6 +4,14 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
         output_path: vendor/lib/crossplane.libsonnet
+    compile:
+      - input_paths:
+          - ${_base_directory}/dev/component/objectstorage.jsonnet
+        input_type: jsonnet
+        output_path: appcat/
+
+  facts:
+    cloud: cloudscale
 
   crossplane:
     namespace: syn-crossplane
@@ -19,5 +27,15 @@ parameters:
       vshn:
         enabled: true
         postgres:
-          bucket_region: 'ch-gva-2'
-          bucket_endpoint: 'https://sos-ch-gva-2.exo.io'
+          bucket_region: 'us-east-1'
+          bucket_endpoint: 'http://minio-server.minio:9000'
+      generic:
+          objectstorage:
+            enabled: true
+
+            defaultComposition: dev
+            compositions:
+              exoscale:
+                enabled: false
+              cloudscale:
+                enabled: false
