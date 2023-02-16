@@ -130,12 +130,12 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ '' ],
-          resources: [ 'namespaces' ],
+          resources: [ 'namespaces', 'serviceaccounts', 'secrets' ],
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
           apiGroups: [ 'stackgres.io' ],
-          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages' ],
+          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
@@ -152,6 +152,21 @@ local controllerConfigRef(config) =
           apiGroups: [ 'cert-manager.io' ],
           resources: [ 'issuers', 'certificates' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'batch' ],
+          resources: [ 'jobs' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'rbac.authorization.k8s.io' ],
+          resources: [ 'clusterrolebindings' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'vshn.appcat.vshn.io' ],
+          resources: [ 'vshnpostgresqls' ],
+          verbs: [ 'get' ],
         },
       ],
     };

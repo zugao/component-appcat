@@ -41,502 +41,629 @@ local xrd = xrds.XRDFromCRD(
 );
 
 
-local composition =
-  local namespace = comp.KubeObject('v1', 'Namespace') +
-                    {
-                      spec+: {
-                        forProvider+: {
-                          manifest+: {
-                            metadata: {
-                              name: '',
-                              labels: {
-                                [serviceNameLabelKey]: 'postgresql-standalone',
-                                [serviceNamespaceLabelKey]: '',
-                              },
-                            },
-                          },
-                        },
-                      },
-                    };
-  local localca = comp.KubeObject('cert-manager.io/v1', 'Issuer') +
+local controlNamespace = kube.Namespace(pgParams.controlNamespace);
+
+local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
+  metadata+: {
+    namespace: pgParams.controlNamespace,
+  },
+};
+
+local restoreRoleName = 'crossplane:appcat:job:postgres:copybackups';
+local restoreRole = kube.ClusterRole(restoreRoleName) {
+  rules: [
+    {
+      apiGroups: [ 'stackgres.io' ],
+      resources: [ 'sgbackups', 'sgobjectstorages' ],
+      verbs: [ 'get', 'list', 'create' ],
+    },
+    {
+      apiGroups: [ 'vshn.appcat.vshn.io' ],
+      resources: [ 'vshnpostgresqls' ],
+      verbs: [ 'get' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'secrets' ],
+      verbs: [ 'get', 'create' ],
+    },
+  ],
+};
+
+local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:postgres:copybackup') + {
+  roleRef_: restoreRole,
+  subjects_: [ restoreServiceAccount ],
+};
+
+local namespace = comp.KubeObject('v1', 'Namespace') +
                   {
                     spec+: {
                       forProvider+: {
                         manifest+: {
                           metadata: {
                             name: '',
-                            namespace: '',
-                          },
-                          spec: {
-                            selfSigned: {
-                              crlDistributionPoints: [],
+                            labels: {
+                              [serviceNameLabelKey]: 'postgresql-standalone',
+                              [serviceNamespaceLabelKey]: '',
                             },
                           },
                         },
                       },
                     },
                   };
-  local certificate = comp.KubeObject('cert-manager.io/v1', 'Certificate') +
-                      {
-                        spec+: {
-                          forProvider+: {
-                            manifest+: {
-                              metadata: {
-                                name: '',
-                                namespace: '',
-                              },
-                              spec: {
-                                secretName: certificateSecretName,
-                                duration: '87600h',
-                                renewBefore: '2400h',
-                                subject: {
-                                  organizations: [
-                                    'vshn-appcat',
-                                  ],
-                                },
-                                isCA: false,
-                                privateKey: {
-                                  algorithm: 'RSA',
-                                  encoding: 'PKCS1',
-                                  size: 4096,
-                                },
-                                usages: [
-                                  'server auth',
-                                  'client auth',
-                                ],
-                                dnsNames: [
-                                  'vshn.appcat.vshn.ch',
-                                ],
-                                issuerRef: {
-                                  name: '',
-                                  kind: 'Issuer',
-                                  group: 'cert-manager.io',
-                                },
-                              },
-                            },
-                          },
+
+local namespaceObserve = {
+  base: namespace {
+    spec+: {
+      managementPolicy: 'Observe',
+    },
+  },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
+    comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
+  ],
+};
+
+local namespaceDebug = {
+  base: namespace,
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceDebug'),
+    comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
+    comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
+  ],
+};
+
+local localca = {
+  base: comp.KubeObject('cert-manager.io/v1', 'Issuer') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {
+                  name: '',
+                  namespace: '',
+                },
+                spec: {
+                  selfSigned: {
+                    crlDistributionPoints: [],
+                  },
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'localca'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+  ],
+};
+
+local certificate = {
+  base: comp.KubeObject('cert-manager.io/v1', 'Certificate') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {
+                  name: '',
+                  namespace: '',
+                },
+                spec: {
+                  secretName: certificateSecretName,
+                  duration: '87600h',
+                  renewBefore: '2400h',
+                  subject: {
+                    organizations: [
+                      'vshn-appcat',
+                    ],
+                  },
+                  isCA: false,
+                  privateKey: {
+                    algorithm: 'RSA',
+                    encoding: 'PKCS1',
+                    size: 4096,
+                  },
+                  usages: [
+                    'server auth',
+                    'client auth',
+                  ],
+                  dnsNames: [
+                    'vshn.appcat.vshn.ch',
+                  ],
+                  issuerRef: {
+                    name: '',
+                    kind: 'Issuer',
+                    group: 'cert-manager.io',
+                  },
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.certificateDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'certificate'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+  ],
+};
+
+local sgInstanceProfile = {
+  base: comp.KubeObject('stackgres.io/v1', 'SGInstanceProfile') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                spec: {
+                  cpu: '',
+                  memory: '',
+                  containers: {
+                    'backup.create-backup': {
+                      cpu: '250m',
+                      memory: '256Mi',
+                    },
+                    'cluster-controller': {
+                      cpu: '100m',
+                      memory: '256Mi',
+                    },
+                    envoy: {
+                      cpu: '100m',
+                      memory: '64Mi',
+                    },
+                    pgbouncer: {
+                      cpu: '100m',
+                      memory: '64Mi',
+                    },
+                    'postgres-util': {
+                      cpu: '100m',
+                      memory: '256Mi',
+                    },
+                    'prometheus-postgres-exporter': {
+                      cpu: '100m',
+                      memory: '256Mi',
+                    },
+                  },
+                  initContainers: {
+                    'pgbouncer-auth-file': {
+                      cpu: '100m',
+                      memory: '100Mi',
+                    },
+                    'relocate-binaries': {
+                      cpu: '100m',
+                      memory: '100Mi',
+                    },
+                    'setup-scripts': {
+                      cpu: '100m',
+                      memory: '100Mi',
+                    },
+                    'setup-arbitrary-user': {
+                      cpu: '100m',
+                      memory: '100Mi',
+                    },
+                    'cluster-reconciliation-cycle': {
+                      cpu: '100m',
+                      memory: '100Mi',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.profileDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'profile'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+
+    comp.FromCompositeFieldPath('spec.parameters.size.memory', 'spec.forProvider.manifest.spec.memory'),
+    comp.FromCompositeFieldPath('spec.parameters.size.cpu', 'spec.forProvider.manifest.spec.cpu'),
+  ],
+};
+
+local sgPostgresConfig = {
+  base: comp.KubeObject('stackgres.io/v1', 'SGPostgresConfig') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                spec: {
+                  postgresVersion: '',
+                  'postgresql.conf': {},
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.pgconfigDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgconf'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+
+    comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgresVersion'),
+    comp.FromCompositeFieldPath('spec.parameters.service.pgSettings', 'spec.forProvider.manifest.spec[postgresql.conf]'),
+  ],
+};
+
+local sgCluster = {
+  base: comp.KubeObject('stackgres.io/v1', 'SGCluster') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                spec: {
+                  instances: 1,
+                  sgInstanceProfile: '',
+                  configurations: {
+                    sgPostgresConfig: '',
+                    backups:
+                      [
+                        {
+                          sgObjectStorage: '',
+                          cronSchedule: '',
+                          retention: 6,
                         },
-                      };
-  local sgInstanceProfile = comp.KubeObject('stackgres.io/v1', 'SGInstanceProfile') +
-                            {
-                              spec+: {
-                                forProvider+: {
-                                  manifest+: {
-                                    metadata: {},
-                                    spec: {
-                                      cpu: '',
-                                      memory: '',
-                                      containers: {
-                                        'cluster-controller': {
-                                          cpu: '100m',
-                                          memory: '256Mi',
-                                        },
-                                        envoy: {
-                                          cpu: '100m',
-                                          memory: '64Mi',
-                                        },
-                                        pgbouncer: {
-                                          cpu: '100m',
-                                          memory: '64Mi',
-                                        },
-                                        'postgres-util': {
-                                          cpu: '100m',
-                                          memory: '256Mi',
-                                        },
-                                        'prometheus-postgres-exporter': {
-                                          cpu: '100m',
-                                          memory: '256Mi',
-                                        },
-                                      },
-                                      initContainers: {
-                                        'pgbouncer-auth-file': {
-                                          cpu: '100m',
-                                          memory: '100Mi',
-                                        },
-                                        'relocate-binaries': {
-                                          cpu: '100m',
-                                          memory: '100Mi',
-                                        },
-                                        'setup-scripts': {
-                                          cpu: '100m',
-                                          memory: '100Mi',
-                                        },
-                                        'setup-arbitrary-user': {
-                                          cpu: '100m',
-                                          memory: '100Mi',
-                                        },
-                                        'cluster-reconciliation-cycle': {
-                                          cpu: '100m',
-                                          memory: '100Mi',
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            };
+                      ],
+                  },
+                  postgres: {
+                    version: '',
+                    ssl: {
+                      enabled: true,
+                      certificateSecretKeySelector: {
+                        name: certificateSecretName,
+                        key: 'tls.crt',
+                      },
+                      privateKeySecretKeySelector: {
+                        name: certificateSecretName,
+                        key: 'tls.key',
+                      },
+                    },
+                  },
+                  pods: {
+                    persistentVolume: {
+                      size: '',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
 
-  local sgPostgresConfig = comp.KubeObject('stackgres.io/v1', 'SGPostgresConfig') +
-                           {
-                             spec+: {
-                               forProvider+: {
-                                 manifest+: {
-                                   metadata: {},
-                                   spec: {
-                                     postgresVersion: '',
-                                     'postgresql.conf': {},
-                                   },
-                                 },
-                               },
-                             },
-                           };
+    comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.manifest.spec.pods.persistentVolume.size'),
+    comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector'),
+    comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
 
-  local sgCluster = comp.KubeObject('stackgres.io/v1', 'SGCluster') +
-                    {
-                      spec+: {
-                        forProvider+: {
-                          manifest+: {
-                            metadata: {},
-                            spec: {
-                              instances: 1,
-                              sgInstanceProfile: '',
-                              configurations: {
-                                sgPostgresConfig: '',
-                                backups:
-                                  [
-                                    {
-                                      sgObjectStorage: '',
-                                      cronSchedule: '',
-                                      retention: 6,
-                                    },
-                                  ],
-                              },
-                              postgres: {
-                                version: '',
-                                ssl: {
-                                  enabled: true,
-                                  certificateSecretKeySelector: {
-                                    name: certificateSecretName,
-                                    key: 'tls.crt',
-                                  },
-                                  privateKeySecretKeySelector: {
-                                    name: certificateSecretName,
-                                    key: 'tls.key',
-                                  },
-                                },
-                              },
-                              pods: {
-                                persistentVolume: {
-                                  size: '',
-                                },
-                              },
-                            },
-                          },
+    comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
+    comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
+  ],
+};
+
+local secret = {
+  base: comp.KubeObject('v1', 'Secret') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                stringData: {
+                  POSTGRESQL_USER: defaultUser,
+                  POSTGRESQL_PORT: defaultPort,
+                  POSTGRESQL_DB: defaultDB,
+                  POSTGRESQL_HOST: '',
+                },
+              },
+            },
+            references: [
+              {
+                patchesFrom: {
+                  apiVersion: 'v1',
+                  kind: 'Secret',
+                  namespace: '',
+                  name: '',
+                  fieldPath: 'data.superuser-password',
+                },
+                toFieldPath: 'data.POSTGRESQL_PASSWORD',
+              },
+              {
+                patchesFrom: {
+                  apiVersion: 'v1',
+                  kind: 'Secret',
+                  name: certificateSecretName,
+                  namespace: '',
+                  fieldPath: 'data[ca.crt]',
+                },
+                toFieldPath: 'data[ca.crt]',
+              },
+              {
+                patchesFrom: {
+                  apiVersion: 'v1',
+                  kind: 'Secret',
+                  name: certificateSecretName,
+                  namespace: '',
+                  fieldPath: 'data[tls.crt]',
+                },
+                toFieldPath: 'data[tls.crt]',
+              },
+              {
+                patchesFrom: {
+                  apiVersion: 'v1',
+                  kind: 'Secret',
+                  name: certificateSecretName,
+                  namespace: '',
+                  fieldPath: 'data[tls.key]',
+                },
+                toFieldPath: 'data[tls.key]',
+              },
+            ],
+            // Make crossplane aware of the connection secret we are creating in this object
+            writeConnectionSecretToRef: {
+              name: '',
+              namespace: '',
+            },
+          },
+        },
+  connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.secretDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.manifest.metadata.name', 'connection'),
+
+    comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/composite]', 'metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.POSTGRESQL_HOST', '%s.vshn-postgresql-%s.svc.cluster.local'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.writeConnectionSecretToRef.name', 'connection'),
+
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-postgresql'),
+  ],
+};
+
+local xobjectBucket = {
+  base: {
+    apiVersion: 'appcat.vshn.io/v1',
+    kind: 'XObjectBucket',
+    metadata: {},
+    spec: {
+      parameters: {
+        bucketName: '',
+        region: pgParams.bucket_region,
+      },
+      writeConnectionSecretToRef: {
+        namespace: '',
+        name: '',
+      },
+    },
+  },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.s3BucketDebug'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
+
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'pgbucket'),
+  ],
+};
+
+local sgObjectStorage = {
+  base: comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {
+                  name: '',
+                  namespace: '',
+                },
+                spec: {
+                  type: 's3Compatible',
+                  s3Compatible: {
+                    bucket: '',
+                    enablePathStyleAddressing: true,
+                    region: pgParams.bucket_region,
+                    endpoint: pgParams.bucket_endpoint,
+                    awsCredentials: {
+                      secretKeySelectors: {
+                        accessKeyId: {
+                          name: '',
+                          key: 'AWS_ACCESS_KEY_ID',
+                        },
+                        secretAccessKey: {
+                          name: '',
+                          key: 'AWS_SECRET_ACCESS_KEY',
                         },
                       },
-                    };
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.s3BackupConfigDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.bucket'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.spec.writeConnectionSecretToRef.namespace'),
 
-  local secret = comp.KubeObject('v1', 'Secret') +
-                 {
-                   spec+: {
-                     forProvider+: {
-                       manifest+: {
-                         metadata: {},
-                         stringData: {
-                           POSTGRESQL_USER: defaultUser,
-                           POSTGRESQL_PORT: defaultPort,
-                           POSTGRESQL_DB: defaultDB,
-                           POSTGRESQL_HOST: '',
-                         },
-                       },
-                     },
-                     references: [
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           namespace: '',
-                           name: '',
-                           fieldPath: 'data.superuser-password',
-                         },
-                         toFieldPath: 'data.POSTGRESQL_PASSWORD',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: certificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[ca.crt]',
-                         },
-                         toFieldPath: 'data[ca.crt]',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: certificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[tls.crt]',
-                         },
-                         toFieldPath: 'data[tls.crt]',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: certificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[tls.key]',
-                         },
-                         toFieldPath: 'data[tls.key]',
-                       },
-                     ],
-                     // Make crossplane aware of the connection secret we are creating in this object
-                     writeConnectionSecretToRef: {
-                       name: '',
-                       namespace: '',
-                     },
-                   },
-                 };
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 'pgbucket'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 'pgbucket'),
+  ],
+};
 
-  local networkPolicy = comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
+local networkPolicy = {
+  base: comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                spec: {
+                  policyTypes: [
+                    'Ingress',
+                  ],
+                  podSelector: {},
+                  ingress: [
+                    {
+                      from: [
                         {
-                          spec+: {
-                            forProvider+: {
-                              manifest+: {
-                                metadata: {},
-                                spec: {
-                                  policyTypes: [
-                                    'Ingress',
-                                  ],
-                                  podSelector: {},
-                                  ingress: [
-                                    {
-                                      from: [
-                                        {
-                                          namespaceSelector: {
-                                            matchLabels: {
-                                              'kubernetes.io/metadata.name': '',
-                                            },
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  ],
-                                },
-                              },
+                          namespaceSelector: {
+                            matchLabels: {
+                              'kubernetes.io/metadata.name': '',
                             },
                           },
-                        };
-  local xobjectBucket =
-    {
-      apiVersion: 'appcat.vshn.io/v1',
-      kind: 'XObjectBucket',
-      metadata: {},
-      spec: {
-        parameters: {
-          bucketName: '',
-          region: pgParams.bucket_region,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          },
         },
-        writeConnectionSecretToRef: {
-          namespace: '',
-          name: '',
+  patches: [
+    comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyDebug'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
+
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
+  ],
+};
+
+local copyJob = {
+  base: comp.KubeObject('batch/v1', 'Job') + {
+    spec+: {
+      forProvider+: {
+        manifest+: {
+          metadata+: {
+            namespace: pgParams.controlNamespace,
+          },
+          spec: {
+            template: {
+              spec: {
+                ttlSecondsAfterFinished: 100,
+                restartPolicy: 'Never',
+                serviceAccountName: 'copyserviceaccount',
+                containers: [
+                  {
+                    name: 'copyjob',
+                    image: 'bitnami/kubectl:latest',
+                    command: [ 'sh', '-c' ],
+                    args: [ importstr 'scripts/copy-pg-backup.sh' ],
+                    env: [
+                      {
+                        name: 'CLAIM_NAMESPACE',
+                      },
+                      {
+                        name: 'CLAIM_NAME',
+                      },
+                      {
+                        name: 'BACKUP_NAME',
+                      },
+                      {
+                        name: 'TARGET_NAMESPACE',
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
         },
       },
-    };
+    },
+  },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'copyjob'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'copyjob'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[0].value'),
+    comp.FromCompositeFieldPath('spec.parameters.restore.claimName', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[1].value'),
+    comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[2].value'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[3].value', 'vshn-postgresql'),
+  ],
+};
 
-  local sgObjectStorage = comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
-                          {
-                            spec+: {
-                              forProvider+: {
-                                manifest+: {
-                                  metadata: {
-                                    name: '',
-                                    namespace: '',
-                                  },
-                                  spec: {
-                                    type: 's3Compatible',
-                                    s3Compatible: {
-                                      bucket: '',
-                                      enablePathStyleAddressing: true,
-                                      region: pgParams.bucket_region,
-                                      endpoint: pgParams.bucket_endpoint,
-                                      awsCredentials: {
-                                        secretKeySelectors: {
-                                          accessKeyId: {
-                                            name: '',
-                                            key: 'AWS_ACCESS_KEY_ID',
-                                          },
-                                          secretAccessKey: {
-                                            name: '',
-                                            key: 'AWS_SECRET_ACCESS_KEY',
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          };
+local clusterRestoreConfig = {
+  base+: {
+    spec+: {
+      references+: [
+        {
+          dependsOn+: {
+            apiVersion: 'stackgres.io/v1',
+            kind: 'SGBackup',
+          },
+        },
+      ],
+    },
+  },
+  patches+: [
+    comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.forProvider.manifest.spec.initialData.restore.fromBackup.name'),
+    comp.FromCompositeFieldPath('spec.parameters.restore.recoveryTimeStamp', 'spec.forProvider.manifest.spec.initialData.restore.fromBackup.pointInTimeRecovery.restoreToTimestamp'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].dependsOn.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.references[0].dependsOn.name'),
+  ],
+};
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnpostgres.vshn.appcat.vshn.io') +
+local composition(restore=false) =
+
+  local metadata = if restore then common.VshnMetaVshn('PostgreSQLRestore', 'standalone', 'false') else common.VshnMetaVshn('PostgreSQL', 'standalone');
+  local compositionName = if restore then 'vshnpostgresrestore.vshn.appcat.vshn.io' else 'vshnpostgres.vshn.appcat.vshn.io';
+  local copyJobFunction(restore) = if restore then [ copyJob ] else [];
+
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', compositionName) +
   common.SyncOptions +
-  common.VshnMetaVshn('PostgreSQL', 'standalone') +
+  metadata +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
       resources: [
-        {
-          base: namespace {
-            spec+: {
-              managementPolicy: 'Observe',
-            },
-          },
-          patches: [
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
-            comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
-          ],
-        },
-        {
-          base: namespace,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.namespaceDebug'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
-            comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
-          ],
-        },
-        {
-          base: localca,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'localca'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-          ],
-        },
-        {
-          base: certificate,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.certificateDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'certificate'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-          ],
-        },
-        {
-          base: sgInstanceProfile,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.profileDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'profile'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-
-            comp.FromCompositeFieldPath('spec.parameters.size.memory', 'spec.forProvider.manifest.spec.memory'),
-            comp.FromCompositeFieldPath('spec.parameters.size.cpu', 'spec.forProvider.manifest.spec.cpu'),
-          ],
-        },
-        {
-          base: sgPostgresConfig,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.pgconfigDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgconf'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-
-            comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgresVersion'),
-            comp.FromCompositeFieldPath('spec.parameters.service.pgSettings', 'spec.forProvider.manifest.spec[postgresql.conf]'),
-          ],
-        },
-        {
-          base: sgCluster,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-
-            comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.manifest.spec.pods.persistentVolume.size'),
-            comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector'),
-            comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
-
-            comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
-            comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
-            // add backup configuration
-          ],
-        },
-        {
-          base: secret,
-          connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.secretDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.manifest.metadata.name', 'connection'),
-
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/composite]', 'metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.POSTGRESQL_HOST', '%s.vshn-postgresql-%s.svc.cluster.local'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.writeConnectionSecretToRef.name', 'connection'),
-
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-postgresql'),
-          ],
-        },
-        // s3 bucket creation for backup purposes
-        {
-          base: xobjectBucket,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.s3BucketDebug'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
-
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'pgbucket'),
-          ],
-        },
-        // s3 bucket creation for backup purposes
-        {
-          base: sgObjectStorage,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.s3BackupConfigDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.bucket'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.spec.writeConnectionSecretToRef.namespace'),
-
-            //
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 'pgbucket'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 'pgbucket'),
-          ],
-        },
-      ] + if pgParams.enableNetworkPolicy == true then [
-        {
-          base: networkPolicy,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyDebug'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
-
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
-          ],
-        },
+                   namespaceObserve,
+                   namespaceDebug,
+                   localca,
+                   certificate,
+                 ] +
+                 copyJobFunction(restore) +
+                 [
+                   sgInstanceProfile,
+                   sgPostgresConfig,
+                   sgCluster +
+                   if restore then clusterRestoreConfig else {},
+                   secret,
+                   xobjectBucket,
+                   sgObjectStorage,
+                 ] + if pgParams.enableNetworkPolicy == true then [
+        networkPolicy,
       ] else [],
     },
   };
 
+local defaultComp = composition();
+local restoreComp = composition(true);
 
 if params.services.vshn.enabled && pgParams.enabled then
   assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
@@ -544,5 +671,8 @@ if params.services.vshn.enabled && pgParams.enabled then
   {
     '20_xrd_vshn_postgres': xrd,
     '20_rbac_vshn_postgres': xrds.CompositeClusterRoles(xrd),
-    '21_composition_vshn_postgres': composition,
+    '20_role_vshn_postgresrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
+    '20_namespace_vshn_control': controlNamespace,
+    '21_composition_vshn_postgres': defaultComp,
+    '21_composition_vshn_postgresrestore': restoreComp,
   } else {}

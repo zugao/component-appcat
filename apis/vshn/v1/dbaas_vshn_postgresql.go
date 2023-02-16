@@ -52,6 +52,9 @@ type VSHNPostgreSQLParameters struct {
 
 	// Backup contains settings to control the backups of an instance.
 	Backup VSHNPostgreSQLBackup `json:"backup,omitempty"`
+
+	// Restore contains settings to control the restore of an instance.
+	Restore VSHNPostgreSQLRestore `json:"restore,omitempty"`
 }
 
 // VSHNPostgreSQLServiceSpec contains PostgreSQL DBaaS specific properties
@@ -129,8 +132,26 @@ type VSHNPostgreSQLBackup struct {
 	Retention int `json:"retention,omitempty"`
 }
 
+// VSHNPostgreSQLRestore contains restore specific parameters.
+type VSHNPostgreSQLRestore struct {
+
+	// ClaimName specifies the name of the instance you want to restore from.
+	// The claim has to be in the same namespace as this new instance.
+	ClaimName string `json:"claimName,omitempty"`
+
+	// BackupName is the name of the specific backup you want to restore.
+	BackupName string `json:"backupName,omitempty"`
+
+	// RecoveryTimeStamp an ISO 8601 date, that holds UTC date indicating at which point-in-time the database has to be restored.
+	// This is optional and if no PIT recovery is required, it can be left empty.
+	// +kubebuilder:validation:Pattern=`^(?:[1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:Z|[+-][01]\d:[0-5]\d)$`
+	RecoveryTimeStamp string `json:"recoveryTimeStamp,omitempty"`
+}
+
 // VSHNPostgreSQLStatus reflects the observed state of a VSHNPostgreSQL.
 type VSHNPostgreSQLStatus struct {
+	// InstanceNamespace contains the name of the namespace where the instance resides
+	InstanceNamespace string `json:"instanceNamespace,omitempty"`
 	// PostgreSQLConditions contains the status conditions of the backing object.
 	PostgreSQLConditions []v1.Condition `json:"postgresqlConditions,omitempty"`
 	NamespaceDebug       []v1.Condition `json:"namespaceDebug,omitempty"`

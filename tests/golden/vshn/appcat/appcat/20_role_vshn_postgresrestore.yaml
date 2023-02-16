@@ -1,0 +1,55 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations: {}
+  labels:
+    name: crossplane-appcat-job-postgres-copybackups
+  name: crossplane:appcat:job:postgres:copybackups
+rules:
+  - apiGroups:
+      - stackgres.io
+    resources:
+      - sgbackups
+      - sgobjectstorages
+    verbs:
+      - get
+      - list
+      - create
+  - apiGroups:
+      - vshn.appcat.vshn.io
+    resources:
+      - vshnpostgresqls
+    verbs:
+      - get
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: copyserviceaccount
+  name: copyserviceaccount
+  namespace: syn-appcat-control
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations: {}
+  labels:
+    name: appcat-job-postgres-copybackup
+  name: appcat:job:postgres:copybackup
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane:appcat:job:postgres:copybackups
+subjects:
+  - kind: ServiceAccount
+    name: copyserviceaccount
+    namespace: syn-appcat-control

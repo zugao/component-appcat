@@ -42,7 +42,7 @@ local vshnMetaDBaaSExoscale(dbname) = {
   },
 };
 
-local vshnMetaVshn(dbname, flavor) = {
+local vshnMetaVshn(dbname, flavor, offered) = {
   metadata+: {
     annotations+: {
       'metadata.appcat.vshn.io/displayname': 'VSHN Managed ' + dbname,
@@ -53,7 +53,7 @@ local vshnMetaVshn(dbname, flavor) = {
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/' + std.asciiLower(dbname) + '.html',
     },
     labels+: {
-      'metadata.appcat.vshn.io/offered': 'true',
+      'metadata.appcat.vshn.io/offered': offered,
       'metadata.appcat.vshn.io/serviceID': 'vshn-' + std.asciiLower(dbname),
     },
   },
@@ -92,8 +92,8 @@ local mergeArgs(args, additional) =
     vshnMetaDBaaSExoscale(dbname),
   VshnMetaObjectStorage(provider):
     vshnMetaObjectStorage(provider),
-  VshnMetaVshn(dbname, flavor):
-    vshnMetaVshn(dbname, flavor),
   MergeArgs(args, additional):
     mergeArgs(args, additional),
+  VshnMetaVshn(dbname, flavor, offered='true'):
+    vshnMetaVshn(dbname, flavor, offered),
 }
