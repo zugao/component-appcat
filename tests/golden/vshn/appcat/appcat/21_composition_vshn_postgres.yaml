@@ -355,6 +355,9 @@ spec:
         - fromFieldPath: spec.parameters.size.disk
           toFieldPath: spec.forProvider.manifest.spec.pods.persistentVolume.size
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.scheduling.nodeSelector
+          toFieldPath: spec.forProvider.manifest.spec.pods.scheduling.nodeSelector
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.majorVersion
           toFieldPath: spec.forProvider.manifest.spec.postgres.version
           type: FromCompositeFieldPath

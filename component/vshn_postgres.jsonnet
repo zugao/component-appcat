@@ -464,6 +464,7 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
 
             comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.manifest.spec.pods.persistentVolume.size'),
+            comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector'),
             comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),

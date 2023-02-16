@@ -44,6 +44,9 @@ type VSHNPostgreSQLParameters struct {
 	// Size contains settings to control the sizing of a service.
 	Size VSHNDBaaSSizeSpec `json:"size,omitempty"`
 
+	// Scheduling contains settings to control the scheduling of an instance.
+	Scheduling VSHNDBaaSSchedulingSpec `json:"scheduling,omitempty"`
+
 	// Network contains any network related settings.
 	Network VSHNDBaaSNetworkSpec `json:"network,omitempty"`
 
@@ -62,6 +65,12 @@ type VSHNPostgreSQLServiceSpec struct {
 
 	// PGSettings contains additional PostgreSQL settings.
 	PostgreSQLSettings runtime.RawExtension `json:"pgSettings,omitempty"`
+}
+
+// VSHNDBaaSSchedulingSpec contains settings to control the scheduling of an instance.
+type VSHNDBaaSSchedulingSpec struct {
+	// NodeSelector is a selector which must match a node’s labels for the pod to be scheduled on that node
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
 }
 
 // VSHNDBaaSMaintenanceScheduleSpec contains settings to control the maintenance of an instance.
