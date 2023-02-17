@@ -1,6 +1,7 @@
 package v1
 
 import (
+	v1 "github.com/vshn/component-appcat/apis/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -9,6 +10,7 @@ import (
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.default={})"
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
+//go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnredis.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.tls.default={})"
 
 // +kubebuilder:object:root=true
 
@@ -19,6 +21,9 @@ type VSHNRedis struct {
 
 	// Spec defines the desired state of a VSHNRedis.
 	Spec VSHNRedisSpec `json:"spec"`
+
+	// Status reflects the observed state of a VSHNRedis.
+	Status VSHNRedisStatus `json:"status,omitempty"`
 }
 
 // VSHNRedisSpec defines the desired state of a VSHNRedis.
@@ -34,6 +39,9 @@ type VSHNRedisParameters struct {
 
 	// Size contains settings to control the sizing of a service.
 	Size VSHNRedisSizeSpec `json:"size,omitempty"`
+
+	// TLS contains settings to control tls traffic of a service.
+	TLS VSHNRedisTLSSpec `json:"tls,omitempty"`
 }
 
 // VSHNRedisServiceSpec contains Redis DBaaS specific properties
@@ -75,4 +83,27 @@ type VSHNRedisSizeSpec struct {
 
 	// Disk defines the amount of disk space for an instance.
 	Disk string `json:"disk,omitempty"`
+}
+
+// VSHNRedisTLSSpec contains settings to control tls traffic of a service.
+type VSHNRedisTLSSpec struct {
+	// +kubebuilder:default=true
+
+	// TLSEnabled enables TLS traffic for the service
+	TLSEnabled bool `json:"enabled,omitempty"`
+
+	// +kubebuilder:default=true
+	// TLSAuthClients enables client authentication requirement
+	TLSAuthClients bool `json:"authClients,omitempty"`
+}
+
+// VSHNRedisStatus reflects the observed state of a VSHNRedis.
+type VSHNRedisStatus struct {
+	// RedisConditions contains the status conditions of the backing object.
+	NamespaceDebug         []v1.Condition `json:"namespaceDebug,omitempty"`
+	SelfSignedIssuerDebug  []v1.Condition `json:"selfSignedIssuerDebug,omitempty"`
+	LocalCADebug           []v1.Condition `json:"localCADebug,omitempty"`
+	CaCertificateDebug     []v1.Condition `json:"caCertificateDebug,omitempty"`
+	ServerCertificateDebug []v1.Condition `json:"serverCertificateDebug,omitempty"`
+	ClientCertificateDebug []v1.Condition `json:"clientCertificateDebug,omitempty"`
 }
