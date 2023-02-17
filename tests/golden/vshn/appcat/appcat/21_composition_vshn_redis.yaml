@@ -43,6 +43,7 @@ spec:
           transforms:
             - string:
                 fmt: ns-observer-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
@@ -73,6 +74,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
@@ -130,6 +132,7 @@ spec:
           transforms:
             - string:
                 fmt: '%s-connection'
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -137,6 +140,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -144,6 +148,7 @@ spec:
           transforms:
             - string:
                 fmt: '%s-connection'
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - combine:
@@ -159,6 +164,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -166,6 +172,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -173,6 +180,7 @@ spec:
           transforms:
             - string:
                 fmt: '%s-connection'
+                type: Format
               type: string
           type: FromCompositeFieldPath
     - base:
@@ -223,6 +231,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
@@ -230,6 +239,7 @@ spec:
           transforms:
             - string:
                 fmt: vshn-redis-%s
+                type: Format
               type: string
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]

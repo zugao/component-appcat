@@ -14,6 +14,7 @@ local fromCompositeFieldPathWithTransform(from, to, prefix, suffix) = fromCompos
       type: 'string',
       string: {
         fmt: prefix + '%s' + suffix,
+        type: 'Format',
       },
     },
   ],
@@ -26,6 +27,7 @@ local fromCompositeFieldPathWithTransformSuffix(from, to, suffix) = fromComposit
       type: 'string',
       string: {
         fmt: '%s-' + suffix,
+        type: 'Format',
       },
     },
   ],
@@ -38,6 +40,7 @@ local fromCompositeFieldPathWithTransformPrefix(from, to, prefix) = fromComposit
       type: 'string',
       string: {
         fmt: prefix + '-%s',
+        type: 'Format',
       },
     },
   ],

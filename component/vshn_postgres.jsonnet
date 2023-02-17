@@ -333,9 +333,7 @@ local composition =
     {
       apiVersion: 'appcat.vshn.io/v1',
       kind: 'XObjectBucket',
-      metadata: {
-        name: '',
-      },
+      metadata: {},
       spec: {
         parameters: {
           bucketName: '',
