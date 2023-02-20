@@ -6,10 +6,9 @@ metadata:
     apiserver: 'true'
   name: v1.api.appcat.vshn.io
 spec:
-  caBundle: dGVzdC1jZXJ0
   group: api.appcat.vshn.io
   groupPriorityMinimum: 2000
-  insecureSkipTLSVerify: false
+  insecureSkipTLSVerify: true
   service:
     name: appcat
     namespace: appcat-apiserver

@@ -116,7 +116,8 @@ local apiService = loadManifest('apiservice.yaml') {
     +
     (
       if apiserverParams.tls.serverCert != null
-         && params.apiserver.tls.serverCert != ''
+         && apiserverParams.tls.serverCert != ''
+         && apiserverParams.apiservice.insecureSkipTLSVerify == false
       then
         { caBundle: std.base64(params.apiserver.tls.serverCert) }
       else

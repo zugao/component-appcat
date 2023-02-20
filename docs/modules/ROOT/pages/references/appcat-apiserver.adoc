@@ -12,7 +12,7 @@ If the API Server should be installed.
 == `namespace`
 [horizontal]
 type:: string
-default:: `syn-provider-cloudscale-secrets`
+default:: `appcat-apiserver`
 
 A namespace where API Server should run.
 The namespace will be created and managed by this component.
@@ -46,7 +46,7 @@ The secret name where the certificate is saved.
 == `tls.serverCert`
 [horizontal]
 type:: string
-default:: `empty`
+default:: ""
 
 The public certificate to be saved in `tls.certSecretName`.
 
