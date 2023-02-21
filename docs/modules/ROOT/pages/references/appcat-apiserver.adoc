@@ -1,0 +1,59 @@
+= AppCat API Server
+
+The parent key for all of the following parameters is `appcat.apiserver`.
+
+== `enabled`
+[horizontal]
+type:: bool
+default:: `false`
+
+If the API Server should be installed.
+
+== `namespace`
+[horizontal]
+type:: string
+default:: `appcat-apiserver`
+
+A namespace where API Server should run.
+The namespace will be created and managed by this component.
+
+== `extraArgs`
+[horizontal]
+type:: array
+
+Extra arguments to pass to the API Server.
+
+== `extraEnv`
+[horizontal]
+type:: dict
+
+Extra environment variables to be passed to the deployment of the API Server.
+
+== `apiservice.insecureSkipTLSVerify`
+[horizontal]
+type:: bool
+default:: `false`
+
+Configuration of the `APIService`. The parameter `insecureSkipTLSVerify` disables TLS certificate verification when communicating with this API Server.
+
+== `tls.certSecretName`
+[horizontal]
+type:: string
+default:: `appcat-apiserver-tls`
+
+The secret name where the certificate is saved.
+
+== `tls.serverCert`
+[horizontal]
+type:: string
+default:: ""
+
+The public certificate to be saved in `tls.certSecretName`.
+
+== `tls.serverKey`
+[horizontal]
+type:: string
+default:: `?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/apiserver/apiserver-key`
+
+The key of the certificate `tls.serverCert`.
+

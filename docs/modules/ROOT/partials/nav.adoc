@@ -10,6 +10,9 @@
 .Technical reference
 * xref:references/component-parameters.adoc[Parameters]
 
+* AppCat API Server Parameters
+** xref:references/appcat-apiserver.adoc[AppCat API Server]
+
 * Provider Parameters
 ** xref:references/provider-cloudscale.adoc[Provider Cloudscale]
 ** xref:references/provider-exoscale.adoc[Provider Exoscale]
