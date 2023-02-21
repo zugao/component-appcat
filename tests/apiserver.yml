@@ -7,6 +7,7 @@ parameters:
 
   facts:
     cloud: cloudscale
+    distribution: openshift4
 
   crossplane:
     # This is not resolving during "commodore package compile", so we provide it explicitly

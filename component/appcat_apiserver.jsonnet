@@ -15,19 +15,34 @@ local namespace = loadManifest('namespace.yaml') {
   },
 };
 
+local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distribution + ':aggregate-appcat-to-basic-user') {
+  metadata+: {
+    labels+: {
+      "authorization.openshift.io/aggregate-to-basic-user": "true"
+    },
+  },
+  rules+: [
+    {
+      apiGroups: ["api.appcat.vshn.io"],
+      resources: ["appcats"],
+      verbs: ["get", "list", "watch"],
+    }
+  ]
+};
+
 local serviceAccount = loadManifest('service-account.yaml') {
   metadata+: {
     namespace: apiserverParams.namespace,
   },
 };
 
-local clusterRole = loadManifest('cluster-role.yaml');
+local clusterRoleAPIServer = loadManifest('cluster-role.yaml');
 
-local clusterRoleBinding = kube.ClusterRoleBinding(clusterRole.metadata.name) {
+local clusterRoleBinding = kube.ClusterRoleBinding(clusterRoleAPIServer.metadata.name) {
   roleRef: {
     kind: 'ClusterRole',
     apiGroup: 'rbac.authorization.k8s.io',
-    name: clusterRole.metadata.name,
+    name: clusterRoleAPIServer.metadata.name,
   },
   subjects: [
     {
@@ -133,7 +148,8 @@ local apiService = loadManifest('apiservice.yaml') {
 
 {
   'apiserver/10_namespace': namespace,
-  'apiserver/10_cluster_role': clusterRole,
+  'apiserver/10_cluster_role_api_server': clusterRoleAPIServer,
+  'apiserver/10_cluster_role_basic_users': clusterRoleUsers,
   'apiserver/10_cluster_role_binding': clusterRoleBinding,
   'apiserver/20_service_account': serviceAccount,
   [if certSecret != null then 'apiserver/20_certs']: certSecret,
