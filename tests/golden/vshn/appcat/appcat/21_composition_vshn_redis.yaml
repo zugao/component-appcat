@@ -69,6 +69,9 @@ spec:
           providerConfigRef:
             name: kubernetes
       patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.namespaceDebug
+          type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:
@@ -82,6 +85,305 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[appuio.io/organization]
           toFieldPath: spec.forProvider.manifest.metadata.labels[appuio.io/organization]
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Issuer
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                selfSigned:
+                  crlDistributionPoints: []
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.selfSignedIssuerDebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-selfsigned-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-selfsigned-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Issuer
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                ca:
+                  secretName: tls-ca-certificate
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.localCADebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ca-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ca-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                dnsNames:
+                  - vshn.appcat.vshn.ch
+                duration: 87600h
+                isCA: true
+                issuerRef:
+                  group: cert-manager.io
+                  kind: Issuer
+                  name: ''
+                privateKey:
+                  algorithm: RSA
+                  encoding: PKCS1
+                  size: 4096
+                renewBefore: 2400h
+                secretName: tls-ca-certificate
+                subject:
+                  organizations:
+                    - vshn-appcat-ca
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.caCertificateDebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ca-certificate'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ca'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
+          transforms:
+            - string:
+                fmt: '%s-selfsigned-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                dnsNames:
+                  - vshn.appcat.vshn.ch
+                duration: 87600h
+                isCA: false
+                issuerRef:
+                  group: cert-manager.io
+                  kind: Issuer
+                  name: ''
+                privateKey:
+                  algorithm: RSA
+                  encoding: PKCS1
+                  size: 4096
+                renewBefore: 2400h
+                secretName: tls-server-certificate
+                subject:
+                  organizations:
+                    - vshn-appcat-server
+                usages:
+                  - server auth
+                  - client auth
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.serverCertificateDebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-server-certificate'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-server'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
+          transforms:
+            - string:
+                fmt: '%s-ca-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: ''
+                namespace: ''
+              spec:
+                dnsNames:
+                  - vshn.appcat.vshn.ch
+                duration: 87600h
+                isCA: false
+                issuerRef:
+                  group: cert-manager.io
+                  kind: Issuer
+                  name: ''
+                privateKey:
+                  algorithm: RSA
+                  encoding: PKCS1
+                  size: 4096
+                renewBefore: 2400h
+                secretName: tls-client-certificate
+                subject:
+                  organizations:
+                    - vshn-appcat-client
+                usages:
+                  - client auth
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: status.conditions
+          toFieldPath: status.clientCertificateDebug
+          type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-client-certificate'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-client'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
+          transforms:
+            - string:
+                fmt: '%s-ca-issuer'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -107,10 +409,40 @@ spec:
                 name: redis
                 namespace: ''
               toFieldPath: data.REDIS_PASSWORD
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[ca.crt]
+                kind: Secret
+                name: tls-client-certificate
+                namespace: ''
+              toFieldPath: data[ca.crt]
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[tls.crt]
+                kind: Secret
+                name: tls-client-certificate
+                namespace: ''
+              toFieldPath: data[tls.crt]
+            - patchesFrom:
+                apiVersion: v1
+                fieldPath: data[tls.key]
+                kind: Secret
+                name: tls-client-certificate
+                namespace: ''
+              toFieldPath: data[tls.key]
           writeConnectionSecretToRef:
             name: redis
             namespace: ''
       connectionDetails:
+        - fromConnectionSecretKey: ca.crt
+          name: ca.crt
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: tls.crt
+          name: tls.crt
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: tls.key
+          name: tls.key
+          type: FromConnectionSecretKey
         - fromConnectionSecretKey: REDIS_HOST
           name: REDIS_HOST
           type: FromConnectionSecretKey
@@ -161,6 +493,30 @@ spec:
           type: CombineFromComposite
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.references[0].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[1].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[2].patchesFrom.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[3].patchesFrom.namespace
           transforms:
             - string:
                 fmt: vshn-redis-%s
@@ -220,6 +576,14 @@ spec:
                 enabled: true
                 ingressNSMatchLabels:
                   kubernetes.io/metadata.name: ''
+              tls:
+                authClients: true
+                autoGenerated: false
+                certCAFilename: ca.crt
+                certFilename: tls.crt
+                certKeyFilename: tls.key
+                enabled: true
+                existingSecret: tls-server-certificate
           providerConfigRef:
             name: helm
       patches:
@@ -262,6 +626,12 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.disk
           toFieldPath: spec.forProvider.values.master.persistence.size
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.tls.enabled
+          toFieldPath: spec.forProvider.values.tls.enabled
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.tls.authClients
+          toFieldPath: spec.forProvider.values.tls.authClients
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.version
           toFieldPath: spec.forProvider.values.image.tag

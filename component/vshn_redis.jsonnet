@@ -15,10 +15,17 @@ local redisParams = params.services.vshn.redis;
 local defaultUser = 'default';
 local defaultPort = '6379';
 
+local caCertificateSecretName = 'tls-ca-certificate';
+local serverCertificateSecretName = 'tls-server-certificate';
+local clientCertificateSecretName = 'tls-client-certificate';
+
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
 local connectionSecretKeys = [
+  'ca.crt',
+  'tls.crt',
+  'tls.key',
   'REDIS_HOST',
   'REDIS_PORT',
   'REDIS_USERNAME',
@@ -52,7 +59,160 @@ local composition =
                         },
                       },
                     };
-
+  local selfSignedIssuer = comp.KubeObject('cert-manager.io/v1', 'Issuer') +
+                           {
+                             spec+: {
+                               forProvider+: {
+                                 manifest+: {
+                                   metadata: {
+                                     name: '',
+                                     namespace: '',
+                                   },
+                                   spec: {
+                                     selfSigned: {
+                                       crlDistributionPoints: [],
+                                     },
+                                   },
+                                 },
+                               },
+                             },
+                           };
+  local caCertificate = comp.KubeObject('cert-manager.io/v1', 'Certificate') +
+                        {
+                          spec+: {
+                            forProvider+: {
+                              manifest+: {
+                                metadata: {
+                                  name: '',
+                                  namespace: '',
+                                },
+                                spec: {
+                                  secretName: caCertificateSecretName,
+                                  duration: '87600h',
+                                  renewBefore: '2400h',
+                                  subject: {
+                                    organizations: [
+                                      'vshn-appcat-ca',
+                                    ],
+                                  },
+                                  isCA: true,
+                                  privateKey: {
+                                    algorithm: 'RSA',
+                                    encoding: 'PKCS1',
+                                    size: 4096,
+                                  },
+                                  dnsNames: [
+                                    'vshn.appcat.vshn.ch',
+                                  ],
+                                  issuerRef: {
+                                    name: '',
+                                    kind: 'Issuer',
+                                    group: 'cert-manager.io',
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        };
+  local caIssuer = comp.KubeObject('cert-manager.io/v1', 'Issuer') +
+                   {
+                     spec+: {
+                       forProvider+: {
+                         manifest+: {
+                           metadata: {
+                             name: '',
+                             namespace: '',
+                           },
+                           spec: {
+                             ca: {
+                               secretName: caCertificateSecretName,
+                             },
+                           },
+                         },
+                       },
+                     },
+                   };
+  local serverCertificate = comp.KubeObject('cert-manager.io/v1', 'Certificate') +
+                            {
+                              spec+: {
+                                forProvider+: {
+                                  manifest+: {
+                                    metadata: {
+                                      name: '',
+                                      namespace: '',
+                                    },
+                                    spec: {
+                                      secretName: serverCertificateSecretName,
+                                      duration: '87600h',
+                                      renewBefore: '2400h',
+                                      subject: {
+                                        organizations: [
+                                          'vshn-appcat-server',
+                                        ],
+                                      },
+                                      isCA: false,
+                                      privateKey: {
+                                        algorithm: 'RSA',
+                                        encoding: 'PKCS1',
+                                        size: 4096,
+                                      },
+                                      usages: [
+                                        'server auth',
+                                        'client auth',
+                                      ],
+                                      dnsNames: [
+                                        'vshn.appcat.vshn.ch',
+                                      ],
+                                      issuerRef: {
+                                        name: '',
+                                        kind: 'Issuer',
+                                        group: 'cert-manager.io',
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                            };
+  local clientCertificate = comp.KubeObject('cert-manager.io/v1', 'Certificate') +
+                            {
+                              spec+: {
+                                forProvider+: {
+                                  manifest+: {
+                                    metadata: {
+                                      name: '',
+                                      namespace: '',
+                                    },
+                                    spec: {
+                                      secretName: clientCertificateSecretName,
+                                      duration: '87600h',
+                                      renewBefore: '2400h',
+                                      subject: {
+                                        organizations: [
+                                          'vshn-appcat-client',
+                                        ],
+                                      },
+                                      isCA: false,
+                                      privateKey: {
+                                        algorithm: 'RSA',
+                                        encoding: 'PKCS1',
+                                        size: 4096,
+                                      },
+                                      usages: [
+                                        'client auth',
+                                      ],
+                                      dnsNames: [
+                                        'vshn.appcat.vshn.ch',
+                                      ],
+                                      issuerRef: {
+                                        name: '',
+                                        kind: 'Issuer',
+                                        group: 'cert-manager.io',
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                            };
   local secret = comp.KubeObject('v1', 'Secret') +
                  {
                    spec+: {
@@ -76,6 +236,36 @@ local composition =
                            fieldPath: 'data.redis-password',
                          },
                          toFieldPath: 'data.REDIS_PASSWORD',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: clientCertificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[ca.crt]',
+                         },
+                         toFieldPath: 'data[ca.crt]',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: clientCertificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[tls.crt]',
+                         },
+                         toFieldPath: 'data[tls.crt]',
+                       },
+                       {
+                         patchesFrom: {
+                           apiVersion: 'v1',
+                           kind: 'Secret',
+                           name: clientCertificateSecretName,
+                           namespace: '',
+                           fieldPath: 'data[tls.key]',
+                         },
+                         toFieldPath: 'data[tls.key]',
                        },
                      ],
                      // Make crossplane aware of the connection secret we are creating in this object
@@ -135,6 +325,15 @@ local composition =
                 },
               },
             },
+            tls: {
+              enabled: true,
+              authClients: true,
+              autoGenerated: false,
+              existingSecret: serverCertificateSecretName,
+              certFilename: 'tls.crt',
+              certKeyFilename: 'tls.key',
+              certCAFilename: 'ca.crt',
+            },
             architecture: 'standalone',
           },
         },
@@ -167,9 +366,58 @@ local composition =
         {
           base: namespace,
           patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.namespaceDebug'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
             comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
+          ],
+        },
+        {
+          base: selfSignedIssuer,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerDebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'selfsigned-issuer'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'selfsigned-issuer'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+          ],
+        },
+        {
+          base: caIssuer,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-issuer'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca-issuer'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+          ],
+        },
+        {
+          base: caCertificate,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateDebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-certificate'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+          ],
+        },
+        {
+          base: serverCertificate,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateDebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'server-certificate'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'server'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+          ],
+        },
+        {
+          base: clientCertificate,
+          patches: [
+            comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateDebug'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'client-certificate'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'client'),
+            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
           ],
         },
         {
@@ -182,6 +430,9 @@ local composition =
 
             comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.REDIS_HOST', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-redis'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-redis'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-redis'),
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-redis'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-redis'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'connection'),
           ],
@@ -200,6 +451,8 @@ local composition =
             comp.FromCompositeFieldPath('spec.parameters.size.cpuRequests', 'spec.forProvider.values.master.resources.requests.cpu'),
             comp.FromCompositeFieldPath('spec.parameters.size.cpuLimits', 'spec.forProvider.values.master.resources.limits.cpu'),
             comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.values.master.persistence.size'),
+            comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
+            comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
 
             comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.values.image.tag'),
             comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
