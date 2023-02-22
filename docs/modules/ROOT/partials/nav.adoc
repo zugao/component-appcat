@@ -2,6 +2,7 @@
 
 .Explanations
 * xref:explanations/crossplane-secrets-non-provider.adoc[Manage secrets not coming from a provider]
+* xref:explanations/restore.adoc[]
 
 .Tutorials
 * xref:tutorials/install-cloudscale.adoc[Install Cloudscale Stack]

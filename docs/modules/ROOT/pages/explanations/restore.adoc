@@ -1,0 +1,22 @@
+= How the Restore Process Works
+
+The restore is defined by another composition `vshnpostgresqlrestore`.
+That composition patches some more information necessary to trigger a restore.
+It also deploys a copy job to the `syn-appcat-control` namespace.
+This is necessary so that we can access the backups from different namespaces.
+
+The copy job copies three things from the original instance namespace to the new namespace:
+
+* the secret containing bucket credentials
+* an sgObjectStorage that contains the endpoint and bucket name where the backup is stored
+* sgBackup this object contains the actual necessary information to successfully trigger a restore of the instance
+
+This job is deployed to a dedicated `syn-appcat-control` namespace that's not available to the user.
+
+These objects are necessary for StackGres to perform a succesful restore of the given backup.
+The remaining differences in the restore composition are to pass the necessary information to the `sgCluster` object.
+The actual restore is handled by StackGres.
+
+To ensure quicker reconciliation the `dependsOn` feature of `provider-kubernetes` is used on the `sgCluster` object.
+This ensures that the `sgCluster` is only applied after the job has been created.
+This cuts the reconcilation of the actual cluster in half.
