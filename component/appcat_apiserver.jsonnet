@@ -18,16 +18,16 @@ local namespace = loadManifest('namespace.yaml') {
 local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distribution + ':aggregate-appcat-to-basic-user') {
   metadata+: {
     labels+: {
-      "authorization.openshift.io/aggregate-to-basic-user": "true"
+      'authorization.openshift.io/aggregate-to-basic-user': 'true',
     },
   },
   rules+: [
     {
-      apiGroups: ["api.appcat.vshn.io"],
-      resources: ["appcats"],
-      verbs: ["get", "list", "watch"],
-    }
-  ]
+      apiGroups: [ 'api.appcat.vshn.io' ],
+      resources: [ 'appcats' ],
+      verbs: [ 'get', 'list', 'watch' ],
+    },
+  ],
 };
 
 local serviceAccount = loadManifest('service-account.yaml') {
@@ -138,11 +138,11 @@ local apiService = loadManifest('apiservice.yaml') {
       then
         {
           caBundle: std.base64(params.apiserver.tls.serverCert),
-          insecureSkipTLSVerify:: null
+          insecureSkipTLSVerify:: null,
         }
       else
         {}
-    )
+    ),
 };
 
 
