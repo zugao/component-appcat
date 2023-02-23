@@ -53,6 +53,7 @@ local composition =
                               labels: {
                                 [serviceNameLabelKey]: 'redis-standalone',
                                 [serviceNamespaceLabelKey]: '',
+                                'appuio.io/no-rbac-creation': 'true',
                               },
                             },
                           },

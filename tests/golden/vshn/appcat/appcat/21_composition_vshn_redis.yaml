@@ -33,6 +33,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: redis-standalone
+                  appuio.io/no-rbac-creation: 'true'
                 name: ''
           managementPolicy: Observe
           providerConfigRef:
@@ -65,6 +66,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: redis-standalone
+                  appuio.io/no-rbac-creation: 'true'
                 name: ''
           providerConfigRef:
             name: kubernetes
