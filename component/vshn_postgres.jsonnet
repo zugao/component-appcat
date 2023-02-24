@@ -105,10 +105,10 @@ local namespaceObserve = {
   ],
 };
 
-local namespaceDebug = {
+local namespaceConditions = {
   base: namespace,
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
     comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
@@ -136,7 +136,7 @@ local localca = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'localca'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
@@ -186,7 +186,7 @@ local certificate = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.certificateDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.certificateConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'certificate'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name'),
@@ -262,7 +262,7 @@ local sgInstanceProfile = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.profileDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.profileConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'profile'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -290,7 +290,7 @@ local sgPostgresConfig = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.pgconfigDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.pgconfigConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgconf'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -350,7 +350,7 @@ local sgCluster = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
@@ -433,7 +433,7 @@ local secret = {
         },
   connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.secretDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.secretConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.manifest.metadata.name', 'connection'),
@@ -467,7 +467,7 @@ local xobjectBucket = {
     },
   },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.s3BucketDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.s3BucketConditions'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
 
@@ -512,7 +512,7 @@ local sgObjectStorage = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.s3BackupConfigDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.s3BackupConfigConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
@@ -555,7 +555,7 @@ local networkPolicy = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyDebug'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
@@ -653,7 +653,7 @@ local composition(restore=false) =
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
       resources: [
                    namespaceObserve,
-                   namespaceDebug,
+                   namespaceConditions,
                    localca,
                    certificate,
                  ] +

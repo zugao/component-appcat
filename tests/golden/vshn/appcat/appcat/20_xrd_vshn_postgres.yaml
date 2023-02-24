@@ -190,7 +190,7 @@ spec:
             status:
               description: Status reflects the observed state of a VSHNPostgreSQL.
               properties:
-                certificateDebug:
+                certificateConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -237,7 +237,7 @@ spec:
                   description: InstanceNamespace contains the name of the namespace
                     where the instance resides
                   type: string
-                localCADebug:
+                localCAConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -280,7 +280,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                namespaceDebug:
+                namespaceConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -323,7 +323,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                networkPolicyDebug:
+                networkPolicyConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -366,7 +366,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                pgclusterDebug:
+                pgclusterConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -409,7 +409,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                pgconfigDebug:
+                pgconfigConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -497,7 +497,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                profileDebug:
+                profileConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -540,7 +540,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                s3BackupConfigDebug:
+                s3BackupConfigConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -583,7 +583,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                s3BucketDebug:
+                s3BucketConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -626,7 +626,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                secretDebug:
+                secretConditions:
                   items:
                     properties:
                       lastTransitionTime:

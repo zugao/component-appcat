@@ -70,7 +70,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.namespaceDebug
+          toFieldPath: status.namespaceConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.name
           toFieldPath: status.instanceNamespace
@@ -108,7 +108,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.localCADebug
+          toFieldPath: status.localCAConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -166,7 +166,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.certificateDebug
+          toFieldPath: status.certificateConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -245,7 +245,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.profileDebug
+          toFieldPath: status.profileConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -295,7 +295,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.pgconfigDebug
+          toFieldPath: status.pgconfigConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -361,7 +361,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.pgclusterDebug
+          toFieldPath: status.pgclusterConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -490,7 +490,7 @@ spec:
           type: FromConnectionSecretKey
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.secretDebug
+          toFieldPath: status.secretConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -589,7 +589,7 @@ spec:
             namespace: ''
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.s3BucketDebug
+          toFieldPath: status.s3BucketConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -644,7 +644,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.s3BackupConfigDebug
+          toFieldPath: status.s3BackupConfigConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -715,7 +715,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.networkPolicyDebug
+          toFieldPath: status.networkPolicyConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name

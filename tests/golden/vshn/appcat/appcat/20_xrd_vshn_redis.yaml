@@ -108,7 +108,7 @@ spec:
             status:
               description: Status reflects the observed state of a VSHNRedis.
               properties:
-                caCertificateDebug:
+                caCertificateConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -151,7 +151,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                clientCertificateDebug:
+                clientCertificateConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -194,7 +194,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                localCADebug:
+                localCAConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -237,7 +237,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                namespaceDebug:
+                namespaceConditions:
                   description: RedisConditions contains the status conditions of the
                     backing object.
                   items:
@@ -282,7 +282,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                selfSignedIssuerDebug:
+                selfSignedIssuerConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -325,7 +325,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                serverCertificateDebug:
+                serverCertificateConditions:
                   items:
                     properties:
                       lastTransitionTime:

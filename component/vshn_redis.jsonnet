@@ -366,7 +366,7 @@ local composition =
         {
           base: namespace,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.namespaceDebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
             comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
@@ -375,7 +375,7 @@ local composition =
         {
           base: selfSignedIssuer,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerDebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerConditions'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'selfsigned-issuer'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'selfsigned-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
@@ -384,7 +384,7 @@ local composition =
         {
           base: caIssuer,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.localCADebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
@@ -393,7 +393,7 @@ local composition =
         {
           base: caCertificate,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateDebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateConditions'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-certificate'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
@@ -403,7 +403,7 @@ local composition =
         {
           base: serverCertificate,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateDebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateConditions'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'server-certificate'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'server'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
@@ -413,7 +413,7 @@ local composition =
         {
           base: clientCertificate,
           patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateDebug'),
+            comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateConditions'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'client-certificate'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'client'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),

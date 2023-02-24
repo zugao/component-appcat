@@ -70,7 +70,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.namespaceDebug
+          toFieldPath: status.namespaceConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -105,7 +105,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.selfSignedIssuerDebug
+          toFieldPath: status.selfSignedIssuerConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -150,7 +150,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.localCADebug
+          toFieldPath: status.localCAConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -210,7 +210,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.caCertificateDebug
+          toFieldPath: status.caCertificateConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -281,7 +281,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.serverCertificateDebug
+          toFieldPath: status.serverCertificateConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -351,7 +351,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.clientCertificateDebug
+          toFieldPath: status.clientCertificateConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
