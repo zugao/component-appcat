@@ -467,7 +467,7 @@ local xobjectBucket = {
     },
   },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.s3BucketConditions'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.objectBackupConfigConditions'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
 
@@ -512,7 +512,7 @@ local sgObjectStorage = {
           },
         },
   patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.s3BackupConfigConditions'),
+    comp.ToCompositeFieldPath('status.conditions', 'status.objectBucketConditions'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),

@@ -165,17 +165,17 @@ type VSHNPostgreSQLStatus struct {
 	// InstanceNamespace contains the name of the namespace where the instance resides
 	InstanceNamespace string `json:"instanceNamespace,omitempty"`
 	// PostgreSQLConditions contains the status conditions of the backing object.
-	PostgreSQLConditions     []v1.Condition `json:"postgresqlConditions,omitempty"`
-	NamespaceConditions      []v1.Condition `json:"namespaceConditions,omitempty"`
-	ProfileConditions        []v1.Condition `json:"profileConditions,omitempty"`
-	PGConfigConditions       []v1.Condition `json:"pgconfigConditions,omitempty"`
-	PGClusterConditions      []v1.Condition `json:"pgclusterConditions,omitempty"`
-	SecretsConditions        []v1.Condition `json:"secretConditions,omitempty"`
-	S3BucketConditions       []v1.Condition `json:"s3BucketConditions,omitempty"`
-	S3BackupConfigConditions []v1.Condition `json:"s3BackupConfigConditions,omitempty"`
-	NetworkPolicyConditions  []v1.Condition `json:"networkPolicyConditions,omitempty"`
-	LocalCAConditions        []v1.Condition `json:"localCAConditions,omitempty"`
-	CertificateConditions    []v1.Condition `json:"certificateConditions,omitempty"`
+	PostgreSQLConditions         []v1.Condition `json:"postgresqlConditions,omitempty"`
+	NamespaceConditions          []v1.Condition `json:"namespaceConditions,omitempty"`
+	ProfileConditions            []v1.Condition `json:"profileConditions,omitempty"`
+	PGConfigConditions           []v1.Condition `json:"pgconfigConditions,omitempty"`
+	PGClusterConditions          []v1.Condition `json:"pgclusterConditions,omitempty"`
+	SecretsConditions            []v1.Condition `json:"secretConditions,omitempty"`
+	ObjectBucketConditions       []v1.Condition `json:"ObjectBucketConditions,omitempty"`
+	ObjectBackupConfigConditions []v1.Condition `json:"ObjectBackupConfigConditions,omitempty"`
+	NetworkPolicyConditions      []v1.Condition `json:"networkPolicyConditions,omitempty"`
+	LocalCAConditions            []v1.Condition `json:"localCAConditions,omitempty"`
+	CertificateConditions        []v1.Condition `json:"certificateConditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true

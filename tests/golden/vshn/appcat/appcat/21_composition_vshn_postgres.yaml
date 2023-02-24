@@ -589,7 +589,7 @@ spec:
             namespace: ''
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.s3BucketConditions
+          toFieldPath: status.objectBackupConfigConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -644,7 +644,7 @@ spec:
             name: kubernetes
       patches:
         - fromFieldPath: status.conditions
-          toFieldPath: status.s3BackupConfigConditions
+          toFieldPath: status.objectBucketConditions
           type: ToCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
