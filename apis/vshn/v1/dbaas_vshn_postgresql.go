@@ -105,10 +105,22 @@ type VSHNDBaaSSizeSpec struct {
 	// Memory defines the amount of memory in units of bytes for an instance.
 	Memory string `json:"memory,omitempty"`
 
+	// Requests defines CPU and memory requests for an instance
+	Requests VSHNDBaaSSizeRequestsSpec `json:"requests,omitempty"`
+
 	// +kubebuilder:default="5Gi"
 
 	// Disk defines the amount of disk space for an instance.
 	Disk string `json:"disk,omitempty"`
+}
+
+// VSHNDBaaSSizeRequestsSpec contains settings to control the resoure requests of a service.
+type VSHNDBaaSSizeRequestsSpec struct {
+	// CPU defines the amount of Kubernetes CPUs for an instance.
+	CPU string `json:"cpu,omitempty"`
+
+	// Memory defines the amount of memory in units of bytes for an instance.
+	Memory string `json:"memory,omitempty"`
 }
 
 // VSHNDBaaSNetworkSpec contains any network related settings.

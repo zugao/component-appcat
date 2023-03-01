@@ -338,6 +338,9 @@ spec:
                     cpu: 100m
                     memory: 100Mi
                 memory: ''
+                requests:
+                  cpu: null
+                  memory: null
           providerConfigRef:
             name: kubernetes
       patches:
@@ -368,6 +371,12 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.cpu
           toFieldPath: spec.forProvider.manifest.spec.cpu
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.requests.memory
+          toFieldPath: spec.forProvider.manifest.spec.requests.memory
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.requests.cpu
+          toFieldPath: spec.forProvider.manifest.spec.requests.cpu
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -431,6 +440,9 @@ spec:
                       sgObjectStorage: ''
                   sgPostgresConfig: ''
                 instances: 1
+                nonProductionOptions:
+                  enableSetPatroniCpuRequests: true
+                  enableSetPatroniMemoryRequests: true
                 pods:
                   persistentVolume:
                     size: ''
