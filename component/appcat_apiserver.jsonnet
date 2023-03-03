@@ -24,7 +24,7 @@ local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distr
   rules+: [
     {
       apiGroups: [ 'api.appcat.vshn.io' ],
-      resources: [ 'appcats' ],
+      resources: [ 'appcats', 'vshnpostgresbackups' ],
       verbs: [ 'get', 'list', 'watch' ],
     },
   ],
