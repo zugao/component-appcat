@@ -36,7 +36,7 @@ local serviceAccount = loadManifest('service-account.yaml') {
   },
 };
 
-local clusterRoleAPIServer = loadManifest('cluster-role.yaml');
+local clusterRoleAPIServer = loadManifest('role.yaml');
 
 local clusterRoleBinding = kube.ClusterRoleBinding(clusterRoleAPIServer.metadata.name) {
   roleRef: {
@@ -92,6 +92,7 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
               image: '%(registry)s/%(repository)s:%(tag)s' % params.images.apiserver,
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
+              resources: apiserverParams.resources,
             }
           else
             c
