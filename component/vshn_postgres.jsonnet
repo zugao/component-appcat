@@ -204,6 +204,10 @@ local sgInstanceProfile = {
                 spec: {
                   cpu: '',
                   memory: '',
+                  requests: {
+                    cpu: null,
+                    memory: null,
+                  },
                   containers: {
                     'backup.create-backup': {
                       cpu: '250m',
@@ -265,6 +269,8 @@ local sgInstanceProfile = {
 
     comp.FromCompositeFieldPath('spec.parameters.size.memory', 'spec.forProvider.manifest.spec.memory'),
     comp.FromCompositeFieldPath('spec.parameters.size.cpu', 'spec.forProvider.manifest.spec.cpu'),
+    comp.FromCompositeFieldPath('spec.parameters.size.requests.memory', 'spec.forProvider.manifest.spec.requests.memory'),
+    comp.FromCompositeFieldPath('spec.parameters.size.requests.cpu', 'spec.forProvider.manifest.spec.requests.cpu'),
   ],
 };
 
@@ -333,6 +339,10 @@ local sgCluster = {
                     persistentVolume: {
                       size: '',
                     },
+                  },
+                  nonProductionOptions: {
+                    enableSetPatroniCpuRequests: true,
+                    enableSetPatroniMemoryRequests: true,
                   },
                 },
               },
