@@ -28,15 +28,15 @@ spec:
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
           env: []
-          image: ghcr.io/vshn/appcat-apiserver:v0.1.2
+          image: ghcr.io/vshn/appcat-apiserver:v0.2.0
           name: apiserver
           resources:
             limits:
-              cpu: 100m
-              memory: 30Mi
+              cpu: 200m
+              memory: 200Mi
             requests:
               cpu: 100m
-              memory: 20Mi
+              memory: 50Mi
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
