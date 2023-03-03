@@ -177,3 +177,13 @@ type VSHNPostgreSQLStatus struct {
 	LocalCADebug         []v1.Condition `json:"localCADebug,omitempty"`
 	CertificateDebug     []v1.Condition `json:"certificateDebug,omitempty"`
 }
+
+// +kubebuilder:object:root=true
+
+// VSHNPostgreSQLList defines a list of VSHNPostgreSQL
+type VSHNPostgreSQLList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+
+	Items []VSHNPostgreSQL `json:"items"`
+}
