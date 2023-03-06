@@ -92,6 +92,16 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
               image: '%(registry)s/%(repository)s:%(tag)s' % params.images.apiserver,
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
+              resources+: {
+                limits: {
+                  cpu: '100m',
+                  memory: '200Mi',
+                },
+                requests: {
+                  cpu: '100m',
+                  memory: '100Mi',
+                },
+              },
             }
           else
             c

@@ -33,10 +33,10 @@ spec:
           resources:
             limits:
               cpu: 100m
-              memory: 30Mi
+              memory: 200Mi
             requests:
               cpu: 100m
-              memory: 20Mi
+              memory: 100Mi
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
