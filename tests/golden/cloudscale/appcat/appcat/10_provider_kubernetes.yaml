@@ -99,6 +99,7 @@ rules:
       - sgpgconfigs
       - sgobjectstorages
       - sgbackups
+      - sgdbops
     verbs:
       - get
       - list
@@ -148,6 +149,7 @@ rules:
       - batch
     resources:
       - jobs
+      - cronjobs
     verbs:
       - get
       - list
@@ -160,6 +162,8 @@ rules:
       - rbac.authorization.k8s.io
     resources:
       - clusterrolebindings
+      - roles
+      - rolebindings
     verbs:
       - get
       - list

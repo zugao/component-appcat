@@ -135,7 +135,7 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ 'stackgres.io' ],
-          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups' ],
+          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
@@ -155,12 +155,12 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ 'batch' ],
-          resources: [ 'jobs' ],
+          resources: [ 'jobs', 'cronjobs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
           apiGroups: [ 'rbac.authorization.k8s.io' ],
-          resources: [ 'clusterrolebindings' ],
+          resources: [ 'clusterrolebindings', 'roles', 'rolebindings' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {

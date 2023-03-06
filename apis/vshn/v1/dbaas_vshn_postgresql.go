@@ -12,6 +12,7 @@ import (
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.size.default={})"
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.service.default={})"
 //go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.backup.default={})"
+//go:generate yq -i e ../../generated/vshn.appcat.vshn.io_vshnpostgresqls.yaml --expression "with(.spec.versions[]; .schema.openAPIV3Schema.properties.spec.properties.parameters.properties.maintenance.default={})"
 
 // +kubebuilder:object:root=true
 
@@ -78,11 +79,11 @@ type VSHNDBaaSSchedulingSpec struct {
 
 // VSHNDBaaSMaintenanceScheduleSpec contains settings to control the maintenance of an instance.
 type VSHNDBaaSMaintenanceScheduleSpec struct {
-	// +kubebuilder:validation:Enum=monday;tuesday;wednesday;thursday;friday;saturday;sunday;never
+	// +kubebuilder:validation:Enum=monday;tuesday;wednesday;thursday;friday;saturday;sunday
 	// +kubebuilder:default="tuesday"
 
 	// DayOfWeek specifies at which weekday the maintenance is held place.
-	// Allowed values are [monday, tuesday, wednesday, thursday, friday, saturday, sunday, never]
+	// Allowed values are [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
 	DayOfWeek string `json:"dayOfWeek,omitempty"`
 
 	// +kubebuilder:validation:Pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$"
