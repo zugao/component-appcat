@@ -11,6 +11,7 @@ rules:
       - api.appcat.vshn.io
     resources:
       - appcats
+      - vshnpostgresbackups
     verbs:
       - get
       - list
