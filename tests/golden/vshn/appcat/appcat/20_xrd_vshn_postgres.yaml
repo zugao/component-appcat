@@ -59,6 +59,7 @@ spec:
                           type: string
                       type: object
                     maintenance:
+                      default: {}
                       description: Maintenance contains settings to control the maintenance
                         of an instance.
                       properties:
@@ -66,7 +67,7 @@ spec:
                           default: tuesday
                           description: DayOfWeek specifies at which weekday the maintenance
                             is held place. Allowed values are [monday, tuesday, wednesday,
-                            thursday, friday, saturday, sunday, never]
+                            thursday, friday, saturday, sunday]
                           enum:
                             - monday
                             - tuesday
@@ -75,7 +76,6 @@ spec:
                             - friday
                             - saturday
                             - sunday
-                            - never
                           type: string
                         timeOfDay:
                           default: '22:30:00'

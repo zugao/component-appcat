@@ -45,4 +45,4 @@ spec:
       volumes:
         - name: apiserver-certs
           secret:
-            secretName: appcat
+            secretName: appcat-apiserver-tls

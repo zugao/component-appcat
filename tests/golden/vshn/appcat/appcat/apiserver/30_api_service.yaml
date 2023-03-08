@@ -8,7 +8,7 @@ metadata:
 spec:
   group: api.appcat.vshn.io
   groupPriorityMinimum: 2000
-  insecureSkipTLSVerify: false
+  insecureSkipTLSVerify: true
   service:
     name: appcat
     namespace: appcat-apiserver
