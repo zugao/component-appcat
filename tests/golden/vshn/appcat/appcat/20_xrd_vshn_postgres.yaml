@@ -190,7 +190,93 @@ spec:
             status:
               description: Status reflects the observed state of a VSHNPostgreSQL.
               properties:
-                certificateDebug:
+                ObjectBackupConfigConditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: LastTransitionTime is the last time the condition
+                          transitioned from one status to another.
+                        format: date-time
+                        type: string
+                      message:
+                        description: Message is a human-readable message indicating
+                          details about the transition.
+                        maxLength: 32768
+                        type: string
+                      observedGeneration:
+                        description: ObservedGeneration represents the .metadata.generation
+                          that the condition was set based upon. For instance, if
+                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
+                          is 9, the condition is out of date with respect to the current
+                          state of the instance.
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      reason:
+                        description: Reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
+                        maxLength: 1024
+                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                        type: string
+                      status:
+                        description: Status of the condition, one of True, False,
+                          Unknown.
+                        enum:
+                          - 'True'
+                          - 'False'
+                          - Unknown
+                        type: string
+                      type:
+                        description: Type of condition.
+                        maxLength: 316
+                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                        type: string
+                    type: object
+                  type: array
+                ObjectBucketConditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: LastTransitionTime is the last time the condition
+                          transitioned from one status to another.
+                        format: date-time
+                        type: string
+                      message:
+                        description: Message is a human-readable message indicating
+                          details about the transition.
+                        maxLength: 32768
+                        type: string
+                      observedGeneration:
+                        description: ObservedGeneration represents the .metadata.generation
+                          that the condition was set based upon. For instance, if
+                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
+                          is 9, the condition is out of date with respect to the current
+                          state of the instance.
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      reason:
+                        description: Reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
+                        maxLength: 1024
+                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                        type: string
+                      status:
+                        description: Status of the condition, one of True, False,
+                          Unknown.
+                        enum:
+                          - 'True'
+                          - 'False'
+                          - Unknown
+                        type: string
+                      type:
+                        description: Type of condition.
+                        maxLength: 316
+                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                        type: string
+                    type: object
+                  type: array
+                certificateConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -237,7 +323,7 @@ spec:
                   description: InstanceNamespace contains the name of the namespace
                     where the instance resides
                   type: string
-                localCADebug:
+                localCAConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -280,7 +366,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                namespaceDebug:
+                namespaceConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -323,7 +409,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                networkPolicyDebug:
+                networkPolicyConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -366,7 +452,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                pgclusterDebug:
+                pgclusterConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -409,7 +495,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                pgconfigDebug:
+                pgconfigConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -497,7 +583,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                profileDebug:
+                profileConditions:
                   items:
                     properties:
                       lastTransitionTime:
@@ -540,93 +626,7 @@ spec:
                         type: string
                     type: object
                   type: array
-                s3BackupConfigDebug:
-                  items:
-                    properties:
-                      lastTransitionTime:
-                        description: LastTransitionTime is the last time the condition
-                          transitioned from one status to another.
-                        format: date-time
-                        type: string
-                      message:
-                        description: Message is a human-readable message indicating
-                          details about the transition.
-                        maxLength: 32768
-                        type: string
-                      observedGeneration:
-                        description: ObservedGeneration represents the .metadata.generation
-                          that the condition was set based upon. For instance, if
-                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
-                          is 9, the condition is out of date with respect to the current
-                          state of the instance.
-                        format: int64
-                        minimum: 0
-                        type: integer
-                      reason:
-                        description: Reason contains a programmatic identifier indicating
-                          the reason for the condition's last transition.
-                        maxLength: 1024
-                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                        type: string
-                      status:
-                        description: Status of the condition, one of True, False,
-                          Unknown.
-                        enum:
-                          - 'True'
-                          - 'False'
-                          - Unknown
-                        type: string
-                      type:
-                        description: Type of condition.
-                        maxLength: 316
-                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                        type: string
-                    type: object
-                  type: array
-                s3BucketDebug:
-                  items:
-                    properties:
-                      lastTransitionTime:
-                        description: LastTransitionTime is the last time the condition
-                          transitioned from one status to another.
-                        format: date-time
-                        type: string
-                      message:
-                        description: Message is a human-readable message indicating
-                          details about the transition.
-                        maxLength: 32768
-                        type: string
-                      observedGeneration:
-                        description: ObservedGeneration represents the .metadata.generation
-                          that the condition was set based upon. For instance, if
-                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
-                          is 9, the condition is out of date with respect to the current
-                          state of the instance.
-                        format: int64
-                        minimum: 0
-                        type: integer
-                      reason:
-                        description: Reason contains a programmatic identifier indicating
-                          the reason for the condition's last transition.
-                        maxLength: 1024
-                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                        type: string
-                      status:
-                        description: Status of the condition, one of True, False,
-                          Unknown.
-                        enum:
-                          - 'True'
-                          - 'False'
-                          - Unknown
-                        type: string
-                      type:
-                        description: Type of condition.
-                        maxLength: 316
-                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                        type: string
-                    type: object
-                  type: array
-                secretDebug:
+                secretConditions:
                   items:
                     properties:
                       lastTransitionTime:

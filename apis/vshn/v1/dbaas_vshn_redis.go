@@ -100,10 +100,10 @@ type VSHNRedisTLSSpec struct {
 // VSHNRedisStatus reflects the observed state of a VSHNRedis.
 type VSHNRedisStatus struct {
 	// RedisConditions contains the status conditions of the backing object.
-	NamespaceDebug         []v1.Condition `json:"namespaceDebug,omitempty"`
-	SelfSignedIssuerDebug  []v1.Condition `json:"selfSignedIssuerDebug,omitempty"`
-	LocalCADebug           []v1.Condition `json:"localCADebug,omitempty"`
-	CaCertificateDebug     []v1.Condition `json:"caCertificateDebug,omitempty"`
-	ServerCertificateDebug []v1.Condition `json:"serverCertificateDebug,omitempty"`
-	ClientCertificateDebug []v1.Condition `json:"clientCertificateDebug,omitempty"`
+	NamespaceConditions         []v1.Condition `json:"namespaceConditions,omitempty"`
+	SelfSignedIssuerConditions  []v1.Condition `json:"selfSignedIssuerConditions,omitempty"`
+	LocalCAConditions           []v1.Condition `json:"localCAConditions,omitempty"`
+	CaCertificateConditions     []v1.Condition `json:"caCertificateConditions,omitempty"`
+	ServerCertificateConditions []v1.Condition `json:"serverCertificateConditions,omitempty"`
+	ClientCertificateConditions []v1.Condition `json:"clientCertificateConditions,omitempty"`
 }

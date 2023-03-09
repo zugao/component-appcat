@@ -166,17 +166,17 @@ type VSHNPostgreSQLStatus struct {
 	// InstanceNamespace contains the name of the namespace where the instance resides
 	InstanceNamespace string `json:"instanceNamespace,omitempty"`
 	// PostgreSQLConditions contains the status conditions of the backing object.
-	PostgreSQLConditions []v1.Condition `json:"postgresqlConditions,omitempty"`
-	NamespaceDebug       []v1.Condition `json:"namespaceDebug,omitempty"`
-	ProfileDebug         []v1.Condition `json:"profileDebug,omitempty"`
-	PGConfigDebug        []v1.Condition `json:"pgconfigDebug,omitempty"`
-	PGClusterDebug       []v1.Condition `json:"pgclusterDebug,omitempty"`
-	SecretsDebug         []v1.Condition `json:"secretDebug,omitempty"`
-	S3BucketDebug        []v1.Condition `json:"s3BucketDebug,omitempty"`
-	S3BackupConfigDebug  []v1.Condition `json:"s3BackupConfigDebug,omitempty"`
-	NetworkPolicyDebug   []v1.Condition `json:"networkPolicyDebug,omitempty"`
-	LocalCADebug         []v1.Condition `json:"localCADebug,omitempty"`
-	CertificateDebug     []v1.Condition `json:"certificateDebug,omitempty"`
+	PostgreSQLConditions         []v1.Condition `json:"postgresqlConditions,omitempty"`
+	NamespaceConditions          []v1.Condition `json:"namespaceConditions,omitempty"`
+	ProfileConditions            []v1.Condition `json:"profileConditions,omitempty"`
+	PGConfigConditions           []v1.Condition `json:"pgconfigConditions,omitempty"`
+	PGClusterConditions          []v1.Condition `json:"pgclusterConditions,omitempty"`
+	SecretsConditions            []v1.Condition `json:"secretConditions,omitempty"`
+	ObjectBucketConditions       []v1.Condition `json:"ObjectBucketConditions,omitempty"`
+	ObjectBackupConfigConditions []v1.Condition `json:"ObjectBackupConfigConditions,omitempty"`
+	NetworkPolicyConditions      []v1.Condition `json:"networkPolicyConditions,omitempty"`
+	LocalCAConditions            []v1.Condition `json:"localCAConditions,omitempty"`
+	CertificateConditions        []v1.Condition `json:"certificateConditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true
