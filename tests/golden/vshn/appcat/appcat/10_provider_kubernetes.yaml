@@ -82,6 +82,10 @@ rules:
       - namespaces
       - serviceaccounts
       - secrets
+      - pods
+      - pods/log
+      - pods/portforward
+      - pods/status
     verbs:
       - get
       - list

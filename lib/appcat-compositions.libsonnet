@@ -168,6 +168,46 @@ local kubeObject(apiVersion, kind) = {
   },
 };
 
+local namespacePermissions(namespacePrefix) = {
+  base: {
+    apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+    kind: 'Object',
+    spec: {
+      providerConfigRef: {
+        name: 'kubernetes',
+      },
+      forProvider: {
+        manifest: {
+          apiVersion: 'rbac.authorization.k8s.io/v1',
+          kind: 'RoleBinding',
+          metadata: {
+            name: 'appcat:services:read',
+          },
+          roleRef: {
+            apiGroup: 'rbac.authorization.k8s.io',
+            kind: 'ClusterRole',
+            name: 'appcat:services:read',
+          },
+          subjects: [
+            {
+              apiGroup: 'rbac.authorization.k8s.io',
+              kind: 'Group',
+              // This name will be patched on APPUiO, on kind the labels don't exist
+              // so we use some dummy value.
+              name: 'organization',
+            },
+          ],
+        },
+      },
+    },
+  },
+  patches: [
+    fromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'service-rolebinding'),
+    fromCompositeFieldPath(from='metadata.labels[appuio.io/organization]', to='spec.forProvider.manifest.subjects[0].name'),
+    fromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', namespacePrefix),
+  ],
+};
+
 {
   CommonResource(name):
     assert std.objectHas(commonResources, name) : "common resources set '%s' doesn't exist" % name;
@@ -190,6 +230,8 @@ local kubeObject(apiVersion, kind) = {
     compositeRef(xrd, version=version),
   KubeObject(apiVersion, kind):
     kubeObject(apiVersion, kind),
+  NamespacePermissions(namespacePrefix):
+    namespacePermissions(namespacePrefix),
   conn: {
     FromSecretKey(name, from=name):
       connFromSecretKey(name, from=name),

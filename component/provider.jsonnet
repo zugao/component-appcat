@@ -130,7 +130,7 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ '' ],
-          resources: [ 'namespaces', 'serviceaccounts', 'secrets' ],
+          resources: [ 'namespaces', 'serviceaccounts', 'secrets', 'pods', 'pods/log', 'pods/portforward', 'pods/status' ],
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
