@@ -73,6 +73,46 @@ Bucket endpoint, required for xObjectBucket and PostreSQL managed by VSHN backup
 * Exoscale
 ** 'https://sos-ch-gva-2.exo.io'
 
+=== `postgres.plan`
+type:: dict
+
+A dict of plans for PostgreSQL by VSHN.
+
+The key is the name of the plan.
+You can configure the CPU request through `size.cpu`, memory through `size.memory`, and disk size through `size.disk`.
+You can also set a node selector through `scheduling.nodeSelector`.
+
+There is also the option to specify a note in `note`, which will be added to the description of the field in the CRD.
+
+.Examples
+[source,yaml]
+----
+plans:
+  standard-2:
+    size:
+      cpu: "400m"
+      memory: "1728Mi"
+      disk: 20Gi
+  standard-4:
+    size:
+      cpu: "900m"
+      memory: "3776Mi"
+      disk: 40Gi
+  standard-8:
+    enabled: false
+  plus-4:
+    size: ${appcat:services:vshn:postgres:plans:standard-4:size}
+    scheduling:
+      nodeSelector:
+        appuio.io/node-class: "plus"
+    note: "Will be scheduled on APPUiO Cloud plus nodes"
+----
+
+=== `postgres.defaultPlan`
+type:: string
+default:: `standard-2`
+
+The default plan used for PostgreSQL by VSHN, if the service user doesn't specify a plan.
 
 == `redis`
 [horizontal]

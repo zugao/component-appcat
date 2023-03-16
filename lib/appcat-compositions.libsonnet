@@ -7,6 +7,7 @@ local fromCompositeFieldPath(from, to) = {
   toFieldPath: to,
 };
 
+
 local fromCompositeFieldPathWithTransform(from, to, prefix, suffix) = fromCompositeFieldPath(from, to) + {
   // this is an enhanced patch type with a transform function that adds the 3rd argument as a suffix
   transforms: [
@@ -42,6 +43,16 @@ local fromCompositeFieldPathWithTransformPrefix(from, to, prefix) = fromComposit
         fmt: prefix + '-%s',
         type: 'Format',
       },
+    },
+  ],
+};
+
+local fromCompositeFieldPathWithTransformMap(from, to, map) = fromCompositeFieldPath(from, to) + {
+  // this is an enhanced patch type with a transform function that maps values given the provided object
+  transforms: [
+    {
+      type: 'map',
+      map: map,
     },
   ],
 };
@@ -214,6 +225,8 @@ local namespacePermissions(namespacePrefix) = {
     commonResources[name],
   FromCompositeFieldPath(from, to):
     fromCompositeFieldPath(from, to),
+  FromCompositeFieldPathWithTransformMap(from, to, map):
+    fromCompositeFieldPathWithTransformMap(from, to, map),
   FromCompositeFieldPathWithTransformSuffix(from, to, suffix):
     fromCompositeFieldPathWithTransformSuffix(from, to, suffix),
   FromCompositeFieldPathWithTransformPrefix(from, to, prefix):
