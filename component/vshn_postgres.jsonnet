@@ -857,6 +857,7 @@ local composition(restore=false) =
       resources: [
                    namespaceObserve,
                    namespaceConditions,
+                   comp.NamespacePermissions('vshn-postgresql'),
                    localca,
                    certificate,
                  ] +

@@ -50,7 +50,23 @@ local finalizerRole = kube.ClusterRole('crossplane:appcat:finalizer') {
 
 };
 
+local readServices = kube.ClusterRole('appcat:services:read') + {
+  rules+: [
+    {
+      apiGroups: [ '' ],
+      resources: [ 'pods', 'pods/log', 'pods/status', 'events', 'services' ],
+      verbs: [ 'get', 'list', 'watch' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'pods/portforward' ],
+      verbs: [ 'get', 'list', 'create' ],
+    },
+  ],
+};
+
 {
   '10_clusterrole_view': xrdBrowseRole,
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
+  '10_clusterrole_services_read': readServices,
 }

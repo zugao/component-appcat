@@ -372,6 +372,7 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
           ],
         },
+        comp.NamespacePermissions('vshn-redis'),
         {
           base: selfSignedIssuer,
           patches: [
