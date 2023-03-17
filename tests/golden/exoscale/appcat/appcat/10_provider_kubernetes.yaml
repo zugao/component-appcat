@@ -86,6 +86,7 @@ rules:
       - pods/log
       - pods/portforward
       - pods/status
+      - services
     verbs:
       - get
       - list
