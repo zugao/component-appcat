@@ -163,6 +163,9 @@ spec:
                         type: string
                     type: object
                   type: array
+                instanceNamespace:
+                  description: InstanceNamespace contains the name of the namespace where the instance resides
+                  type: string
                 localCAConditions:
                   items:
                     properties:
