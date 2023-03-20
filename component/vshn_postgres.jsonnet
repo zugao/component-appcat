@@ -841,6 +841,59 @@ local maintenanceJob = {
   ] + convertToCron(),
 };
 
+local prometheusRule = {
+  base: comp.KubeObject('monitoring.coreos.com/v1', 'PrometheusRule') + {
+    spec+: {
+      forProvider+: {
+        manifest+: {
+          metadata: {
+            name: 'postgresql-storage-rules',
+          },
+          spec: {
+            groups: [
+              {
+                name: 'postgresql-storage',
+                rules: [
+                  {
+                    alert: 'PostgreSQLPersistentVolumeFillingUp',
+                    annotations: {
+                      description: 'The PersistentVolume claimed by {{ $labels.persistentvolumeclaim\n              }} in Namespace {{ $labels.namespace }} is only {{ $value |\n              humanizePercentage }} free.',
+                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
+                      summary: 'PersistentVolume is filling up.',
+                    },
+                    expr: '(\n            kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}\n              /\n            kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}\n          ) < 0.03\n          and\n          kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                    'for': '1m',
+                    labels: {
+                      severity: 'critical',
+                    },
+                  },
+                  {
+                    alert: 'PostgreSQLPersistentVolumeFillingUp',
+                    annotations: {
+                      description: 'Based on recent sampling, the PersistentVolume claimed by {{\n              $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace\n              }} is expected to fill up within four days. Currently {{ $value |\n              humanizePercentage }} is available.',
+                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
+                      summary: 'PersistentVolume is filling up.',
+                    },
+                    expr: '(\n            kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}\n              /\n            kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}\n          ) < 0.15\n          and\n          kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0\n          and\n          predict_linear(kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                    'for': '1h',
+                    labels: {
+                      severity: 'warning',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'prometheusrule'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+  ],
+};
+
 local composition(restore=false) =
 
   local metadata = if restore then common.VshnMetaVshn('PostgreSQLRestore', 'standalone', 'false') else common.VshnMetaVshn('PostgreSQL', 'standalone');
@@ -874,6 +927,7 @@ local composition(restore=false) =
                    maintenanceRole,
                    maintenanceRoleBinding,
                    maintenanceJob,
+                   prometheusRule,
                  ] + if pgParams.enableNetworkPolicy == true then [
         networkPolicy,
       ] else [],
