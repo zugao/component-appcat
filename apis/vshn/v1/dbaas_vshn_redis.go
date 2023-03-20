@@ -106,4 +106,6 @@ type VSHNRedisStatus struct {
 	CaCertificateConditions     []v1.Condition `json:"caCertificateConditions,omitempty"`
 	ServerCertificateConditions []v1.Condition `json:"serverCertificateConditions,omitempty"`
 	ClientCertificateConditions []v1.Condition `json:"clientCertificateConditions,omitempty"`
+	// InstanceNamespace contains the name of the namespace where the instance resides
+	InstanceNamespace string `json:"instanceNamespace,omitempty"`
 }
