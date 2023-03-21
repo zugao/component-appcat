@@ -168,6 +168,11 @@ local controllerConfigRef(config) =
           resources: [ 'vshnpostgresqls' ],
           verbs: [ 'get' ],
         },
+        {
+          apiGroups: [ 'monitoring.coreos.com' ],
+          resources: [ 'prometheusrules' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
