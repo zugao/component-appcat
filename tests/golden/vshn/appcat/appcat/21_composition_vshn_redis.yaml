@@ -657,17 +657,87 @@ spec:
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.values.networkPolicy.ingressNSMatchLabels[kubernetes.io/metadata.name]
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.resources.requests.memory
+          transforms:
+            - map:
+                plus-1: 1Gi
+                plus-2: 2Gi
+                plus-4: 4Gi
+                plus-512m: 512Mi
+                standard-1: 1Gi
+                standard-2: 2Gi
+                standard-4: 4Gi
+                standard-512m: 512Mi
+              type: map
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.resources.limits.memory
+          transforms:
+            - map:
+                plus-1: 1Gi
+                plus-2: 2Gi
+                plus-4: 4Gi
+                plus-512m: 512Mi
+                standard-1: 1Gi
+                standard-2: 2Gi
+                standard-4: 4Gi
+                standard-512m: 512Mi
+              type: map
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.memoryRequests
           toFieldPath: spec.forProvider.values.master.resources.requests.memory
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.memoryLimits
           toFieldPath: spec.forProvider.values.master.resources.limits.memory
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.resources.requests.cpu
+          transforms:
+            - map:
+                plus-1: 250m
+                plus-2: 500m
+                plus-4: '1'
+                plus-512m: 125m
+                standard-1: 250m
+                standard-2: 500m
+                standard-4: '1'
+                standard-512m: 125m
+              type: map
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.resources.limits.cpu
+          transforms:
+            - map:
+                plus-1: 250m
+                plus-2: 500m
+                plus-4: '1'
+                plus-512m: 125m
+                standard-1: 250m
+                standard-2: 500m
+                standard-4: '1'
+                standard-512m: 125m
+              type: map
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.cpuRequests
           toFieldPath: spec.forProvider.values.master.resources.requests.cpu
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.cpuLimits
           toFieldPath: spec.forProvider.values.master.resources.limits.cpu
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.persistence.size
+          transforms:
+            - map:
+                plus-1: 16Gi
+                plus-2: 16Gi
+                plus-4: 16Gi
+                plus-512m: 16Gi
+                standard-1: 16Gi
+                standard-2: 16Gi
+                standard-4: 16Gi
+                standard-512m: 16Gi
+              type: map
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.disk
           toFieldPath: spec.forProvider.values.master.persistence.size
@@ -677,6 +747,24 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.tls.authClients
           toFieldPath: spec.forProvider.values.tls.authClients
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.values.master.nodeSelector
+          transforms:
+            - map:
+                plus-1:
+                  appuio.io/node-class: plus
+                plus-2:
+                  appuio.io/node-class: plus
+                plus-4:
+                  appuio.io/node-class: plus
+                plus-512m:
+                  appuio.io/node-class: plus
+                standard-1: {}
+                standard-2: {}
+                standard-4: {}
+                standard-512m: {}
+              type: map
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.scheduling.nodeSelector
           toFieldPath: spec.forProvider.values.master.nodeSelector

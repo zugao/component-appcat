@@ -138,6 +138,40 @@ parameters:
                 nodeSelector:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
+        redis:
+          plans:
+            standard-8:
+              enabled: false
+            plus-512m:
+              size: ${appcat:services:vshn:redis:plans:standard-512m:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-1:
+              size: ${appcat:services:vshn:redis:plans:standard-1:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-4:
+              size: ${appcat:services:vshn:redis:plans:standard-4:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-2:
+              size: ${appcat:services:vshn:redis:plans:standard-2:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-4:
+              size: ${appcat:services:vshn:redis:plans:standard-4:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
       generic:
           objectstorage:
             enabled: true

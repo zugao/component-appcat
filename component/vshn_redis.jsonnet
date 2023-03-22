@@ -36,12 +36,16 @@ local connectionSecretKeys = [
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 local securityContext = if isOpenshift then false else true;
 
+
+local redisPlans = common.FilterDisabledParams(redisParams.plans);
+
 local xrd = xrds.XRDFromCRD(
   'xvshnredis.vshn.appcat.vshn.io',
   xrds.LoadCRD('vshn.appcat.vshn.io_vshnredis.yaml'),
   defaultComposition='vshnredis.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
-);
+) + xrds.WithPlanDefaults(redisPlans, redisParams.defaultPlan);
+
 local composition =
   local namespace = comp.KubeObject('v1', 'Namespace') +
                     {
@@ -449,15 +453,27 @@ local composition =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.values.networkPolicy.ingressNSMatchLabels[kubernetes.io/metadata.name]'),
 
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.size.memoryRequests', 'spec.forProvider.values.master.resources.requests.memory'),
             comp.FromCompositeFieldPath('spec.parameters.size.memoryLimits', 'spec.forProvider.values.master.resources.limits.memory'),
+
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.size.cpuRequests', 'spec.forProvider.values.master.resources.requests.cpu'),
             comp.FromCompositeFieldPath('spec.parameters.size.cpuLimits', 'spec.forProvider.values.master.resources.limits.cpu'),
+
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.persistence.size', std.mapWithKey(function(key, x) x.size.disk, redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.values.master.persistence.size'),
+
             comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
             comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
 
-
+            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
+                                                        'spec.forProvider.values.master.nodeSelector',
+                                                        std.mapWithKey(function(key, x)
+                                                                         std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
+                                                                       redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
             comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.values.image.tag'),
             comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),

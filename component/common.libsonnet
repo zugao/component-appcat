@@ -86,6 +86,18 @@ local mergeArgs(args, additional) =
   [ '%s=%s' % [ k, final[k] ] for k in std.objectFields(final) ];
 
 
+local filterDisabledParams(params) = std.foldl(
+  function(ps, key)
+    local p = params[key];
+    local enabled = p != null && p != {} && std.get(p, 'enabled', true);
+    ps {
+      [if enabled then key]: p,
+    },
+  std.objectFields(params),
+  {}
+);
+
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -96,4 +108,6 @@ local mergeArgs(args, additional) =
     mergeArgs(args, additional),
   VshnMetaVshn(dbname, flavor, offered='true'):
     vshnMetaVshn(dbname, flavor, offered),
+  FilterDisabledParams(params):
+    filterDisabledParams(params),
 }

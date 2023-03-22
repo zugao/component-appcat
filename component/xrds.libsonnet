@@ -88,6 +88,58 @@ local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
     },
   };
 
+local withPlanDefaults(plans, defaultPlan) = {
+  spec+: {
+    versions: [
+      v {
+        schema+: {
+          openAPIV3Schema+: {
+            properties+: {
+              spec+: {
+                properties+: {
+                  parameters+: {
+                    properties+: {
+                      size+: {
+                        properties+: {
+                          plan+: {
+                            default: defaultPlan,
+                            enum: std.objectFields(plans),
+
+                            description: |||
+                              %s
+
+                              The following plans are available:
+
+                                %s
+                            ||| % [
+                              super.description,
+                              std.join(
+                                '\n\n  ',
+                                [
+                                  '%s - CPU: %s; Memory: %s; Disk: %s' % [ p, plans[p].size.cpu, plans[p].size.memory, plans[p].size.disk ]
+                                  + if std.objectHas(plans[p], 'note') && plans[p].note != '' then ' - %s' % plans[p].note else ''
+
+                                  for p in std.objectFields(plans)
+                                ]
+                              ),
+                            ],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }
+      for v in super.versions
+    ],
+  },
+};
+
+
 {
   CompositeClusterRoles(composite):
     compositeClusterRoles(composite),
@@ -95,4 +147,6 @@ local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
     loadCRD(crd),
   XRDFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]):
     xrdFromCRD(name, crd, defaultComposition=defaultComposition, connectionSecretKeys=connectionSecretKeys),
+  WithPlanDefaults(plans, defaultPlan):
+    withPlanDefaults(plans, defaultPlan),
 }
