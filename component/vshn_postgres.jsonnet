@@ -848,7 +848,7 @@ local prometheusRule = {
       forProvider+: {
         manifest+: {
           metadata: {
-            name: 'postgresql-storage-rules',
+            name: 'postgresql-rules',
           },
           spec: {
             groups: [
@@ -879,6 +879,24 @@ local prometheusRule = {
                     'for': '1h',
                     labels: {
                       severity: 'warning',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'postgresql-memory',
+                rules: [
+                  {
+                    alert: 'PostgreSQLMemoryCritical',
+                    annotations: {
+                      description: 'The memory claimed by {{ $labels.pod }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
+                      // runbook_url: 'TBD',
+                      summary: 'Memory usage critical',
+                    },
+                    expr: '(container_memory_working_set_bytes{container="patroni"}\n  / on(container,pod)\n  kube_pod_container_resource_limits{resource="memory"} * 100)\n  > 85',
+                    'for': '120m',
+                    labels: {
+                      severity: 'critical',
                     },
                   },
                 ],

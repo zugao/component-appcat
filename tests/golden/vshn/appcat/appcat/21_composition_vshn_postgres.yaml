@@ -996,7 +996,7 @@ spec:
               apiVersion: monitoring.coreos.com/v1
               kind: PrometheusRule
               metadata:
-                name: postgresql-storage-rules
+                name: postgresql-rules
               spec:
                 groups:
                   - name: postgresql-storage
@@ -1050,6 +1050,22 @@ spec:
                         for: 1h
                         labels:
                           severity: warning
+                  - name: postgresql-memory
+                    rules:
+                      - alert: PostgreSQLMemoryCritical
+                        annotations:
+                          description: |-
+                            The memory claimed by {{ $labels.pod }} has been over 85% for 2 hours.
+                              Please reducde the load of this instance, or increase the memory.
+                          summary: Memory usage critical
+                        expr: |-
+                          (container_memory_working_set_bytes{container="patroni"}
+                            / on(container,pod)
+                            kube_pod_container_resource_limits{resource="memory"} * 100)
+                            > 85
+                        for: 120m
+                        labels:
+                          severity: critical
           providerConfigRef:
             name: kubernetes
       patches:
