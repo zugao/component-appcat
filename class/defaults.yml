@@ -24,7 +24,7 @@ parameters:
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
-        tag: v0.2.1
+        tag: v0.2.2
 
     apiserver:
       enabled: false
