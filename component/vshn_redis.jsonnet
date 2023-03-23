@@ -457,6 +457,8 @@ local composition =
             comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
             comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
 
+
+            comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
             comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.values.image.tag'),
             comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
           ],

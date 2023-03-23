@@ -40,6 +40,9 @@ type VSHNRedisParameters struct {
 	// Size contains settings to control the sizing of a service.
 	Size VSHNRedisSizeSpec `json:"size,omitempty"`
 
+	// Scheduling contains settings to control the scheduling of an instance.
+	Scheduling VSHNDBaaSSchedulingSpec `json:"scheduling,omitempty"`
+
 	// TLS contains settings to control tls traffic of a service.
 	TLS VSHNRedisTLSSpec `json:"tls,omitempty"`
 }

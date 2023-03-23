@@ -678,6 +678,9 @@ spec:
         - fromFieldPath: spec.parameters.tls.authClients
           toFieldPath: spec.forProvider.values.tls.authClients
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.scheduling.nodeSelector
+          toFieldPath: spec.forProvider.values.master.nodeSelector
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.version
           toFieldPath: spec.forProvider.values.image.tag
           type: FromCompositeFieldPath
