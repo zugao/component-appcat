@@ -62,30 +62,24 @@ type VSHNRedisServiceSpec struct {
 
 // VSHNRedisSizeSpec contains settings to control the sizing of a service.
 type VSHNRedisSizeSpec struct {
-	// +kubebuilder:default="500m"
 
 	// CPURequests defines the requests amount of Kubernetes CPUs for an instance.
 	CPURequests string `json:"cpuRequests,omitempty"`
 
-	// +kubebuilder:default="500m"
-
 	// CPULimits defines the limits amount of Kubernetes CPUs for an instance.
 	CPULimits string `json:"cpuLimits,omitempty"`
-
-	// +kubebuilder:default="2048Mi"
 
 	// MemoryRequests defines the requests amount of memory in units of bytes for an instance.
 	MemoryRequests string `json:"memoryRequests,omitempty"`
 
-	// +kubebuilder:default="2048Mi"
-
 	// MemoryLimits defines the limits amount of memory in units of bytes for an instance.
 	MemoryLimits string `json:"memoryLimits,omitempty"`
 
-	// +kubebuilder:default="5Gi"
-
 	// Disk defines the amount of disk space for an instance.
 	Disk string `json:"disk,omitempty"`
+
+	// Plan is the name of the resource plan that defines the compute resources.
+	Plan string `json:"plan,omitempty"`
 }
 
 // VSHNRedisTLSSpec contains settings to control tls traffic of a service.

@@ -22,16 +22,7 @@ local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
 // Filter out disabled plans
-local pgPlans = std.foldl(
-  function(plans, key)
-    local p = pgParams.plans[key];
-    local enabled = p != null && p != {} && std.get(p, 'enabled', true);
-    plans {
-      [if enabled then key]: p,
-    },
-  std.objectFields(pgParams.plans),
-  {}
-);
+local pgPlans = common.FilterDisabledParams(pgParams.plans);
 
 local connectionSecretKeys = [
   'ca.crt',
@@ -50,56 +41,7 @@ local xrd = xrds.XRDFromCRD(
   xrds.LoadCRD('vshn.appcat.vshn.io_vshnpostgresqls.yaml'),
   defaultComposition='vshnpostgres.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
-) {
-  spec+: {
-    versions: [
-      v {
-        schema+: {
-          openAPIV3Schema+: {
-            properties+: {
-              spec+: {
-                properties+: {
-                  parameters+: {
-                    properties+: {
-                      size+: {
-                        properties+: {
-                          plan+: {
-                            default: pgParams.defaultPlan,
-                            enum: std.objectFields(pgPlans),
-
-                            description: |||
-                              %s
-
-                              The following plans are available:
-
-                                %s
-                            ||| % [
-                              super.description,
-                              std.join(
-                                '\n\n  ',
-                                [
-                                  '%s - CPU: %s; Memory: %s; Disk: %s' % [ p, pgPlans[p].size.cpu, pgPlans[p].size.memory, pgPlans[p].size.disk ]
-                                  + if std.objectHas(pgPlans[p], 'note') && pgPlans[p].note != '' then ' - %s' % pgPlans[p].note else ''
-
-                                  for p in std.objectFields(pgPlans)
-                                ]
-                              ),
-                            ],
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      }
-      for v in super.versions
-    ],
-  },
-};
+) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
 
 
 local controlNamespace = kube.Namespace(pgParams.controlNamespace);

@@ -62,24 +62,22 @@ spec:
                       description: Size contains settings to control the sizing of a service.
                       properties:
                         cpuLimits:
-                          default: 500m
                           description: CPULimits defines the limits amount of Kubernetes CPUs for an instance.
                           type: string
                         cpuRequests:
-                          default: 500m
                           description: CPURequests defines the requests amount of Kubernetes CPUs for an instance.
                           type: string
                         disk:
-                          default: 5Gi
                           description: Disk defines the amount of disk space for an instance.
                           type: string
                         memoryLimits:
-                          default: 2048Mi
                           description: MemoryLimits defines the limits amount of memory in units of bytes for an instance.
                           type: string
                         memoryRequests:
-                          default: 2048Mi
                           description: MemoryRequests defines the requests amount of memory in units of bytes for an instance.
+                          type: string
+                        plan:
+                          description: Plan is the name of the resource plan that defines the compute resources.
                           type: string
                       type: object
                       default: {}
