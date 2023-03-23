@@ -388,6 +388,26 @@ spec:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.metadata.name
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.manifest.spec.cpu
+          transforms:
+            - map:
+                plus-2: 400m
+                plus-4: 900m
+                standard-2: 400m
+                standard-4: 900m
+              type: map
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.manifest.spec.memory
+          transforms:
+            - map:
+                plus-2: 1728Mi
+                plus-4: 3776Mi
+                standard-2: 1728Mi
+                standard-4: 3776Mi
+              type: map
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.memory
           toFieldPath: spec.forProvider.manifest.spec.memory
           type: FromCompositeFieldPath
@@ -508,8 +528,30 @@ spec:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.metadata.name
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.manifest.spec.pods.persistentVolume.size
+          transforms:
+            - map:
+                plus-2: 20Gi
+                plus-4: 40Gi
+                standard-2: 20Gi
+                standard-4: 40Gi
+              type: map
+          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.disk
           toFieldPath: spec.forProvider.manifest.spec.pods.persistentVolume.size
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.size.plan
+          toFieldPath: spec.forProvider.manifest.spec.pods.scheduling.nodeSelector
+          transforms:
+            - map:
+                plus-2:
+                  appuio.io/node-class: plus
+                plus-4:
+                  appuio.io/node-class: plus
+                standard-2: {}
+                standard-4: {}
+              type: map
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.scheduling.nodeSelector
           toFieldPath: spec.forProvider.manifest.spec.pods.scheduling.nodeSelector

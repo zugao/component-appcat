@@ -157,19 +157,36 @@ spec:
                         a service.
                       properties:
                         cpu:
-                          default: 600m
                           description: CPU defines the amount of Kubernetes CPUs for
                             an instance.
                           type: string
                         disk:
-                          default: 5Gi
                           description: Disk defines the amount of disk space for an
                             instance.
                           type: string
                         memory:
-                          default: 3500Mi
                           description: Memory defines the amount of memory in units
                             of bytes for an instance.
+                          type: string
+                        plan:
+                          default: standard-2
+                          description: |
+                            Plan is the name of the resource plan that defines the compute resources.
+
+                            The following plans are available:
+
+                              plus-2 - CPU: 400m; Memory: 1728Mi; Disk: 20Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              plus-4 - CPU: 900m; Memory: 3776Mi; Disk: 40Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              standard-2 - CPU: 400m; Memory: 1728Mi; Disk: 20Gi
+
+                              standard-4 - CPU: 900m; Memory: 3776Mi; Disk: 40Gi
+                          enum:
+                            - plus-2
+                            - plus-4
+                            - standard-2
+                            - standard-4
                           type: string
                         requests:
                           description: Requests defines CPU and memory requests for

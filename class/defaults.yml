@@ -105,6 +105,27 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           # Used for deploying jobs during restores
           controlNamespace: 'syn-appcat-control'
+
+          defaultPlan: standard-2
+          plans:
+            standard-2:
+              size:
+                enabled: true
+                cpu: "400m"
+                memory: "1728Mi"
+                disk: 20Gi
+            standard-4:
+              size:
+                enabled: true
+                cpu: "900m"
+                memory: "3776Mi"
+                disk: 40Gi
+            standard-8:
+              size:
+                enabled: true
+                cpu: "1900m"
+                memory: "7872Mi"
+                disk: 80Gi
         redis:
           enabled: true
           enableNetworkPolicy: true

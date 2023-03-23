@@ -21,6 +21,18 @@ local certificateSecretName = 'tls-certificate';
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
+// Filter out disabled plans
+local pgPlans = std.foldl(
+  function(plans, key)
+    local p = pgParams.plans[key];
+    local enabled = p != null && p != {} && std.get(p, 'enabled', true);
+    plans {
+      [if enabled then key]: p,
+    },
+  std.objectFields(pgParams.plans),
+  {}
+);
+
 local connectionSecretKeys = [
   'ca.crt',
   'tls.crt',
@@ -38,7 +50,56 @@ local xrd = xrds.XRDFromCRD(
   xrds.LoadCRD('vshn.appcat.vshn.io_vshnpostgresqls.yaml'),
   defaultComposition='vshnpostgres.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
-);
+) {
+  spec+: {
+    versions: [
+      v {
+        schema+: {
+          openAPIV3Schema+: {
+            properties+: {
+              spec+: {
+                properties+: {
+                  parameters+: {
+                    properties+: {
+                      size+: {
+                        properties+: {
+                          plan+: {
+                            default: pgParams.defaultPlan,
+                            enum: std.objectFields(pgPlans),
+
+                            description: |||
+                              %s
+
+                              The following plans are available:
+
+                                %s
+                            ||| % [
+                              super.description,
+                              std.join(
+                                '\n\n  ',
+                                [
+                                  '%s - CPU: %s; Memory: %s; Disk: %s' % [ p, pgPlans[p].size.cpu, pgPlans[p].size.memory, pgPlans[p].size.disk ]
+                                  + if std.objectHas(pgPlans[p], 'note') && pgPlans[p].note != '' then ' - %s' % pgPlans[p].note else ''
+
+                                  for p in std.objectFields(pgPlans)
+                                ]
+                              ),
+                            ],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }
+      for v in super.versions
+    ],
+  },
+};
 
 
 local controlNamespace = kube.Namespace(pgParams.controlNamespace);
@@ -268,6 +329,8 @@ local sgInstanceProfile = {
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
 
+    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.manifest.spec.cpu', std.mapWithKey(function(key, x) x.size.cpu, pgPlans)),
+    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.manifest.spec.memory', std.mapWithKey(function(key, x) x.size.memory, pgPlans)),
     comp.FromCompositeFieldPath('spec.parameters.size.memory', 'spec.forProvider.manifest.spec.memory'),
     comp.FromCompositeFieldPath('spec.parameters.size.cpu', 'spec.forProvider.manifest.spec.cpu'),
     comp.FromCompositeFieldPath('spec.parameters.size.requests.memory', 'spec.forProvider.manifest.spec.requests.memory'),
@@ -356,8 +419,19 @@ local sgCluster = {
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
 
+    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
+                                                'spec.forProvider.manifest.spec.pods.persistentVolume.size',
+                                                std.mapWithKey(function(key, x) x.size.disk, pgPlans)),
     comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.manifest.spec.pods.persistentVolume.size'),
+
+    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
+                                                'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector',
+                                                std.mapWithKey(function(key, x)
+                                                                 std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
+                                                               pgPlans)),
     comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector'),
+
+
     comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),

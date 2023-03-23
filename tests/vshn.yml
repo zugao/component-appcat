@@ -123,6 +123,21 @@ parameters:
         postgres:
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
+          plans:
+            standard-8:
+              enabled: false
+            plus-2:
+              size: ${appcat:services:vshn:postgres:plans:standard-2:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-4:
+              size: ${appcat:services:vshn:postgres:plans:standard-4:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
       generic:
           objectstorage:
             enabled: true
