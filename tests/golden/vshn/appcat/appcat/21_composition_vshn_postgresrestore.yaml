@@ -1137,6 +1137,53 @@ spec:
           forProvider:
             manifest:
               apiVersion: monitoring.coreos.com/v1
+              kind: PodMonitor
+              metadata:
+                name: postgresql-podmonitor
+              spec:
+                podMetricsEndpoints:
+                  - port: pgexporter
+                selector:
+                  matchLabels:
+                    app: StackGresCluster
+          providerConfigRef:
+            name: kubernetes
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-podmonitor'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: monitoring.coreos.com/v1
               kind: PrometheusRule
               metadata:
                 name: postgresql-rules
@@ -1206,6 +1253,20 @@ spec:
                             / on(container,pod)
                             kube_pod_container_resource_limits{resource="memory"} * 100)
                             > 85
+                        for: 120m
+                        labels:
+                          severity: critical
+                  - name: postgresql-connections
+                    rules:
+                      - alert: PostgreSQLConnectionsCritical
+                        annotations:
+                          description: |-
+                            The connections to {{ $labels.pod }} have been over 90% of the configured connections for 2 hours.
+                              Please reduce the load of this instance.
+                          summary: Connection usage critical
+                        expr: |-
+                          sum(pg_stat_activity_count) by (pod)
+                            > 90/100 * sum(pg_settings_max_connections) by (pod)
                         for: 120m
                         labels:
                           severity: critical

@@ -187,6 +187,7 @@ rules:
       - monitoring.coreos.com
     resources:
       - prometheusrules
+      - podmonitors
     verbs:
       - get
       - list

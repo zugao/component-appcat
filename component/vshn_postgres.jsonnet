@@ -917,6 +917,24 @@ local prometheusRule = {
                   },
                 ],
               },
+              {
+                name: 'postgresql-connections',
+                rules: [
+                  {
+                    alert: 'PostgreSQLConnectionsCritical',
+                    annotations: {
+                      description: 'The connections to {{ $labels.pod }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
+                      // runbook_url: 'TBD',
+                      summary: 'Connection usage critical',
+                    },
+                    expr: 'sum(pg_stat_activity_count) by (pod)\n  > 90/100 * sum(pg_settings_max_connections) by (pod)',
+                    'for': '120m',
+                    labels: {
+                      severity: 'critical',
+                    },
+                  },
+                ],
+              },
             ],
           },
         },
@@ -926,6 +944,38 @@ local prometheusRule = {
   patches: [
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'prometheusrule'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+  ],
+};
+
+local podMonitor = {
+  base: comp.KubeObject('monitoring.coreos.com/v1', 'PodMonitor') + {
+    spec+: {
+      forProvider+: {
+        manifest+: {
+          metadata: {
+            name: 'postgresql-podmonitor',
+          },
+          spec: {
+            podMetricsEndpoints: [
+              {
+                port: 'pgexporter',
+              },
+            ],
+            selector: {
+              matchLabels: {
+                app: 'StackGresCluster',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'podmonitor'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]', 'vshn-postgresql'),
   ],
 };
 
@@ -962,6 +1012,7 @@ local composition(restore=false) =
                    maintenanceRole,
                    maintenanceRoleBinding,
                    maintenanceJob,
+                   podMonitor,
                    prometheusRule,
                  ] + if pgParams.enableNetworkPolicy == true then [
         networkPolicy,
