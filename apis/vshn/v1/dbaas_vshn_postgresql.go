@@ -1,6 +1,7 @@
 package v1
 
 import (
+	alertmanagerv1alpha1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1alpha1"
 	v1 "github.com/vshn/component-appcat/apis/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -59,6 +60,9 @@ type VSHNPostgreSQLParameters struct {
 
 	// Restore contains settings to control the restore of an instance.
 	Restore VSHNPostgreSQLRestore `json:"restore,omitempty"`
+
+	// Monitoring contains settings to control monitoring.
+	Monitoring VSHNPostgreSQLMonitoring `json:"monitoring,omitempty"`
 }
 
 // VSHNPostgreSQLServiceSpec contains PostgreSQL DBaaS specific properties
@@ -159,6 +163,21 @@ type VSHNPostgreSQLRestore struct {
 	// This is optional and if no PIT recovery is required, it can be left empty.
 	// +kubebuilder:validation:Pattern=`^(?:[1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:Z|[+-][01]\d:[0-5]\d)$`
 	RecoveryTimeStamp string `json:"recoveryTimeStamp,omitempty"`
+}
+
+// VSHNPostgreSQLMonitoring contains settings to configure monitoring aspects of PostgreSQL
+type VSHNPostgreSQLMonitoring struct {
+	// AlertmanagerConfigRef contains the name of the AlertmanagerConfig that should be copied over to the
+	// namespace of the PostgreSQL instance.
+	AlertmanagerConfigRef string `json:"alertmanagerConfigRef,omitempty"`
+
+	// AlertmanagerConfigSecretRef contains the name of the secret that is used
+	// in the referenced AlertmanagerConfig
+	AlertmanagerConfigSecretRef string `json:"alertmanagerConfigSecretRef,omitempty"`
+
+	// AlertmanagerConfigSpecTemplate takes an AlertmanagerConfigSpec object.
+	// This takes precedence over the AlertmanagerConfigRef.
+	AlertmanagerConfigSpecTemplate *alertmanagerv1alpha1.AlertmanagerConfigSpec `json:"alertmanagerConfigTemplate,omitempty"`
 }
 
 // VSHNPostgreSQLStatus reflects the observed state of a VSHNPostgreSQL.
