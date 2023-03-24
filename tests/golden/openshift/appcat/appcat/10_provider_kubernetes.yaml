@@ -190,6 +190,7 @@ rules:
     resources:
       - prometheusrules
       - podmonitors
+      - alertmanagerconfigs
     verbs:
       - get
       - list
