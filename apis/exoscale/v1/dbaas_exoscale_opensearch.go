@@ -20,6 +20,17 @@ import (
 // +kubebuilder:printcolumn:name="Plan",type="string",JSONPath=".spec.parameters.size.plan"
 // +kubebuilder:printcolumn:name="Zone",type="string",JSONPath=".spec.parameters.service.zone"
 
+// ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
+type ExoscaleOpenSearch struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	//Spec defines the desired state of an ExoscaleOpenSearch
+	Spec ExoscaleOpenSearchSpec `json:"spec,omitempty"`
+	// Status reflects the observed state of a ExoscaleOpenSearch
+	Status ExoscaleOpenSearchStatus `json:"status,omitempty"`
+}
+
 type ExoscaleOpenSearchServiceSpec struct {
 	ExoscaleDBaaSServiceSpec `json:",inline"`
 
@@ -57,15 +68,4 @@ type ExoscaleOpenSearchSpec struct {
 type ExoscaleOpenSearchStatus struct {
 	// OpenSearchConditions contains the status conditions of the backing object.
 	OpenSearchConditions []appcatv1.Condition `json:"opensearchConditions,omitempty"`
-}
-
-// ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
-type ExoscaleOpenSearch struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	//Spec defines the desired state of an ExoscaleOpenSearch
-	Spec ExoscaleOpenSearchSpec `json:"spec,omitempty"`
-	// Status reflects the observed state of a ExoscaleOpenSearch
-	Status ExoscaleOpenSearchStatus `json:"status,omitempty"`
 }
