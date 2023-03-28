@@ -15,6 +15,13 @@ local namespace = loadManifest('namespace.yaml') {
   },
 };
 
+local envs = loadManifest('apiserver-envs.yaml') {
+  data+: apiserverParams.env,
+  metadata+: {
+    namespace: apiserverParams.namespace,
+  },
+};
+
 local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distribution + ':aggregate-appcat-to-basic-user') {
   metadata+: {
     labels+: {
@@ -153,6 +160,7 @@ local apiService = loadManifest('apiservice.yaml') {
   'apiserver/10_cluster_role_basic_users': clusterRoleUsers,
   'apiserver/10_cluster_role_binding': clusterRoleBinding,
   'apiserver/20_service_account': serviceAccount,
+  'apiserver/10_apiserver_envs': envs,
   [if certSecret != null then 'apiserver/20_certs']: certSecret,
   'apiserver/30_deployment': apiserver,
   'apiserver/30_service': service,

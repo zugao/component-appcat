@@ -13,6 +13,10 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+    apiserver:
+      env:
+        APPCAT_HANDLER_ENABLED: "true"
+        VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "true"
     providers:
       cloudscale:
         enabled: true

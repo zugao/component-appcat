@@ -24,11 +24,14 @@ parameters:
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
-        tag: v0.2.2
+        tag: v0.2.3
 
     apiserver:
       enabled: false
       namespace: appcat-apiserver
+      env:
+        APPCAT_HANDLER_ENABLED: "true"
+        VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "false"
       extraArgs: []
       extraEnv: {}
       apiservice:
