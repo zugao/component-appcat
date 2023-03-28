@@ -30,6 +30,9 @@ type VSHNRedis struct {
 type VSHNRedisSpec struct {
 	// Parameters are the configurable fields of a VSHNRedis.
 	Parameters VSHNRedisParameters `json:"parameters,omitempty"`
+
+	// WriteConnectionSecretToRef references a secret to which the connection details will be written.
+	WriteConnectionSecretToRef v1.LocalObjectReference `json:"writeConnectionSecretToRef,omitempty"`
 }
 
 // VSHNRedisParameters are the configurable fields of a VSHNRedis.

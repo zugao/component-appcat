@@ -78,6 +78,11 @@ local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
               metadata:: {},
               kind:: {},
               apiVersion:: {},
+              spec+: {
+                properties: {
+                  parameters: v.schema.openAPIV3Schema.properties.spec.properties.parameters,
+                },
+              },
             },
           },
         },

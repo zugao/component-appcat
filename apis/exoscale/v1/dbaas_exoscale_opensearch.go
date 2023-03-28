@@ -5,6 +5,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 
 	appcatv1 "github.com/vshn/component-appcat/apis/v1"
+	v1 "github.com/vshn/component-appcat/apis/v1"
 )
 
 // Workaround to make nested defaulting work.
@@ -64,6 +65,9 @@ type ExoscaleOpenSearchParameters struct {
 type ExoscaleOpenSearchSpec struct {
 	// Parameters are the configurable fields of a ExoscaleOpenSearch.
 	Parameters ExoscaleOpenSearchParameters `json:"parameters,omitempty"`
+
+	// WriteConnectionSecretToRef references a secret to which the connection details will be written.
+	WriteConnectionSecretToRef v1.LocalObjectReference `json:"writeConnectionSecretToRef,omitempty"`
 }
 type ExoscaleOpenSearchStatus struct {
 	// OpenSearchConditions contains the status conditions of the backing object.
