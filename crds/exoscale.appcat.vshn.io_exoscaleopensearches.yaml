@@ -15,7 +15,14 @@ spec:
     singular: exoscaleopensearch
   scope: Namespaced
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .spec.parameters.size.plan
+          name: Plan
+          type: string
+        - jsonPath: .spec.parameters.service.zone
+          name: Zone
+          type: string
+      name: v1
       schema:
         openAPIV3Schema:
           description: ExoscaleOpenSearch is the api for creating OpenSearch on Exoscale
@@ -161,3 +168,4 @@ spec:
           type: object
       served: true
       storage: true
+      subresources: {}

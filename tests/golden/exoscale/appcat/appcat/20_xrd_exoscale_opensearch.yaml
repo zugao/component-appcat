@@ -25,7 +25,14 @@ spec:
     kind: XExoscaleOpenSearch
     plural: xexoscaleopensearches
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .spec.parameters.size.plan
+          name: Plan
+          type: string
+        - jsonPath: .spec.parameters.service.zone
+          name: Zone
+          type: string
+      name: v1
       referenceable: true
       schema:
         openAPIV3Schema:
