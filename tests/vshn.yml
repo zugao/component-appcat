@@ -166,12 +166,6 @@ parameters:
                 nodeSelector:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
-            plus-4:
-              size: ${appcat:services:vshn:redis:plans:standard-4:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
       generic:
           objectstorage:
             enabled: true

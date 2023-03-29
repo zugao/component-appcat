@@ -28,7 +28,10 @@ spec:
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
           env: []
-          image: ghcr.io/vshn/appcat-apiserver:v0.2.2
+          envFrom:
+            - configMapRef:
+                name: apiserver-envs
+          image: ghcr.io/vshn/appcat-apiserver:v0.2.3
           name: apiserver
           resources:
             limits:
