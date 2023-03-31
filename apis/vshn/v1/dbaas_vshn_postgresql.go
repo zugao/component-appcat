@@ -63,6 +63,9 @@ type VSHNPostgreSQLParameters struct {
 
 	// Monitoring contains settings to control monitoring.
 	Monitoring VSHNPostgreSQLMonitoring `json:"monitoring,omitempty"`
+
+	// Encryption contains settings to control the storage encryption of an instance.
+	Encryption VSHNPostgreSQLEncryption `json:"encryption,omitempty"`
 }
 
 // VSHNPostgreSQLServiceSpec contains PostgreSQL DBaaS specific properties
@@ -178,6 +181,13 @@ type VSHNPostgreSQLMonitoring struct {
 	// AlertmanagerConfigSpecTemplate takes an AlertmanagerConfigSpec object.
 	// This takes precedence over the AlertmanagerConfigRef.
 	AlertmanagerConfigSpecTemplate *alertmanagerv1alpha1.AlertmanagerConfigSpec `json:"alertmanagerConfigTemplate,omitempty"`
+}
+
+// VSHNPostgreSQLEncryption contains storage encryption specific parameters
+type VSHNPostgreSQLEncryption struct {
+
+	// Enabled specifies if the instance should use encrypted storage for the instance.
+	Enabled bool `json:"enabled,omitempty"`
 }
 
 // VSHNPostgreSQLStatus reflects the observed state of a VSHNPostgreSQL.

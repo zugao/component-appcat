@@ -57,6 +57,18 @@ local fromCompositeFieldPathWithTransformMap(from, to, map) = fromCompositeField
   ],
 };
 
+local fromCompositeFieldPathWithTransformMatch(from, to, patterns) = fromCompositeFieldPath(from, to) + {
+  // this is an enhanced patch type with a transform function that matches values given the provided object
+  transforms: [
+    {
+      type: 'match',
+      match: {
+        patterns: patterns,
+      },
+    },
+  ],
+};
+
 local combineCompositeFromOneFieldPath(fromOne, to, format) = {
   // this is the default combine patch type
   // This type patches from a field within the XR to a field within the composed resource using format function.
@@ -228,6 +240,8 @@ local namespacePermissions(namespacePrefix) = {
     fromCompositeFieldPath(from, to),
   FromCompositeFieldPathWithTransformMap(from, to, map):
     fromCompositeFieldPathWithTransformMap(from, to, map),
+  FromCompositeFieldPathWithTransformMatch(from, to, pattern):
+    fromCompositeFieldPathWithTransformMatch(from, to, pattern),
   FromCompositeFieldPathWithTransformSuffix(from, to, suffix):
     fromCompositeFieldPathWithTransformSuffix(from, to, suffix),
   FromCompositeFieldPathWithTransformPrefix(from, to, prefix):

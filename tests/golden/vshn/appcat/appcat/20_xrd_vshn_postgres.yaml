@@ -58,6 +58,15 @@ spec:
                             (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$
                           type: string
                       type: object
+                    encryption:
+                      description: Encryption contains settings to control the storage
+                        encryption of an instance.
+                      properties:
+                        enabled:
+                          description: Enabled specifies if the instance should use
+                            encrypted storage for the instance.
+                          type: boolean
+                      type: object
                     maintenance:
                       default: {}
                       description: Maintenance contains settings to control the maintenance
