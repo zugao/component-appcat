@@ -111,6 +111,7 @@ spec:
                   name: organization
           providerConfigRef:
             name: kubernetes
+      name: namespace-permissions
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
