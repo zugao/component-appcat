@@ -38,6 +38,7 @@ spec:
           managementPolicy: Observe
           providerConfigRef:
             name: kubernetes
+      name: ns-observer
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -70,6 +71,7 @@ spec:
                 name: ''
           providerConfigRef:
             name: kubernetes
+      name: namespace-conditions
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.namespaceConditions
@@ -111,6 +113,7 @@ spec:
                   name: organization
           providerConfigRef:
             name: kubernetes
+      name: namespace-permissions
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -148,6 +151,7 @@ spec:
                   crlDistributionPoints: []
           providerConfigRef:
             name: kubernetes
+      name: local-ca
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.localCAConditions
@@ -206,6 +210,7 @@ spec:
                   - client auth
           providerConfigRef:
             name: kubernetes
+      name: certificate
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.certificateConditions
@@ -278,6 +283,7 @@ spec:
                     ttlSecondsAfterFinished: 100
           providerConfigRef:
             name: kubernetes
+      name: copy-job
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -365,6 +371,7 @@ spec:
                   memory: null
           providerConfigRef:
             name: kubernetes
+      name: profile
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.profileConditions
@@ -435,6 +442,7 @@ spec:
                 postgresql.conf: {}
           providerConfigRef:
             name: kubernetes
+      name: pg-conf
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgconfigConditions
@@ -505,6 +513,7 @@ spec:
             - dependsOn:
                 apiVersion: stackgres.io/v1
                 kind: SGBackup
+      name: cluster-restore
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgclusterConditions
@@ -673,6 +682,7 @@ spec:
         - fromConnectionSecretKey: POSTGRESQL_PASSWORD
           name: POSTGRESQL_PASSWORD
           type: FromConnectionSecretKey
+      name: connection
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.secretConditions
@@ -772,6 +782,7 @@ spec:
           writeConnectionSecretToRef:
             name: ''
             namespace: ''
+      name: pg-bucket
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.objectBackupConfigConditions
@@ -827,6 +838,7 @@ spec:
                 type: s3Compatible
           providerConfigRef:
             name: kubernetes
+      name: sg-backup
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.objectBucketConditions
@@ -893,6 +905,7 @@ spec:
                 name: maintenanceserviceaccount
           providerConfigRef:
             name: kubernetes
+      name: maintenance-serviceaccount
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -934,6 +947,7 @@ spec:
                     - create
           providerConfigRef:
             name: kubernetes
+      name: maintenance-role
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -970,6 +984,7 @@ spec:
                   name: maintenanceserviceaccount
           providerConfigRef:
             name: kubernetes
+      name: maintenance-rolebinding
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -1041,6 +1056,7 @@ spec:
                 successfulJobsHistoryLimit: 0
           providerConfigRef:
             name: kubernetes
+      name: maintenancejob
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -1148,6 +1164,7 @@ spec:
                     app: StackGresCluster
           providerConfigRef:
             name: kubernetes
+      name: podmonitor
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -1272,6 +1289,7 @@ spec:
                           severity: critical
           providerConfigRef:
             name: kubernetes
+      name: prometheusrule
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -1310,6 +1328,7 @@ spec:
                   - Ingress
           providerConfigRef:
             name: kubernetes
+      name: network-policy
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.networkPolicyConditions
