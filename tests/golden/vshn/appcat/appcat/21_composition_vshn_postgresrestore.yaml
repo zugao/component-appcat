@@ -503,12 +503,25 @@ spec:
             name: kubernetes
           references:
             - dependsOn:
+                apiVersion: v1
+                kind: namespace
+                metadata:
+                  name: ''
+            - dependsOn:
                 apiVersion: stackgres.io/v1
                 kind: SGBackup
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgclusterConditions
           type: ToCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.references[0].dependsOn.name
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
           transforms:

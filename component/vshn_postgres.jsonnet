@@ -310,6 +310,17 @@ local sgCluster = {
   base: comp.KubeObject('stackgres.io/v1', 'SGCluster') +
         {
           spec+: {
+            references+: [
+              {
+                dependsOn+: {
+                  apiVersion: 'v1',
+                  kind: 'namespace',
+                  metadata: {
+                    name: "" #patched
+                  }
+                },
+              },
+            ],
             forProvider+: {
               manifest+: {
                 metadata: {},
@@ -357,6 +368,7 @@ local sgCluster = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterConditions'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].dependsOn.name', 'vshn-postgresql'),
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
