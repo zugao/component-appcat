@@ -1,0 +1,31 @@
+= AppCat SLO Parameters
+
+The parent key for all the following parameters is `appcat.slos`.
+
+== `enabled`
+[horizontal]
+type:: bool
+default:: `true`
+
+If the SLOs should be enabled in general.
+
+== `namespace`
+[horizontal]
+type:: string
+default:: `appcat-slos`
+
+A namespace where all SLO related resources will be deployed to, including the SLI Exporter.
+The namespace will be created and managed by this component.
+
+== `sli_exporter.resources`
+[horizontal]
+type:: dict
+
+The resource requests and limits for the SLI Exporter.
+
+== `sli_exporter.kustomize_input`
+[horizontal]
+type:: dict
+
+The input passed to the Kustomize renderer.
+See https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[the Kustomization File] for all available options.

@@ -25,6 +25,10 @@ parameters:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
         tag: v0.2.3
+      sli_exporter:
+        registry: ghcr.io
+        repository: vshn/appcat-sli-exporter
+        tag: v0.1.1
 
     apiserver:
       enabled: false
@@ -47,6 +51,20 @@ parameters:
         limits:
           cpu: 200m
           memory: 200Mi
+
+    slos:
+      enabled: true
+      namespace: appcat-slos
+      sli_exporter:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 200Mi
+          limits:
+            cpu: 100m
+            memory: 300Mi
+        kustomize_input:
+          namespace: ${appcat:slos:namespace}
 
     providers:
       cloudscale:
