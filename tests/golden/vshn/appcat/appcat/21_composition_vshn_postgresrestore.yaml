@@ -34,6 +34,7 @@ spec:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: postgresql-standalone
                   appuio.io/no-rbac-creation: 'true'
+                  appuio.io/organization: vshn
                 name: ''
           managementPolicy: Observe
           providerConfigRef:
@@ -68,6 +69,7 @@ spec:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: postgresql-standalone
                   appuio.io/no-rbac-creation: 'true'
+                  appuio.io/organization: vshn
                 name: ''
           providerConfigRef:
             name: kubernetes

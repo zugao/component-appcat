@@ -89,6 +89,7 @@ local namespace = comp.KubeObject('v1', 'Namespace') +
                               [serviceNameLabelKey]: 'postgresql-standalone',
                               [serviceNamespaceLabelKey]: '',
                               'appuio.io/no-rbac-creation': 'true',
+                              'appuio.io/organization': 'vshn',
                             },
                           },
                         },
