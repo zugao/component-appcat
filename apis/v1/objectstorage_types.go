@@ -1,6 +1,8 @@
 package v1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
 
 // +kubebuilder:object:root=true
 // +kubebuilder:printcolumn:name="Bucket Name",type="string",JSONPath=".spec.parameters.bucketName"
@@ -18,6 +20,9 @@ type ObjectBucket struct {
 // ObjectBucketSpec defines the desired state of a ObjectBucket.
 type ObjectBucketSpec struct {
 	Parameters ObjectBucketParameters `json:"parameters,omitempty"`
+
+	// WriteConnectionSecretToRef references a secret to which the connection details will be written.
+	WriteConnectionSecretToRef LocalObjectReference `json:"writeConnectionSecretToRef,omitempty"`
 }
 
 // ObjectBucketParameters are the configurable fields of a ObjectBucket.

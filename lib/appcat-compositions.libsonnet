@@ -180,6 +180,7 @@ local kubeObject(apiVersion, kind) = {
 };
 
 local namespacePermissions(namespacePrefix) = {
+  name: 'namespace-permissions',
   base: {
     apiVersion: 'kubernetes.crossplane.io/v1alpha1',
     kind: 'Object',

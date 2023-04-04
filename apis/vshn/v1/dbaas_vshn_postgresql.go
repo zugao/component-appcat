@@ -32,6 +32,9 @@ type VSHNPostgreSQL struct {
 type VSHNPostgreSQLSpec struct {
 	// Parameters are the configurable fields of a VSHNPostgreSQL.
 	Parameters VSHNPostgreSQLParameters `json:"parameters,omitempty"`
+
+	// WriteConnectionSecretToRef references a secret to which the connection details will be written.
+	WriteConnectionSecretToRef v1.LocalObjectReference `json:"writeConnectionSecretToRef,omitempty"`
 }
 
 // VSHNPostgreSQLParameters are the configurable fields of a VSHNPostgreSQL.
