@@ -98,6 +98,7 @@ local namespace = comp.KubeObject('v1', 'Namespace') +
                   };
 
 local namespaceObserve = {
+  name: 'ns-observer',
   base: namespace {
     spec+: {
       managementPolicy: 'Observe',
@@ -111,6 +112,7 @@ local namespaceObserve = {
 };
 
 local namespaceConditions = {
+  name: 'namespace-conditions',
   base: namespace,
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
@@ -122,6 +124,7 @@ local namespaceConditions = {
 };
 
 local localca = {
+  name: 'local-ca',
   base: comp.KubeObject('cert-manager.io/v1', 'Issuer') +
         {
           spec+: {
@@ -149,6 +152,7 @@ local localca = {
 };
 
 local certificate = {
+  name: 'certificate',
   base: comp.KubeObject('cert-manager.io/v1', 'Certificate') +
         {
           spec+: {
@@ -200,6 +204,7 @@ local certificate = {
 };
 
 local sgInstanceProfile = {
+  name: 'profile',
   base: comp.KubeObject('stackgres.io/v1', 'SGInstanceProfile') +
         {
           spec+: {
@@ -282,6 +287,7 @@ local sgInstanceProfile = {
 };
 
 local sgPostgresConfig = {
+  name: 'pg-conf',
   base: comp.KubeObject('stackgres.io/v1', 'SGPostgresConfig') +
         {
           spec+: {
@@ -308,6 +314,7 @@ local sgPostgresConfig = {
 };
 
 local sgCluster = {
+  name: 'cluster',
   base: comp.KubeObject('stackgres.io/v1', 'SGCluster') +
         {
           spec+: {
@@ -386,6 +393,7 @@ local sgCluster = {
 };
 
 local secret = {
+  name: 'connection',
   base: comp.KubeObject('v1', 'Secret') +
         {
           spec+: {
@@ -469,6 +477,7 @@ local secret = {
 };
 
 local xobjectBucket = {
+  name: 'pg-bucket',
   base: {
     apiVersion: 'appcat.vshn.io/v1',
     kind: 'XObjectBucket',
@@ -495,6 +504,7 @@ local xobjectBucket = {
 };
 
 local sgObjectStorage = {
+  name: 'sg-backup',
   base: comp.KubeObject('stackgres.io/v1beta1', 'SGObjectStorage') +
         {
           spec+: {
@@ -543,6 +553,7 @@ local sgObjectStorage = {
 };
 
 local networkPolicy = {
+  name: 'network-policy',
   base: comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
         {
           spec+: {
@@ -583,6 +594,7 @@ local networkPolicy = {
 };
 
 local copyJob = {
+  name: 'copy-job',
   base: comp.KubeObject('batch/v1', 'Job') + {
     spec+: {
       forProvider+: {
@@ -636,6 +648,7 @@ local copyJob = {
 };
 
 local clusterRestoreConfig = {
+  name: 'cluster-restore',
   base+: {
     spec+: {
       references+: [
@@ -657,6 +670,7 @@ local clusterRestoreConfig = {
 };
 
 local maintenanceServiceAccount = {
+  name: 'maintenance-serviceaccount',
   base: comp.KubeObject('v1', 'ServiceAccount') + {
     spec+: {
       forProvider+: {
@@ -671,6 +685,7 @@ local maintenanceServiceAccount = {
 };
 
 local maintenanceRole = {
+  name: 'maintenance-role',
   base: comp.KubeObject('rbac.authorization.k8s.io/v1', 'Role') + {
     spec+: {
       forProvider+: {
@@ -696,6 +711,7 @@ local maintenanceRole = {
 };
 
 local maintenanceRoleBinding = {
+  name: 'maintenance-rolebinding',
   base: comp.KubeObject('rbac.authorization.k8s.io/v1', 'RoleBinding') + {
     spec+: {
       forProvider+: {
@@ -813,6 +829,7 @@ local convertToCron() = [
 ];
 
 local maintenanceJob = {
+  name: 'maintenancejob',
   base: comp.KubeObject('batch/v1', 'CronJob') + {
     spec+: {
       forProvider+: {
@@ -860,6 +877,7 @@ local maintenanceJob = {
 };
 
 local prometheusRule = {
+  name: 'prometheusrule',
   base: comp.KubeObject('monitoring.coreos.com/v1', 'PrometheusRule') + {
     spec+: {
       forProvider+: {
@@ -949,6 +967,7 @@ local prometheusRule = {
 };
 
 local podMonitor = {
+  name: 'podmonitor',
   base: comp.KubeObject('monitoring.coreos.com/v1', 'PodMonitor') + {
     spec+: {
       forProvider+: {

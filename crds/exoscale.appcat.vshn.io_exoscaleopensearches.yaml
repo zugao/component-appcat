@@ -124,6 +124,14 @@ spec:
                       default: {}
                   type: object
                   default: {}
+                writeConnectionSecretToRef:
+                  description: WriteConnectionSecretToRef references a secret to which the connection details will be written.
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
               type: object
             status:
               description: Status reflects the observed state of a ExoscaleOpenSearch
