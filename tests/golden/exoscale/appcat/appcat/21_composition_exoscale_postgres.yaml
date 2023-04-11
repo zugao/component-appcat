@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '10'
     metadata.appcat.vshn.io/description: PostgreSQL DBaaS instances by Exoscale
     metadata.appcat.vshn.io/displayname: Exoscale PostgreSQL
-    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/exoscale-dbaas/postgresql/create.html
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/exo-postgresql
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/exoscale_dbaas.html
     metadata.appcat.vshn.io/zone: 'Exoscale zones: de-fra-1, de-muc-1, at-vie-1, ch-gva-2,
       ch-dk-2, bg-sof-1'

@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '10'
     metadata.appcat.vshn.io/description: PostgreSQL instances by VSHN
     metadata.appcat.vshn.io/displayname: VSHN Managed PostgreSQL
-    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/vshn-dbaas/postgresql/create.html
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-postgresql
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/postgresql.html
     metadata.appcat.vshn.io/zone: rma1

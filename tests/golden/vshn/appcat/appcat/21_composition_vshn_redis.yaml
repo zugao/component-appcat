@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '10'
     metadata.appcat.vshn.io/description: Redis instances by VSHN
     metadata.appcat.vshn.io/displayname: VSHN Managed Redis
-    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/vshn-dbaas/redis/create.html
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-redis
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/redis.html
     metadata.appcat.vshn.io/zone: rma1
