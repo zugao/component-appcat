@@ -1223,6 +1223,9 @@ spec:
                       - namespaceSelector:
                           matchLabels:
                             kubernetes.io/metadata.name: ''
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: appcat-slos
                 podSelector: {}
                 policyTypes:
                   - Ingress

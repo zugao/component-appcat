@@ -13,6 +13,21 @@ Each image is specified using keys `registry`, `repository` and `tag`.
 This structure allows easily injecting a registry mirror, if required.
 
 
+== `apiserver`
+[horizontal]
+type:: dict
+reference:: xref:references/appcat-apiserver.adoc[See API Server parameters]
+
+This parameter allows configuring https://github.com/vshn/appcat-apiserver[the AppCat API Server].
+
+
+== `slos`
+[horizontal]
+type:: dict
+reference:: xref:references/slo-parameters.adoc[See SLO parameters]
+
+This parameter allows configuring SLOs for AppCat.
+
 == `providers`
 
 

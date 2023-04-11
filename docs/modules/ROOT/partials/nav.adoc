@@ -11,8 +11,8 @@
 .Technical reference
 * xref:references/component-parameters.adoc[Parameters]
 
-* AppCat API Server Parameters
-** xref:references/appcat-apiserver.adoc[AppCat API Server]
+* xref:references/slo-parameters.adoc[AppCat SLOs Parameters]
+* xref:references/appcat-apiserver.adoc[AppCat API Server Parameters]
 
 * Provider Parameters
 ** xref:references/provider-cloudscale.adoc[Provider Cloudscale]

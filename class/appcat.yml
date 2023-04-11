@@ -2,7 +2,7 @@ parameters:
   kapitan:
     dependencies:
       - type: git
-        output_path: dependencies/appcat/manifests/${appcat:images:apiserver:tag}
+        output_path: dependencies/appcat/manifests/apiserver/${appcat:images:apiserver:tag}
         source: https://github.com/vshn/appcat-apiserver.git
         subdir: config
         ref: ${appcat:images:apiserver:tag}
@@ -28,3 +28,17 @@ parameters:
           - ${_base_directory}/component/vshn_redis.jsonnet
         input_type: jsonnet
         output_path: appcat/
+
+      - input_paths:
+          - ${_base_directory}/component/appcat_sli_exporter.jsonnet
+        input_type: jsonnet
+        output_path: ${_base_directory}/.work/appcat_sli_exporter
+        output_type: yaml
+      - input_type: external
+        output_path: .
+        input_paths:
+          - ${_kustomize_wrapper}
+        env_vars:
+          INPUT_DIR: ${_base_directory}/.work/appcat_sli_exporter
+        args:
+          - \${compiled_target_dir}/appcat/sli_exporter

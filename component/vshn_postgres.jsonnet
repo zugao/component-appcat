@@ -575,6 +575,13 @@ local networkPolicy = {
                             },
                           },
                         },
+                        {
+                          namespaceSelector: {
+                            matchLabels: {
+                              'kubernetes.io/metadata.name': params.slos.namespace,
+                            },
+                          },
+                        },
                       ],
                     },
                   ],
