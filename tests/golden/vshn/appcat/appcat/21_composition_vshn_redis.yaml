@@ -38,6 +38,7 @@ spec:
           managementPolicy: Observe
           providerConfigRef:
             name: kubernetes
+      name: ns-observer
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -70,6 +71,7 @@ spec:
                 name: ''
           providerConfigRef:
             name: kubernetes
+      name: namespace-conditions
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.namespaceConditions
@@ -149,6 +151,7 @@ spec:
                   crlDistributionPoints: []
           providerConfigRef:
             name: kubernetes
+      name: self-signed-issuer
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.selfSignedIssuerConditions
@@ -194,6 +197,7 @@ spec:
                   secretName: tls-ca-certificate
           providerConfigRef:
             name: kubernetes
+      name: local-ca
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.localCAConditions
@@ -254,6 +258,7 @@ spec:
                     - vshn-appcat-ca
           providerConfigRef:
             name: kubernetes
+      name: certificate
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.caCertificateConditions
@@ -325,6 +330,7 @@ spec:
                   - client auth
           providerConfigRef:
             name: kubernetes
+      name: server-certificate
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.serverCertificateConditions
@@ -395,6 +401,7 @@ spec:
                   - client auth
           providerConfigRef:
             name: kubernetes
+      name: client-certificate
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.clientCertificateConditions
@@ -504,6 +511,7 @@ spec:
         - fromConnectionSecretKey: REDIS_URL
           name: REDIS_URL
           type: FromConnectionSecretKey
+      name: connection
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -632,6 +640,7 @@ spec:
                 existingSecret: tls-server-certificate
           providerConfigRef:
             name: helm
+      name: release
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
