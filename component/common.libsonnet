@@ -31,7 +31,7 @@ local vshnMetaDBaaSExoscale(dbname) = {
     annotations+: {
       'metadata.appcat.vshn.io/displayname': 'Exoscale ' + dbname,
       'metadata.appcat.vshn.io/description': dbname + ' DBaaS instances by Exoscale',
-      'metadata.appcat.vshn.io/end-user-docs-url': 'https://docs.appuio.cloud/appcat/exoscale-dbaas/' + std.asciiLower(dbname) + '/create.html',
+      'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/exo-' + std.asciiLower(dbname),
       'metadata.appcat.vshn.io/zone': 'Exoscale zones: ' + strExoscaleZones,
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/exoscale_dbaas.html',
     },
@@ -47,7 +47,7 @@ local vshnMetaVshn(dbname, flavor, offered) = {
     annotations+: {
       'metadata.appcat.vshn.io/displayname': 'VSHN Managed ' + dbname,
       'metadata.appcat.vshn.io/description': dbname + ' instances by VSHN',
-      'metadata.appcat.vshn.io/end-user-docs-url': 'https://docs.appuio.cloud/appcat/vshn-dbaas/' + std.asciiLower(dbname) + '/create.html',
+      'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/vshn-' + std.asciiLower(dbname),
       'metadata.appcat.vshn.io/zone': facts.region,
       'metadata.appcat.vshn.io/flavor': flavor,
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/' + std.asciiLower(dbname) + '.html',
@@ -64,7 +64,7 @@ local vshnMetaObjectStorage(provider) = {
     annotations+: {
       'metadata.appcat.vshn.io/displayname': provider + ' Object Storage',
       'metadata.appcat.vshn.io/description': 'S3 compatible object storage hosted by ' + provider,
-      'metadata.appcat.vshn.io/end-user-docs-url': 'https://docs.appuio.cloud/appcat/object-storage/create.html',
+      'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/objstor',
       'metadata.appcat.vshn.io/zone': provider + ' zones: ' +
                                       if provider == 'Exoscale' then strExoscaleZones else strCloudscaleZones,
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/objectstorage.html',

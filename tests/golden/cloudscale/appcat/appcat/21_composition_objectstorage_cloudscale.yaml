@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '10'
     metadata.appcat.vshn.io/description: S3 compatible object storage hosted by cloudscale.ch
     metadata.appcat.vshn.io/displayname: cloudscale.ch Object Storage
-    metadata.appcat.vshn.io/end-user-docs-url: https://docs.appuio.cloud/appcat/object-storage/create.html
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/objstor
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/objectstorage.html
     metadata.appcat.vshn.io/zone: 'cloudscale.ch zones: lpgandrma'
   labels:
