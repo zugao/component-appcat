@@ -357,6 +357,7 @@ local composition =
       writeConnectionSecretsToNamespace: redisParams.secretNamespace,
       resources: [
         {
+          name: 'ns-observer',
           base: namespace {
             spec+: {
               managementPolicy: 'Observe',
@@ -369,6 +370,7 @@ local composition =
           ],
         },
         {
+          name: 'namespace-conditions',
           base: namespace,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
@@ -380,6 +382,7 @@ local composition =
         },
         comp.NamespacePermissions('vshn-redis'),
         {
+          name: 'self-signed-issuer',
           base: selfSignedIssuer,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerConditions'),
@@ -389,6 +392,7 @@ local composition =
           ],
         },
         {
+          name: 'local-ca',
           base: caIssuer,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
@@ -398,6 +402,7 @@ local composition =
           ],
         },
         {
+          name: 'certificate',
           base: caCertificate,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateConditions'),
@@ -408,6 +413,7 @@ local composition =
           ],
         },
         {
+          name: 'server-certificate',
           base: serverCertificate,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateConditions'),
@@ -418,6 +424,7 @@ local composition =
           ],
         },
         {
+          name: 'client-certificate',
           base: clientCertificate,
           patches: [
             comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateConditions'),
@@ -428,6 +435,7 @@ local composition =
           ],
         },
         {
+          name: 'connection',
           base: secret,
           connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
           patches: [
@@ -445,6 +453,7 @@ local composition =
           ],
         },
         {
+          name: 'release',
           base: redisHelmChart,
           patches: [
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
