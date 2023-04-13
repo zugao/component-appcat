@@ -3475,6 +3475,12 @@ spec:
                             type: string
                           type: array
                       type: object
+                    restart:
+                      description: Restart contains settings to force a restart of the instance
+                      properties:
+                        run:
+                          type: boolean
+                      type: object
                     restore:
                       description: Restore contains settings to control the restore of an instance.
                       properties:
