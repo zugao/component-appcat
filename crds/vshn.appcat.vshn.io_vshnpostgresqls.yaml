@@ -3475,12 +3475,6 @@ spec:
                             type: string
                           type: array
                       type: object
-                    restart:
-                      description: Restart contains settings to force a restart of the instance
-                      properties:
-                        run:
-                          type: boolean
-                      type: object
                     restore:
                       description: Restore contains settings to control the restore of an instance.
                       properties:
@@ -3549,6 +3543,19 @@ spec:
                           type: object
                       type: object
                       default: {}
+                    tasks:
+                      description: Taks is a list of day two operations to perform
+                      items:
+                        description: VSHNPostgreSQLRestart contains settings to force a restart of the instance
+                        properties:
+                          name:
+                            type: string
+                        required:
+                          - name
+                        type: object
+                      type: array
+                  required:
+                    - tasks
                   type: object
                   default: {}
                 writeConnectionSecretToRef:

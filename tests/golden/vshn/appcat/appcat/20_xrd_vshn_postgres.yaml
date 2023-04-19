@@ -5119,6 +5119,20 @@ spec:
                               type: string
                           type: object
                       type: object
+                    tasks:
+                      description: Taks is a list of day two operations to perform
+                      items:
+                        description: VSHNPostgreSQLRestart contains settings to force
+                          a restart of the instance
+                        properties:
+                          name:
+                            type: string
+                        required:
+                          - name
+                        type: object
+                      type: array
+                  required:
+                    - tasks
                   type: object
               type: object
             status:

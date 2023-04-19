@@ -63,13 +63,14 @@ type VSHNPostgreSQLParameters struct {
 
 	// Monitoring contains settings to control monitoring.
 	Monitoring VSHNPostgreSQLMonitoring `json:"monitoring,omitempty"`
-	// Restart contains settings to force a restart of the instance
-	Restart VSHNPostgreSQLRestart `json:"restart,omitempty"`
+
+	// Taks is a list of day two operations to perform
+	Tasks []VSHNPostgreSQLTask `json:"tasks"`
 }
 
 // VSHNPostgreSQLRestart contains settings to force a restart of the instance
-type VSHNPostgreSQLRestart struct {
-	Run bool `json:"run,omitempty"`
+type VSHNPostgreSQLTask struct {
+	Name string `json:"name"`
 }
 
 // VSHNPostgreSQLServiceSpec contains PostgreSQL DBaaS specific properties
