@@ -1012,6 +1012,19 @@ local composition(restore=false) =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
+      functions:
+        [
+          {
+            name: 'pgsql-func',
+            type: 'Container',
+            container: {
+              image: 'postgresql',
+              runner: {
+                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+              },
+            },
+          },
+        ],
       resources: [
                    namespaceObserve,
                    namespaceConditions,
