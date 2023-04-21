@@ -19,6 +19,13 @@ spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNPostgreSQL
+  functions:
+    - container:
+        image: postgresql
+        runner:
+          endpoint: unix-abstract:crossplane/fn/default.sock
+      name: pgsql-func
+      type: Container
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1

@@ -747,7 +747,7 @@ local maintenanceRoleBinding = {
 };
 
 local convertToCron() = [
-  // This function produces patches, that will convert dayOdWeek and timeOfDay
+  // This function produces patches, that will convert dayOfWeek and timeOfDay
   // to a proper cron string. It does that by using maps and regex. As well as
   // environment patches.
   {
@@ -1019,6 +1019,19 @@ local composition(restore=false) =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
+      functions:
+        [
+          {
+            name: 'pgsql-func',
+            type: 'Container',
+            container: {
+              image: 'postgresql',
+              runner: {
+                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+              },
+            },
+          },
+        ],
       resources: [
                    namespaceObserve,
                    namespaceConditions,
