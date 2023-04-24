@@ -22,6 +22,7 @@ spec:
   functions:
     - container:
         image: postgresql
+        imagePullPolicy: always
         runner:
           endpoint: unix-abstract:crossplane/fn/default.sock
       name: pgsql-func
