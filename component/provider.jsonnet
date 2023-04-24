@@ -170,7 +170,7 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ 'monitoring.coreos.com' ],
-          resources: [ 'prometheusrules', 'podmonitors' ],
+          resources: [ 'prometheusrules', 'podmonitors', 'alertmanagerconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
       ],
