@@ -1026,7 +1026,6 @@ local composition(restore=false) =
             type: 'Container',
             container: {
               image: 'postgresql',
-              imagePullPolicy: 'Always',
               runner: {
                 endpoint: 'unix-abstract:crossplane/fn/default.sock',
               },
