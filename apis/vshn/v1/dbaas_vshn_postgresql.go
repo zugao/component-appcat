@@ -90,14 +90,12 @@ type VSHNDBaaSSchedulingSpec struct {
 // VSHNDBaaSMaintenanceScheduleSpec contains settings to control the maintenance of an instance.
 type VSHNDBaaSMaintenanceScheduleSpec struct {
 	// +kubebuilder:validation:Enum=monday;tuesday;wednesday;thursday;friday;saturday;sunday
-	// +kubebuilder:default="tuesday"
 
 	// DayOfWeek specifies at which weekday the maintenance is held place.
 	// Allowed values are [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
 	DayOfWeek string `json:"dayOfWeek,omitempty"`
 
 	// +kubebuilder:validation:Pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$"
-	// +kubebuilder:default="22:30:00"
 
 	// TimeOfDay for installing updates in UTC.
 	// Format: "hh:mm:ss".
@@ -143,7 +141,6 @@ type VSHNDBaaSNetworkSpec struct {
 
 type VSHNPostgreSQLBackup struct {
 	// +kubebuilder:validation:Pattern=^(\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$
-	// +kubebuilder:default="0 22 * * *"
 	Schedule string `json:"schedule,omitempty"`
 
 	// +kubebuilder:validation:Pattern="^[1-9][0-9]*$"
