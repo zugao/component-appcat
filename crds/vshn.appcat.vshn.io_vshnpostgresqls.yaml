@@ -43,7 +43,6 @@ spec:
                           type: integer
                           x-kubernetes-int-or-string: true
                         schedule:
-                          default: 0 22 * * *
                           pattern: ^(\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$
                           type: string
                       type: object
@@ -59,7 +58,6 @@ spec:
                       description: Maintenance contains settings to control the maintenance of an instance.
                       properties:
                         dayOfWeek:
-                          default: tuesday
                           description: DayOfWeek specifies at which weekday the maintenance is held place. Allowed values are [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
                           enum:
                             - monday
@@ -71,7 +69,6 @@ spec:
                             - sunday
                           type: string
                         timeOfDay:
-                          default: "22:30:00"
                           description: 'TimeOfDay for installing updates in UTC. Format: "hh:mm:ss".'
                           pattern: ^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
                           type: string
