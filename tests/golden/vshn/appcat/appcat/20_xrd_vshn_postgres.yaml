@@ -46,6 +46,18 @@ spec:
                       description: Backup contains settings to control the backups
                         of an instance.
                       properties:
+                        deletionProtection:
+                          default: true
+                          description: DeletionProtection will protect the instance
+                            from being deleted for the given retention time. This
+                            is enabled by default.
+                          type: boolean
+                        deletionRetention:
+                          default: 7
+                          description: DeletionRetention specifies in days how long
+                            the instance should be kept after deletion. The default
+                            is keeping it one week.
+                          type: integer
                         retention:
                           default: 6
                           pattern: ^[1-9][0-9]*$

@@ -1,0 +1,37 @@
+= AppCat API Server
+
+The parent key for all of the following parameters is `appcat.controllers.postgres`.
+
+== `enabled`
+[horizontal]
+type:: bool
+default:: `false`
+
+If the PostgreSQL Controller should be installed.
+
+== `namespace`
+[horizontal]
+type:: string
+default:: `appcat-controllers`
+
+A namespace where PostgreSQL Server should run.
+The namespace will be created and managed by this component.
+
+== `extraArgs`
+[horizontal]
+type:: array
+
+Extra arguments to pass to the PostgreSQL Controller.
+
+== `extraEnv`
+[horizontal]
+type:: dict
+
+Extra environment variables to be passed to the deployment of the PostgreSQL Controller.
+
+== `resources`
+[horizontal]
+type:: dict
+
+The resource requests and limits for the PostgreSQL Controller.
+

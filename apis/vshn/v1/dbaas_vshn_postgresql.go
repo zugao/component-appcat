@@ -3,6 +3,7 @@ package v1
 import (
 	alertmanagerv1alpha1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1alpha1"
 	v1 "github.com/vshn/component-appcat/apis/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -33,9 +34,16 @@ type VSHNPostgreSQL struct {
 type VSHNPostgreSQLSpec struct {
 	// Parameters are the configurable fields of a VSHNPostgreSQL.
 	Parameters VSHNPostgreSQLParameters `json:"parameters,omitempty"`
-
 	// WriteConnectionSecretToRef references a secret to which the connection details will be written.
 	WriteConnectionSecretToRef v1.LocalObjectReference `json:"writeConnectionSecretToRef,omitempty"`
+
+	// ResourceRef contains a reference to the composite.
+	ResourceRef corev1.ObjectReference `json:"resourceRef,omitempty"`
+
+	// CompositeDeletePolicy defines how the claim should behave if it's deleted.
+	// This field definition will be overwritten by crossplane again, once the XRD is applied to a cluster.
+	// It's added here so it can be marshalled correctly in third party operators or composition functions.
+	CompositeDeletePolicy string `json:"compositeDeletePolicy,omitempty"`
 }
 
 // VSHNPostgreSQLParameters are the configurable fields of a VSHNPostgreSQL.
@@ -147,6 +155,16 @@ type VSHNPostgreSQLBackup struct {
 	// +kubebuilder:default=6
 	// +kubebuilder:validation:XIntOrString
 	Retention int `json:"retention,omitempty"`
+
+	// DeletionProtection will protect the instance from being deleted for the given retention time.
+	// This is enabled by default.
+	// +kubebuilder:default=true
+	DeletionProtection bool `json:"deletionProtection,omitempty"`
+
+	// DeletionRetention specifies in days how long the instance should be kept after deletion.
+	// The default is keeping it one week.
+	// +kubebuilder:default=7
+	DeletionRetention int `json:"deletionRetention,omitempty"`
 }
 
 // VSHNPostgreSQLRestore contains restore specific parameters.
@@ -213,4 +231,21 @@ type VSHNPostgreSQLList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 
 	Items []VSHNPostgreSQL `json:"items"`
+}
+
+// +kubebuilder:object:generate=true
+// +kubebuilder:object:root=true
+
+// XVSHNPostgreSQL represents the internal composite of this claim
+type XVSHNPostgreSQL VSHNPostgreSQL
+
+// +kubebuilder:object:generate=true
+// +kubebuilder:object:root=true
+
+// XVSHNPostgreSQLList represents a list of composites
+type XVSHNPostgreSQLList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+
+	Items []XVSHNPostgreSQL `json:"items"`
 }

@@ -18,6 +18,7 @@ parameters:
       - input_paths:
           - ${_base_directory}/component/provider.jsonnet
           - ${_base_directory}/component/appcat_apiserver.jsonnet
+          - ${_base_directory}/component/appcat_controller_postgres.jsonnet
           - ${_base_directory}/component/objectstorage.jsonnet
           - ${_base_directory}/component/exoscale_kafka.jsonnet
           - ${_base_directory}/component/exoscale_redis.jsonnet
