@@ -20,3 +20,7 @@ vendor/
 dependencies/
 hack/
 
+# sloth artifacts
+sloth-*-*-*
+sloth-input/
+sloth-output/

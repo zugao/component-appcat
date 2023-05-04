@@ -29,3 +29,71 @@ type:: dict
 
 The input passed to the Kustomize renderer.
 See https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[the Kustomization File] for all available options.
+
+== `alerting.labels`
+[horizontal]
+type:: dict
+
+Labels that will be added to any SLO alerts.
+
+== `alerting.page_labels`
+[horizontal]
+type:: dict
+
+Labels that will be added to any critical SLO alerts.
+`page_alerts` are alerts are critical alerts for a high burn rate that require immediate attention.
+
+== `alerting.tickt_labels`
+[horizontal]
+type:: dict
+
+Labels that will be added to any non-crtiical SLO alerts.
+`ticket_alerts` are alerts are alerts for an elevated burn rate that might require attention, but aren’t urg
+
+== `vshn.postgres.uptime`
+
+Configuration of the PostgreSQL by VSHN uptime SLO.
+
+=== `vshn.postgres.uptime.objective`
+[horizontal]
+type:: float
+default:: 99.9
+
+The SLO objective in percentage between 0-100.
+
+=== `vshn.postgres.uptime.alerting.page_alert`
+[horizontal]
+type:: dict
+
+The alert configuration for `page_alerts`.
+Can be used add additional lables or annotations throght the `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert throug the `for` key.
+
+=== `vshn.postgres.uptime.alerting.ticket_alert`
+[horizontal]
+type:: dict
+
+The alert configuration for `page_alerts`.
+Can be used add additional lables or annotations throght the `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert throug the `for` key.
+
+
+.Example
+
+[source,yaml]
+----
+vshn:
+  postgres:
+    uptime:
+      objective: 81.9 <1>
+      alerting:
+        page_alert:
+          labels: <2>
+            foo: bar
+          for: 13m <3>
+        ticket_alert:
+          annotations: <4>
+            please: ignore
+----
+<1> Reduces the objective to 81.9%
+<2> Adds the label `foo: bar` to all page alerts
+<3> Only fires page alerts if they are pending for 13 minutes
+<4> Adds annotation `please: ignore` to all ticket alerts
