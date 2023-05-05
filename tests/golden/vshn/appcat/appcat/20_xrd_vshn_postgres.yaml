@@ -5105,18 +5105,14 @@ spec:
                           type: string
                         plan:
                           default: standard-2
-                          description: |
-                            Plan is the name of the resource plan that defines the compute resources.
-
-                            The following plans are available:
-
-                              plus-2 - CPU: 400m; Memory: 1728Mi; Disk: 20Gi - Will be scheduled on APPUiO Cloud plus nodes
-
-                              plus-4 - CPU: 900m; Memory: 3776Mi; Disk: 40Gi - Will be scheduled on APPUiO Cloud plus nodes
-
-                              standard-2 - CPU: 400m; Memory: 1728Mi; Disk: 20Gi
-
-                              standard-4 - CPU: 900m; Memory: 3776Mi; Disk: 40Gi
+                          description: "Plan is the name of the resource plan that\
+                            \ defines the compute resources.\n\nThe following plans\
+                            \ are available:\n\n  plus-2 - CPU: 400m; Memory: 1728Mi;\
+                            \ Disk: 20Gi - Will be scheduled on APPUiO Cloud plus\
+                            \ nodes\n\n  plus-4 - CPU: 900m; Memory: 3776Mi; Disk:\
+                            \ 40Gi - Will be scheduled on APPUiO Cloud plus nodes\n\
+                            \n  standard-2 - CPU: 400m; Memory: 1728Mi; Disk: 20Gi\n\
+                            \n  standard-4 - CPU: 900m; Memory: 3776Mi; Disk: 40Gi\n"
                           enum:
                             - plus-2
                             - plus-4
