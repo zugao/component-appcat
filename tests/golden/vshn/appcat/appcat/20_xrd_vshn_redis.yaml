@@ -96,20 +96,26 @@ spec:
                           type: string
                         plan:
                           default: standard-1
-                          description: "Plan is the name of the resource plan that\
-                            \ defines the compute resources.\n\nThe following plans\
-                            \ are available:\n\n  plus-1 - CPU: 250m; Memory: 1Gi;\
-                            \ Disk: 16Gi - Will be scheduled on APPUiO Cloud plus\
-                            \ nodes\n\n  plus-2 - CPU: 500m; Memory: 2Gi; Disk: 16Gi\
-                            \ - Will be scheduled on APPUiO Cloud plus nodes\n\n \
-                            \ plus-4 - CPU: 1; Memory: 4Gi; Disk: 16Gi - Will be scheduled\
-                            \ on APPUiO Cloud plus nodes\n\n  plus-512m - CPU: 125m;\
-                            \ Memory: 512Mi; Disk: 16Gi - Will be scheduled on APPUiO\
-                            \ Cloud plus nodes\n\n  standard-1 - CPU: 250m; Memory:\
-                            \ 1Gi; Disk: 16Gi\n\n  standard-2 - CPU: 500m; Memory:\
-                            \ 2Gi; Disk: 16Gi\n\n  standard-4 - CPU: 1; Memory: 4Gi;\
-                            \ Disk: 16Gi\n\n  standard-512m - CPU: 125m; Memory: 512Mi;\
-                            \ Disk: 16Gi\n"
+                          description: |
+                            Plan is the name of the resource plan that defines the compute resources.
+
+                            The following plans are available:
+
+                              plus-1 - CPU: 250m; Memory: 1Gi; Disk: 16Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              plus-2 - CPU: 500m; Memory: 2Gi; Disk: 16Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              plus-4 - CPU: 1; Memory: 4Gi; Disk: 16Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              plus-512m - CPU: 125m; Memory: 512Mi; Disk: 16Gi - Will be scheduled on APPUiO Cloud plus nodes
+
+                              standard-1 - CPU: 250m; Memory: 1Gi; Disk: 16Gi
+
+                              standard-2 - CPU: 500m; Memory: 2Gi; Disk: 16Gi
+
+                              standard-4 - CPU: 1; Memory: 4Gi; Disk: 16Gi
+
+                              standard-512m - CPU: 125m; Memory: 512Mi; Disk: 16Gi
                           enum:
                             - plus-1
                             - plus-2
