@@ -491,16 +491,6 @@ spec:
         - fromFieldPath: spec.parameters.scheduling.nodeSelector
           toFieldPath: spec.forProvider.manifest.spec.pods.scheduling.nodeSelector
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.encryption.enabled
-          toFieldPath: spec.forProvider.manifest.spec.pods.persistentVolume.storageClass
-          transforms:
-            - match:
-                patterns:
-                  - literal: 'true'
-                    result: ssd-encrypted
-                    type: literal
-              type: match
-          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.majorVersion
           toFieldPath: spec.forProvider.manifest.spec.postgres.version
           type: FromCompositeFieldPath
