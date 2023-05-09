@@ -154,7 +154,7 @@ local apiService = loadManifest('apiservice.yaml') {
 };
 
 
-{
+if apiserverParams.enabled == true then {
   'apiserver/10_namespace': namespace,
   'apiserver/10_cluster_role_api_server': clusterRoleAPIServer,
   'apiserver/10_cluster_role_basic_users': clusterRoleUsers,
@@ -165,4 +165,4 @@ local apiService = loadManifest('apiservice.yaml') {
   'apiserver/30_deployment': apiserver,
   'apiserver/30_service': service,
   'apiserver/30_api_service': apiService,
-}
+} else {}

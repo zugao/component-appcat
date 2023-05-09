@@ -30,3 +30,6 @@ parameters:
           compositions:
             exoscale:
               enabled: false
+
+    slos:
+      enabled: false

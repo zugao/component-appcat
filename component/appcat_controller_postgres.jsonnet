@@ -82,4 +82,4 @@ if controllersParams.enabled == true && postgresControllerParams.enabled == true
   'controllers/postgres/10_cluster_role_binding': clusterRoleBinding,
   'controllers/postgres/20_service_account': serviceAccount,
   'controllers/postgres/30_deployment': controller,
-}
+} else {}

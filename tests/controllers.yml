@@ -6,29 +6,18 @@ parameters:
         output_path: vendor/lib/crossplane.libsonnet
 
   facts:
-    cloud: exoscale
+    cloud: cloudscale
+    distribution: openshift4
 
   crossplane:
+    # This is not resolving during "commodore package compile", so we provide it explicitly
     namespace: syn-crossplane
 
   appcat:
-    providers:
-      exoscale:
+    controller:
+      enabled: true
+      postgres:
         enabled: true
-      kubernetes:
-        enabled: true
-
-
-    services:
-      exoscale:
-        enabled: true
-
-      generic:
-        objectstorage:
-          enabled: true
-          compositions:
-            cloudscale:
-              enabled: false
 
     slos:
       enabled: false

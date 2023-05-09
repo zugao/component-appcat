@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations: {}
+  labels:
+    rbac.crossplane.io/aggregate-to-crossplane: 'true'
+  name: crossplane:appcat:finalizer
+rules:
+  - apiGroups:
+      - appcat.vshn.io
+      - vshn.appcat.vshn.io
+      - exoscale.appcat.vshn.io
+    resources:
+      - '*/finalizers'
+    verbs:
+      - '*'

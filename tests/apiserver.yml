@@ -14,6 +14,8 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+    controller:
+      enabled: false
     apiserver:
       enabled: true
       namespace: appcat-apiserver
@@ -108,3 +110,6 @@ parameters:
           VN1CjPHpXj4RZlmGHj8SIXGaLsf5+eJmJ6FRtznlM+OYmXt9kTwAMVJjK6PuM4yC
           73WWkY9/mi6QSBoGdLOLUbJx/UtN
           -----END PRIVATE KEY-----
+
+    slos:
+      enabled: false
