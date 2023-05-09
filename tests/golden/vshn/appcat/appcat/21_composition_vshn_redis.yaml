@@ -33,6 +33,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: redis-standalone
+                  appuio.io/billing-name: appcat-redis
                   appuio.io/no-rbac-creation: 'true'
                 name: ''
           managementPolicy: Observe
@@ -67,6 +68,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: redis-standalone
+                  appuio.io/billing-name: appcat-redis
                   appuio.io/no-rbac-creation: 'true'
                 name: ''
           providerConfigRef:
