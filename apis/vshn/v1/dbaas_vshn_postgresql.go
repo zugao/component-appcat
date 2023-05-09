@@ -75,7 +75,7 @@ type VSHNPostgreSQLParameters struct {
 	// Encryption contains settings to control the storage encryption of an instance.
 	Encryption VSHNPostgreSQLEncryption `json:"encryption,omitempty"`
 
-	// UpdateStrategy indicates how and when updates to the instance spec will be applied.
+	// UpdateStrategy indicates when updates to the instance spec will be applied.
 	UpdateStrategy VSHNPostgreSQLUpdateStrategy `json:"updateStrategy,omitempty"`
 }
 
@@ -87,7 +87,7 @@ type VSHNPostgreSQLUpdateStrategy struct {
 	// +kubebuilder:validation:Enum="Immediate";"OnRestart"
 	// +kubebuilder:default="Immediate"
 
-	// Type indicates the type of the UpdateStrategy. Default is OnDelete.
+	// Type indicates the type of the UpdateStrategy. Default is OnRestart.
 	// Possible enum values:
 	//   - `"OnRestart"` indicates that the changes to the spec will only be applied once the instance is restarted by other means, most likely during maintenance.
 	//   - `"Immediate"` indicates that update will be applied to the instance as soon as the spec changes. Please be aware that this might lead to short downtime.

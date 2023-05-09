@@ -5138,13 +5138,13 @@ spec:
                           type: object
                       type: object
                     updateStrategy:
-                      description: UpdateStrategy indicates how and when updates to
-                        the instance spec will be applied.
+                      description: UpdateStrategy indicates when updates to the instance
+                        spec will be applied.
                       properties:
                         type:
                           default: Immediate
                           description: 'Type indicates the type of the UpdateStrategy.
-                            Default is OnDelete. Possible enum values: - `"OnRestart"`
+                            Default is OnRestart. Possible enum values: - `"OnRestart"`
                             indicates that the changes to the spec will only be applied
                             once the instance is restarted by other means, most likely
                             during maintenance. - `"Immediate"` indicates that update
