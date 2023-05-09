@@ -90,6 +90,7 @@ local namespace = comp.KubeObject('v1', 'Namespace') +
                               [serviceNamespaceLabelKey]: '',
                               'appuio.io/no-rbac-creation': 'true',
                               'appuio.io/organization': 'vshn',
+                              'appuio.io/billing-name': 'appcat-postgresql',
                             },
                           },
                         },

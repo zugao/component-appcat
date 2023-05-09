@@ -58,6 +58,7 @@ local composition =
                                 [serviceNameLabelKey]: 'redis-standalone',
                                 [serviceNamespaceLabelKey]: '',
                                 'appuio.io/no-rbac-creation': 'true',
+                                'appuio.io/billing-name': 'appcat-redis',
                               },
                             },
                           },
