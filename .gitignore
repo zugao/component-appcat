@@ -6,6 +6,7 @@
 # Additional entries
 .work
 .kind
+.idea
 
 # Kubebuilder
 /apis/generated/
@@ -18,3 +19,4 @@ compiled/
 vendor/
 dependencies/
 hack/
+
