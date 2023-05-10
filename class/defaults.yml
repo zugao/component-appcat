@@ -57,8 +57,6 @@ parameters:
         insecureSkipTLSVerify: false
       tls:
         certSecretName: appcat-apiserver-tls
-        serverCert: ""
-        serverKey: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/apiserver/apiserver-key}"
       resources:
         requests:
           cpu: 100m

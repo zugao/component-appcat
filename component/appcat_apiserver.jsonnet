@@ -60,31 +60,12 @@ local clusterRoleBinding = kube.ClusterRoleBinding(clusterRoleAPIServer.metadata
   ],
 };
 
-local certSecret =
-  if apiserverParams.tls.certSecretName != null && apiserverParams.enabled == true then
-    assert std.length(apiserverParams.tls.serverCert) > 0 : 'apiserver.tls.serverCert is required';
-    assert std.length(apiserverParams.tls.serverKey) > 0 : 'apiserver.tls.serverKey is required';
-    kube.Secret(apiserverParams.tls.certSecretName) {
-      metadata+: {
-        namespace: apiserverParams.namespace,
-      },
-      stringData: {
-        'tls.key': apiserverParams.tls.serverKey,
-        'tls.crt': apiserverParams.tls.serverCert,
-      },
-    }
-  else
-    null;
-
 local extraDeploymentArgs =
-  if certSecret != null then
+  if apiserverParams.tls.certSecretName != null then
     [
       '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
       '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
-    ]
-  else
-    []
-;
+    ] else null;
 
 local apiserver = loadManifest('aggregated-apiserver.yaml') {
   metadata+: {
@@ -105,18 +86,17 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
             c
           for c in super.containers
         ],
-      } + if certSecret != null then
+      } + if apiserverParams.tls.certSecretName != null then
         {
           volumes: [
             {
               name: 'apiserver-certs',
               secret: {
-                secretName: certSecret.metadata.name,
+                secretName: apiserverParams.tls.certSecretName,
               },
             },
           ],
-        }
-      else {},
+        } else {},
     },
   },
 };
@@ -129,6 +109,11 @@ local service = loadManifest('service.yaml') {
 
 
 local apiService = loadManifest('apiservice.yaml') {
+  metadata+: {
+    annotations: {
+      'cert-manager.io/inject-ca-from': apiserverParams.namespace + '/apiserver-certificate',
+    },
+  },
   spec+:
     {
       service: {
@@ -140,19 +125,58 @@ local apiService = loadManifest('apiservice.yaml') {
     apiserverParams.apiservice
     +
     (
-      if apiserverParams.tls.serverCert != null
-         && apiserverParams.tls.serverCert != ''
-         && apiserverParams.apiservice.insecureSkipTLSVerify == false
+      if apiserverParams.apiservice.insecureSkipTLSVerify == false
       then
         {
-          caBundle: std.base64(params.apiserver.tls.serverCert),
           insecureSkipTLSVerify:: null,
         }
-      else
-        {}
+      else {}
     ),
 };
 
+local apiIssuer = {
+  apiVersion: 'cert-manager.io/v1',
+  kind: 'Issuer',
+  metadata: {
+    name: 'api-server-issuer',
+    namespace: apiserverParams.namespace,
+  },
+  spec: {
+    selfSigned: {},
+  },
+};
+
+local apiCertificate = {
+  apiVersion: 'cert-manager.io/v1',
+  kind: 'Certificate',
+  metadata: {
+    name: 'apiserver-certificate',
+    namespace: apiserverParams.namespace,
+  },
+  spec: {
+    dnsNames: [ service.metadata.name + '.' + apiserverParams.namespace + '.svc' ],
+    duration: '87600h0m0s',
+    issuerRef: {
+      group: 'cert-manager.io',
+      kind: 'Issuer',
+      name: apiIssuer.metadata.name,
+    },
+    privateKey: {
+      algorithm: 'RSA',
+      encoding: 'PKCS1',
+      size: 4096,
+    },
+    renewBefore: '2400h0m0s',
+    secretName: apiserverParams.tls.certSecretName,
+    subject: {
+      organizations: [ 'vshn-appcat' ],
+    },
+    usages: [
+      'server auth',
+      'client auth',
+    ],
+  },
+};
 
 if apiserverParams.enabled == true then {
   'apiserver/10_namespace': namespace,
@@ -161,8 +185,9 @@ if apiserverParams.enabled == true then {
   'apiserver/10_cluster_role_binding': clusterRoleBinding,
   'apiserver/20_service_account': serviceAccount,
   'apiserver/10_apiserver_envs': envs,
-  [if certSecret != null then 'apiserver/20_certs']: certSecret,
   'apiserver/30_deployment': apiserver,
   'apiserver/30_service': service,
   'apiserver/30_api_service': apiService,
+  [if apiserverParams.tls.certSecretName != null then 'apiserver/31_api_issuer']: apiIssuer,
+  [if apiserverParams.tls.certSecretName != null then 'apiserver/31_api_certificate']: apiCertificate,
 } else {}
