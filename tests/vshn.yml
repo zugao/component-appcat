@@ -17,6 +17,12 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+    slos:
+      enabled: true
+    controller:
+      enabled: true
+      postgres:
+        enabled: true
     providers:
       kubernetes:
         enabled: true
