@@ -66,7 +66,7 @@ kubectl --as cluster-admin get object -l crossplane.io/composite=$COMPOSITE
 
 If any of them are not synced, describing them should point you in the right direction.
 
-Finally, it might also be helpful to look at the logs of various crossplane components in namespace `sny-crossplane`.
+Finally, it might also be helpful to look at the logs of various crossplane components in namespace `syn-crossplane`.
 
 ==== Debugging PostgreSQL Instance
 

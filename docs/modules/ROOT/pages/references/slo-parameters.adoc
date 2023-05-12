@@ -48,7 +48,7 @@ Labels that will be added to any critical SLO alerts.
 type:: dict
 
 Labels that will be added to any non-crtiical SLO alerts.
-`ticket_alerts` are alerts are alerts for an elevated burn rate that might require attention, but aren’t urg
+`ticket_alerts` are alerts for an elevated burn rate that might require attention, but aren’t urgent.
 
 == `vshn.postgres.uptime`
 
@@ -66,15 +66,14 @@ The SLO objective in percentage between 0-100.
 type:: dict
 
 The alert configuration for `page_alerts`.
-Can be used add additional lables or annotations throght the `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert throug the `for` key.
+Can be used to add additional labels or annotations through `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert through the `for` key.
 
 === `vshn.postgres.uptime.alerting.ticket_alert`
 [horizontal]
 type:: dict
 
-The alert configuration for `page_alerts`.
-Can be used add additional lables or annotations throght the `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert throug the `for` key.
-
+The alert configuration for `ticket_alert`.
+Can be used to add additional labels or annotations through `labels` or `annotations` key, disable the alert through the `disable` key, or delay emitting the alert through the `for` key.
 
 .Example
 
