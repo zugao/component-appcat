@@ -84,7 +84,9 @@ parameters:
           namespace: ${appcat:slos:namespace}
       alerting:
         labels:
-          syn_component: "appcat"
+          syn: "true"
+          syn_team: schedar
+          syn_component: appcat
           slo: "true"
         page_labels:
           severity: "critical"
