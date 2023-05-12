@@ -4,7 +4,6 @@ parameters:
       - type: git
         output_path: dependencies/appcat/manifests/apiserver/${appcat:images:apiserver:tag}
         source: https://github.com/vshn/appcat-apiserver.git
-        subdir: config
         ref: ${appcat:images:apiserver:tag}
     compile:
       - input_paths:
@@ -52,6 +51,7 @@ parameters:
           - ${_base_directory}/component/exoscale_mysql.jsonnet
           - ${_base_directory}/component/exoscale_postgres.jsonnet
           - ${_base_directory}/component/exoscale_opensearch.jsonnet
+          - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_redis.jsonnet
         input_type: jsonnet

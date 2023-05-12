@@ -7,7 +7,7 @@ local params = inv.parameters.appcat;
 local apiserverParams = params.apiserver;
 
 local image = params.images.apiserver;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/apiserver/' + manifest));
+local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/config/apiserver/' + manifest));
 
 local namespace = loadManifest('namespace.yaml') {
   metadata+: {

@@ -40,7 +40,7 @@ local connectionSecretKeys = [
 
 local xrd = xrds.XRDFromCRD(
   'xvshnpostgresqls.vshn.appcat.vshn.io',
-  xrds.LoadCRD('vshn.appcat.vshn.io_vshnpostgresqls.yaml'),
+  xrds.LoadCRD('vshn.appcat.vshn.io_vshnpostgresqls.yaml', params.images.apiserver.tag),
   defaultComposition='vshnpostgres.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);

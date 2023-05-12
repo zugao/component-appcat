@@ -53,7 +53,7 @@ local compositeClusterRoles(composite) =
     ];
 
 
-local loadCRD(crd) = std.parseJson(kap.yaml_load('appcat/crds/%s' % crd));
+local loadCRD(crd, tag) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + tag + '/crds/' + crd));
 
 local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
   kube._Object('apiextensions.crossplane.io/v1', 'CompositeResourceDefinition', name) + common.SyncOptions + {
@@ -148,8 +148,8 @@ local withPlanDefaults(plans, defaultPlan) = {
 {
   CompositeClusterRoles(composite):
     compositeClusterRoles(composite),
-  LoadCRD(crd):
-    loadCRD(crd),
+  LoadCRD(crd, tag):
+    loadCRD(crd, tag),
   XRDFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]):
     xrdFromCRD(name, crd, defaultComposition=defaultComposition, connectionSecretKeys=connectionSecretKeys),
   WithPlanDefaults(plans, defaultPlan):

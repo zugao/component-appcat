@@ -45,12 +45,12 @@ local namespace_patch = kube.Namespace('system') {
 
 local kustomization =
   if params.slos.enabled then
-    local image = params.images.sli_exporter;
+    local image = params.images.apiserver;
     com.Kustomization(
-      'https://github.com/vshn/appcat-sli-exporter/config/default',
+      'https://github.com/vshn/appcat-apiserver/config/sliexporter/default',
       image.tag,
       {
-        'ghcr.io/vshn/appcat-sli-exporter': {
+        'ghcr.io/vshn/appcat-apiserver': {
           newTag: image.tag,
           newName: '%(registry)s/%(repository)s' % image,
         },

@@ -8,7 +8,7 @@ local controllersParams = params.controller;
 local postgresControllerParams = controllersParams.postgres;
 
 local image = params.images.apiserver;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/controller/' + manifest));
+local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/config/controller/' + manifest));
 
 local namespace = loadManifest('namespace.yaml') {
   metadata+: {
