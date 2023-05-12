@@ -84,7 +84,7 @@ If they're running, check the logs if there are any obvious error messages
 
 [source,shell]
 ----
-kubectl --as cluster-admin -n $INSTANCE_NAMESPACE logs ${COMPOSITE}-0
+kubectl --as cluster-admin -n $INSTANCE_NAMESPACE sts/${COMPOSITE}
 ----
 
 If you can't see any pods at all, this might be a Stackgres operator issue.

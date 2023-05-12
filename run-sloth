@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# This script is used to download and run the Sloth tooling as part of the catalog compile step
+# Sloth (sloth.dev) is used to generate prometheus alerts and recording rules based on the SLO alerting standards defined in Google's SRE book
+
 set -eu
 
 basedir=$(dirname "$0")
