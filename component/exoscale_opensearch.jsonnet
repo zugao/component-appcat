@@ -12,6 +12,8 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local osParams = params.services.exoscale.opensearch;
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 local connectionSecretKeys = [
   'OPENSEARCH_USER',
   'OPENSEARCH_PASSWORD',
@@ -92,9 +94,65 @@ local composition =
     },
   };
 
+// OpenShift template configuration
+local templateObject = kube._Object('exoscale.appcat.vshn.io/v1', 'ExoscaleOpenSearch', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        zone: '${ZONE}',
+        majorVersion: '${MAJOR_VERSION}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'OpenSearch is a community-driven, open-source search and analytics suite used by developers to ingest, search, visualize, and analyze data.';
+local templateMessage = 'Your OpenSearch by Exoscale instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('opensearchbyexoscale',
+                           'OpenSearch by Exoscale',
+                           templateDescription,
+                           'icon-opensearch',
+                           'database,nosql',
+                           templateMessage,
+                           'Exoscale',
+                           'https://vs.hn/exo-opensearch') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'startup-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'opensearch-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'ZONE',
+        value: 'ch-dk-2',
+      },
+      {
+        name: 'MAJOR_VERSION',
+        value: '2',
+      },
+    ],
+  };
 
 if params.services.exoscale.enabled && osParams.enabled then {
   '20_xrd_exoscale_opensearch': xrd,
   '20_rbac_exoscale_opensearch': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_opensearch': composition,
+  [if isOpenshift then '21_openshift_template_opensearch_exoscale']: osTemplate,
 } else {}

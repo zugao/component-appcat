@@ -493,9 +493,60 @@ local composition =
     },
   };
 
+// OpenShift template configuration
+local templateObject = kube._Object('vshn.appcat.vshn.io/v1', 'VSHNRedis', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        version: '${VERSION}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.';
+local templateMessage = 'Your Redis by VSHN instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('redisbyvshn',
+                           'Redis by VSHN',
+                           templateDescription,
+                           'icon-redis',
+                           'database,nosql',
+                           templateMessage,
+                           'VSHN',
+                           'https://vs.hn/vshn-redis') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'standard-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'redis-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'VERSION',
+        value: '7.0',
+      },
+    ],
+  };
 
 if params.services.vshn.enabled && redisParams.enabled then {
   '20_xrd_vshn_redis': xrd,
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '21_composition_vshn_redis': composition,
+  [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
 } else {}

@@ -12,6 +12,8 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local redisParams = params.services.exoscale.redis;
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 local connectionSecretKeys = [
   'REDIS_HOST',
   'REDIS_PORT',
@@ -85,9 +87,60 @@ local composition =
     },
   };
 
+// OpenShift template configuration
+local templateObject = kube._Object('exoscale.appcat.vshn.io/v1', 'ExoscaleRedis', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        zone: '${ZONE}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.';
+local templateMessage = 'Your Redis by Exoscale instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('redisbyexoscale',
+                           'Redis by Exoscale',
+                           templateDescription,
+                           'icon-redis',
+                           'database,nosql',
+                           templateMessage,
+                           'Exoscale',
+                           'https://vs.hn/exo-redis') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'startup-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'redis-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'ZONE',
+        value: 'ch-dk-2',
+      },
+    ],
+  };
 
 if params.services.exoscale.enabled && redisParams.enabled then {
   '20_xrd_exoscale_redis': xrd,
   '20_rbac_exoscale_redis': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_redis': composition,
+  [if isOpenshift then '21_openshift_template_redis_exoscale']: osTemplate,
 } else {}

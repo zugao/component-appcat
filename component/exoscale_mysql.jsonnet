@@ -12,6 +12,8 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local mysqlParams = params.services.exoscale.mysql;
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 local connectionSecretKeys = [
   'MYSQL_URL',
   'MYSQL_DB',
@@ -93,9 +95,65 @@ local composition =
     },
   };
 
+// OpenShift template configuration
+local templateObject = kube._Object('exoscale.appcat.vshn.io/v1', 'ExoscaleMySQL', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        zone: '${ZONE}',
+        majorVersion: '${MAJOR_VERSION}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'The world’s most popular open-source database.';
+local templateMessage = 'Your MySQL by Exoscale instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('mysqlbyexoscale',
+                           'MySQL by Exoscale',
+                           templateDescription,
+                           'icon-mysql',
+                           'database,sql',
+                           templateMessage,
+                           'Exoscale',
+                           'https://vs.hn/exo-mysql') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'startup-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'mysql-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'ZONE',
+        value: 'ch-dk-2',
+      },
+      {
+        name: 'MAJOR_VERSION',
+        value: '8',
+      },
+    ],
+  };
 
 if params.services.exoscale.enabled && mysqlParams.enabled then {
   '20_xrd_exoscale_mysql': xrd,
   '20_rbac_exoscale_mysql': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_mysql': composition,
+  [if isOpenshift then '21_openshift_template_mysql_exoscale']: osTemplate,
 } else {}
