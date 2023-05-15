@@ -29,6 +29,10 @@ parameters:
         registry: ghcr.io
         repository: vshn/appcat-sli-exporter
         tag: v0.1.1
+      sloth:
+        registry: ghcr.io
+        image: slok/sloth
+        tag: v0.11.0
 
     controller:
       enabled: false
@@ -78,6 +82,28 @@ parameters:
             memory: 300Mi
         kustomize_input:
           namespace: ${appcat:slos:namespace}
+      alerting:
+        labels:
+          syn: "true"
+          syn_team: schedar
+          syn_component: appcat
+          slo: "true"
+        page_labels:
+          severity: "critical"
+        ticket_labels:
+          severity: "warning"
+      vshn:
+        postgres:
+          uptime:
+            objective: 99.9
+            alerting:
+              page_alert:
+                # This should reduce non actionable alerts because of single instance restarts.
+                # The page alert looks (ammong other things) at the burn rate over the last 5min.
+                # If the alert is pending for more than 5m this indicates a real problem.
+                for: 6m
+              ticket_alert: {}
+
 
     providers:
       cloudscale:

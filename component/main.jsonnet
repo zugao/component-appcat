@@ -1,6 +1,7 @@
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
+local slos = import 'slos.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -69,4 +70,8 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
   '10_clusterrole_view': xrdBrowseRole,
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
+
+} + if params.slos.enabled then {
+  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then '90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
 }
+else {}

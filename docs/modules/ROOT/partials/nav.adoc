@@ -23,3 +23,7 @@
 ** xref:references/services-exoscale.adoc[Exoscale Services]
 ** xref:references/services-vshn.adoc[VSHN Services]
 ** xref:references/service-objectstorage.adoc[Objectstorage Service]
+
+.Runbooks
+* xref:runbooks/vshn-postgresql.adoc[]
+
