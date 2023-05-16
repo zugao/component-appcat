@@ -109,7 +109,7 @@ local templateMessage = 'Your Redis by Exoscale instance is being provisioned, p
 
 local osTemplate =
   common.OpenShiftTemplate('redisbyexoscale',
-                           'Redis by Exoscale',
+                           'Redis',
                            templateDescription,
                            'icon-redis',
                            'database,nosql',

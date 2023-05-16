@@ -118,10 +118,10 @@ local templateMessage = 'Your MySQL by Exoscale instance is being provisioned, p
 
 local osTemplate =
   common.OpenShiftTemplate('mysqlbyexoscale',
-                           'MySQL by Exoscale',
+                           'MySQL',
                            templateDescription,
-                           'icon-mysql',
-                           'database,sql',
+                           'icon-mysql-database',
+                           'database,sql,mysql',
                            templateMessage,
                            'Exoscale',
                            'https://vs.hn/exo-mysql') + {

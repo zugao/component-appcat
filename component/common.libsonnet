@@ -107,6 +107,7 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
       tags: tags,
       'openshift.io/provider-display-name': provider,
       'openshift.io/documentation-url': docs,
+      'openshift.io/support-url': 'https://www.vshn.ch/en/contact/',
     },
     namespace: 'openshift',
   },

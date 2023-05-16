@@ -117,10 +117,10 @@ local templateMessage = 'Your OpenSearch by Exoscale instance is being provision
 
 local osTemplate =
   common.OpenShiftTemplate('opensearchbyexoscale',
-                           'OpenSearch by Exoscale',
+                           'OpenSearch',
                            templateDescription,
-                           'icon-opensearch',
-                           'database,nosql',
+                           'icon-elastic',
+                           'database,nosql,opensearch,search',
                            templateMessage,
                            'Exoscale',
                            'https://vs.hn/exo-opensearch') + {

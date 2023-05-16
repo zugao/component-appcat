@@ -1087,10 +1087,10 @@ local templateMessage = 'Your PostgreSQL by VSHN instance is being provisioned, 
 
 local osTemplate =
   common.OpenShiftTemplate('postgresqlbyvshn',
-                           'PostgreSQL by VSHN',
+                           'PostgreSQL',
                            templateDescription,
                            'icon-postgresql',
-                           'database,sql',
+                           'database,sql,postgresql',
                            templateMessage,
                            'VSHN',
                            'https://vs.hn/vshn-postgresql') + {

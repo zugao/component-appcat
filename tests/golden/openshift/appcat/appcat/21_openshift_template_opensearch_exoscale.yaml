@@ -6,11 +6,12 @@ metadata:
   annotations:
     description: OpenSearch is a community-driven, open-source search and analytics
       suite used by developers to ingest, search, visualize, and analyze data.
-    iconClass: icon-opensearch
-    openshift.io/display-name: OpenSearch by Exoscale
+    iconClass: icon-elastic
+    openshift.io/display-name: OpenSearch
     openshift.io/documentation-url: https://vs.hn/exo-opensearch
     openshift.io/provider-display-name: Exoscale
-    tags: database,nosql
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
+    tags: database,nosql,opensearch,search
   labels:
     name: opensearchbyexoscale
   name: opensearchbyexoscale

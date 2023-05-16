@@ -118,10 +118,10 @@ local templateMessage = 'Your PostgreSQL by Exoscale instance is being provision
 
 local osTemplate =
   common.OpenShiftTemplate('postgresqlbyexoscale',
-                           'PostgreSQL by Exoscale',
+                           'PostgreSQL',
                            templateDescription,
                            'icon-postgresql',
-                           'database,sql',
+                           'database,sql,postgresql',
                            templateMessage,
                            'Exoscale',
                            'https://vs.hn/exo-postgresql') + {

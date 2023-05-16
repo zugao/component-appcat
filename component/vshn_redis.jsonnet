@@ -515,7 +515,7 @@ local templateMessage = 'Your Redis by VSHN instance is being provisioned, pleas
 
 local osTemplate =
   common.OpenShiftTemplate('redisbyvshn',
-                           'Redis by VSHN',
+                           'Redis',
                            templateDescription,
                            'icon-redis',
                            'database,nosql',

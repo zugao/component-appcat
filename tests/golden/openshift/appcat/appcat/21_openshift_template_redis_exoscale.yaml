@@ -7,9 +7,10 @@ metadata:
     description: The open source, in-memory data store used by millions of developers
       as a database, cache, streaming engine, and message broker.
     iconClass: icon-redis
-    openshift.io/display-name: Redis by Exoscale
+    openshift.io/display-name: Redis
     openshift.io/documentation-url: https://vs.hn/exo-redis
     openshift.io/provider-display-name: Exoscale
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
     tags: database,nosql
   labels:
     name: redisbyexoscale

@@ -113,10 +113,10 @@ local templateMessage = 'Your Kafka by Exoscale instance is being provisioned, p
 
 local osTemplate =
   common.OpenShiftTemplate('kafkabyexoscale',
-                           'Kafka by Exoscale',
+                           'Kafka',
                            templateDescription,
-                           'icon-kafka',
-                           'database,nosql',
+                           'icon-other-unknown',
+                           'database,nosql,kafka',
                            templateMessage,
                            'Exoscale',
                            'https://vs.hn/exo-kafka') + {
@@ -126,7 +126,7 @@ local osTemplate =
     parameters: [
       {
         name: 'PLAN',
-        value: 'startup-4',
+        value: 'startup-2',
       },
       {
         name: 'SECRET_NAME',

@@ -5,11 +5,12 @@ message: Your MySQL by Exoscale instance is being provisioned, please see ${SECR
 metadata:
   annotations:
     description: "The world\u2019s most popular open-source database."
-    iconClass: icon-mysql
-    openshift.io/display-name: MySQL by Exoscale
+    iconClass: icon-mysql-database
+    openshift.io/display-name: MySQL
     openshift.io/documentation-url: https://vs.hn/exo-mysql
     openshift.io/provider-display-name: Exoscale
-    tags: database,sql
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
+    tags: database,sql,mysql
   labels:
     name: mysqlbyexoscale
   name: mysqlbyexoscale
