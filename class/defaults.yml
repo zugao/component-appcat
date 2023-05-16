@@ -24,7 +24,7 @@ parameters:
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
-        tag: v3.0.0
+        tag: v3.1.0
       sli_exporter:
         registry: ghcr.io
         repository: vshn/appcat-sli-exporter
