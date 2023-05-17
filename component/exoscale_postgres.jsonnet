@@ -12,6 +12,8 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.exoscale.postgres;
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 local connectionSecretKeys = [
   'POSTGRESQL_URL',
   'POSTGRESQL_DB',
@@ -93,9 +95,65 @@ local composition =
     },
   };
 
+// OpenShift template configuration
+local templateObject = kube._Object('exoscale.appcat.vshn.io/v1', 'ExoscalePostgreSQL', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        majorVersion: '${MAJOR_VERSION}',
+        zone: '${ZONE}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'PostgreSQL is a powerful, open source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. The origins of PostgreSQL date back to 1986 as part of the POSTGRES project at the University of California at Berkeley and has more than 30 years of active development on the core platform.';
+local templateMessage = 'Your PostgreSQL by Exoscale instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('postgresqlbyexoscale',
+                           'PostgreSQL',
+                           templateDescription,
+                           'icon-postgresql',
+                           'database,sql,postgresql',
+                           templateMessage,
+                           'Exoscale',
+                           'https://vs.hn/exo-postgresql') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'startup-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'postgresql-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'MAJOR_VERSION',
+        value: '14',
+      },
+      {
+        name: 'ZONE',
+        value: 'ch-dk-2',
+      },
+    ],
+  };
 
 if params.services.exoscale.enabled && pgParams.enabled then {
   '20_xrd_exoscale_postgres': xrd,
   '20_rbac_exoscale_postgres': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_postgres': composition,
+  [if isOpenshift then '21_openshift_template_postgresql_exoscale']: osTemplate,
 } else {}

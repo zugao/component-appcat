@@ -21,6 +21,8 @@ local certificateSecretName = 'tls-certificate';
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 // Filter out disabled plans
 local pgPlans = common.FilterDisabledParams(pgParams.plans);
 
@@ -1063,6 +1065,57 @@ local composition(restore=false) =
 local defaultComp = composition();
 local restoreComp = composition(true);
 
+// OpenShift template configuration
+local templateObject = kube._Object('vshn.appcat.vshn.io/v1', 'VSHNPostgreSQL', '${INSTANCE_NAME}') + {
+  spec: {
+    parameters: {
+      service: {
+        majorVersion: '${MAJOR_VERSION}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local templateDescription = 'PostgreSQL is a powerful, open source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. The origins of PostgreSQL date back to 1986 as part of the POSTGRES project at the University of California at Berkeley and has more than 30 years of active development on the core platform.';
+local templateMessage = 'Your PostgreSQL by VSHN instance is being provisioned, please see ${SECRET_NAME} for access.';
+
+local osTemplate =
+  common.OpenShiftTemplate('postgresqlbyvshn',
+                           'PostgreSQL',
+                           templateDescription,
+                           'icon-postgresql',
+                           'database,sql,postgresql',
+                           templateMessage,
+                           'VSHN',
+                           'https://vs.hn/vshn-postgresql') + {
+    objects: [
+      templateObject,
+    ],
+    parameters: [
+      {
+        name: 'PLAN',
+        value: 'standard-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'postgresql-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'MAJOR_VERSION',
+        value: '15',
+      },
+    ],
+  };
+
 if params.services.vshn.enabled && pgParams.enabled then
   assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
   assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
@@ -1073,4 +1126,5 @@ if params.services.vshn.enabled && pgParams.enabled then
     '20_namespace_vshn_control': controlNamespace,
     '21_composition_vshn_postgres': defaultComp,
     '21_composition_vshn_postgresrestore': restoreComp,
+    [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
   } else {}

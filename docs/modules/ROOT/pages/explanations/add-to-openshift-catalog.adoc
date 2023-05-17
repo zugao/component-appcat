@@ -1,0 +1,98 @@
+= Add a service to the OpenShift catalog
+
+There's a function in the common library that helps to create an OpenShift template.
+The function will ensure that all necessary metadata is set for the template.
+
+== Set the template metadata
+
+[source,jsonnet]
+----
+local osTemplate =
+  common.OpenShiftTemplate('postgresqlbyvshn', <1>
+                           'PostgreSQL', <2>
+                           templateDescription, <3>
+                           'icon-postgresql', <4>
+                           'database,sql,postgresql', <5>
+                           templateMessage, <6>
+                           'VSHN', <7>
+                           'https://vs.hn/vshn-postgresql') <8>
+----
+<1> Objectname of the tempalte. All these objects are deployed to the `openshift` namespace. So make sure this name doesn't collide with any other template. Use the `$servicenameby$provider` naming scheme to avoid collisons.
+<2> DisplayName of the template. This is the name shown in the OpenShift console.
+<3> Description of the service, a description what this service is. Can usually be copied from https://products.vshn.ch/appcat/services_index.html[the product docs].
+<4> Icon class, the icon can be chosen from predefined ones. See this list https://docs.openshift.com/container-platform/4.11/openshift_images/using-templates.html#templates-writing-description_using-templates[here].
+<5> Tags, various tags that can be set. For some of the tags there are predefined filters in the OpenShift console.
+<6> Template message, a message that is shown after the template is applied. It's only shown if the template is applied via the CLI.
+<7> Provider name, this can be set to the name of the provider that provides this service. For example VSHN or Exoscale.
+<8> Docs link, this should point to the docs of this specific service.
+
+== Add the actual template
+
+To add the actual template part, you need to add fields to the template
+
+[source,jsonnet]
+----
+local templateObject = kube._Object('vshn.appcat.vshn.io/v1', 'VSHNPostgreSQL', '${INSTANCE_NAME}') + { <1>
+  spec: {
+    parameters: {
+      service: {
+        majorVersion: '${MAJOR_VERSION}',
+      },
+      size: {
+        plan: '${PLAN}',
+      },
+    },
+    writeConnectionSecretToRef: {
+      name: '${SECRET_NAME}',
+    },
+  },
+};
+
+local osTemplate =
+  common.OpenShiftTemplate(...)  + {
+    objects: [
+      templateObject, <1>
+    ],
+    parameters: [ <2>
+      {
+        name: 'PLAN',
+        value: 'standard-4',
+      },
+      {
+        name: 'SECRET_NAME',
+        value: 'postgresql-credentials',
+      },
+      {
+        name: 'INSTANCE_NAME',
+      },
+      {
+        name: 'MAJOR_VERSION',
+        value: '15',
+      },
+    ],
+  }
+----
+<1> The actual template, this is just a normal claim with some variable placeholders. Each tempalte could hold multiple objects to template.
+<2> Parameters define the user input and will be placed in the variable placeholders specified in the object. If the `value` field is provided then it's set a default and can be overwriten by the user.
+
+Currently we expose these parameters for each service:
+
+* PLAN: with the same default as in the CRD
+* SECRET_NAME: Crossplane's `writeConnectionSecretToRef` field
+* INSTANCE_NAME: name of the claim. It should not have a default.
+* MAJOR_VERSION or VERSION: depending on the service we expose only the major version or a specific version.
+
+== Render it
+
+Finally, we need to render it, but only on OpenShift.
+
+[source,jsonnet]
+----
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
+{
+  '20_xrd_vshn_postgres': xrd,
+  ...
+  [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
+}
+----

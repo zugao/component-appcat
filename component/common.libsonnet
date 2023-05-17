@@ -97,6 +97,22 @@ local filterDisabledParams(params) = std.foldl(
   {}
 );
 
+local openShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs)
+      = kube._Object('template.openshift.io/v1', 'Template', name) + {
+  metadata+: {
+    annotations: {
+      'openshift.io/display-name': displayName,
+      description: description,
+      iconClass: iconClass,
+      tags: tags,
+      'openshift.io/provider-display-name': provider,
+      'openshift.io/documentation-url': docs,
+      'openshift.io/support-url': 'https://www.vshn.ch/en/contact/',
+    },
+    namespace: 'openshift',
+  },
+  message: message,
+};
 
 {
   SyncOptions: syncOptions,
@@ -110,4 +126,6 @@ local filterDisabledParams(params) = std.foldl(
     vshnMetaVshn(dbname, flavor, offered),
   FilterDisabledParams(params):
     filterDisabledParams(params),
+  OpenShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs):
+    openShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs),
 }
