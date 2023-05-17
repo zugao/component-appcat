@@ -104,7 +104,6 @@ spec:
                             Currently only "3.4" is supported. Leave it empty to always
                             get the latest supported version.
                           enum:
-                            - '3.3'
                             - '3.4'
                           type: string
                         zone:

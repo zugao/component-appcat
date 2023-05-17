@@ -67,7 +67,7 @@ type ExoscaleKafkaServiceSpec struct {
 	// KafkaSettings contains additional Kafka settings.
 	KafkaSettings runtime.RawExtension `json:"kafkaSettings,omitempty"`
 
-	// +kubebuilder:validation:Enum="3.3";"3.4"
+	// +kubebuilder:validation:Enum="3.4"
 	// +kubebuilder:default="3.4"
 
 	// Version contains the minor version for Kafka.
