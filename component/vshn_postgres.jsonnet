@@ -1006,6 +1006,75 @@ local podMonitor = {
   ],
 };
 
+local alertmanagerconfig = {
+  name: 'alertmanagerconfig-mailgun',
+  base: comp.KubeObject('monitoring.coreos.com/v1alpha1', 'AlertmanagerConfig') + {
+    spec+: {
+      forProvider+: {
+        manifest+: {
+          metadata: {
+            name: 'postgresql-alertmanagerconfig-mailgun',
+          },
+          spec: {
+            receivers: [
+              {
+                name: 'email-receiver',
+                emailConfigs: [
+                  {
+                    to: '',
+                    from: 'appcat@appuio.cloud',
+                    authUsername: 'appcat@appuio.cloud',
+                    authPassword: {
+                      name: 'mailgunSecret',
+                      key: "password"
+                    },
+                    smarthost: 'smtp.mailgun.org:587',
+                    requireTLS: true,
+                    sendResolved: true,
+                  },
+                ],
+              },
+            ],
+            route: {
+              groupBy: [ 'alertname' ],
+              groupWait: '10s',
+              groupInterval: '5m',
+              repeatInterval: '1h',
+              receiver: 'email-receiver',
+            },
+          },
+        },
+      },
+    },
+  },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'alertmanagerconfig'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]', 'vshn-postgresql'),
+  ],
+};
+
+local mailgunSecret = {
+  name: 'mailgunSecret',
+  base: comp.KubeObject('v1', 'Secret') +
+        {
+          spec+: {
+            forProvider+: {
+              manifest+: {
+                metadata: {},
+                stringData: {
+                  password: pgParams.mailGun_api_key,
+                },
+              },
+            },
+          },
+        },
+  patches: [
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'mailgunsecret'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+  ],
+};
 local composition(restore=false) =
 
   local metadata = if restore then common.VshnMetaVshn('PostgreSQLRestore', 'standalone', 'false') else common.VshnMetaVshn('PostgreSQL', 'standalone');
@@ -1054,6 +1123,8 @@ local composition(restore=false) =
                    maintenanceJob,
                    podMonitor,
                    prometheusRule,
+                   mailgunSecret,
+                   alertmanagerconfig,
                  ] + if pgParams.enableNetworkPolicy == true then [
         networkPolicy,
       ] else [],

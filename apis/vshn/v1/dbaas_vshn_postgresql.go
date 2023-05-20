@@ -214,6 +214,11 @@ type VSHNPostgreSQLMonitoring struct {
 	// AlertmanagerConfigSpecTemplate takes an AlertmanagerConfigSpec object.
 	// This takes precedence over the AlertmanagerConfigRef.
 	AlertmanagerConfigSpecTemplate *alertmanagerv1alpha1.AlertmanagerConfigSpec `json:"alertmanagerConfigTemplate,omitempty"`
+
+	// Email to notify customer about issues with instance.
+	// kubebuilder:validation:Pattern=`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`
+	// +kubebuilder:default=""
+	Email string `json:"email"`
 }
 
 // VSHNPostgreSQLEncryption contains storage encryption specific parameters

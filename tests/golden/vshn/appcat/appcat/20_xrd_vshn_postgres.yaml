@@ -5018,6 +5018,13 @@ spec:
                                   type: array
                               type: object
                           type: object
+                        email:
+                          default: ''
+                          description: Email to notify customer about issues with
+                            instance. kubebuilder:validation:Pattern=`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`
+                          type: string
+                      required:
+                        - email
                       type: object
                     network:
                       description: Network contains any network related settings.

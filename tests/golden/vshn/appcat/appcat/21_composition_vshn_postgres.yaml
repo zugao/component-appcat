@@ -1223,6 +1223,100 @@ spec:
         spec:
           forProvider:
             manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata: {}
+              stringData:
+                password: ''
+          providerConfigRef:
+            name: kubernetes
+      name: mailgunSecret
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-mailgunsecret'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: monitoring.coreos.com/v1alpha1
+              kind: AlertmanagerConfig
+              metadata:
+                name: postgresql-alertmanagerconfig-mailgun
+              spec:
+                receivers:
+                  - emailConfigs:
+                      - authPassword:
+                          key: password
+                          name: mailgunSecret
+                        authUsername: appcat@appuio.cloud
+                        from: appcat@appuio.cloud
+                        requireTLS: true
+                        sendResolved: true
+                        smarthost: smtp.mailgun.org:587
+                        to: ''
+                    name: email-receiver
+                route:
+                  groupBy:
+                    - alertname
+                  groupInterval: 5m
+                  groupWait: 10s
+                  receiver: email-receiver
+                  repeatInterval: 1h
+          providerConfigRef:
+            name: kubernetes
+      name: alertmanagerconfig-mailgun
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-alertmanagerconfig'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]
+          transforms:
+            - string:
+                fmt: vshn-postgresql-%s
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata: {}
+        spec:
+          forProvider:
+            manifest:
               apiVersion: networking.k8s.io/v1
               kind: NetworkPolicy
               metadata: {}

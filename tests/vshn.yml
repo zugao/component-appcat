@@ -127,6 +127,7 @@ parameters:
       vshn:
         enabled: true
         postgres:
+          mailGun_api_key: ""
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
           plans:
