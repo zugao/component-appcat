@@ -1287,7 +1287,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-alertmanagerconfig'
+                fmt: '%s-alertmanagerconfig-mailgun'
                 type: Format
               type: string
           type: FromCompositeFieldPath
@@ -1309,6 +1309,9 @@ spec:
                 fmt: vshn-postgresql-%s
                 type: Format
               type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.monitoring.email
+          toFieldPath: spec.forProvider.manifest.spec.receivers[0].emailConfigs[0].to
           type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
