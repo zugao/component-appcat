@@ -1026,7 +1026,7 @@ local alertmanagerconfig = {
                     authUsername: 'appcat@appuio.cloud',
                     authPassword: {
                       name: 'mailgunSecret',
-                      key: "password"
+                      key: 'password',
                     },
                     smarthost: 'smtp.mailgun.org:587',
                     requireTLS: true,
