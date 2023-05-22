@@ -10,7 +10,6 @@ For documentation on Project Syn and this component, see https://syn.tools.
 This repository contains:
 
 * `component`: SYN Commodore component for installing AppCat features
-* `apis`: The code that describes the Composites (XRDs) and generates their YAML in `/packages/composite/`
 
 This component can be compiled with commodore like this:
 
@@ -27,20 +26,6 @@ The resulting compiled component can be found in `compiled/`.
 There is currently no easy way to run it locally. You need to apply the compiled component to a test cluster to see if it works as expected.
 
 This process is not suitable for installing the component on a production system.
-
-## Generate XRDs with Go / KubeBuilder
-
-In `/apis` there is code in Go to generate the XRDs (composites) as this is in OpenAPI.
-This code generates the OpenAPI scheme using [Kubebuilder](https://kubebuilder.io/).
-
-See following pages for learning how to do that:
-- https://kubebuilder.io/reference/generating-crd.html
-- https://kubebuilder.io/reference/markers.html
-
-To run the composition generator, run `make generate-crd`.
-You need to have `go` installed for this to work.
-
-After that, you are able to update the golden files for the component: `make gen-golden-all`.
 
 ## Documentation
 
