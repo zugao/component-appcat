@@ -18,7 +18,7 @@ This structure allows easily injecting a registry mirror, if required.
 type:: dict
 reference:: xref:references/appcat-apiserver.adoc[See API Server parameters]
 
-This parameter allows configuring https://github.com/vshn/appcat-apiserver[the AppCat API Server].
+This parameter allows configuring https://github.com/vshn/appcat[the AppCat API Server].
 
 
 == `slos`

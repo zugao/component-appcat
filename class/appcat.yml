@@ -3,7 +3,7 @@ parameters:
     dependencies:
       - type: git
         output_path: dependencies/appcat/manifests/apiserver/${appcat:images:apiserver:tag}
-        source: https://github.com/vshn/appcat-apiserver.git
+        source: https://github.com/vshn/appcat.git
         ref: ${appcat:images:apiserver:tag}
     compile:
       - input_paths:

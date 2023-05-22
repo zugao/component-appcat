@@ -47,10 +47,10 @@ local kustomization =
   if params.slos.enabled then
     local image = params.images.apiserver;
     com.Kustomization(
-      'https://github.com/vshn/appcat-apiserver/config/sliexporter/default',
+      'https://github.com/vshn/appcat/config/sliexporter/default',
       image.tag,
       {
-        'ghcr.io/vshn/appcat-apiserver': {
+        'ghcr.io/vshn/appcat': {
           newTag: image.tag,
           newName: '%(registry)s/%(repository)s' % image,
         },
