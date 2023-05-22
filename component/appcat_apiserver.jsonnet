@@ -6,8 +6,8 @@ local com = import 'lib/commodore.libjsonnet';
 local params = inv.parameters.appcat;
 local apiserverParams = params.apiserver;
 
-local image = params.images.apiserver;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/config/apiserver/' + manifest));
+local image = params.images.appcat;
+local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/' + image.tag + '/config/apiserver/' + manifest));
 
 local namespace = loadManifest('namespace.yaml') {
   metadata+: {
@@ -77,7 +77,7 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.apiserver,
+              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.appcat,
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
               resources: apiserverParams.resources,

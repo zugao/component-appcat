@@ -24,7 +24,7 @@ local connectionSecretKeys = [
 
 local xrd = xrds.XRDFromCRD(
   'xexoscaleredis.exoscale.appcat.vshn.io',
-  xrds.LoadCRD('exoscale.appcat.vshn.io_exoscaleredis.yaml', params.images.apiserver.tag),
+  xrds.LoadCRD('exoscale.appcat.vshn.io_exoscaleredis.yaml', params.images.appcat.tag),
   defaultComposition='exoscaleredis.exoscale.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
 );

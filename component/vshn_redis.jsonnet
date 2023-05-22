@@ -41,7 +41,7 @@ local redisPlans = common.FilterDisabledParams(redisParams.plans);
 
 local xrd = xrds.XRDFromCRD(
   'xvshnredis.vshn.appcat.vshn.io',
-  xrds.LoadCRD('vshn.appcat.vshn.io_vshnredis.yaml', params.images.apiserver.tag),
+  xrds.LoadCRD('vshn.appcat.vshn.io_vshnredis.yaml', params.images.appcat.tag),
   defaultComposition='vshnredis.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(redisPlans, redisParams.defaultPlan);

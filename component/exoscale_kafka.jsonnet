@@ -26,7 +26,7 @@ local connectionSecretKeys = [
 
 local xrd = xrds.XRDFromCRD(
   'xexoscalekafkas.exoscale.appcat.vshn.io',
-  xrds.LoadCRD('exoscale.appcat.vshn.io_exoscalekafkas.yaml', params.images.apiserver.tag),
+  xrds.LoadCRD('exoscale.appcat.vshn.io_exoscalekafkas.yaml', params.images.appcat.tag),
   connectionSecretKeys=connectionSecretKeys,
 );
 
