@@ -42,15 +42,16 @@ local vshnMetaDBaaSExoscale(dbname) = {
   },
 };
 
-local vshnMetaVshn(dbname, flavor, offered) = {
+local vshnMetaVshn(dbname, flavor, offered, plans) = {
   metadata+: {
     annotations+: {
-      'metadata.appcat.vshn.io/displayname': 'VSHN Managed ' + dbname,
+      'metadata.appcat.vshn.io/displayname': dbname + ' by VSHN',
       'metadata.appcat.vshn.io/description': dbname + ' instances by VSHN',
       'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/vshn-' + std.asciiLower(dbname),
       'metadata.appcat.vshn.io/zone': facts.region,
       'metadata.appcat.vshn.io/flavor': flavor,
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/' + std.asciiLower(dbname) + '.html',
+      'metadata.appcat.vshn.io/plans': std.manifestJsonMinified(plans),
     },
     labels+: {
       'metadata.appcat.vshn.io/offered': offered,
@@ -122,8 +123,8 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
     vshnMetaObjectStorage(provider),
   MergeArgs(args, additional):
     mergeArgs(args, additional),
-  VshnMetaVshn(dbname, flavor, offered='true'):
-    vshnMetaVshn(dbname, flavor, offered),
+  VshnMetaVshn(dbname, flavor, offered='true', plans):
+    vshnMetaVshn(dbname, flavor, offered, plans),
   FilterDisabledParams(params):
     filterDisabledParams(params),
   OpenShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs):
