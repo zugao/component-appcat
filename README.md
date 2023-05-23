@@ -10,7 +10,6 @@ For documentation on Project Syn and this component, see https://syn.tools.
 This repository contains:
 
 * `component`: SYN Commodore component for installing AppCat features
-* `apis`: The code that describes the Composites (XRDs) and generates their YAML in `/packages/composite/`
 
 This component can be compiled with commodore like this:
 
