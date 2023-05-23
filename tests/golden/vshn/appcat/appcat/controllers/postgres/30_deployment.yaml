@@ -20,7 +20,7 @@ spec:
             - controller
             - --leader-elect
           env: []
-          image: ghcr.io/vshn/appcat:common-repo
+          image: ghcr.io/vshn/appcat:v4.0.0
           livenessProbe:
             httpGet:
               path: /healthz
