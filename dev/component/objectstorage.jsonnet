@@ -14,7 +14,7 @@ local objStoParams = params.services.generic.objectstorage;
 
 local xrd = xrds.XRDFromCRD(
   'xobjectbuckets.appcat.vshn.io',
-  xrds.LoadCRD('appcat.vshn.io_objectbuckets.yaml'),
+  xrds.LoadCRD('appcat.vshn.io_objectbuckets.yaml', params.images.appcat.tag),
   defaultComposition='%s.objectbuckets.appcat.vshn.io' % objStoParams.defaultComposition,
   connectionSecretKeys=[
     'AWS_ACCESS_KEY_ID',

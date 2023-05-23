@@ -3,12 +3,12 @@ kind: ClusterRoleBinding
 metadata:
   annotations: {}
   labels:
-    name: appcat-apiserver
-  name: appcat-apiserver
+    name: appcat
+  name: appcat
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: appcat-apiserver
+  name: appcat
 subjects:
   - kind: ServiceAccount
     name: appcat-apiserver

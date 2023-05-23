@@ -7,8 +7,8 @@ local params = inv.parameters.appcat;
 local controllersParams = params.controller;
 local postgresControllerParams = controllersParams.postgres;
 
-local image = params.images.apiserver;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/apiserver/' + image.tag + '/controller/' + manifest));
+local image = params.images.appcat;
+local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/' + image.tag + '/config/controller/' + manifest));
 
 local namespace = loadManifest('namespace.yaml') {
   metadata+: {
@@ -59,7 +59,7 @@ local controller = loadManifest('deployment.yaml') {
         containers: [
           if c.name == 'manager' then
             c {
-              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.apiserver,
+              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.appcat,
               args+: postgresControllerParams.extraArgs,
               env+: com.envList(postgresControllerParams.extraEnv),
               resources: postgresControllerParams.resources,
