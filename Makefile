@@ -80,6 +80,11 @@ lint_kubent_all: $(test_instances) ## Lint deprecated Kubernetes API versions fo
 $(test_instances):
 	$(MAKE) $(recursive_target) -e instance=$(basename $(@F))
 
+.PHONY: generate-exoscale-plans
+generate-exoscale-plans: ## Generate current plans for Exoscale
+	cd dev/scripts/exoscale-plans/ && \
+	go run main.go
+
 .PHONY: clean
 clean: ## Clean the project
 	rm -rf .cache compiled dependencies vendor helmcharts jsonnetfile*.json || true

@@ -67,7 +67,13 @@ local composition =
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscaleopensearch.exoscale.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaDBaaSExoscale('OpenSearch') +
+  common.VshnMetaDBaaSExoscale('OpenSearch') + {
+    metadata+: {
+      annotations+: {
+        'metadata.appcat.vshn.io/plans': importstr 'exoscale-plans/opensearch.json',
+      },
+    },
+  } +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
