@@ -26,6 +26,48 @@ In which namespace an XR's connection secret is written to.
 
 Defaults to the crossplane namespace.
 
+== `emailAlerting`
+[horizontal]
+type:: dict
+
+Configuration options for email alerting trough an SMTP service.
+Here you can configure the smtp host as well as the credentails required to send out alerts via any SMTP mail relay.
+
+=== `emailAlerting.smtpHost`
+type:: string
+default:: `'smtp.eu.mailgun.org:465'`
+
+Hostname to be used for sending out email alerts
+
+=== `emailAlerting.smtpUsername`
+type:: string
+default:: `'myuser@example.com'`
+
+The Username for the mail relay server
+
+=== `emailAlerting.smtpPassword`
+type:: string
+default:: `?{vaultkv:__shared__/__shared__/mailgun/smtp_password}`
+
+The Password for the mail relay server.
+
+=== `emailAlerting.smtpFromAddress`
+type:: string
+default:: `'myuser@example.com'`
+
+The email address used in the FROM header for sending out the alerts.
+
+=== `emailAlerting.secretNamespace`
+type:: string
+default:: `'syn-appcat'`
+
+The namespace where the secret that contains the password for the smtp relay server will be placed in
+
+=== `emailAlerting.secretName`
+type:: string
+default:: `'mailgun-smtp-secret'`
+
+The name of the secret that contains the password for the smtp relay server.
 
 == `postgres`
 [horizontal]
