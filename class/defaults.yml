@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.0.1
+        tag: v4.1.0
 
     controller:
       enabled: false

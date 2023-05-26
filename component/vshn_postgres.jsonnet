@@ -1010,7 +1010,7 @@ local podMonitor = {
 
 local composition(restore=false) =
 
-  local metadata = if restore then common.VshnMetaVshn('PostgreSQLRestore', 'standalone', 'false') else common.VshnMetaVshn('PostgreSQL', 'standalone');
+  local metadata = if restore then common.VshnMetaVshn('PostgreSQLRestore', 'standalone', 'false', pgPlans) else common.VshnMetaVshn('PostgreSQL', 'standalone', 'true', pgPlans);
   local compositionName = if restore then 'vshnpostgresrestore.vshn.appcat.vshn.io' else 'vshnpostgres.vshn.appcat.vshn.io';
   local copyJobFunction(restore) = if restore then [ copyJob ] else [];
 

@@ -64,7 +64,13 @@ local composition =
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscalekafka.exoscale.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaDBaaSExoscale('Kafka') +
+  common.VshnMetaDBaaSExoscale('Kafka') + {
+    metadata+: {
+      annotations+: {
+        'metadata.appcat.vshn.io/plans': importstr 'exoscale-plans/kafka.json',
+      },
+    },
+  } +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),

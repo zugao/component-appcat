@@ -62,7 +62,13 @@ local composition =
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscaleredis.exoscale.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaDBaaSExoscale('Redis') +
+  common.VshnMetaDBaaSExoscale('Redis') + {
+    metadata+: {
+      annotations+: {
+        'metadata.appcat.vshn.io/plans': importstr 'exoscale-plans/redis.json',
+      },
+    },
+  } +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),

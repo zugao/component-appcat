@@ -351,7 +351,7 @@ local composition =
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnredis.vshn.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaVshn('Redis', 'standalone') +
+  common.VshnMetaVshn('Redis', 'standalone', 'true', redisPlans) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),

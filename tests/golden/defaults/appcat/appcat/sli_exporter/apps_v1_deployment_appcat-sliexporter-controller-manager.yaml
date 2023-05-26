@@ -26,7 +26,7 @@ spec:
         env:
         - name: APPCAT_SLI_VSHNPOSTGRESQL
           value: "false"
-        image: ghcr.io/vshn/appcat:v4.0.1
+        image: ghcr.io/vshn/appcat:v4.1.0
         livenessProbe:
           httpGet:
             path: /healthz

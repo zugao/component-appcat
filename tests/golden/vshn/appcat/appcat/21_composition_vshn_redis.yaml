@@ -5,9 +5,14 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
     metadata.appcat.vshn.io/description: Redis instances by VSHN
-    metadata.appcat.vshn.io/displayname: VSHN Managed Redis
+    metadata.appcat.vshn.io/displayname: Redis by VSHN
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-redis
     metadata.appcat.vshn.io/flavor: standalone
+    metadata.appcat.vshn.io/plans: '{"plus-1":{"note":"Will be scheduled on APPUiO
+      Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"250m","disk":"16Gi","enabled":true,"memory":"1Gi"}},"plus-2":{"note":"Will
+      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"500m","disk":"16Gi","enabled":true,"memory":"2Gi"}},"plus-4":{"note":"Will
+      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"1","disk":"16Gi","enabled":true,"memory":"4Gi"}},"plus-512m":{"note":"Will
+      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"125m","disk":"16Gi","enabled":true,"memory":"512Mi"}},"standard-1":{"size":{"cpu":"250m","disk":"16Gi","enabled":true,"memory":"1Gi"}},"standard-2":{"size":{"cpu":"500m","disk":"16Gi","enabled":true,"memory":"2Gi"}},"standard-4":{"size":{"cpu":"1","disk":"16Gi","enabled":true,"memory":"4Gi"}},"standard-512m":{"size":{"cpu":"125m","disk":"16Gi","enabled":true,"memory":"512Mi"}}}'
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/redis.html
     metadata.appcat.vshn.io/zone: rma1
   labels:
