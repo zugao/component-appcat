@@ -166,7 +166,7 @@ local controllerConfigRef(config) =
         {
           apiGroups: [ 'vshn.appcat.vshn.io' ],
           resources: [ 'vshnpostgresqls' ],
-          verbs: [ 'get' ],
+          verbs: [ 'get', 'update' ],
         },
         {
           apiGroups: [ 'monitoring.coreos.com' ],
