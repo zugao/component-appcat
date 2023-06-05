@@ -183,6 +183,7 @@ rules:
       - vshnpostgresqls
     verbs:
       - get
+      - update
   - apiGroups:
       - monitoring.coreos.com
     resources:

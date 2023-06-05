@@ -678,213 +678,6 @@ local clusterRestoreConfig = {
   ],
 };
 
-local maintenanceServiceAccount = {
-  name: 'maintenance-serviceaccount',
-  base: comp.KubeObject('v1', 'ServiceAccount') + {
-    spec+: {
-      forProvider+: {
-        manifest+: kube.ServiceAccount('maintenanceserviceaccount'),
-      },
-    },
-  },
-  patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'maintenanceserviceaccount'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-  ],
-};
-
-local maintenanceRole = {
-  name: 'maintenance-role',
-  base: comp.KubeObject('rbac.authorization.k8s.io/v1', 'Role') + {
-    spec+: {
-      forProvider+: {
-        manifest+: kube.Role('crossplane:appcat:job:postgres:maintenance') + {
-          rules: [
-            {
-              apiGroups: [ 'stackgres.io' ],
-              resources: [ 'sgdbops' ],
-              verbs: [
-                'delete',
-                'create',
-              ],
-            },
-          ],
-        },
-      },
-    },
-  },
-  patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'maintenancerole'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-  ],
-};
-
-local maintenanceRoleBinding = {
-  name: 'maintenance-rolebinding',
-  base: comp.KubeObject('rbac.authorization.k8s.io/v1', 'RoleBinding') + {
-    spec+: {
-      forProvider+: {
-        manifest+: {
-          roleRef: {
-            apiGroup: 'rbac.authorization.k8s.io',
-            kind: 'Role',
-            name: 'crossplane:appcat:job:postgres:maintenance',
-          },
-          subjects: [
-            {
-              apiGroup: '',
-              kind: 'ServiceAccount',
-              name: 'maintenanceserviceaccount',
-            },
-          ],
-        },
-      },
-    },
-  },
-  patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'maintenancerolebinding'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'maintenancerolebinding'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-  ],
-};
-
-local convertToCron() = [
-  // This function produces patches, that will convert dayOfWeek and timeOfDay
-  // to a proper cron string. It does that by using maps and regex. As well as
-  // environment patches.
-  {
-    type: 'FromCompositeFieldPath',
-    fromFieldPath: 'spec.parameters.maintenance.dayOfWeek',
-    toFieldPath: 'metadata.annotations[dayOfWeek]',
-    transforms: [
-      {
-        type: 'map',
-        map: {
-          monday: '1',
-          tuesday: '2',
-          wednesday: '3',
-          thursday: '4',
-          friday: '5',
-          saturday: '6',
-          sunday: '0',
-        },
-      },
-    ],
-  },
-  {
-    type: 'FromCompositeFieldPath',
-    fromFieldPath: 'spec.parameters.maintenance.timeOfDay',
-    toFieldPath: 'metadata.annotations[hour]',
-    transforms: [
-      {
-        type: 'string',
-        string: {
-          type: 'Regexp',
-          regexp: {
-            match: '(\\d+):(\\d+):.*',
-            group: 1,
-          },
-        },
-      },
-    ],
-  },
-  {
-    type: 'FromCompositeFieldPath',
-    fromFieldPath: 'spec.parameters.maintenance.timeOfDay',
-    toFieldPath: 'metadata.annotations[minute]',
-    transforms: [
-      {
-        type: 'string',
-        string: {
-          type: 'Regexp',
-          regexp: {
-            match: '(\\d+):(\\d+):.*',
-            group: 2,
-          },
-        },
-      },
-    ],
-  },
-  {
-    type: 'ToEnvironmentFieldPath',
-    fromFieldPath: 'metadata.annotations[minute]',
-    toFieldPath: 'maintenance.minute',
-  },
-  {
-    type: 'ToEnvironmentFieldPath',
-    fromFieldPath: 'metadata.annotations[hour]',
-    toFieldPath: 'maintenance.hour',
-  },
-  {
-    type: 'ToEnvironmentFieldPath',
-    fromFieldPath: 'metadata.annotations[dayOfWeek]',
-    toFieldPath: 'maintenance.dayOfWeek',
-  },
-  {
-    type: 'CombineFromEnvironment',
-    toFieldPath: 'spec.forProvider.manifest.spec.schedule',
-    combine: {
-      variables: [
-        { fromFieldPath: 'maintenance.minute' },
-        { fromFieldPath: 'maintenance.hour' },
-        { fromFieldPath: 'maintenance.dayOfWeek' },
-      ],
-      strategy: 'string',
-      string: {
-        fmt: '%s %s * * %s',
-      },
-    },
-  },
-];
-
-local maintenanceJob = {
-  name: 'maintenancejob',
-  base: comp.KubeObject('batch/v1', 'CronJob') + {
-    spec+: {
-      forProvider+: {
-        manifest+: {
-          spec: {
-            successfulJobsHistoryLimit: 0,
-            jobTemplate: {
-              spec: {
-                template: {
-                  spec: {
-                    restartPolicy: 'Never',
-                    serviceAccountName: 'maintenanceserviceaccount',
-                    containers: [
-                      {
-                        name: 'maintenancejob',
-                        image: 'bitnami/kubectl:latest',
-                        command: [ 'sh', '-c' ],
-                        args: [ importstr 'scripts/pg-maintenance.sh' ],
-                        env: [
-                          {
-                            name: 'TARGET_NAMESPACE',
-                          },
-                          {
-                            name: 'TARGET_INSTANCE',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'maintenancejob'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'maintenancejob'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.jobTemplate.spec.template.spec.containers[0].env[0].value', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.jobTemplate.spec.template.spec.containers[0].env[1].value'),
-  ] + convertToCron(),
-};
-
 local prometheusRule = {
   name: 'prometheusrule',
   base: comp.KubeObject('monitoring.coreos.com/v1', 'PrometheusRule') + {
@@ -1026,6 +819,12 @@ local composition(restore=false) =
           {
             name: 'pgsql-func',
             type: 'Container',
+            config: kube.ConfigMap('xfn-config') + {
+              data: {
+                imageTag: params.images.appcat.tag,
+                sgNamespace: pgParams.sgNamespace,
+              },
+            },
             container: {
               image: 'postgresql',
               runner: {
@@ -1050,10 +849,6 @@ local composition(restore=false) =
                    secret,
                    xobjectBucket,
                    sgObjectStorage,
-                   maintenanceServiceAccount,
-                   maintenanceRole,
-                   maintenanceRoleBinding,
-                   maintenanceJob,
                    podMonitor,
                    prometheusRule,
                  ] + if pgParams.enableNetworkPolicy == true then [

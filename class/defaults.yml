@@ -161,6 +161,7 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           # Used for deploying jobs during restores
           controlNamespace: 'syn-appcat-control'
+          sgNamespace: syn-stackgres
 
           defaultPlan: standard-2
           plans:
