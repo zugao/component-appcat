@@ -30,14 +30,15 @@ spec:
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
-          annotations: {}
           labels:
             name: xfn-config
           name: xfn-config
       container:
         image: postgresql
+        imagePullPolicy: IfNotPresent
         runner:
           endpoint: unix-abstract:crossplane/fn/default.sock
+        timeout: 20s
       name: pgsql-func
       type: Container
   resources:
