@@ -820,6 +820,12 @@ local composition(restore=false) =
             name: 'pgsql-func',
             type: 'Container',
             config: kube.ConfigMap('xfn-config') + {
+              metadata: {
+                labels: {
+                  name: 'xfn-config',
+                },
+                name: 'xfn-config',
+              },
               data: {
                 imageTag: params.images.appcat.tag,
                 sgNamespace: pgParams.sgNamespace,
@@ -827,6 +833,8 @@ local composition(restore=false) =
             },
             container: {
               image: 'postgresql',
+              imagePullPolicy: 'IfNotPresent',
+              timeout: '20s',
               runner: {
                 endpoint: 'unix-abstract:crossplane/fn/default.sock',
               },
