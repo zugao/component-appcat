@@ -1,7 +1,7 @@
+local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
-
 
 local inv = kap.inventory();
 // The hiera parameters for the component
@@ -51,7 +51,7 @@ local kustomization =
       image.tag,
       {
         'ghcr.io/vshn/appcat': {
-          newTag: image.tag,
+          newTag: common.GetAppCatImageTag(),
           newName: '%(registry)s/%(repository)s' % image,
         },
       },

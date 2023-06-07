@@ -115,6 +115,10 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
   message: message,
 };
 
+local getAppCatImageTag() = std.strReplace(params.images.appcat.tag, '/', '_');
+
+local getAppCatImageString() = params.images.appcat.registry + '/' + params.images.appcat.repository + ':' + getAppCatImageTag();
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -129,4 +133,8 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
     filterDisabledParams(params),
   OpenShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs):
     openShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs),
+  GetAppCatImageString():
+    getAppCatImageString(),
+  GetAppCatImageTag():
+    getAppCatImageTag(),
 }

@@ -59,7 +59,7 @@ local controller = loadManifest('deployment.yaml') {
         containers: [
           if c.name == 'manager' then
             c {
-              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.appcat,
+              image: common.GetAppCatImageString(),
               args+: postgresControllerParams.extraArgs,
               env+: com.envList(postgresControllerParams.extraEnv),
               resources: postgresControllerParams.resources,
