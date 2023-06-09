@@ -64,8 +64,8 @@ local prometheusRule(name) =
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}]))  by (service, namespace, name)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name)',
+            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}]))  by (service, namespace, name, organization)',
+            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization)',
           },
         },
         alerting+: {

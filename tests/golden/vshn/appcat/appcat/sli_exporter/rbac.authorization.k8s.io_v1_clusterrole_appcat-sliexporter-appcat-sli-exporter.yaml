@@ -18,3 +18,14 @@ rules:
   - vshnpostgresqls/status
   verbs:
   - get
+<<<<<<< HEAD
+=======
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  - secrets
+  verbs:
+  - get
+  - list
+>>>>>>> 1d232be (Fix sli exporter)
