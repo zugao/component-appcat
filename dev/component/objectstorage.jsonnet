@@ -153,26 +153,19 @@ local compositionMinioDev =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: 'syn-crossplane',
-      resources: [
-        {
-          base: namespace,
-          patches: [
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-          ],
-        },
-        {
-          base: devMinioHelmChart,
-          connectionDetails: [
-            { fromConnectionSecretKey: 'AWS_SECRET_ACCESS_KEY' },
-            { fromConnectionSecretKey: 'ENDPOINT_URL' },
-            { fromConnectionSecretKey: 'AWS_ACCESS_KEY_ID' },
-          ],
-          patches: [
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.values.buckets[0].name'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
-          ],
-        },
-      ],
+      functions:
+        [
+          {
+            name: 'miniodev-func',
+            type: 'Container',
+            container: {
+              image: 'miniodev',
+              runner: {
+                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+              },
+            },
+          },
+        ],
     },
   };
 
