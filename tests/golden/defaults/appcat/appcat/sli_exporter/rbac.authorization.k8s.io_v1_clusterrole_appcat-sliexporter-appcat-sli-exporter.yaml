@@ -18,8 +18,6 @@ rules:
   - vshnpostgresqls/status
   verbs:
   - get
-<<<<<<< HEAD
-=======
 - apiGroups:
   - ""
   resources:
@@ -28,4 +26,4 @@ rules:
   verbs:
   - get
   - list
->>>>>>> 1d232be (Fix sli exporter)
+  - watch

@@ -19,6 +19,9 @@ parameters:
   appcat:
     slos:
       enabled: true
+      sla_reporter:
+        enabled: true
+        slo_mimir_endpoint: http://kube-prometheus-kube-prome-prometheus.prometheus-system.svc:9090/prometheus
     controller:
       enabled: true
       postgres:

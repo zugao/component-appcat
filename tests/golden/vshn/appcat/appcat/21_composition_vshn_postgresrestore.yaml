@@ -31,7 +31,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.4.0
+          imageTag: add_slareports
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
