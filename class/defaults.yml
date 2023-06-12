@@ -28,7 +28,9 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.2.0
+        tag: v4.4.0
+
+    namespace: syn-appcat
 
     controller:
       enabled: false
@@ -36,7 +38,7 @@ parameters:
       postgres:
         enabled: false
         extraArgs: []
-        extraEnv: { }
+        extraEnv: {}
         resources:
           requests:
             cpu: 100m
@@ -100,7 +102,6 @@ parameters:
                 for: 6m
               ticket_alert: {}
 
-
     providers:
       cloudscale:
         enabled: false
@@ -151,6 +152,13 @@ parameters:
       vshn:
         enabled: false
         secretNamespace: ${crossplane:namespace}
+        emailAlerting:
+          smtpHost: "smtp.eu.mailgun.org:465"
+          smtpUsername: myuser@example.com
+          smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
+          smtpFromAddress: myuser@example.com
+          secretNamespace: syn-appcat
+          secretName: mailgun-smtp-credentials
         postgres:
           # bucket_region: 'lpg' || 'ch-gva-2'
           bucket_region: ""
@@ -160,7 +168,7 @@ parameters:
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           # Used for deploying jobs during restores
-          controlNamespace: 'syn-appcat-control'
+          controlNamespace: "syn-appcat-control"
           sgNamespace: syn-stackgres-operator
 
           defaultPlan: standard-2

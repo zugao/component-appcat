@@ -35,6 +35,8 @@ parameters:
     services:
       vshn:
         enabled: true
+        emailAlerting:
+          smtpPassword: "whatever"
         postgres:
           sgNamespace: stackgres
           bucket_region: 'us-east-1'

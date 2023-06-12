@@ -829,6 +829,11 @@ local composition(restore=false) =
               data: {
                 imageTag: common.GetAppCatImageTag(),
                 sgNamespace: pgParams.sgNamespace,
+                emailAlertingSecretNamespace: params.services.vshn.emailAlerting.secretNamespace,
+                emailAlertingSecretName: params.services.vshn.emailAlerting.secretName,
+                emailAlertingSmtpFromAddress: params.services.vshn.emailAlerting.smtpFromAddress,
+                emailAlertingSmtpUsername: params.services.vshn.emailAlerting.smtpUsername,
+                emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
               },
             },
             container: {
