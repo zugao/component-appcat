@@ -77,7 +77,7 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: '%(registry)s/%(repository)s:%(tag)s' % params.images.appcat,
+              image: common.GetAppCatImageString(),
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
               resources: apiserverParams.resources,

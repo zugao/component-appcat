@@ -827,7 +827,7 @@ local composition(restore=false) =
                 name: 'xfn-config',
               },
               data: {
-                imageTag: params.images.appcat.tag,
+                imageTag: common.GetAppCatImageTag(),
                 sgNamespace: pgParams.sgNamespace,
               },
             },
