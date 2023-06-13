@@ -76,7 +76,7 @@ local ObjectStorage = kube._Object('appcat.vshn.io/v1', 'ObjectBucket', 'appcat-
   },
 };
 
-if params.slos.enabled == true then {
+if sla_reporter_params.enabled == true then {
   '01_cronjob': CronJob,
   '02_object_bucket': ObjectStorage,
 } else {}
