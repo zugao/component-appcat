@@ -71,7 +71,7 @@ parameters:
       enabled: true
       namespace: appcat-slos
       sla_reporter:
-        enables: false
+        enabled: false
         resources:
           requests:
             cpu: 10m
