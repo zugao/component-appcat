@@ -20,7 +20,7 @@ spec:
             - controller
             - --leader-elect
           env: []
-          image: ghcr.io/vshn/appcat:add_slareports
+          image: ghcr.io/vshn/appcat:v4.5.0
           livenessProbe:
             httpGet:
               path: /healthz

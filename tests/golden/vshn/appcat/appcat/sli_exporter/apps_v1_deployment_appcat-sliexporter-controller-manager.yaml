@@ -26,7 +26,7 @@ spec:
         env:
         - name: APPCAT_SLI_VSHNPOSTGRESQL
           value: "true"
-        image: ghcr.io/vshn/appcat:add_slareports
+        image: ghcr.io/vshn/appcat:v4.5.0
         livenessProbe:
           httpGet:
             path: /healthz

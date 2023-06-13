@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: add/slareports
+        tag: v4.5.0
 
     namespace: syn-appcat
 
