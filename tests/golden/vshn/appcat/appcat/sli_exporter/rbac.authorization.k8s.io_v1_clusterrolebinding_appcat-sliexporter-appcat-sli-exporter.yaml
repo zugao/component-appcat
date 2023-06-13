@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: appcat-sliexporter-glrf-test-appcat-sli-probe
+  name: appcat-sliexporter-appcat-sli-exporter
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cluster-admin
+  name: appcat-sliexporter-appcat-sli-exporter
 subjects:
 - kind: ServiceAccount
   name: appcat-sliexporter-controller-manager

@@ -70,7 +70,10 @@ parameters:
           INPUT_DIR: ${_base_directory}/.work/appcat_sli_exporter
         args:
           - \${compiled_target_dir}/appcat/sli_exporter
-
+      - input_paths:
+          - ${_base_directory}/component/appcat_sla_reporter.jsonnet
+        input_type: jsonnet
+        output_path: appcat/sla_reporter
 
 
       - input_paths:

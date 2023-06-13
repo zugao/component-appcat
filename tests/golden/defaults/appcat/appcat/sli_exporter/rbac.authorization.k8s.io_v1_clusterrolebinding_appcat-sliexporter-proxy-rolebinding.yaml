@@ -8,5 +8,5 @@ roleRef:
   name: appcat-sliexporter-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: controller-manager
-  namespace: system
+  name: appcat-sliexporter-controller-manager
+  namespace: appcat-slos

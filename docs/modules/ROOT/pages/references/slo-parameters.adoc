@@ -96,3 +96,48 @@ vshn:
 <2> Adds the label `foo: bar` to all page alerts
 <3> Only fires page alerts if they are pending for 13 minutes
 <4> Adds annotation `please: ignore` to all ticket alerts
+
+== `sla_reporter`
+
+Configuration options for the monthly SLA report generator.
+
+=== `sla_reporter.enabled`
+[horizontal]
+type:: boolean
+default:: false
+
+Enables or disables the monthly reporter cronjob.
+
+=== `sla_reporter.resources`
+[horizontal]
+type:: dict
+
+The resource requests and limits for the SLA Reporter.
+
+=== `sla_reporter.schedule`
+[horizontal]
+type:: string
+default:: "0 9 1 * *"
+
+Cron schedule when the SLA Reporter should run.
+
+=== `sla_reporter.bucket_region`
+[horizontal]
+type:: dict
+default:: lpg
+
+The region in which the bucket that stores the reports should be provisioned.
+
+=== `sla_reporter.slo_mimir_endpoint`
+[horizontal]
+type:: dict
+default:: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc.cluster.local:8080/prometheus
+
+Endpoint for the Prometheus compatible data source.
+
+=== `sla_reporter.mimir_organization`
+[horizontal]
+type:: dict
+default:: appuio-managed-openshift-metrics
+
+Organization header needed to query Mimir data sources.
