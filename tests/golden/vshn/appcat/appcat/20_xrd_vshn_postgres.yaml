@@ -5296,6 +5296,10 @@ spec:
                   description: InstanceNamespace contains the name of the namespace
                     where the instance resides
                   type: string
+                isEOL:
+                  description: IsEOL indicates if this instance is using an EOL version
+                    of PostgreSQL.
+                  type: boolean
                 localCAConditions:
                   items:
                     properties:

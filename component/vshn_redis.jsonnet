@@ -356,6 +356,32 @@ local composition =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: redisParams.secretNamespace,
+      functions:
+        [
+          {
+            name: 'pgsql-func',
+            type: 'Container',
+            config: kube.ConfigMap('xfn-config') + {
+              metadata: {
+                labels: {
+                  name: 'xfn-config',
+                },
+                name: 'xfn-config',
+              },
+              data: {
+                bucketRegion: redisParams.bucket_region,
+              },
+            },
+            container: {
+              image: 'redis',
+              imagePullPolicy: 'IfNotPresent',
+              timeout: '20s',
+              runner: {
+                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+              },
+            },
+          },
+        ],
       resources: [
         {
           name: 'ns-observer',
