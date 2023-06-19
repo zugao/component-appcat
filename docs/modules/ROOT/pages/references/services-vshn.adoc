@@ -173,6 +173,12 @@ default:: `true`
 
 Whether to enable NetworkPolicy in the Redis instance namespace. This allows to establish connections from claim's namespace to the Redis instance.
 
+=== `redis.bucket_region`
+type:: bool
+default:: lpg
+
+What region the backup buckets should use.
+
 === `redis.plans`
 type:: dict
 

@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.5.0
+        tag: v4.6.0
 
     namespace: syn-appcat
 
@@ -211,6 +211,7 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:redis:version}
           imageRegistry: ""
+          bucket_region: "lpg"
 
           defaultPlan: standard-1
           plans:

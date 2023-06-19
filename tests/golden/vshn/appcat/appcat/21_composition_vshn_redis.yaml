@@ -24,6 +24,24 @@ spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNRedis
+  functions:
+    - config:
+        apiVersion: v1
+        data:
+          bucketRegion: lpg
+        kind: ConfigMap
+        metadata:
+          labels:
+            name: xfn-config
+          name: xfn-config
+      container:
+        image: redis
+        imagePullPolicy: IfNotPresent
+        runner:
+          endpoint: unix-abstract:crossplane/fn/default.sock
+        timeout: 20s
+      name: pgsql-func
+      type: Container
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1

@@ -173,6 +173,11 @@ local controllerConfigRef(config) =
           resources: [ 'prometheusrules', 'podmonitors', 'alertmanagerconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'k8up.io' ],
+          resources: [ 'schedules' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {

@@ -1,0 +1,115 @@
+= How-To Manual Redis Restore
+
+This document explains how a Redis instance can be restored manually.
+
+Requirements:
+
+- restic installed
+
+== Connect Restic to the redis backup
+
+[source,bash]
+----
+instanceNamespace='mynamespace'
+# get the repository password
+export RESTIC_PASSWORD=$(kubectl -n "${instanceNamespace}" get secrets k8up-repository-password -o jsonpath='{.data.password}' | base64 -d)
+
+# get the s3 credentials
+export AWS_ACCESS_KEY_ID=$( kubectl -n "${instanceNamespace}" get secrets backup-bucket-credentials -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base64 -d)
+export AWS_SECRET_ACCESS_KEY=$(kubectl -n "${instanceNamespace}" get secrets backup-bucket-credentials -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 -d)
+bucket=$(kubectl -n "${instanceNamespace}" get secrets backup-bucket-credentials -o jsonpath='{.data.BUCKET_NAME}' | base64 -d)
+endpoint=$(kubectl -n "${instanceNamespace}" get secrets backup-bucket-credentials -o jsonpath='{.data.ENDPOINT_URL}' | base64 -d)
+export RESTIC_REPOSITORY="s3:${endpoint}/${bucket}"
+----
+
+== List available backups
+
+Pick the snapshot you want to restore from the list.
+
+[source,bash]
+----
+restic snapshots
+repository 5a0b7f47 opened (version 2, compression level auto)
+created new cache in /Users/simonbeck/Library/Caches/restic
+ID        Time                 Host                              Tags        Paths
+------------------------------------------------------------------------------------------------------------------------
+8699508e  2023-06-16 09:27:08  vshn-redis-redis-app1-prod-x94wt              /vshn-redis-redis-app1-prod-x94wt-redis.tar
+------------------------------------------------------------------------------------------------------------------------
+1 snapshots
+____
+
+
+== Restore locally
+
+[source,bash]
+----
+# restore the tar file locally
+# take the snapshot ID and the filename from the list above
+id=8699508e
+filename=/vshn-redis-redis-app1-prod-x94wt-redis.tar
+restic dump "${id}" "${filename}" > ~/Desktop/restore.tar
+
+# extract the tar file
+cd ~/Desktop
+tar xvf restore.tar
+----
+
+== Put back into instance
+
+[source,bash]
+----
+# scale down instance
+kubectl -n "${instanceNamespace}" scale statefulset redis-master --replicas 0
+
+# create a temp restore pod
+cat <<EOF | kubectl apply -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restic
+  namespace: "$instanceNamespace"
+  labels:
+    run: restic
+
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis-data-redis-master-0
+      containers:
+        - name: restic
+          image: ghcr.io/k8up-io/k8up:master
+          command:
+            - bash
+            - -c
+            - |
+              rm -rf /data/*
+              restic dump "${id}" ${filename} > /data/restore.tar
+              cd /data
+              tar xvf restore.tar
+              mv data/* .
+              rmdir data
+              rm restore.tar
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: "${AWS_ACCESS_KEY_ID}"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${AWS_SECRET_ACCESS_KEY}
+            - name: RESTIC_PASSWORD
+              value: "${RESTIC_PASSWORD}"
+            - name: RESTIC_REPOSITORY
+              value: "${RESTIC_REPOSITORY}"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+EOF
+
+# Delete the job once it succeeded
+kubectl -n "${instanceNamespace}" delete job restic
+
+# Scale instance back up
+kubectl -n "${instanceNamespace}" scale statefulset redis-master --replicas 1
+----
