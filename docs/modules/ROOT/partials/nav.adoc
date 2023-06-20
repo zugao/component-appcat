@@ -5,6 +5,7 @@
 * xref:explanations/restore.adoc[]
 * xref:explanations/add-to-openshift-catalog.adoc[]
 * xref:explanations/exoscale-plans.adoc[]
+* xref:explanations/redisrestore.adoc[]
 
 .Tutorials
 * xref:tutorials/install-cloudscale.adoc[Install Cloudscale Stack]
@@ -28,4 +29,3 @@
 
 .Runbooks
 * xref:runbooks/vshn-postgresql.adoc[]
-
