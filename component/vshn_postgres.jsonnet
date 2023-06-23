@@ -829,6 +829,7 @@ local composition(restore=false) =
               data: {
                 imageTag: common.GetAppCatImageTag(),
                 sgNamespace: pgParams.sgNamespace,
+                emailAlertingEnabled: std.toString(params.services.vshn.emailAlerting.enabled),
                 emailAlertingSecretNamespace: params.services.vshn.emailAlerting.secretNamespace,
                 emailAlertingSecretName: params.services.vshn.emailAlerting.secretName,
                 emailAlertingSmtpFromAddress: params.services.vshn.emailAlerting.smtpFromAddress,

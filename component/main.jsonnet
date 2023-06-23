@@ -71,7 +71,7 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
 // adding namespace for syn-appcat
 local ns = kube.Namespace(params.namespace);
 
-local secret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
+local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   metadata+: {
     namespace: params.services.vshn.emailAlerting.secretNamespace,
   },
@@ -84,7 +84,7 @@ local secret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
-  [if params.services.vshn.enabled then '10_mailgun_secret']: secret,
+  [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
 
 } + if params.slos.enabled then {
   [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
