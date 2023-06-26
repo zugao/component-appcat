@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.6.1
+        tag: v4.7.0
 
     namespace: syn-appcat
 
@@ -53,6 +53,7 @@ parameters:
       env:
         APPCAT_HANDLER_ENABLED: "true"
         VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "false"
+        VSHN_REDIS_BACKUP_HANDLER_ENABLED: "false"
       extraArgs: []
       extraEnv: {}
       apiservice:
