@@ -369,6 +369,7 @@ local composition =
                 name: 'xfn-config',
               },
               data: {
+                imageTag: common.GetAppCatImageTag(),
                 bucketRegion: redisParams.bucket_region,
               },
             },
@@ -511,7 +512,6 @@ local composition =
                                                                          std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
                                                                        redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
-            comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.values.image.tag'),
             comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
           ],
         },
