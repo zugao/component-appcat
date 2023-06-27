@@ -36,7 +36,7 @@ ID        Time                 Host                              Tags        Pat
 8699508e  2023-06-16 09:27:08  vshn-redis-redis-app1-prod-x94wt              /vshn-redis-redis-app1-prod-x94wt-redis.tar
 ------------------------------------------------------------------------------------------------------------------------
 1 snapshots
-____
+----
 
 
 == Restore locally
