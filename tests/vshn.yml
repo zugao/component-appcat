@@ -39,6 +39,7 @@ parameters:
       vshn:
         enabled: true
         emailAlerting:
+          enabled: true
           smtpPassword: "whatever"
         postgres:
           sgNamespace: stackgres

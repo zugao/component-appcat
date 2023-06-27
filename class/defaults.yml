@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.7.0
+        tag: v4.8.0
 
     namespace: syn-appcat
 
@@ -168,6 +168,7 @@ parameters:
         enabled: false
         secretNamespace: ${crossplane:namespace}
         emailAlerting:
+          enabled: false
           smtpHost: "smtp.eu.mailgun.org:465"
           smtpUsername: myuser@example.com
           smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"

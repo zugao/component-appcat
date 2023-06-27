@@ -33,6 +33,12 @@ type:: dict
 Configuration options for email alerting trough an SMTP service.
 Here you can configure the smtp host as well as the credentails required to send out alerts via any SMTP mail relay.
 
+=== `emailAlerting.enabled
+type:: bool
+default:: `false`
+
+If e-mail the alerting feature is enabled.
+
 === `emailAlerting.smtpHost`
 type:: string
 default:: `'smtp.eu.mailgun.org:465'`

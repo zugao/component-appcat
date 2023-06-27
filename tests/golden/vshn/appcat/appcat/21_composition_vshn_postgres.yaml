@@ -26,12 +26,13 @@ spec:
     - config:
         apiVersion: v1
         data:
+          emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.7.0
+          imageTag: v4.8.0
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
