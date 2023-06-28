@@ -804,9 +804,6 @@ spec:
         - fromFieldPath: spec.parameters.scheduling.nodeSelector
           toFieldPath: spec.forProvider.values.master.nodeSelector
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.service.version
-          toFieldPath: spec.forProvider.values.image.tag
-          type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.service.redisSettings
           toFieldPath: spec.forProvider.values.commonConfiguration
           type: FromCompositeFieldPath
