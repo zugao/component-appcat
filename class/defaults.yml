@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: add-maintenance-job
+        tag: v4.9.0
 
     namespace: syn-appcat
 
@@ -164,6 +164,8 @@ parameters:
         providerConfig: {}
 
     services:
+      # Used for deploying jobs
+      controlNamespace: "syn-appcat-control"
       vshn:
         enabled: false
         secretNamespace: ${crossplane:namespace}
@@ -183,10 +185,7 @@ parameters:
           enabled: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
-          # Used for deploying jobs during restores
-          controlNamespace: "syn-appcat-control"
           sgNamespace: syn-stackgres-operator
-
           defaultPlan: standard-2
           plans:
             standard-2:
