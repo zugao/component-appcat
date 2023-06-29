@@ -34,6 +34,8 @@ parameters:
     namespaceLabels: {}
     namespaceAnnotations: {}
 
+    appuioManaged: true
+    tenantID: ${cluster:tenant}
 
     controller:
       enabled: false

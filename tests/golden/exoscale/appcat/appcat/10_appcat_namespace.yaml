@@ -4,4 +4,5 @@ metadata:
   annotations: {}
   labels:
     name: syn-appcat
+    openshift.io/cluster-monitoring: 'true'
   name: syn-appcat

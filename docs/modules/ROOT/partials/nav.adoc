@@ -27,5 +27,8 @@
 ** xref:references/services-vshn.adoc[VSHN Services]
 ** xref:references/service-objectstorage.adoc[Objectstorage Service]
 
+* How-Tos
+** xref:how-tos/billing.adoc[]
+
 .Runbooks
 * xref:runbooks/vshn-postgresql.adoc[]

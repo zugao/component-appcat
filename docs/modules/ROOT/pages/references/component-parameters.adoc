@@ -12,6 +12,19 @@ This parameter allows selecting the Docker images to us.
 Each image is specified using keys `registry`, `repository` and `tag`.
 This structure allows easily injecting a registry mirror, if required.
 
+== `appuioManaged`
+[horizontal]
+type:: bool
+default:: true
+
+Determines if the cluster is APPUiO Managed or APPUiO Cloud.
+
+== `tenantID`
+[horizontal]
+type:: string
+default:: ${cluster:tenant}
+
+The tenant ID that should get hardcoded into the billing query.
 
 == `namespace`
 

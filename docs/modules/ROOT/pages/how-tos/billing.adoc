@@ -1,0 +1,8 @@
+= Add a new VSHN service to billing
+
+If you want to add a new service to billing please ensure the following points:
+
+* The instance namespace contains a label of the form `'appuio.io/billing-name': 'appcat-$servicename',`
+* There's a product in the billing database's product table in the form of `appcat_$servicename:vshn:*:*:besteffort` and `appcat_$servicename:vshn:*:*:guaranteed`.
+* There's a discount in the discount table in the form of `appcat_$servicename:vshn`.
+* Matching products are added to the ERP

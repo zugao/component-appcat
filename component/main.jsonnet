@@ -71,8 +71,53 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
 // adding namespace for syn-appcat
 local ns = kube.Namespace(params.namespace) {
   metadata+: {
-    labels+: params.namespaceLabels,
+    labels+: {
+      'openshift.io/cluster-monitoring': 'true',
+    } + params.namespaceLabels,
     annotations+: params.namespaceAnnotations,
+  },
+};
+
+local tenant = {
+  // We hardcode the cluster tenant on appuio managed
+  [if params.appuioManaged then 'replace']: std.strReplace(|||
+    "tenant_id",
+    "$1",
+    "",
+    ""
+  |||, '$1', params.tenantID),
+  [if params.appuioManaged then 'label']: '',
+
+  // We use the organization label on appuio cloud
+  [if !params.appuioManaged then 'replace']: |||
+    "tenant_id",
+    "$1",
+    "label_appuio_io_organization",
+    "(.*)"
+  |||,
+  [if !params.appuioManaged then 'label']: 'label_appuio_io_organization=~".+",',
+};
+
+local promQueryTemplate = importstr 'promql/appcat.promql';
+local promQueryWithLabel = std.strReplace(promQueryTemplate, '{{ORGLABEL}}', tenant.label);
+local promQuery = std.strReplace(promQueryWithLabel, '{{TENANT_REPLACE}}', tenant.replace);
+
+local promRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-billing',
+        rules: [
+          {
+            expr: promQuery,
+            record: 'appcat:billing',
+          },
+        ],
+      },
+    ],
   },
 };
 
@@ -89,6 +134,7 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
+  '10_appcat_recording_rule': promRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
 
 } + if params.slos.enabled then {
