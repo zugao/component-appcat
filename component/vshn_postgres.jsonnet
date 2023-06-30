@@ -46,11 +46,11 @@ local xrd = xrds.XRDFromCRD(
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
 
 
-local controlNamespace = kube.Namespace(pgParams.controlNamespace);
+local controlNamespace = kube.Namespace(params.services.controlNamespace);
 
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {
-    namespace: pgParams.controlNamespace,
+    namespace: params.services.controlNamespace,
   },
 };
 
@@ -609,7 +609,7 @@ local copyJob = {
       forProvider+: {
         manifest+: {
           metadata+: {
-            namespace: pgParams.controlNamespace,
+            namespace: params.services.controlNamespace,
           },
           spec: {
             template: {

@@ -60,6 +60,12 @@ This parameter allows configuring https://github.com/crossplane-contrib/provider
 
 == `services`
 
+=== `services.controlNamespace`
+type:: string
+default:: `'appcat-control'`
+
+Name of the additional namespace for appcat that's needed for backups and maintenance
+
 === `services.exoscale`
 [horizontal]
 type:: dict

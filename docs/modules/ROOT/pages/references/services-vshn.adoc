@@ -91,12 +91,6 @@ default:: `true`
 
 Whether to enable NetworkPolicy in the PostgreSQL instance namespace. This allows to establish connections from claim's namespace to the PostgreSQL instance.
 
-=== `postgres.controlNamespace`
-type:: string
-default:: `'appcat-control'`
-
-Name of the additional namespace that's needed to the backup copy job.
-
 === `postgres.bucket_region`
 type:: string
 default:: `''`

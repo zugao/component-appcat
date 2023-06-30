@@ -36,7 +36,6 @@ local connectionSecretKeys = [
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 local securityContext = if isOpenshift then false else true;
 
-
 local redisPlans = common.FilterDisabledParams(redisParams.plans);
 
 local xrd = xrds.XRDFromCRD(
@@ -300,7 +299,6 @@ local composition =
             },
             image: {
               repository: 'bitnami/redis',
-              tag: '',
             },
             commonConfiguration: '',
             networkPolicy: {
@@ -369,7 +367,10 @@ local composition =
                 name: 'xfn-config',
               },
               data: {
+                imageTag: common.GetAppCatImageTag(),
                 bucketRegion: redisParams.bucket_region,
+                maintenanceSA: 'helm-based-service-maintenance',
+                controlNamespace: params.services.controlNamespace,
               },
             },
             container: {
@@ -511,7 +512,6 @@ local composition =
                                                                          std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
                                                                        redisPlans)),
             comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
-            comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.values.image.tag'),
             comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
           ],
         },
