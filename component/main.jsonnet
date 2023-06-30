@@ -69,7 +69,12 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
 };
 
 // adding namespace for syn-appcat
-local ns = kube.Namespace(params.namespace);
+local ns = kube.Namespace(params.namespace) {
+  metadata+: {
+    labels+: params.namespaceLabels,
+    annotations+: params.namespaceAnnotations,
+  },
+};
 
 local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   metadata+: {

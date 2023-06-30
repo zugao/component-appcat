@@ -12,6 +12,8 @@ local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/' +
 local namespace = loadManifest('namespace.yaml') {
   metadata+: {
     name: apiserverParams.namespace,
+    labels+: apiserverParams.namespaceLabels,
+    annotations+: apiserverParams.namespaceAnnotations,
   },
 };
 

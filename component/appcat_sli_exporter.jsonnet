@@ -38,7 +38,8 @@ local namespace_patch = kube.Namespace('system') {
   metadata+: {
     labels: {
       [if isOpenshift then 'openshift.io/cluster-monitoring']: 'true',  // Enable cluster-monitoring on APPUiO Managed OpenShift
-    },
+    } + params.slos.namespaceLabels,
+    annotations+: params.slos.namespaceAnnotations,
   },
 };
 

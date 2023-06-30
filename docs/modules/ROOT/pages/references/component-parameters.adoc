@@ -13,6 +13,31 @@ Each image is specified using keys `registry`, `repository` and `tag`.
 This structure allows easily injecting a registry mirror, if required.
 
 
+== `namespace`
+
+[horizontal]
+type:: string
+default:: `syn-appcat`
+
+The namespace in which to deploy AppCat resources.
+
+== `namespaceLabels`
+
+[horizontal]
+type:: dict
+default:: `{}`
+
+Additional labels to add to the created namespace.
+
+== `namespaceAnnotations`
+
+[horizontal]
+type:: dict
+default:: `{}`
+
+Additional annotations to add to the created namespace.
+
+
 == `apiserver`
 [horizontal]
 type:: dict

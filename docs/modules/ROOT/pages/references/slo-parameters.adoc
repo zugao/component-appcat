@@ -17,6 +17,22 @@ default:: `appcat-slos`
 A namespace where all SLO related resources will be deployed to, including the SLI Exporter.
 The namespace will be created and managed by this component.
 
+== `namespaceLabels`
+
+[horizontal]
+type:: dict
+default:: `${appcat:namespaceLabels}`
+
+Additional labels to add to the created namespace.
+
+== `namespaceAnnotations`
+
+[horizontal]
+type:: dict
+default:: `${appcat:namespaceAnnotations}`
+
+Additional annotations to add to the created namespace.
+
 == `sli_exporter.resources`
 [horizontal]
 type:: dict

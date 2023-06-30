@@ -1,7 +1,10 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  annotations:
+    openshift.io/node-selector: node-role.kubernetes.io/infra=
   labels:
     control-plane: controller-manager
+    foo: bar
     openshift.io/cluster-monitoring: "true"
   name: appcat-slos
