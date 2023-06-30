@@ -35,6 +35,24 @@ parameters:
     namespaceAnnotations: {}
 
 
+    manageBillingProducts: false
+    products:
+      - source: appcat_postgresql:vshn:*:*:besteffort
+        target: '2'
+        amount: 1
+        unit: instances
+        during: '[-infinity,infinity)'
+      - source: appcat_postgresql:vshn:*:*:lesseffort
+        target: '2'
+        amount: 1
+        unit: instances
+        during: '[-infinity,infinity)'
+      - source: appcat_kafka:vshn:*:*:lesseffort
+        target: '2'
+        amount: 1
+        unit: instances
+        during: '[-infinity,infinity)'
+
     controller:
       enabled: false
       namespace: appcat-controllers

@@ -17,6 +17,9 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+
+    manageBillingProducts: true
+
     slos:
       enabled: true
       sla_reporter:

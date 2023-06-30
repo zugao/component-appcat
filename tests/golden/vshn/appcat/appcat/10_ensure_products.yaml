@@ -1,0 +1,76 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations: {}
+  labels:
+    name: ensure-product-data
+  name: ensure-product-data
+  namespace: syn-appcat
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            name: ensure-product-data
+        spec:
+          containers:
+            - args:
+                - psql
+                - ${PSQL_URL}
+                - -f
+                - products.sql
+              env:
+                - name: PSQL_URL
+                  value: postgresql://postgres:$password@localhost
+                - name: SELECTS
+                  value: |
+                    INSERT INTO products(source, target, amount, unit, during)
+                    SELECT 'appcat_postgresql:vshn:*:*:besteffort', '2', 1, 'instances', '[-infinity,infinity)'
+                    WHERE
+                    NOT EXISTS (
+                    SELECT id
+                    FROM products
+                    WHERE
+                    source = 'appcat_postgresql:vshn:*:*:besteffort' AND
+                    target = '2' AND
+                    unit = 'instances' AND
+                    during = '[-infinity,infinity)' AND
+                    amount = 1);
+                    INSERT INTO products(source, target, amount, unit, during)
+                    SELECT 'appcat_postgresql:vshn:*:*:lesseffort', '2', 1, 'instances', '[-infinity,infinity)'
+                    WHERE
+                    NOT EXISTS (
+                    SELECT id
+                    FROM products
+                    WHERE
+                    source = 'appcat_postgresql:vshn:*:*:lesseffort' AND
+                    target = '2' AND
+                    unit = 'instances' AND
+                    during = '[-infinity,infinity)' AND
+                    amount = 1);
+                    INSERT INTO products(source, target, amount, unit, during)
+                    SELECT 'appcat_kafka:vshn:*:*:lesseffort', '2', 1, 'instances', '[-infinity,infinity)'
+                    WHERE
+                    NOT EXISTS (
+                    SELECT id
+                    FROM products
+                    WHERE
+                    source = 'appcat_kafka:vshn:*:*:lesseffort' AND
+                    target = '2' AND
+                    unit = 'instances' AND
+                    during = '[-infinity,infinity)' AND
+                    amount = 1);
+              image: postgres
+              name: ensure-product-data
+          imagePullSecrets: []
+          initContainers: []
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          volumes: []
+  schedule: '* * * * *'
+  successfulJobsHistoryLimit: 0
