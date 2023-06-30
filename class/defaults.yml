@@ -31,10 +31,15 @@ parameters:
         tag: v4.9.0
 
     namespace: syn-appcat
+    namespaceLabels: {}
+    namespaceAnnotations: {}
+
 
     controller:
       enabled: false
       namespace: appcat-controllers
+      namespaceLabels: ${appcat:namespaceLabels}
+      namespaceAnnotations: ${appcat:namespaceAnnotations}
       postgres:
         enabled: false
         extraArgs: []
@@ -50,6 +55,8 @@ parameters:
     apiserver:
       enabled: false
       namespace: appcat-apiserver
+      namespaceLabels: ${appcat:namespaceLabels}
+      namespaceAnnotations: ${appcat:namespaceAnnotations}
       env:
         APPCAT_HANDLER_ENABLED: "true"
         VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "false"
@@ -71,6 +78,8 @@ parameters:
     slos:
       enabled: true
       namespace: appcat-slos
+      namespaceLabels: ${appcat:namespaceLabels}
+      namespaceAnnotations: ${appcat:namespaceAnnotations}
       sla_reporter:
         enabled: false
         resources:

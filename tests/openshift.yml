@@ -13,6 +13,11 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+    namespaceLabels:
+      foo: bar
+    namespaceAnnotations:
+      openshift.io/node-selector: node-role.kubernetes.io/infra=
+
     providers:
       cloudscale:
         enabled: true

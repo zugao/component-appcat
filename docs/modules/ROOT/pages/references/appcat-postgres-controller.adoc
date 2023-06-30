@@ -17,6 +17,22 @@ default:: `appcat-controllers`
 A namespace where PostgreSQL Server should run.
 The namespace will be created and managed by this component.
 
+== `namespaceLabels`
+
+[horizontal]
+type:: dict
+default:: `${appcat:namespaceLabels}`
+
+Additional labels to add to the created namespace.
+
+== `namespaceAnnotations`
+
+[horizontal]
+type:: dict
+default:: `${appcat:namespaceAnnotations}`
+
+Additional annotations to add to the created namespace.
+
 == `extraArgs`
 [horizontal]
 type:: array
