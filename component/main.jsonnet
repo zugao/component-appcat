@@ -57,7 +57,12 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
   rules+: [
     {
       apiGroups: [ '' ],
-      resources: [ 'pods', 'pods/log', 'pods/status', 'events', 'services' ],
+      resources: [ 'pods', 'pods/log', 'pods/status', 'events', 'services', 'namespaces' ],
+      verbs: [ 'get', 'list', 'watch' ],
+    },
+    {
+      apiGroups: [ 'apps' ],
+      resources: [ 'statefulsets' ],
       verbs: [ 'get', 'list', 'watch' ],
     },
     {
