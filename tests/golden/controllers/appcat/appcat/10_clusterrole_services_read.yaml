@@ -14,6 +14,15 @@ rules:
       - pods/status
       - events
       - services
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
     verbs:
       - get
       - list
