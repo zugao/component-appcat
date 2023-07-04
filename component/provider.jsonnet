@@ -134,6 +134,13 @@ local controllerConfigRef(config) =
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
+          apiGroups: [ 'rbac.authorization.k8s.io' ],
+          resources: [ 'clusterroles' ],
+          resourceNames: [ 'appcat:services:read' ],
+          verbs: [ 'bind' ],
+        },
+
+        {
           apiGroups: [ 'stackgres.io' ],
           resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
@@ -184,7 +191,6 @@ local controllerConfigRef(config) =
       roleRef_: role,
       subjects_: [ sa ],
     };
-
 
     local controllerConf = controllerConfig('kubernetes', provider.controllerConfig);
 

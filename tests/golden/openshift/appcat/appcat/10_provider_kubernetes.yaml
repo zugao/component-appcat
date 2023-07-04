@@ -99,6 +99,14 @@ rules:
       - update
       - delete
   - apiGroups:
+      - rbac.authorization.k8s.io
+    resourceNames:
+      - appcat:services:read
+    resources:
+      - clusterroles
+    verbs:
+      - bind
+  - apiGroups:
       - stackgres.io
     resources:
       - sginstanceprofiles
