@@ -45,9 +45,6 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
 
-
-local controlNamespace = kube.Namespace(params.services.controlNamespace);
-
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {
     namespace: params.services.controlNamespace,
@@ -932,7 +929,6 @@ if params.services.vshn.enabled && pgParams.enabled then
     '20_xrd_vshn_postgres': xrd,
     '20_rbac_vshn_postgres': xrds.CompositeClusterRoles(xrd),
     '20_role_vshn_postgresrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
-    '20_namespace_vshn_control': controlNamespace,
     '21_composition_vshn_postgres': defaultComp,
     '21_composition_vshn_postgresrestore': restoreComp,
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
