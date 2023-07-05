@@ -54,7 +54,7 @@ parameters:
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_redis.jsonnet
-          - ${_base_directory}/component/vshn_helm_based_service.jsonnet
+          - ${_base_directory}/component/vshn_services.jsonnet
         input_type: jsonnet
         output_path: appcat/
 
