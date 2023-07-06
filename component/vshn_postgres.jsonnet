@@ -1,3 +1,4 @@
+local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -44,6 +45,8 @@ local xrd = xrds.XRDFromCRD(
   defaultComposition='vshnpostgres.vshn.appcat.vshn.io',
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
+
+local promRulePostgresSLA = common.PromRuleSLA(params.services.vshn.postgres.sla, 'postgres');
 
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {
@@ -931,5 +934,6 @@ if params.services.vshn.enabled && pgParams.enabled then
     '20_role_vshn_postgresrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
     '21_composition_vshn_postgres': defaultComp,
     '21_composition_vshn_postgresrestore': restoreComp,
+    '22_prom_rule_sla_postgres': promRulePostgresSLA,
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
   } else {}

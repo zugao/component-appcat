@@ -198,6 +198,7 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
           defaultPlan: standard-2
+          sla: 99.25
           plans:
             standard-2:
               size:
