@@ -119,6 +119,31 @@ local getAppCatImageTag() = std.strReplace(params.images.appcat.tag, '/', '_');
 
 local getAppCatImageString() = params.images.appcat.registry + '/' + params.images.appcat.repository + ':' + getAppCatImageTag();
 
+local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'vshn-' + service + '-sla') {
+  metadata+: {
+    labels: {
+      name: 'vshn-' + service + '-sla',
+    },
+    namespace: params.slos.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-' + service + '-sla-target',
+        rules: [
+          {
+            expr: 'vector(' + value + ')',
+            labels: {
+              service: service,
+            },
+            record: 'sla:objective:ratio',
+          },
+        ],
+      },
+    ],
+  },
+};
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -137,4 +162,6 @@ local getAppCatImageString() = params.images.appcat.registry + '/' + params.imag
     getAppCatImageString(),
   GetAppCatImageTag():
     getAppCatImageTag(),
+  PromRuleSLA(value, service):
+    promRuleSLA(value, service),
 }

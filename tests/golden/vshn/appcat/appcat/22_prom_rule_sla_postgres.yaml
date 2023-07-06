@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  annotations: {}
+  labels:
+    name: vshn-postgres-sla
+  name: vshn-postgres-sla
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-postgres-sla-target
+      rules:
+        - expr: vector(99.25)
+          labels:
+            service: postgres
+          record: sla:objective:ratio
