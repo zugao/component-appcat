@@ -3,14 +3,14 @@ kind: PrometheusRule
 metadata:
   annotations: {}
   labels:
-    name: vshn-postgres-sla
-  name: vshn-postgres-sla
+    name: vshn-VSHNPostgreSQL-sla
+  name: vshn-VSHNPostgreSQL-sla
   namespace: appcat-slos
 spec:
   groups:
-    - name: appcat-postgres-sla-target
+    - name: appcat-VSHNPostgreSQL-sla-target
       rules:
         - expr: vector(99.25)
           labels:
-            service: postgres
+            service: VSHNPostgreSQL
           record: sla:objective:ratio
