@@ -3,12 +3,12 @@ kind: PrometheusRule
 metadata:
   annotations: {}
   labels:
-    name: vshn-VSHNPostgreSQL-sla
-  name: vshn-VSHNPostgreSQL-sla
+    name: vshn-vshnpostgresql-sla
+  name: vshn-vshnpostgresql-sla
   namespace: appcat-slos
 spec:
   groups:
-    - name: appcat-VSHNPostgreSQL-sla-target
+    - name: appcat-vshnpostgresql-sla-target
       rules:
         - expr: vector(99.25)
           labels:
