@@ -351,6 +351,11 @@ local sgCluster = {
                         key: 'tls.key',
                       },
                     },
+                    extensions: [
+                      {
+                        name: 'pg_repack',
+                      },
+                    ],
                   },
                   pods: {
                     persistentVolume: {
