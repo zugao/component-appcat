@@ -35,3 +35,10 @@ rules:
       - get
       - list
       - create
+  - apiGroups:
+      - ''
+      - project.openshift.io
+    resources:
+      - projects
+    verbs:
+      - get
