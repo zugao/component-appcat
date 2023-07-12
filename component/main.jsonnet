@@ -70,6 +70,11 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
       resources: [ 'pods/portforward' ],
       verbs: [ 'get', 'list', 'create' ],
     },
+    {
+      apiGroups: [ '', 'project.openshift.io' ],
+      resources: [ 'projects' ],
+      verbs: [ 'get' ],
+    },
   ],
 };
 
