@@ -230,6 +230,14 @@ local sgInstanceProfile = {
                       cpu: '32m',
                       memory: '188Mi',
                     },
+                    'dbops.run-dbops': {
+                      cpu: '250m',
+                      memory: '256Mi',
+                    },
+                    'dbops.set-dbops-result': {
+                      cpu: '250m',
+                      memory: '256Mi',
+                    },
                     envoy: {
                       cpu: '32m',
                       memory: '64Mi',
@@ -267,6 +275,10 @@ local sgInstanceProfile = {
                     'cluster-reconciliation-cycle': {
                       cpu: '100m',
                       memory: '100Mi',
+                    },
+                    'dbops.set-dbops-running': {
+                      cpu: '250m',
+                      memory: '256Mi',
                     },
                   },
                 },

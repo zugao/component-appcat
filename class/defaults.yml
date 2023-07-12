@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.11.1
+        tag: v4.11.2
 
     namespace: syn-appcat
     namespaceLabels: {}
