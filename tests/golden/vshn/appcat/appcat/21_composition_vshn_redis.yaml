@@ -30,7 +30,7 @@ spec:
         data:
           bucketRegion: lpg
           controlNamespace: syn-appcat-control
-          imageTag: v4.11.2
+          imageTag: v4.12.0
           maintenanceSA: helm-based-service-maintenance
         kind: ConfigMap
         metadata:
