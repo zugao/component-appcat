@@ -32,7 +32,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.11.2
+          imageTag: v4.12.0
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
@@ -538,8 +538,6 @@ spec:
                   persistentVolume:
                     size: ''
                 postgres:
-                  extensions:
-                    - name: pg_repack
                   ssl:
                     certificateSecretKeySelector:
                       key: tls.crt
