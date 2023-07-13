@@ -538,8 +538,6 @@ spec:
                   persistentVolume:
                     size: ''
                 postgres:
-                  extensions:
-                    - name: pg_repack
                   ssl:
                     certificateSecretKeySelector:
                       key: tls.crt
