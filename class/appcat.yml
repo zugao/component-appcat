@@ -4,7 +4,7 @@ parameters:
       - type: git
         output_path: dependencies/appcat/manifests/${appcat:images:appcat:tag}
         source: https://github.com/vshn/appcat.git
-        ref: ${appcat:images:appcat:tag}
+        ref: ${appcat:_crd_version}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
