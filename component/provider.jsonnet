@@ -134,6 +134,16 @@ local controllerConfigRef(config) =
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
+          apiGroups: [ 'apps' ],
+          resources: [ 'statefulsets/scale' ],
+          verbs: [ 'update', 'patch' ],
+        },
+        {
+          apiGroups: [ 'apps' ],
+          resources: [ 'statefulsets' ],
+          verbs: [ 'get' ],
+        },
+        {
           apiGroups: [ 'rbac.authorization.k8s.io' ],
           resources: [ 'clusterroles' ],
           resourceNames: [ 'appcat:services:read' ],
@@ -176,6 +186,11 @@ local controllerConfigRef(config) =
           verbs: [ 'get', 'update' ],
         },
         {
+          apiGroups: [ 'vshn.appcat.vshn.io' ],
+          resources: [ 'vshnredis' ],
+          verbs: [ 'get', 'update' ],
+        },
+        {
           apiGroups: [ 'monitoring.coreos.com' ],
           resources: [ 'prometheusrules', 'podmonitors', 'alertmanagerconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
@@ -184,6 +199,11 @@ local controllerConfigRef(config) =
           apiGroups: [ 'k8up.io' ],
           resources: [ 'schedules' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'k8up.io' ],
+          resources: [ 'snapshots' ],
+          verbs: [ 'get' ],
         },
       ],
     };

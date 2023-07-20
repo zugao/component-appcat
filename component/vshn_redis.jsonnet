@@ -45,6 +45,53 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(redisPlans, redisParams.defaultPlan);
 
+local restoreServiceAccount = kube.ServiceAccount('redisrestoreserviceaccount') + {
+  metadata+: {
+    namespace: params.services.controlNamespace,
+  },
+};
+
+local restoreRoleName = 'crossplane:appcat:job:redis:restorejob';
+local restoreRole = kube.ClusterRole(restoreRoleName) {
+  rules: [
+    {
+      apiGroups: [ 'vshn.appcat.vshn.io' ],
+      resources: [ 'vshnredis' ],
+      verbs: [ 'get' ],
+    },
+    {
+      apiGroups: [ 'k8up.io' ],
+      resources: [ 'snapshots' ],
+      verbs: [ 'get' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'secrets' ],
+      verbs: [ 'get', 'create', 'delete' ],
+    },
+    {
+      apiGroups: [ 'apps' ],
+      resources: [ 'statefulsets/scale' ],
+      verbs: [ 'update', 'patch' ],
+    },
+    {
+      apiGroups: [ 'apps' ],
+      resources: [ 'statefulsets' ],
+      verbs: [ 'get' ],
+    },
+    {
+      apiGroups: [ 'batch' ],
+      resources: [ 'jobs' ],
+      verbs: [ 'get' ],
+    },
+  ],
+};
+
+local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:restorejob') + {
+  roleRef_: restoreRole,
+  subjects_: [ restoreServiceAccount ],
+};
+
 local composition =
   local namespace = comp.KubeObject('v1', 'Namespace') +
                     {
@@ -357,7 +404,7 @@ local composition =
       functions:
         [
           {
-            name: 'pgsql-func',
+            name: 'redis-func',
             type: 'Container',
             config: kube.ConfigMap('xfn-config') + {
               metadata: {
@@ -371,6 +418,7 @@ local composition =
                 bucketRegion: redisParams.bucket_region,
                 maintenanceSA: 'helm-based-service-maintenance',
                 controlNamespace: params.services.controlNamespace,
+                restoreSA: 'redisrestoreserviceaccount',
               },
             },
             container: {
@@ -573,6 +621,7 @@ local osTemplate =
 if params.services.vshn.enabled && redisParams.enabled then {
   '20_xrd_vshn_redis': xrd,
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
+  '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
   '21_composition_vshn_redis': composition,
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
 } else {}
