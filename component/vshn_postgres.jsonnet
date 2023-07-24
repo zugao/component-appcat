@@ -699,19 +699,27 @@ local prometheusRule = {
           metadata: {
             name: 'postgresql-rules',
           },
+          local bottomPod(query) = 'label_replace( bottomk(1, %s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")' % query,
+          local topPod(query) = 'label_replace( topk(1, %s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")' % query,
           spec: {
             groups: [
               {
                 name: 'postgresql-storage',
+                local queries = {
+                  availableStorage: 'kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}',
+                  availablePercent: '(%s / kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"})' % queries.availableStorage,
+                  usedStorage: 'kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"}',
+                  unlessExcluded: 'unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                },
                 rules: [
                   {
                     alert: 'PostgreSQLPersistentVolumeFillingUp',
                     annotations: {
-                      description: 'The PersistentVolume claimed by {{ $labels.persistentvolumeclaim\n              }} in Namespace {{ $labels.namespace }} is only {{ $value |\n              humanizePercentage }} free.',
+                      description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
                       runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
                       summary: 'PersistentVolume is filling up.',
                     },
-                    expr: '(\n            kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}\n              /\n            kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}\n          ) < 0.03\n          and\n          kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                    expr: bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries),
                     'for': '1m',
                     labels: {
                       severity: 'critical',
@@ -720,11 +728,11 @@ local prometheusRule = {
                   {
                     alert: 'PostgreSQLPersistentVolumeFillingUp',
                     annotations: {
-                      description: 'Based on recent sampling, the PersistentVolume claimed by {{\n              $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace\n              }} is expected to fill up within four days. Currently {{ $value |\n              humanizePercentage }} is available.',
+                      description: 'Based on recent sampling, the volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.',
                       runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
                       summary: 'PersistentVolume is filling up.',
                     },
-                    expr: '(\n            kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}\n              /\n            kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}\n          ) < 0.15\n          and\n          kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0\n          and\n          predict_linear(kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1\n          unless on(namespace, persistentvolumeclaim)\n          kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                    expr: bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries),
                     'for': '1h',
                     labels: {
                       severity: 'warning',
@@ -738,11 +746,11 @@ local prometheusRule = {
                   {
                     alert: 'PostgreSQLMemoryCritical',
                     annotations: {
-                      description: 'The memory claimed by {{ $labels.pod }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
+                      description: 'The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
                       // runbook_url: 'TBD',
                       summary: 'Memory usage critical',
                     },
-                    expr: '(container_memory_working_set_bytes{container="patroni"}\n  / on(container,pod)\n  kube_pod_container_resource_limits{resource="memory"} * 100)\n  > 85',
+                    expr: topPod('(container_memory_working_set_bytes{container="patroni"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 85'),
                     'for': '120m',
                     labels: {
                       severity: 'critical',
@@ -756,11 +764,11 @@ local prometheusRule = {
                   {
                     alert: 'PostgreSQLConnectionsCritical',
                     annotations: {
-                      description: 'The connections to {{ $labels.pod }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
+                      description: 'The number of connections to the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
                       // runbook_url: 'TBD',
                       summary: 'Connection usage critical',
                     },
-                    expr: 'sum(pg_stat_activity_count) by (pod)\n  > 90/100 * sum(pg_settings_max_connections) by (pod)',
+                    expr: topPod('sum(pg_stat_activity_count) by (pod, namespace) > 90/100 * sum(pg_settings_max_connections) by (pod, namespace)'),
                     'for': '120m',
                     labels: {
                       severity: 'critical',
