@@ -373,6 +373,14 @@ local sgCluster = {
                     enableSetPatroniCpuRequests: true,
                     enableSetPatroniMemoryRequests: true,
                   },
+                  postgresServices: {
+                    primary: {
+                      type: 'ClusterIP',
+                    },
+                    replicas: {
+                      type: 'ClusterIP',
+                    },
+                  },
                 },
               },
             },
@@ -403,6 +411,8 @@ local sgCluster = {
 
     comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
     comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
+    comp.FromCompositeFieldPath('spec.parameters.network.serviceType', 'spec.forProvider.manifest.spec.postgresServices.primary.type'),
+    comp.FromCompositeFieldPath('spec.parameters.network.serviceType', 'spec.forProvider.manifest.spec.postgresServices.replicas.type'),
   ],
 };
 

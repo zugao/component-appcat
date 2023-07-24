@@ -1,0 +1,11 @@
+apiVersion: appcat.vshn.io/v1
+kind: ObjectBucket
+metadata:
+  name: widera-testing
+  namespace: default
+spec:
+  parameters:
+    bucketName: testing-bucket-widera
+    region: ch-gva-2
+  writeConnectionSecretToRef:
+    name: objectbucket-creds 

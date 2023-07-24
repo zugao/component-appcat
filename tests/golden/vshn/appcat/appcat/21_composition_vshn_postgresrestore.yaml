@@ -547,6 +547,11 @@ spec:
                       key: tls.key
                       name: tls-certificate
                   version: ''
+                postgresServices:
+                  primary:
+                    type: ClusterIP
+                  replicas:
+                    type: ClusterIP
                 sgInstanceProfile: ''
           providerConfigRef:
             name: kubernetes
@@ -628,6 +633,12 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.backup.retention
           toFieldPath: spec.forProvider.manifest.spec.configurations.backups[0].retention
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.network.serviceType
+          toFieldPath: spec.forProvider.manifest.spec.postgresServices.primary.type
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.network.serviceType
+          toFieldPath: spec.forProvider.manifest.spec.postgresServices.replicas.type
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.restore.backupName
           toFieldPath: spec.forProvider.manifest.spec.initialData.restore.fromBackup.name
