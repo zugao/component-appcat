@@ -37,6 +37,8 @@ local connectionSecretKeys = [
   'POSTGRESQL_PORT',
   'POSTGRESQL_USER',
   'POSTGRESQL_PASSWORD',
+  'PRIMARY_IP',
+  'REPLICAS_IP',
 ];
 
 local xrd = xrds.XRDFromCRD(

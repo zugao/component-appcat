@@ -632,6 +632,12 @@ spec:
         - fromConnectionSecretKey: POSTGRESQL_PASSWORD
           name: POSTGRESQL_PASSWORD
           type: FromConnectionSecretKey
+        - fromConnectionSecretKey: PRIMARY_IP
+          name: PRIMARY_IP
+          type: FromConnectionSecretKey
+        - fromConnectionSecretKey: REPLICAS_IP
+          name: REPLICAS_IP
+          type: FromConnectionSecretKey
       name: connection
       patches:
         - fromFieldPath: status.conditions
