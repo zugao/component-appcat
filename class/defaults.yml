@@ -6,13 +6,13 @@ parameters:
         version: 17.6.0
     images:
       provider-kubernetes:
-        registry: docker.io
-        repository: crossplane/provider-kubernetes
-        tag: v0.4.0
+        registry: xpkg.upbound.io
+        repository: crossplane-contrib/provider-kubernetes
+        tag: v0.9.0
       provider-helm:
-        registry: docker.io
-        repository: crossplane/provider-helm
-        tag: v0.11.1
+        registry: xpkg.upbound.io
+        repository: crossplane-contrib/provider-helm
+        tag: v0.15.0
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale/provider
