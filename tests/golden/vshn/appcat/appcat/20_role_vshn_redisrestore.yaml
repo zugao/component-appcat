@@ -45,6 +45,14 @@ rules:
       - jobs
     verbs:
       - get
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - get
+      - create
+      - patch
 ---
 apiVersion: v1
 kind: ServiceAccount
