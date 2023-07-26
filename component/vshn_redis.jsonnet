@@ -84,6 +84,11 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
       resources: [ 'jobs' ],
       verbs: [ 'get' ],
     },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'events' ],
+      verbs: [ 'get', 'create', 'patch' ],
+    },
   ],
 };
 
