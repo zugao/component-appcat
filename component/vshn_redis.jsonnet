@@ -97,6 +97,42 @@ local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:rest
   subjects_: [ restoreServiceAccount ],
 };
 
+local resizeServiceAccount = kube.ServiceAccount('sa-sts-deleter') + {
+  metadata+: {
+    namespace: params.services.controlNamespace,
+  },
+};
+
+local resizeClusterRole = kube.ClusterRole('appcat:job:redis:resizejob') {
+  rules: [
+    {
+      apiGroups: [ 'helm.crossplane.io' ],
+      resources: [ 'releases' ],
+      verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+    },
+    {
+      apiGroups: [ 'apps' ],
+      resources: [ 'statefulsets' ],
+      verbs: [ 'delete', 'get', 'watch', 'list', 'update', 'patch' ],
+    },
+    {
+      apiGroups: [ 'helm.crossplane.io' ],
+      resources: [ 'releases' ],
+      verbs: [ 'update', 'get' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'pods' ],
+      verbs: [ 'list', 'get', 'update', 'delete' ],
+    },
+  ],
+};
+
+local resizeClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:resizejob') + {
+  roleRef_: resizeClusterRole,
+  subjects_: [ resizeServiceAccount ],
+};
+
 local composition =
   local namespace = comp.KubeObject('v1', 'Namespace') +
                     {
@@ -627,6 +663,7 @@ if params.services.vshn.enabled && redisParams.enabled then {
   '20_xrd_vshn_redis': xrd,
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
+  '20_rbac_vshn_redis_resize': [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
   '21_composition_vshn_redis': composition,
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
 } else {}

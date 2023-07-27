@@ -5,6 +5,10 @@ parameters:
         output_path: dependencies/appcat/manifests/${appcat:images:appcat:tag}
         source: https://github.com/vshn/appcat.git
         ref: ${appcat:_crd_version}
+      - type: git
+        source: https://github.com/vshn/statefulset-resize-controller
+        output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulSetResizer:tag}
+        ref: ${appcat:images:statefulSetResizer:tag}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
@@ -55,6 +59,7 @@ parameters:
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_redis.jsonnet
           - ${_base_directory}/component/vshn_services.jsonnet
+          - ${_base_directory}/component/statefuleset-resize-controller.jsonnet
         input_type: jsonnet
         output_path: appcat/
 

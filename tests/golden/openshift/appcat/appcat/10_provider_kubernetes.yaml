@@ -69,6 +69,18 @@ rules:
       - create
       - delete
   - apiGroups:
+      - helm.crossplane.io
+    resources:
+      - releases
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
       - ''
       - coordination.k8s.io
     resources:
@@ -111,6 +123,9 @@ rules:
       - statefulsets
     verbs:
       - get
+      - delete
+      - watch
+      - list
   - apiGroups:
       - rbac.authorization.k8s.io
     resourceNames:

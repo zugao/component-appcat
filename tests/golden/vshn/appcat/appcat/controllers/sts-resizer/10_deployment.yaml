@@ -2,25 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    appcat-controller: postgres-deletion-protection
-  name: postgres-deletion-protection-manager
-  namespace: appcat-controllers
+    control-plane: controller-manager
+  name: sts-resizer
+  namespace: syn-appcat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      appcat-controller: postgres-deletion-protection
+      control-plane: controller-manager
   template:
     metadata:
       labels:
-        appcat-controller: postgres-deletion-protection
+        control-plane: controller-manager
     spec:
       containers:
         - args:
-            - controller
-            - --leader-elect
-          env: []
-          image: ghcr.io/vshn/appcat:v4.18.0
+            - --inplace
+          image: quay.io/vshn/statefulset-resize-controller:v0.3.0
           livenessProbe:
             httpGet:
               path: /healthz
@@ -36,12 +34,14 @@ spec:
             periodSeconds: 10
           resources:
             limits:
-              cpu: 200m
-              memory: 200Mi
+              cpu: 100m
+              memory: 30Mi
             requests:
               cpu: 100m
-              memory: 50Mi
+              memory: 20Mi
+          securityContext:
+            allowPrivilegeEscalation: false
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: postgres-deletion-protection-manager
+      serviceAccountName: sts-resizer
       terminationGracePeriodSeconds: 10
