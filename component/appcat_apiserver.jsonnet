@@ -33,11 +33,27 @@ local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distr
   rules+: [
     {
       apiGroups: [ 'api.appcat.vshn.io' ],
-      resources: [ 'appcats', 'vshnpostgresbackups', 'vshnredisbackups' ],
+      resources: [ 'appcats' ],
       verbs: [ 'get', 'list', 'watch' ],
     },
   ],
 };
+
+local clusterRoleView = kube.ClusterRole('appcat:api:view') {
+  metadata+: {
+    labels+: {
+      'rbac.authorization.k8s.io/aggregate-to-view': 'true',
+    },
+  },
+  rules+: [
+    {
+      apiGroups: [ 'api.appcat.vshn.io' ],
+      resources: [ 'vshnpostgresbackups', 'vshnredisbackups' ],
+      verbs: [ 'get', 'list', 'watch' ],
+    },
+  ],
+};
+
 
 local serviceAccount = loadManifest('service-account.yaml') {
   metadata+: {
@@ -184,6 +200,7 @@ if apiserverParams.enabled == true then {
   'apiserver/10_namespace': namespace,
   'apiserver/10_cluster_role_api_server': clusterRoleAPIServer,
   'apiserver/10_cluster_role_basic_users': clusterRoleUsers,
+  'apiserver/10_cluster_role_view': clusterRoleView,
   'apiserver/10_cluster_role_binding': clusterRoleBinding,
   'apiserver/20_service_account': serviceAccount,
   'apiserver/10_apiserver_envs': envs,
