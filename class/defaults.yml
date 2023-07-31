@@ -28,7 +28,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.15.1
+        tag: v4.15.2
 
     =_crd_version: ${appcat:images:appcat:tag}
 
