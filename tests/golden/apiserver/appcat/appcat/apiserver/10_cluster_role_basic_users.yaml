@@ -12,6 +12,7 @@ rules:
     resources:
       - appcats
       - vshnpostgresbackups
+      - vshnredisbackups
     verbs:
       - get
       - list
