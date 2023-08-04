@@ -21,8 +21,7 @@ spec:
     - POSTGRESQL_PORT
     - POSTGRESQL_USER
     - POSTGRESQL_PASSWORD
-    - PRIMARY_IP
-    - REPLICAS_IP
+    - LOADBALANCER_IP
   defaultCompositionRef:
     name: vshnpostgres.vshn.appcat.vshn.io
   group: vshn.appcat.vshn.io

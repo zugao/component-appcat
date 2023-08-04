@@ -32,6 +32,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
+          externalDatabaseConnectionsEnabled: 'true'
           imageTag: v4.15.2
           sgNamespace: stackgres
         kind: ConfigMap
@@ -43,7 +44,7 @@ spec:
         image: postgresql
         imagePullPolicy: IfNotPresent
         runner:
-          endpoint: unix-abstract:crossplane/fn/default.sock
+          endpoint: 172.17.0.1:9547
         timeout: 20s
       name: pgsql-func
       type: Container
@@ -466,11 +467,6 @@ spec:
                       key: tls.key
                       name: tls-certificate
                   version: ''
-                postgresServices:
-                  primary:
-                    type: ClusterIP
-                  replicas:
-                    type: ClusterIP
                 sgInstanceProfile: ''
           providerConfigRef:
             name: kubernetes
@@ -549,12 +545,6 @@ spec:
         - fromFieldPath: spec.parameters.backup.retention
           toFieldPath: spec.forProvider.manifest.spec.configurations.backups[0].retention
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.network.serviceType
-          toFieldPath: spec.forProvider.manifest.spec.postgresServices.primary.type
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.network.serviceType
-          toFieldPath: spec.forProvider.manifest.spec.postgresServices.replicas.type
-          type: FromCompositeFieldPath
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -632,11 +622,8 @@ spec:
         - fromConnectionSecretKey: POSTGRESQL_PASSWORD
           name: POSTGRESQL_PASSWORD
           type: FromConnectionSecretKey
-        - fromConnectionSecretKey: PRIMARY_IP
-          name: PRIMARY_IP
-          type: FromConnectionSecretKey
-        - fromConnectionSecretKey: REPLICAS_IP
-          name: REPLICAS_IP
+        - fromConnectionSecretKey: LOADBALANCER_IP
+          name: LOADBALANCER_IP
           type: FromConnectionSecretKey
       name: connection
       patches:

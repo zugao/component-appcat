@@ -37,8 +37,7 @@ local connectionSecretKeys = [
   'POSTGRESQL_PORT',
   'POSTGRESQL_USER',
   'POSTGRESQL_PASSWORD',
-  'PRIMARY_IP',
-  'REPLICAS_IP',
+  'LOADBALANCER_IP',
 ];
 
 local xrd = xrds.XRDFromCRD(
@@ -375,14 +374,6 @@ local sgCluster = {
                     enableSetPatroniCpuRequests: true,
                     enableSetPatroniMemoryRequests: true,
                   },
-                  postgresServices: {
-                    primary: {
-                      type: 'ClusterIP',
-                    },
-                    replicas: {
-                      type: 'ClusterIP',
-                    },
-                  },
                 },
               },
             },
@@ -413,8 +404,6 @@ local sgCluster = {
 
     comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
     comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
-    comp.FromCompositeFieldPath('spec.parameters.network.serviceType', 'spec.forProvider.manifest.spec.postgresServices.primary.type'),
-    comp.FromCompositeFieldPath('spec.parameters.network.serviceType', 'spec.forProvider.manifest.spec.postgresServices.replicas.type'),
   ],
 };
 
@@ -867,6 +856,7 @@ local composition(restore=false) =
                 emailAlertingSmtpFromAddress: params.services.vshn.emailAlerting.smtpFromAddress,
                 emailAlertingSmtpUsername: params.services.vshn.emailAlerting.smtpUsername,
                 emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
+                externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
               },
             },
             container: {
@@ -874,7 +864,7 @@ local composition(restore=false) =
               imagePullPolicy: 'IfNotPresent',
               timeout: '20s',
               runner: {
-                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+                endpoint: '172.17.0.1:9547',
               },
             },
           },
