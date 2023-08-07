@@ -864,7 +864,7 @@ local composition(restore=false) =
               imagePullPolicy: 'IfNotPresent',
               timeout: '20s',
               runner: {
-                endpoint: '172.17.0.1:9547',
+                endpoint: 'unix-abstract:crossplane/fn/default.sock',
               },
             },
           },
