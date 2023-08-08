@@ -25,10 +25,14 @@ parameters:
         registry: ghcr.io
         image: slok/sloth
         tag: v0.11.0
+      statefulSetResizer:
+        registry: quay.io
+        repository: vshn/statefulset-resize-controller
+        tag: v0.3.0
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.15.2
+        tag: v4.18.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 

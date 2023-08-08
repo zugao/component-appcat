@@ -124,6 +124,11 @@ local controllerConfigRef(config) =
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
+          apiGroups: [ 'helm.crossplane.io' ],
+          resources: [ 'releases' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
           apiGroups: [ '', 'coordination.k8s.io' ],
           resources: [ 'secrets', 'configmaps', 'events', 'leases' ],
           verbs: [ '*' ],
@@ -141,7 +146,7 @@ local controllerConfigRef(config) =
         {
           apiGroups: [ 'apps' ],
           resources: [ 'statefulsets' ],
-          verbs: [ 'get' ],
+          verbs: [ 'get', 'delete', 'watch', 'list' ],
         },
         {
           apiGroups: [ 'rbac.authorization.k8s.io' ],
@@ -149,7 +154,6 @@ local controllerConfigRef(config) =
           resourceNames: [ 'appcat:services:read' ],
           verbs: [ 'bind' ],
         },
-
         {
           apiGroups: [ 'stackgres.io' ],
           resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops' ],
