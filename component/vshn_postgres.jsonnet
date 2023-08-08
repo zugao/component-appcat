@@ -37,6 +37,7 @@ local connectionSecretKeys = [
   'POSTGRESQL_PORT',
   'POSTGRESQL_USER',
   'POSTGRESQL_PASSWORD',
+  'LOADBALANCER_IP',
 ];
 
 local xrd = xrds.XRDFromCRD(
@@ -855,6 +856,7 @@ local composition(restore=false) =
                 emailAlertingSmtpFromAddress: params.services.vshn.emailAlerting.smtpFromAddress,
                 emailAlertingSmtpUsername: params.services.vshn.emailAlerting.smtpUsername,
                 emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
+                externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
               },
             },
             container: {

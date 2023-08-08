@@ -38,6 +38,7 @@ parameters:
     services:
       vshn:
         enabled: true
+        externalDatabaseConnectionsEnabled: true
         emailAlerting:
           enabled: true
           smtpPassword: "whatever"
