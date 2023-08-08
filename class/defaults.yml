@@ -181,6 +181,7 @@ parameters:
       controlNamespace: "syn-appcat-control"
       vshn:
         enabled: false
+        externalDatabaseConnectionsEnabled: 'false'
         secretNamespace: ${crossplane:namespace}
         emailAlerting:
           enabled: false
