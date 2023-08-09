@@ -33,7 +33,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.18.5
+          imageTag: v4.19.0
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
@@ -62,6 +62,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: postgresql-standalone
+                  appcat.vshn.io/sla: ''
                   appuio.io/billing-name: appcat-postgresql
                   appuio.io/no-rbac-creation: 'true'
                   appuio.io/organization: vshn
@@ -98,6 +99,7 @@ spec:
                 labels:
                   appcat.vshn.io/claim-namespace: ''
                   appcat.vshn.io/servicename: postgresql-standalone
+                  appcat.vshn.io/sla: ''
                   appuio.io/billing-name: appcat-postgresql
                   appuio.io/no-rbac-creation: 'true'
                   appuio.io/organization: vshn
@@ -122,6 +124,9 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
           toFieldPath: spec.forProvider.manifest.metadata.labels[appcat.vshn.io/claim-namespace]
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.service.serviceLevel
+          toFieldPath: spec.forProvider.manifest.metadata.labels[appcat.vshn.io/sla]
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[appuio.io/organization]
           toFieldPath: spec.forProvider.manifest.metadata.labels[appuio.io/organization]
