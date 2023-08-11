@@ -30,7 +30,7 @@ spec:
         data:
           bucketRegion: lpg
           controlNamespace: syn-appcat-control
-          imageTag: v4.18.3
+          imageTag: v4.18.4
           maintenanceSA: helm-based-service-maintenance
           restoreSA: redisrestoreserviceaccount
         kind: ConfigMap
