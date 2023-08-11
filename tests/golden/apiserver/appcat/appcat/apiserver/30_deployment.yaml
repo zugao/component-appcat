@@ -32,7 +32,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: apiserver-envs
-          image: ghcr.io/vshn/appcat:v4.18.2
+          image: ghcr.io/vshn/appcat:v4.18.3
           name: apiserver
           resources:
             limits:
