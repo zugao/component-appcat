@@ -33,7 +33,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.18.4
+          imageTag: v4.18.5
           sgNamespace: stackgres
         kind: ConfigMap
         metadata:
