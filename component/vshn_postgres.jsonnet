@@ -21,6 +21,7 @@ local certificateSecretName = 'tls-certificate';
 
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
+local slaLabelKey = 'appcat.vshn.io/sla';
 
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 
@@ -91,6 +92,7 @@ local namespace = comp.KubeObject('v1', 'Namespace') +
                             labels: {
                               [serviceNameLabelKey]: 'postgresql-standalone',
                               [serviceNamespaceLabelKey]: '',
+                              [slaLabelKey]: '',
                               'appuio.io/no-rbac-creation': 'true',
                               'appuio.io/organization': 'vshn',
                               'appuio.io/billing-name': 'appcat-postgresql',
@@ -101,7 +103,7 @@ local namespace = comp.KubeObject('v1', 'Namespace') +
                     },
                   };
 
-local namespaceObserve = {
+local claimNamespaceObserve = {
   name: 'ns-observer',
   base: namespace {
     spec+: {
@@ -115,7 +117,7 @@ local namespaceObserve = {
   ],
 };
 
-local namespaceConditions = {
+local instanceNamespace = {
   name: 'namespace-conditions',
   base: namespace,
   patches: [
@@ -123,6 +125,7 @@ local namespaceConditions = {
     comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
+    comp.FromCompositeFieldPath('spec.parameters.service.serviceLevel', 'spec.forProvider.manifest.metadata.labels[appcat.vshn.io/sla]'),
     comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
   ],
 };
@@ -870,8 +873,8 @@ local composition(restore=false) =
           },
         ],
       resources: [
-                   namespaceObserve,
-                   namespaceConditions,
+                   claimNamespaceObserve,
+                   instanceNamespace,
                    comp.NamespacePermissions('vshn-postgresql'),
                    localca,
                    certificate,
