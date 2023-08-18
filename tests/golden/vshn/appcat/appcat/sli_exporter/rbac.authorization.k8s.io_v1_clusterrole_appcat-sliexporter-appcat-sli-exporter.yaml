@@ -5,6 +5,22 @@ metadata:
   name: appcat-sliexporter-appcat-sli-exporter
 rules:
 - apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - vshn.appcat.vshn.io
   resources:
   - vshnpostgresqls
@@ -19,11 +35,16 @@ rules:
   verbs:
   - get
 - apiGroups:
-  - ""
+  - vshn.appcat.vshn.io
   resources:
-  - namespaces
-  - secrets
+  - vshnredis
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+  - vshn.appcat.vshn.io
+  resources:
+  - vshnredis/status
+  verbs:
+  - get

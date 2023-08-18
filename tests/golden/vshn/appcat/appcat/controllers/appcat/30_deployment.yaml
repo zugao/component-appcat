@@ -2,25 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    appcat-controller: postgres-deletion-protection
-  name: postgres-deletion-protection-manager
-  namespace: appcat-controllers
+    appcat-controller: appcat-controller
+  name: appcat-controller
+  namespace: syn-appcat
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      appcat-controller: postgres-deletion-protection
+      appcat-controller: appcat-controller
   template:
     metadata:
       labels:
-        appcat-controller: postgres-deletion-protection
+        appcat-controller: appcat-controller
     spec:
       containers:
         - args:
             - controller
             - --leader-elect
-          env: []
-          image: ghcr.io/vshn/appcat:v4.20.0
+            - --quotas=false
+          env:
+            - name: PLANS_NAMESPACE
+              value: syn-appcat
+          image: ghcr.io/vshn/appcat:v4.22.0
           livenessProbe:
             httpGet:
               path: /healthz
@@ -41,7 +44,14 @@ spec:
             requests:
               cpu: 100m
               memory: 50Mi
+          volumeMounts:
+            - mountPath: /etc/webhook/certs
+              name: webhook-certs
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: postgres-deletion-protection-manager
+      serviceAccountName: appcat-controller
       terminationGracePeriodSeconds: 10
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: webhook-cert

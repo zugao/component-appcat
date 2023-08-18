@@ -32,7 +32,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.20.0
+        tag: v4.22.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -42,23 +42,26 @@ parameters:
 
     appuioManaged: true
     tenantID: ${cluster:tenant}
+    quotasEnabled: false
+    grpcEndpoint: unix-abstract:crossplane/fn/default.sock
 
     controller:
       enabled: false
-      namespace: appcat-controllers
+      namespace: ${appcat:namespace}
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}
-      postgres:
-        enabled: false
-        extraArgs: []
-        extraEnv: {}
-        resources:
-          requests:
-            cpu: 100m
-            memory: 50Mi
-          limits:
-            cpu: 200m
-            memory: 200Mi
+      quotasEnabled: ${appcat:quotasEnabled}
+      extraArgs: []
+      extraEnv: {}
+      tls:
+        certSecretName: webhook-cert
+      resources:
+        requests:
+          cpu: 100m
+          memory: 50Mi
+        limits:
+          cpu: 200m
+          memory: 200Mi
 
     stsResizer:
       resources:
@@ -195,6 +198,7 @@ parameters:
       vshn:
         enabled: false
         externalDatabaseConnectionsEnabled: 'false'
+        quotasEnabled: ${appcat:quotasEnabled}
         secretNamespace: ${crossplane:namespace}
         emailAlerting:
           enabled: false
@@ -210,6 +214,7 @@ parameters:
           # bucket_endpoint: 'https://objects.lpg.cloudscale.ch' || 'https://sos-ch-gva-2.exo.io'
           bucket_endpoint: ""
           enabled: true
+          grpcEndpoint: ${appcat:grpcEndpoint}
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
@@ -241,7 +246,7 @@ parameters:
           helmChartVersion: ${appcat:charts:redis:version}
           imageRegistry: ""
           bucket_region: "lpg"
-
+          grpcEndpoint: ${appcat:grpcEndpoint}
           defaultPlan: standard-1
           plans:
             standard-512m:
