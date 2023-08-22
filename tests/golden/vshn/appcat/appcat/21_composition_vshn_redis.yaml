@@ -331,6 +331,14 @@ spec:
               - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
           type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: redis-headless.vshn-redis-%s.svc
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
+          type: CombineFromComposite
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -410,6 +418,14 @@ spec:
               - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
           type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: redis-headless.vshn-redis-%s.svc
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
+          type: CombineFromComposite
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -487,6 +503,14 @@ spec:
             variables:
               - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: redis-headless.vshn-redis-%s.svc
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
           type: CombineFromComposite
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
