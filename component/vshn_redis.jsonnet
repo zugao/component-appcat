@@ -522,6 +522,7 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
             comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
 
           ],
         },
@@ -535,6 +536,7 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
             comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
 
           ],
         },
@@ -548,6 +550,7 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
             comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
           ],
         },
         {
