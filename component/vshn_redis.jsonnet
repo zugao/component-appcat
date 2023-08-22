@@ -194,9 +194,7 @@ local composition =
                                     encoding: 'PKCS1',
                                     size: 4096,
                                   },
-                                  dnsNames: [
-                                    'vshn.appcat.vshn.ch',
-                                  ],
+                                  dnsNames: [],
                                   issuerRef: {
                                     name: '',
                                     kind: 'Issuer',
@@ -253,9 +251,7 @@ local composition =
                                         'server auth',
                                         'client auth',
                                       ],
-                                      dnsNames: [
-                                        'vshn.appcat.vshn.ch',
-                                      ],
+                                      dnsNames: [],
                                       issuerRef: {
                                         name: '',
                                         kind: 'Issuer',
@@ -293,9 +289,7 @@ local composition =
                                       usages: [
                                         'client auth',
                                       ],
-                                      dnsNames: [
-                                        'vshn.appcat.vshn.ch',
-                                      ],
+                                      dnsNames: [],
                                       issuerRef: {
                                         name: '',
                                         kind: 'Issuer',
@@ -527,6 +521,8 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+
           ],
         },
         {
@@ -538,6 +534,8 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'server'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+
           ],
         },
         {
@@ -549,6 +547,7 @@ local composition =
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'client'),
             comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
             comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
           ],
         },
         {
