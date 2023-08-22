@@ -32,7 +32,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.19.0
+        tag: v4.20.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 
