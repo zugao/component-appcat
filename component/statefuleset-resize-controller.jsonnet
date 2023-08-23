@@ -7,6 +7,7 @@ local params = inv.parameters.appcat;
 local srcImage = params.images.statefulSetResizer;
 local imageTag = std.strReplace(srcImage.tag, '/', '_');
 local image = srcImage.registry + '/' + srcImage.repository + ':' + imageTag;
+local stsParams = params.stsResizer;
 
 local loadManifest(manifest) =
   std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat/manifests/statefulset-resize-controller/' + srcImage.tag + '/' + manifest));
@@ -54,7 +55,7 @@ local deployment = loadManifest('config/manager/manager.yaml') + {
             c {
               image: image,
               args: args,
-              // resources+: params.operator.resources,
+              resources+: stsParams.resources,
             }
           else
             c
