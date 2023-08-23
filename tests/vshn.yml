@@ -17,6 +17,9 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+
+    quotasEnabled: false
+
     slos:
       enabled: true
       sla_reporter:
@@ -47,6 +50,7 @@ parameters:
           enabled: true
           smtpPassword: "whatever"
         postgres:
+          # grpcEndpoint: host.docker.internal:9547
           sgNamespace: stackgres
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
@@ -66,6 +70,7 @@ parameters:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
         redis:
+          # grpcEndpoint: host.docker.internal:9547
           plans:
             standard-8:
               enabled: false

@@ -860,6 +860,7 @@ local composition(restore=false) =
                 emailAlertingSmtpUsername: params.services.vshn.emailAlerting.smtpUsername,
                 emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
                 externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
+                quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
               },
             },
             container: {
@@ -867,7 +868,7 @@ local composition(restore=false) =
               imagePullPolicy: 'IfNotPresent',
               timeout: '20s',
               runner: {
-                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+                endpoint: pgParams.grpcEndpoint,
               },
             },
           },
@@ -950,6 +951,15 @@ local osTemplate =
     ],
   };
 
+local plansCM = kube.ConfigMap('vshnpostgresqlplans') + {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  data: {
+    plans: std.toString(pgPlans),
+  },
+};
+
 if params.services.vshn.enabled && pgParams.enabled then
   assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
   assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
@@ -957,6 +967,7 @@ if params.services.vshn.enabled && pgParams.enabled then
     '20_xrd_vshn_postgres': xrd,
     '20_rbac_vshn_postgres': xrds.CompositeClusterRoles(xrd),
     '20_role_vshn_postgresrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
+    '20_plans_vshn_postgresql': plansCM,
     '21_composition_vshn_postgres': defaultComp,
     '21_composition_vshn_postgresrestore': restoreComp,
     '22_prom_rule_sla_postgres': promRulePostgresSLA,

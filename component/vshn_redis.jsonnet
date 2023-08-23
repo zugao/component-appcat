@@ -454,6 +454,7 @@ local composition =
                 maintenanceSA: 'helm-based-service-maintenance',
                 controlNamespace: params.services.controlNamespace,
                 restoreSA: 'redisrestoreserviceaccount',
+                quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
               },
             },
             container: {
@@ -461,7 +462,7 @@ local composition =
               imagePullPolicy: 'IfNotPresent',
               timeout: '20s',
               runner: {
-                endpoint: 'unix-abstract:crossplane/fn/default.sock',
+                endpoint: redisParams.grpcEndpoint,
               },
             },
           },
@@ -661,11 +662,21 @@ local osTemplate =
     ],
   };
 
+local plansCM = kube.ConfigMap('vshnredisplans') + {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  data: {
+    plans: std.toString(redisPlans),
+  },
+};
+
 if params.services.vshn.enabled && redisParams.enabled then {
   '20_xrd_vshn_redis': xrd,
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
   '20_rbac_vshn_redis_resize': [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
+  '20_plans_vshn_redis': plansCM,
   '21_composition_vshn_redis': composition,
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
 } else {}
