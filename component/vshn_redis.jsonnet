@@ -389,6 +389,19 @@ local composition =
               ingressNSMatchLabels: {
                 'kubernetes.io/metadata.name': '',
               },
+              extraIngress: [
+                {
+                  from: [
+                    {
+                      namespaceSelector: {
+                        matchLabels: {
+                          'kubernetes.io/metadata.name': params.slos.namespace,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
             },
             master: {
               persistence: {

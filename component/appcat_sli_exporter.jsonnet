@@ -26,6 +26,10 @@ local deployment_patch = kube._Object('apps/v1', 'Deployment', 'controller-manag
                 name: 'APPCAT_SLI_VSHNPOSTGRESQL',
                 value: std.manifestJson(params.services.vshn.enabled && params.services.vshn.postgres.enabled),
               },
+              {
+                name: 'APPCAT_SLI_VSHNREDIS',
+                value: std.manifestJson(params.services.vshn.enabled && params.services.vshn.redis.enabled),
+              },
             ],
           },
         ],

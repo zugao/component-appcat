@@ -145,6 +145,16 @@ parameters:
                 # If the alert is pending for more than 5m this indicates a real problem.
                 for: 6m
               ticket_alert: {}
+        redis:
+          uptime:
+            objective: 99.9
+            alerting:
+              page_alert:
+                # This should reduce non actionable alerts because of single instance restarts.
+                # The page alert looks (ammong other things) at the burn rate over the last 5min.
+                # If the alert is pending for more than 5m this indicates a real problem.
+                for: 6m
+              ticket_alert: {}
 
     providers:
       cloudscale:

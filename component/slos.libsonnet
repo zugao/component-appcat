@@ -80,6 +80,24 @@ local prometheusRule(name) =
         },
       },
     ],
+    'vshn-redis': [
+      newSLO('uptime', 'vshn-Redis', params.slos.vshn.redis.uptime) {
+        description: 'Uptime SLO for Redis by VSHN',
+        sli: {
+          events: {
+            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
+            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla)',
+            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+          },
+        },
+        alerting+: {
+          name: 'SLO_AppCat_VSHNRedisUptime',
+          annotations+: {
+            summary: 'Probes to Redis by VSHN instance fail',
+          },
+        },
+      },
+    ],
   },
   Get(name): prometheusRule(name),
 }
