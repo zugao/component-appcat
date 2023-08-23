@@ -60,6 +60,15 @@ parameters:
             cpu: 200m
             memory: 200Mi
 
+    stsResizer:
+      resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+          limits:
+            cpu: 250m
+            memory: 200Mi
+
     apiserver:
       enabled: false
       namespace: appcat-apiserver
