@@ -149,5 +149,6 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
 
 } + if params.slos.enabled then {
   [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
+  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
 }
 else {}

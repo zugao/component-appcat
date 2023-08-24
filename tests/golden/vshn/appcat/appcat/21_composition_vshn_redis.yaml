@@ -702,6 +702,11 @@ spec:
               networkPolicy:
                 allowExternal: false
                 enabled: true
+                extraIngress:
+                  - from:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: appcat-slos
                 ingressNSMatchLabels:
                   kubernetes.io/metadata.name: ''
               tls:

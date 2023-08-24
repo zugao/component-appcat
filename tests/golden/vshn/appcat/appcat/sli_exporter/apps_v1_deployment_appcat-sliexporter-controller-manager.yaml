@@ -26,6 +26,8 @@ spec:
         env:
         - name: APPCAT_SLI_VSHNPOSTGRESQL
           value: "true"
+        - name: APPCAT_SLI_VSHNREDIS
+          value: "true"
         image: ghcr.io/vshn/appcat:v4.22.0
         livenessProbe:
           httpGet:
