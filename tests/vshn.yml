@@ -24,7 +24,8 @@ parameters:
       enabled: true
       sla_reporter:
         enabled: true
-        slo_mimir_endpoint: http://kube-prometheus-kube-prome-prometheus.prometheus-system.svc:9090/prometheus
+        slo_mimir_svc: kube-prometheus-kube-prome-prometheus
+        slo_mimir_namespace: prometheus-system
     controller:
       enabled: true
       postgres:

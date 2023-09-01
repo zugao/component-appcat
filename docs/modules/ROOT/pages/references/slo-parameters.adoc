@@ -139,21 +139,28 @@ Cron schedule when the SLA Reporter should run.
 
 === `sla_reporter.bucket_region`
 [horizontal]
-type:: dict
+type:: string
 default:: lpg
 
 The region in which the bucket that stores the reports should be provisioned.
 
-=== `sla_reporter.slo_mimir_endpoint`
+=== `sla_reporter.slo_mimir_svc`
 [horizontal]
-type:: dict
-default:: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc.cluster.local:8080/prometheus
+type:: string
+default:: vshn-appuio-mimir-query-frontend
 
-Endpoint for the Prometheus compatible data source.
+The service for the Prometheus compatible data source.
+
+=== `sla_reporter.slo_mimir_namespace`
+[horizontal]
+type:: string
+default:: vshn-appuio-mimir
+
+THe namespace where the Prometheus compatible data source is deployed.
 
 === `sla_reporter.mimir_organization`
 [horizontal]
-type:: dict
+type:: string
 default:: appuio-managed-openshift-metrics
 
 Organization header needed to query Mimir data sources.

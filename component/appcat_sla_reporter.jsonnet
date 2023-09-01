@@ -6,11 +6,13 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.appcat;
-local sla_reporter_params = params.slos.sla_reporter;
+local slos_params = params.slos;
+local sla_reporter_params = slos_params.sla_reporter;
+local mimir_endpoint = 'http://' + sla_reporter_params.slo_mimir_svc + '.' + sla_reporter_params.slo_mimir_namespace + '.svc.cluster.local:8080/prometheus';
 
 local CronJob = kube.CronJob('appcat-sla-reporter') {
   metadata+: {
-    namespace: params.slos.namespace,
+    namespace: slos_params.namespace,
   },
   spec+: {
     schedule: sla_reporter_params.schedule,
@@ -41,7 +43,7 @@ local CronJob = kube.CronJob('appcat-sla-reporter') {
                 env: [
                   {
                     name: 'PROM_URL',
-                    value: sla_reporter_params.slo_mimir_endpoint,
+                    value: mimir_endpoint,
                   },
                 ],
               },
@@ -55,7 +57,7 @@ local CronJob = kube.CronJob('appcat-sla-reporter') {
 
 local ObjectStorage = kube._Object('appcat.vshn.io/v1', 'ObjectBucket', 'appcat-sla-reports') {
   metadata: {
-    namespace: params.slos.namespace,
+    namespace: slos_params.namespace,
     name: 'appcat-sla-reports',
     annotations: {
       // Our current ArgoCD configuration can't handle the claim -> composite
@@ -75,7 +77,29 @@ local ObjectStorage = kube._Object('appcat.vshn.io/v1', 'ObjectBucket', 'appcat-
   },
 };
 
+local netPol = kube.NetworkPolicy('allow-from-%s' % slos_params.namespace) {
+  metadata+: {
+    namespace: sla_reporter_params.slo_mimir_namespace,
+  },
+  spec+: {
+    ingress_: {
+      allowFromReportNs: {
+        from: [
+          {
+            namespaceSelector: {
+              matchLabels: {
+                name: slos_params.namespace,
+              },
+            },
+          },
+        ],
+      },
+    },
+  },
+};
+
 if sla_reporter_params.enabled == true then {
   '01_cronjob': CronJob,
   '02_object_bucket': ObjectStorage,
+  '03_network_policy': netPol,
 } else {}

@@ -26,11 +26,11 @@ spec:
                 - appuio-managed-openshift-metrics
               env:
                 - name: PROM_URL
-                  value: http://kube-prometheus-kube-prome-prometheus.prometheus-system.svc:9090/prometheus
+                  value: http://kube-prometheus-kube-prome-prometheus.prometheus-system.svc.cluster.local:8080/prometheus
               envFrom:
                 - secretRef:
                     name: appcat-sla-reports-creds
-              image: ghcr.io/vshn/appcat:v4.23.0
+              image: ghcr.io/vshn/appcat:v4.23.1
               name: sla-reporter
               resources:
                 limits:
