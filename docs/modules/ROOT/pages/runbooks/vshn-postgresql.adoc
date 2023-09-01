@@ -123,3 +123,39 @@ appcat:
             page_alert:
               enabled: false
 ----
+
+
+[[PostgreSQLReplicationCritical]]
+== PostgreSQLReplicationCritical
+
+This alert fires if the replication is broken for a VSHNPostrgeSQL instance last longer than 10 minutes.
+
+
+```
+# figure out which pod is master
+kubectl get pods -n $affected_namespace -l app=StackGresCluster -l role=master
+
+# figure out which pod are replicas
+kubectl get pods -n default -l app=StackGresCluster,cluster=true -l role=replica
+
+```
+
+delete replica pods and let patroni fix itself, if that doesn't work, please refer to the patroni documentation on how to fix replication issues. https://stackgres.io/doc/1.1/administration/patroni/management/[Stackgres documentation]  https://www.percona.com/blog/how-patroni-addresses-the-problem-of-the-logical-replication-slot-failover-in-a-postgresql-cluster/[Percona blog post]
+
+We need to build know-how on how to fix replication issues, please document your findings in this runbook.
+
+[[PostgreSQLReplicationLagCritical]]
+== PostgreSQLReplicationLagCritical
+
+This alert fires if the replication lag is higher than 5 minutes for a VSHNPostrgeSQL instance. It means that replicas are behind master.
+Probably related to network or storage.
+
+
+[[PostgreSQLReplicationCountCritical]]
+== PostgreSQLReplicationCountCritical
+
+This alert fires when there are issues with statefullset responsible for replicas. It means that there are less replicas than expected. Most probably related to quota issues.
+
+```
+k describe -n vasn-postgresql-<instance> sts <instance>
+```
