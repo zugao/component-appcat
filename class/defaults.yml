@@ -32,7 +32,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.23.0
+        tag: v4.23.1
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -112,7 +112,8 @@ parameters:
         # 09:00 on the first of the month
         schedule: "0 9 1 * *"
         bucket_region: lpg
-        slo_mimir_endpoint: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc.cluster.local:8080/prometheus
+        slo_mimir_svc: vshn-appuio-mimir-query-frontend
+        slo_mimir_namespace: vshn-appuio-mimir
         mimir_organization: appuio-managed-openshift-metrics
       sli_exporter:
         resources:
