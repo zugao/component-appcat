@@ -4,6 +4,9 @@ parameters:
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
+      minio:
+        source: https://charts.min.io
+        version: 5.0.13
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
@@ -36,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.23.1
+        tag: v4.25.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -304,6 +307,21 @@ parameters:
                 cpu: "2"
                 memory: "8Gi"
                 disk: 16Gi
+        minio:
+          enabled: false
+          enableNetworkPolicy: true
+          secretNamespace: ${appcat:services:vshn:secretNamespace}
+          helmChartVersion: ${appcat:charts:minio:version}
+          grpcEndpoint: ${appcat:grpcEndpoint}
+          defaultPlan: standard-1
+          plans:
+            standard-1:
+              size:
+                enabled: true
+                cpu: "1"
+                memory: "1Gi"
+                disk: 50Gi
+
 
       # Config for exoscale composites
       exoscale:

@@ -1,0 +1,33 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: appcat-controller
+rules:
+  - apiGroups:
+      - vshn.appcat.vshn.io
+    resources:
+      - xvshnpostgresqls
+      - xvshnpostgresqls/finalizers
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - kubernetes.crossplane.io
+    resources:
+      - objects
+    verbs:
+      - delete
+  - apiGroups:
+      - ''
+    resources:
+      - namespaces
+      - configmaps
+    verbs:
+      - get
+      - update
+      - list
+      - watch
+      - delete

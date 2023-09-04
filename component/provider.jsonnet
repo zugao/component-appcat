@@ -258,18 +258,23 @@ local controllerConfigRef(config) =
         },
         {
           apiGroups: [ '' ],
-          resources: [ 'namespaces', 'serviceaccounts', 'services' ],
+          resources: [ 'namespaces', 'serviceaccounts', 'services', 'persistentvolumeclaims' ],
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
           apiGroups: [ 'apps' ],
-          resources: [ 'statefulsets' ],
+          resources: [ 'statefulsets', 'deployments' ],
           verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
         },
         {
           apiGroups: [ 'networking.k8s.io' ],
           resources: [ 'networkpolicies' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'batch' ],
+          resources: [ 'jobs' ],
+          verbs: [ 'get', 'list', 'watch', 'create', 'delete' ],
         },
       ],
     };

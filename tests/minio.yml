@@ -1,0 +1,57 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
+        output_path: vendor/lib/crossplane.libsonnet
+    compile:
+      - input_paths:
+          - ${_base_directory}/dev/component/objectstorage.jsonnet
+        input_type: jsonnet
+        output_path: appcat/
+
+  facts:
+    cloud: cloudscale
+
+  crossplane:
+    namespace: syn-crossplane
+
+  appcat:
+    quotasEnabled: false
+
+    slos:
+      enabled: true
+      sla_reporter:
+        enabled: true
+        slo_mimir_endpoint: http://kube-prometheus-kube-prome-prometheus.prometheus-system.svc:9090/prometheus
+    controller:
+      enabled: true
+      postgres:
+        enabled: true
+    providers:
+      kubernetes:
+        enabled: true
+      helm:
+        enabled: true
+    apiserver:
+      enabled: true
+      namespace: appcat-apiserver
+      env:
+        APPCAT_HANDLER_ENABLED: "true"
+        VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "true"
+        VSHN_REDIS_BACKUP_HANDLER_ENABLED: "true"
+
+    services:
+      vshn:
+        enabled: true
+        externalDatabaseConnectionsEnabled: true
+        emailAlerting:
+          enabled: true
+          smtpPassword: "whatever"
+        postgres:
+          enabled: false
+        redis:
+          enabled: false
+        minio:
+          enabled: true
+          grpcEndpoint: 172.18.0.1:9547
