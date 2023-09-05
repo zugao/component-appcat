@@ -139,7 +139,7 @@ kubectl get pods -n $affected_namespace -l app=StackGresCluster -l role=master
 kubectl get pods -n default -l app=StackGresCluster,cluster=true -l role=replica
 
 # reinitialize replica pod (example commands)
-k --as cluster-admin -n vshn-postgresql-test-cluster-always-true-jnlj4 exec -ti pods/test-cluster-always-true-jnlj4-1 -- bash 
+k --as cluster-admin -n vshn-postgresql-test-cluster-always-true-jnlj4 exec -ti pods/test-cluster-always-true-jnlj4-1 -- bash
 (inside pod):bash-4.4$ patronictl list
 (inside pod):bash-4.4$ patronictl reinit test-cluster-always-true-jnlj4 test-cluster-always-true-jnlj4-1
 ```
