@@ -160,8 +160,8 @@ This alert fires if the replication lag is higher than 5 minutes for a VSHNPostr
 Probably related to network or storage.
 
 
-[[PostgreSQLReplicationCountCritical]]
-== PostgreSQLReplicationCountCritical
+[[PostgreSQLPodReplicasCritical]]
+== PostgreSQLPodReplicasCritical
 
 This alert fires when there are issues with statefullset responsible for replicas. It means that there are less replicas than expected. Most probably related to quota issues.
 
