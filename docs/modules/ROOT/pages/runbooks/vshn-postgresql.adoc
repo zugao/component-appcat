@@ -149,9 +149,7 @@ notice that patronictl takes the name of the cluster and the name of the pod, no
 if that doesn;t work:
 delete replica pods and let patroni fix itself
 if that doesn't work either, please refer to the patroni documentation on how to fix replication issues.
-https://patroni.readthedocs.io/en/latest/rest_api.html?highlight=reinit#reinitialize-endpoint[Patroni documentation - reinitialize replica pod]
 https://stackgres.io/doc/1.1/administration/patroni/management/[Stackgres documentation]
-https://www.percona.com/blog/how-patroni-addresses-the-problem-of-the-logical-replication-slot-failover-in-a-postgresql-cluster/[Percona blog post]
 
 We need to build know-how on how to fix replication issues, please document your findings in this runbook.
 
