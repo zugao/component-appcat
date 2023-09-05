@@ -138,9 +138,17 @@ kubectl get pods -n $affected_namespace -l app=StackGresCluster -l role=master
 # figure out which pod are replicas
 kubectl get pods -n default -l app=StackGresCluster,cluster=true -l role=replica
 
+# reinitialize replica pod (example commands)
+k --as cluster-admin -n vshn-postgresql-test-cluster-always-true-jnlj4 exec -ti pods/test-cluster-always-true-jnlj4-1 -- bash 
+(inside pod):bash-4.4$ patronictl list
+(inside pod):bash-4.4$ patronictl reinit test-cluster-always-true-jnlj4 test-cluster-always-true-jnlj4-1
 ```
 
-delete replica pods and let patroni fix itself, if that doesn't work, please refer to the patroni documentation on how to fix replication issues.
+notice that patronictl takes the name of the cluster and the name of the pod, not the name of the statefulset. Can be used in scripts with `--force` flag which auto-accepts all prompts.
+
+if that doesn;t work:
+delete replica pods and let patroni fix itself
+if that doesn't work either, please refer to the patroni documentation on how to fix replication issues.
 https://patroni.readthedocs.io/en/latest/rest_api.html?highlight=reinit#reinitialize-endpoint[Patroni documentation - reinitialize replica pod]
 https://stackgres.io/doc/1.1/administration/patroni/management/[Stackgres documentation]
 https://www.percona.com/blog/how-patroni-addresses-the-problem-of-the-logical-replication-slot-failover-in-a-postgresql-cluster/[Percona blog post]
