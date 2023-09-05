@@ -1077,7 +1077,7 @@ spec:
                           syn_team: schedar
                   - name: postgresql-replication
                     rules:
-                      - alert: PostgreSQLReplicationCritical
+                      - alert: PostgreSQLPodReplicasCritical
                         annotations:
                           description: The number of replicas for the instance {{
                             $labels.cluster_name }} in namespace {{ $labels.namespace
