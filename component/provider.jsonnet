@@ -304,4 +304,56 @@ local controllerConfigRef(config) =
       role,
       rolebinding,
     ],
+  [if params.providers.minio.enabled then '10_provider_minio']:
+    local provider = params.providers.minio;
+
+    local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
+      metadata+: {
+        namespace: provider.namespace,
+      },
+    };
+    local role = kube.ClusterRole('crossplane:provider:provider-minio:system:custom') {
+      rules: [
+        {
+          apiGroups: [ 'minio.crossplane.io' ],
+          resources: [ '*' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ '' ],
+          resources: [ 'secrets' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+      ],
+    };
+    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-minio:system:custom') {
+      roleRef_: role,
+      subjects_: [ sa ],
+    };
+
+
+    local controllerConf = controllerConfig('minio', provider.controllerConfig);
+
+    [
+      crossplane.Provider('minio') {
+        spec+: provider.spec + controllerConfigRef(controllerConf),
+      },
+    ]
+    +
+    controllerConf
+    +
+    [
+      crossplane.ProviderConfig('minio') {
+        apiVersion: 'minio.crossplane.io/v1',
+        spec+: addCredentials(
+          provider.providerConfig,
+          {
+            source: 'InjectedIdentity',
+          }
+        ),
+      },
+      sa,
+      role,
+      rolebinding,
+    ],
 }

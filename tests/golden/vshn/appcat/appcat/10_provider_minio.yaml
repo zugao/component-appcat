@@ -1,0 +1,99 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: minio
+  name: minio
+spec:
+  controllerConfigRef:
+    name: minio
+  package: ghcr.io/vshn/provider-minio/provider:v0.1.0
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: minio
+  name: minio
+spec:
+  serviceAccountName: provider-minio
+---
+apiVersion: minio.crossplane.io/v1
+kind: ProviderConfig
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: minio
+  name: minio
+spec:
+  credentials:
+    apiSecretRef:
+      name: minio-secret
+      namespace: syn-crossplane
+  minioURL: http://minio-server.minio.svc:9000/
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-minio
+  name: provider-minio
+  namespace: syn-crossplane
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations: {}
+  labels:
+    name: crossplane-provider-provider-minio-system-custom
+  name: crossplane:provider:provider-minio:system:custom
+rules:
+  - apiGroups:
+      - minio.crossplane.io
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations: {}
+  labels:
+    name: crossplane-provider-provider-minio-system-custom
+  name: crossplane:provider:provider-minio:system:custom
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane:provider:provider-minio:system:custom
+subjects:
+  - kind: ServiceAccount
+    name: provider-minio
+    namespace: syn-crossplane
