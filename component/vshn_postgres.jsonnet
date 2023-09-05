@@ -788,7 +788,7 @@ local prometheusRule = {
                 name: 'postgresql-replication',
                 rules: [
                   {
-                    alert: 'PostgreSQLPodReplicasCritical',
+                    alert: 'PostgreSQLReplicationCritical',
                     annotations: {
                       description: 'The number of replicas for the instance {{ $labels.cluster_name }} in namespace {{ $labels.namespace }}. Please check pod counts in affected namespace.',
                       runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCritical',
@@ -826,10 +826,10 @@ local prometheusRule = {
                 name: 'postgresql-replication-count',
                 rules: [
                   {
-                    alert: 'PostgreSQLReplicationCountCritical',
+                    alert: 'PostgreSQLPodReplicasCritical',
                     annotations: {
                       description: 'Replication is broken in namespace {{$labels.namespace}}, check statefulset ({{$labels.statefulset}}).',
-                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCountCritical',
+                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLPodReplicasCritical',
                       summary: 'Replication lag status check',
                     },
                     expr: 'kube_statefulset_status_replicas_available{statefulset=~".+", namespace=~"vshn-postgresql-.+"} != kube_statefulset_replicas{statefulset=~".+",namespace=~"vshn-postgresql-.+"}',
