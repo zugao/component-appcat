@@ -788,7 +788,7 @@ local prometheusRule = {
                 name: 'postgresql-replication',
                 rules: [
                   {
-                    alert: 'PostgreSQLReplicationCritical',
+                    alert: 'PostgreSQLPodReplicasCritical',
                     annotations: {
                       description: 'The number of replicas for the instance {{ $labels.cluster_name }} in namespace {{ $labels.namespace }}. Please check pod counts in affected namespace.',
                       runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCritical',
