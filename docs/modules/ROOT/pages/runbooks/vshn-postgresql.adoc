@@ -156,7 +156,7 @@ We need to build know-how on how to fix replication issues, please document your
 [[PostgreSQLReplicationLagCritical]]
 == PostgreSQLReplicationLagCritical
 
-This alert fires if the replication lag is higher than 5 minutes for a VSHNPostrgeSQL instance. It means that replicas are behind master.
+This alert fires if the replication lag is higher than 5 minutes for a VSHNPostrgeSQL instance. It means that replicas are behind master. If storage and network looks okay, you can try to re-initialize the node with the replication lag.
 Probably related to network or storage.
 
 
