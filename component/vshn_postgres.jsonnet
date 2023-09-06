@@ -727,6 +727,7 @@ local prometheusRule = {
                     'for': '1m',
                     labels: {
                       severity: 'critical',
+                      syn_team: 'schedar',
                     },
                   },
                   {
@@ -758,6 +759,7 @@ local prometheusRule = {
                     'for': '120m',
                     labels: {
                       severity: 'critical',
+                      syn_team: 'schedar',
                     },
                   },
                 ],
@@ -776,6 +778,65 @@ local prometheusRule = {
                     'for': '120m',
                     labels: {
                       severity: 'critical',
+                      syn_team: 'schedar',
+                    },
+                  },
+                ],
+              },
+              // new
+              {
+                name: 'postgresql-replication',
+                rules: [
+                  {
+                    alert: 'PostgreSQLReplicationCritical',
+                    annotations: {
+                      description: 'The number of replicas for the instance {{ $labels.cluster_name }} in namespace {{ $labels.namespace }}. Please check pod counts in affected namespace.',
+                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCritical',
+                      summary: 'Replication status check',
+                    },
+                    expr: 'pg_replication_slots_active == 0',
+                    'for': '10m',
+                    labels: {
+                      severity: 'critical',
+                      syn_team: 'schedar',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'postgresql-replication-lag',
+                rules: [
+                  {
+                    alert: 'PostgreSQLReplicationLagCritical',
+                    annotations: {
+                      description: 'Replication lag size on namespace {{$labels.exported_namespace}} instance ({{$labels.application_name}}) is currently {{ $value | humanize1024}}B behind the leader.',
+                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationLagCritical',
+                      summary: 'Replication lag status check',
+                    },
+                    expr: 'pg_replication_status_lag_size > 1e+09',
+                    'for': '5m',
+                    labels: {
+                      severity: 'critical',
+                      syn_team: 'schedar',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'postgresql-replication-count',
+                rules: [
+                  {
+                    alert: 'PostgreSQLPodReplicasCritical',
+                    annotations: {
+                      description: 'Replication is broken in namespace {{$labels.namespace}}, check statefulset ({{$labels.statefulset}}).',
+                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLPodReplicasCritical',
+                      summary: 'Replication lag status check',
+                    },
+                    expr: 'kube_statefulset_status_replicas_available{statefulset=~".+", namespace=~"vshn-postgresql-.+"} != kube_statefulset_replicas{statefulset=~".+",namespace=~"vshn-postgresql-.+"}',
+                    'for': '5m',
+                    labels: {
+                      severity: 'critical',
+                      syn_team: 'schedar',
                     },
                   },
                 ],

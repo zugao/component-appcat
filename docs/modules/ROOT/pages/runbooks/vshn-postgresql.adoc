@@ -123,3 +123,52 @@ appcat:
             page_alert:
               enabled: false
 ----
+
+
+[[PostgreSQLReplicationCritical]]
+== PostgreSQLReplicationCritical
+
+This alert fires if the replication is broken for a VSHNPostrgeSQL instance last longer than 10 minutes.
+
+
+```
+# figure out which pod is master
+kubectl get pods -n $affected_namespace -l app=StackGresCluster -l role=master
+
+# figure out which pod are replicas
+kubectl get pods -n default -l app=StackGresCluster,cluster=true -l role=replica
+
+# reinitialize replica pod (example commands)
+k --as cluster-admin -n vshn-postgresql-test-cluster-always-true-jnlj4 exec -ti pods/test-cluster-always-true-jnlj4-1 -- bash
+(inside pod):bash-4.4$ patronictl list
+(inside pod):bash-4.4$ patronictl reinit test-cluster-always-true-jnlj4 test-cluster-always-true-jnlj4-1
+```
+
+notice that patronictl takes the name of the cluster and the name of the pod, not the name of the statefulset. Can be used in scripts with `--force` flag which auto-accepts all prompts.
+
+if that doesn;t work:
+delete replica pods and let patroni fix itself
+if that doesn't work either, please refer to the patroni documentation on how to fix replication issues.
+https://stackgres.io/doc/1.1/administration/patroni/management/[Stackgres documentation]
+
+We need to build know-how on how to fix replication issues, please document your findings in this runbook.
+
+[[PostgreSQLReplicationLagCritical]]
+== PostgreSQLReplicationLagCritical
+
+This alert fires if the replication lag is higher than 5 minutes for a VSHNPostrgeSQL instance. It means that replicas are behind master. If storage and network looks okay, you can try to re-initialize the node with the replication lag.
+Probably related to network or storage.
+
+
+[[PostgreSQLPodReplicasCritical]]
+== PostgreSQLPodReplicasCritical
+
+This alert fires when there are issues with statefullset responsible for replicas. It means that there are less replicas than expected. Most probably related to quota issues.
+
+```
+kubectl describe -n vshn-postgresql-<instance> sts <instance>
+## for exmaple:  kubectl -n vshn-postgresql-test-cluster-always-true-jnlj4 describe sts test-cluster-always-true-jnlj4
+
+## get events from affected namespace and look for issues
+k -n vshn-postgresql-test-cluster-always-true-jnlj4 get events
+```
