@@ -371,6 +371,13 @@ parameters:
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
               bucketDeletionPolicy: ${appcat:services:generic:objectstorage:bucketDeletionPolicy}
+            minio:
+              enabled: false
+              secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
+              providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
+              bucketDeletionPolicy: ${appcat:services:generic:objectstorage:bucketDeletionPolicy}
+              grpcEndpoint: ${appcat:grpcEndpoint}
+              providerConfig: minio
 
           # Generic config for objecstorage composite
           secretNamespace: ${crossplane:namespace}

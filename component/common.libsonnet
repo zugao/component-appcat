@@ -67,14 +67,18 @@ local vshnMetaVshnDBaas(dbname, flavor, offered, plans) = vshnMetaVshn(dbname, f
   },
 };
 
+local providerZones(provider) =
+  if provider == 'Exoscale' then strExoscaleZones
+  else if provider == 'Cloudscale' then strCloudscaleZones
+  else if provider == 'Minio' then 'us-east-1';
+
 local vshnMetaObjectStorage(provider) = {
   metadata+: {
     annotations+: {
       'metadata.appcat.vshn.io/displayname': provider + ' Object Storage',
       'metadata.appcat.vshn.io/description': 'S3 compatible object storage hosted by ' + provider,
       'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/objstor',
-      'metadata.appcat.vshn.io/zone': provider + ' zones: ' +
-                                      if provider == 'Exoscale' then strExoscaleZones else strCloudscaleZones,
+      'metadata.appcat.vshn.io/zone': providerZones(provider),
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/objectstorage.html',
     },
     labels+: {

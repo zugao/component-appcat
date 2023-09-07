@@ -4,11 +4,6 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
         output_path: vendor/lib/crossplane.libsonnet
-    compile:
-      - input_paths:
-          - ${_base_directory}/dev/component/objectstorage.jsonnet
-        input_type: jsonnet
-        output_path: appcat/
 
   facts:
     cloud: cloudscale
@@ -111,9 +106,12 @@ parameters:
           objectstorage:
             enabled: true
 
-            defaultComposition: dev
+            defaultComposition: minio
             compositions:
               exoscale:
                 enabled: false
               cloudscale:
                 enabled: false
+              minio:
+                enabled: true
+                # grpcEndpoint: host.docker.internal:9547
