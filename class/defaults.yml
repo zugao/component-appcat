@@ -21,6 +21,10 @@ parameters:
         registry: ghcr.io
         repository: vshn/provider-cloudscale/provider
         tag: v0.5.0
+      provider-minio:
+        registry: ghcr.io
+        repository: vshn/provider-minio/provider
+        tag: v0.1.0
       sloth:
         registry: ghcr.io
         image: slok/sloth
@@ -201,6 +205,15 @@ parameters:
           package: ${appcat:images:provider-helm:registry}/${appcat:images:provider-helm:repository}:${appcat:images:provider-helm:tag}
         controllerConfig:
           serviceAccountName: provider-helm
+        providerConfig: {}
+
+      minio:
+        enabled: false
+        namespace: ${crossplane:namespace}
+        spec:
+          package: ${appcat:images:provider-minio:registry}/${appcat:images:provider-minio:repository}:${appcat:images:provider-minio:tag}
+        controllerConfig:
+          serviceAccountName: provider-minio
         providerConfig: {}
 
     services:

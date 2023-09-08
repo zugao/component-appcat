@@ -35,6 +35,14 @@ parameters:
         enabled: true
       helm:
         enabled: true
+      minio:
+        enabled: true
+        providerConfig:
+          minioURL: http://minio-server.minio.svc:9000/
+          credentials:
+            apiSecretRef:
+              name: minio-secret
+              namespace: syn-crossplane
     apiserver:
       enabled: true
       namespace: appcat-apiserver
