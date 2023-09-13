@@ -101,6 +101,7 @@ parameters:
 
     slos:
       enabled: true
+      alertsEnabled: true
       namespace: appcat-slos
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}

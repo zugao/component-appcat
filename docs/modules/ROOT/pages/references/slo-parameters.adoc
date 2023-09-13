@@ -9,6 +9,13 @@ default:: `true`
 
 If the SLOs should be enabled in general.
 
+== `alertsEnabled`
+[horizontal]
+type:: bool
+default:: `true`
+
+If the SLOs should configure alerting or not.
+
 == `namespace`
 [horizontal]
 type:: string
