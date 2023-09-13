@@ -8,6 +8,7 @@ local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.appcat;
 
+local alertsDisabled = !inv.parameters.appcat.slos.alertsEnabled;
 
 local newSLO(name, group, sloParams) =
   {
@@ -46,6 +47,7 @@ local prometheusRule(name) =
         } for r in g.rules ],
       }
       for g in super.groups
+      if !(alertsDisabled && std.startsWith(g.name, 'sloth-slo-alerts'))
     ],
   };
 
