@@ -58,6 +58,7 @@ parameters:
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_postgres.jsonnet
           - ${_base_directory}/component/vshn_redis.jsonnet
+          - ${_base_directory}/component/vshn_minio.jsonnet
           - ${_base_directory}/component/vshn_services.jsonnet
           - ${_base_directory}/component/statefuleset-resize-controller.jsonnet
         input_type: jsonnet

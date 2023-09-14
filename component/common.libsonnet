@@ -42,20 +42,27 @@ local vshnMetaDBaaSExoscale(dbname) = {
   },
 };
 
-local vshnMetaVshn(dbname, flavor, offered, plans) = {
+local vshnMetaVshn(servicename, flavor, offered, plans) = {
   metadata+: {
     annotations+: {
-      'metadata.appcat.vshn.io/displayname': dbname + ' by VSHN',
-      'metadata.appcat.vshn.io/description': dbname + ' instances by VSHN',
-      'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/vshn-' + std.asciiLower(dbname),
-      'metadata.appcat.vshn.io/zone': facts.region,
+      'metadata.appcat.vshn.io/displayname': servicename + ' by VSHN',
+      'metadata.appcat.vshn.io/description': servicename + ' instances by VSHN',
+      'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/vshn-' + std.asciiLower(servicename),
       'metadata.appcat.vshn.io/flavor': flavor,
-      'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/' + std.asciiLower(dbname) + '.html',
       'metadata.appcat.vshn.io/plans': std.manifestJsonMinified(plans),
+      'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/' + std.asciiLower(servicename) + '.html',
     },
     labels+: {
       'metadata.appcat.vshn.io/offered': offered,
-      'metadata.appcat.vshn.io/serviceID': 'vshn-' + std.asciiLower(dbname),
+      'metadata.appcat.vshn.io/serviceID': 'vshn-' + std.asciiLower(servicename),
+    },
+  },
+};
+
+local vshnMetaVshnDBaas(dbname, flavor, offered, plans) = vshnMetaVshn(dbname, flavor, offered, plans) + {
+  metadata+: {
+    annotations+: {
+      'metadata.appcat.vshn.io/zone': facts.region,
     },
   },
 };
@@ -152,8 +159,10 @@ local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'Pr
     vshnMetaObjectStorage(provider),
   MergeArgs(args, additional):
     mergeArgs(args, additional),
-  VshnMetaVshn(dbname, flavor, offered='true', plans):
-    vshnMetaVshn(dbname, flavor, offered, plans),
+  VshnMetaVshn(servicename, flavor, offered='true', plans):
+    vshnMetaVshn(servicename, flavor, offered, plans),
+  vshnMetaVshnDBaas(dbname, flavor, offered='true', plans):
+    vshnMetaVshnDBaas(dbname, flavor, offered, plans),
   FilterDisabledParams(params):
     filterDisabledParams(params),
   OpenShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs):
