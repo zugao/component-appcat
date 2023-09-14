@@ -9,4 +9,4 @@ metadata:
     api: appcat
     apiserver: 'true'
   name: apiserver-envs
-  namespace: appcat-apiserver
+  namespace: syn-appcat

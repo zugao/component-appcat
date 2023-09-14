@@ -6,16 +6,9 @@ local com = import 'lib/commodore.libjsonnet';
 local params = inv.parameters.appcat;
 local apiserverParams = params.apiserver;
 
-local image = params.images.appcat;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/' + image.tag + '/config/apiserver/' + manifest));
-
-local namespace = loadManifest('namespace.yaml') {
-  metadata+: {
-    name: apiserverParams.namespace,
-    labels+: apiserverParams.namespaceLabels,
-    annotations+: apiserverParams.namespaceAnnotations,
-  },
-};
+local image = params.images.apiserver;
+local loadManifest(manifest) =
+  std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat-apiserver/manifests/' + image.tag + '/config/apiserver/' + manifest));
 
 local envs = loadManifest('apiserver-envs.yaml') {
   data+: apiserverParams.env,
@@ -95,7 +88,7 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: common.GetAppCatImageString(),
+              image: common.GetApiserverImageString(),
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
               resources: apiserverParams.resources,
@@ -197,7 +190,6 @@ local apiCertificate = {
 };
 
 if apiserverParams.enabled == true then {
-  'apiserver/10_namespace': namespace,
   'apiserver/10_cluster_role_api_server': clusterRoleAPIServer,
   'apiserver/10_cluster_role_basic_users': clusterRoleUsers,
   'apiserver/10_cluster_role_view': clusterRoleView,
