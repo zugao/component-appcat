@@ -40,6 +40,10 @@ parameters:
         registry: ghcr.io
         repository: vshn/appcat
         tag: v4.25.0
+      apiserver:
+        registry: ghcr.io
+        repository: vshn/appcat-apiserver
+        tag: v0.1.2
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -81,7 +85,7 @@ parameters:
 
     apiserver:
       enabled: false
-      namespace: appcat-apiserver
+      namespace: ${appcat:namespace}
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}
       env:

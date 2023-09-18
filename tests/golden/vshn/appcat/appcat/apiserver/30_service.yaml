@@ -5,7 +5,7 @@ metadata:
     api: appcat
     apiserver: 'true'
   name: appcat
-  namespace: appcat-apiserver
+  namespace: syn-appcat
 spec:
   ports:
     - port: 443

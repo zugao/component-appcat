@@ -2,6 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: api-server-issuer
-  namespace: appcat-apiserver
+  namespace: syn-appcat
 spec:
   selfSigned: {}

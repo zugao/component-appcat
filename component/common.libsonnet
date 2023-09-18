@@ -124,7 +124,11 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
 
 local getAppCatImageTag() = std.strReplace(params.images.appcat.tag, '/', '_');
 
+local getApiserverImageTag() = std.strReplace(params.images.apiserver.tag, '/', '_');
+
 local getAppCatImageString() = params.images.appcat.registry + '/' + params.images.appcat.repository + ':' + getAppCatImageTag();
+
+local getApiserverImageString() = params.images.apiserver.registry + '/' + params.images.apiserver.repository + ':' + getApiserverImageTag();
 
 local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'vshn-' + std.asciiLower(service) + '-sla') {
   metadata+: {
@@ -171,6 +175,10 @@ local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'Pr
     getAppCatImageString(),
   GetAppCatImageTag():
     getAppCatImageTag(),
+  GetApiserverImageTag():
+    getApiserverImageTag(),
+  GetApiserverImageString():
+    getApiserverImageString(),
   PromRuleSLA(value, service):
     promRuleSLA(value, service),
 }

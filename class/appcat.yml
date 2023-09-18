@@ -9,6 +9,10 @@ parameters:
         source: https://github.com/vshn/statefulset-resize-controller
         output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulSetResizer:tag}
         ref: ${appcat:images:statefulSetResizer:tag}
+      - type: git
+        output_path: ${_base_directory}/dependencies/appcat-apiserver/manifests/${appcat:images:apiserver:tag}
+        source: https://github.com/vshn/appcat-apiserver.git
+        ref: ${appcat:images:apiserver:tag}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
