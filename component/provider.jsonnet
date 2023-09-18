@@ -1,3 +1,4 @@
+local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -209,6 +210,11 @@ local controllerConfigRef(config) =
           resources: [ 'snapshots' ],
           verbs: [ 'get' ],
         },
+        {
+          apiGroups: [ 'minio.crossplane.io' ],
+          resources: [ 'providerconfigs' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
@@ -348,15 +354,18 @@ local controllerConfigRef(config) =
     controllerConf
     +
     [
-      crossplane.ProviderConfig('minio') {
+      crossplane.ProviderConfig(config.name) {
         apiVersion: 'minio.crossplane.io/v1',
         spec+: addCredentials(
-          provider.providerConfig,
+          common.RemoveField(config, 'name'),
           {
             source: 'InjectedIdentity',
           }
         ),
-      },
+      }
+      for config in provider.additionalProviderConfigs
+    ] +
+    [
       sa,
       role,
       rolebinding,

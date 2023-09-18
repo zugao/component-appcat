@@ -1,0 +1,44 @@
+= Provider Minio
+
+The parent key for all of the following parameters is `appcat.provider.minio`.
+
+== `enabled`
+[horizontal]
+type:: bool
+default:: `false`
+
+If the provider should be installed.
+
+== `providerConfigRefs`
+[horizontal]
+type:: array
+
+A list of names for already existing `ProviderConfigs`.
+
+== `additionalProviderConfigs`
+[horizontal]
+type:: array
+
+A list of additional `ProviderConfigs` that should be deployed via the component.
+Contains the `spec` of the `ProviderConfig` object.
+
+.Examples
+[source,yaml]
+----
+additionalProviderConfigs:
+  - name: minio
+    minioURL: http://minio-server.minio.svc:9000/
+    credentials:
+      apiSecretRef:
+        name: minio-secret
+        namespace: syn-crossplane
+----
+
+== `controllerConfig`
+[horizontal]
+type:: dict
+
+The `spec` of the `ControllerConfig`.
+If the component is deployed on OpenShift, it will automatically add the necessary security context changes to the config.
+
+Consult the https://doc.crds.dev/github.com/crossplane/crossplane/pkg.crossplane.io/ControllerConfig/v1alpha1[upstream documentation] for configuration options.

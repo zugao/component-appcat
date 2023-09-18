@@ -33,12 +33,14 @@ parameters:
         enabled: true
       minio:
         enabled: true
-        providerConfig:
-          minioURL: http://minio-server.minio.svc:9000/
-          credentials:
-            apiSecretRef:
-              name: minio-secret
-              namespace: syn-crossplane
+        additionalProviderConfigs:
+          - name: minio
+            minioURL: http://minio-server.minio.svc:9000/
+            credentials:
+              apiSecretRef:
+                name: minio-secret
+                namespace: syn-crossplane
+
     apiserver:
       enabled: true
       env:
@@ -102,16 +104,20 @@ parameters:
                 nodeSelector:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
-      generic:
-          objectstorage:
-            enabled: true
+        minio:
+          enabled: true
+          # grpcEndpoint: host.docker.internal:9547
 
-            defaultComposition: minio
-            compositions:
-              exoscale:
-                enabled: false
-              cloudscale:
-                enabled: false
-              minio:
-                enabled: true
-                # grpcEndpoint: host.docker.internal:9547
+      generic:
+        objectstorage:
+          enabled: true
+
+          defaultComposition: minio
+          compositions:
+            exoscale:
+              enabled: false
+            cloudscale:
+              enabled: false
+            minio:
+              enabled: true
+              # grpcEndpoint: host.docker.internal:9547

@@ -15,7 +15,7 @@ local exoscaleZones = [ 'de-fra-1', 'de-muc-1', 'at-vie-1', 'ch-gva-2', 'ch-dk-2
 local cloudscaleZones = [ 'lpg', 'rma' ];
 
 local strExoscaleZones = std.join(', ', exoscaleZones);
-local strCloudscaleZones = std.join('and', cloudscaleZones);
+local strCloudscaleZones = std.join(', ', cloudscaleZones);
 
 local syncOptions = {
   metadata+: {
@@ -32,7 +32,7 @@ local vshnMetaDBaaSExoscale(dbname) = {
       'metadata.appcat.vshn.io/displayname': 'Exoscale ' + dbname,
       'metadata.appcat.vshn.io/description': dbname + ' DBaaS instances by Exoscale',
       'metadata.appcat.vshn.io/end-user-docs-url': 'https://vs.hn/exo-' + std.asciiLower(dbname),
-      'metadata.appcat.vshn.io/zone': 'Exoscale zones: ' + strExoscaleZones,
+      'metadata.appcat.vshn.io/zone': strExoscaleZones,
       'metadata.appcat.vshn.io/product-description': 'https://products.docs.vshn.ch/products/appcat/exoscale_dbaas.html',
     },
     labels+: {
@@ -69,8 +69,8 @@ local vshnMetaVshnDBaas(dbname, flavor, offered, plans) = vshnMetaVshn(dbname, f
 
 local providerZones(provider) =
   if provider == 'Exoscale' then strExoscaleZones
-  else if provider == 'Cloudscale' then strCloudscaleZones
-  else if provider == 'Minio' then 'us-east-1';
+  else if provider == 'cloudscale.ch' then strCloudscaleZones
+  else 'default';
 
 local vshnMetaObjectStorage(provider) = {
   metadata+: {
@@ -159,6 +159,20 @@ local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'Pr
   },
 };
 
+local removeField(obj, name) = {
+  // We don't want the name field in the actual providerConfig
+  [k]: obj[k]
+  for k in std.objectFieldsAll(obj)
+  if k != name
+};
+
+local argoCDAnnotations() = {
+  // Our current ArgoCD configuration can't handle the claim -> composite
+  // relationship
+  'argocd.argoproj.io/compare-options': 'IgnoreExtraneous',
+  'argocd.argoproj.io/sync-options': 'Prune=false',
+};
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -185,4 +199,8 @@ local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'Pr
     getApiserverImageString(),
   PromRuleSLA(value, service):
     promRuleSLA(value, service),
+  RemoveField(obj, name):
+    removeField(obj, name),
+  ArgoCDAnnotations():
+    argoCDAnnotations(),
 }

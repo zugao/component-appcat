@@ -241,13 +241,12 @@ local compositionExoscale =
     },
   };
 
-local compositionMinio =
-
+local minioComp(name) =
   local compParams = objStoParams.compositions.minio;
 
-  kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'minio.objectbuckets.appcat.vshn.io') +
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', name + '.objectbuckets.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaObjectStorage('Minio') +
+  common.VshnMetaObjectStorage('Minio-' + name) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
@@ -265,7 +264,7 @@ local compositionMinio =
                 name: 'xfn-config',
               },
               data: {
-                providerConfig: objStoParams.compositions.minio.providerConfig,
+                providerConfig: name,
               },
             },
             container: {
@@ -280,6 +279,21 @@ local compositionMinio =
         ],
     },
   };
+
+local compositionMinio =
+  local provider = params.providers.minio;
+  [
+    minioComp(config.name)
+    for config in provider.additionalProviderConfigs
+  ] + [
+    minioComp(configRef)
+    for configRef in provider.providerConfigRefs
+  ] + [
+    // Automagically add the defined instances as well
+    minioComp(instance.name)
+    for instance in params.services.vshn.minio.instances
+  ];
+
 
 if objStoParams.enabled then {
   '20_xrd_objectstorage': xrd,

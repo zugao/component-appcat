@@ -259,6 +259,18 @@ rules:
       - snapshots
     verbs:
       - get
+  - apiGroups:
+      - minio.crossplane.io
+    resources:
+      - providerconfigs
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

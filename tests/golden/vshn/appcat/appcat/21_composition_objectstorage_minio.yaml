@@ -4,14 +4,14 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
-    metadata.appcat.vshn.io/description: S3 compatible object storage hosted by Minio
-    metadata.appcat.vshn.io/displayname: Minio Object Storage
+    metadata.appcat.vshn.io/description: S3 compatible object storage hosted by Minio-minio
+    metadata.appcat.vshn.io/displayname: Minio-minio Object Storage
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/objstor
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/objectstorage.html
-    metadata.appcat.vshn.io/zone: Currently no zones available
+    metadata.appcat.vshn.io/zone: default
   labels:
     metadata.appcat.vshn.io/offered: 'true'
-    metadata.appcat.vshn.io/serviceID: minio-objectbucket
+    metadata.appcat.vshn.io/serviceID: minio-minio-objectbucket
     name: minio.objectbuckets.appcat.vshn.io
   name: minio.objectbuckets.appcat.vshn.io
 spec:
