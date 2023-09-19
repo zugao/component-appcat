@@ -227,62 +227,62 @@ local sgInstanceProfile = {
                   },
                   containers: {
                     'backup.create-backup': {
-                      cpu: '250m',
-                      memory: '256Mi',
+                      cpu: pgParams.sideCars.createBackup.requests.cpu,
+                      memory: pgParams.sideCars.createBackup.requests.memory,
                     },
                     'cluster-controller': {
-                      cpu: '32m',
-                      memory: '188Mi',
+                      cpu: pgParams.sideCars.clusterController.requests.cpu,
+                      memory: pgParams.sideCars.clusterController.requests.memory,
                     },
                     'dbops.run-dbops': {
-                      cpu: '250m',
-                      memory: '256Mi',
+                      cpu: pgParams.sideCars.runDbops.requests.cpu,
+                      memory: pgParams.sideCars.runDbops.requests.memory,
                     },
                     'dbops.set-dbops-result': {
-                      cpu: '250m',
-                      memory: '256Mi',
+                      cpu: pgParams.sideCars.setDbopsResult.requests.cpu,
+                      memory: pgParams.sideCars.setDbopsResult.requests.memory,
                     },
                     envoy: {
-                      cpu: '32m',
-                      memory: '64Mi',
+                      cpu: pgParams.sideCars.envoy.requests.cpu,
+                      memory: pgParams.sideCars.envoy.requests.memory,
                     },
                     pgbouncer: {
-                      cpu: '16m',
-                      memory: '32Mi',
+                      cpu: pgParams.sideCars.pgbouncer.requests.cpu,
+                      memory: pgParams.sideCars.pgbouncer.requests.memory,
                     },
                     'postgres-util': {
-                      cpu: '10m',
-                      memory: '4Mi',
+                      cpu: pgParams.sideCars.postgresUtil.requests.cpu,
+                      memory: pgParams.sideCars.postgresUtil.requests.memory,
                     },
                     'prometheus-postgres-exporter': {
-                      cpu: '10m',
-                      memory: '32Mi',
+                      cpu: pgParams.sideCars.prometheusPostgresExporter.requests.cpu,
+                      memory: pgParams.sideCars.prometheusPostgresExporter.requests.memory,
                     },
                   },
                   initContainers: {
                     'pgbouncer-auth-file': {
-                      cpu: '100m',
-                      memory: '100Mi',
+                      cpu: pgParams.initContainers.pgbouncerAuthFile.requests.cpu,
+                      memory: pgParams.initContainers.pgbouncerAuthFile.requests.memory,
                     },
                     'relocate-binaries': {
-                      cpu: '100m',
-                      memory: '100Mi',
+                      cpu: pgParams.initContainers.relocateBinaries.requests.cpu,
+                      memory: pgParams.initContainers.relocateBinaries.requests.memory,
                     },
                     'setup-scripts': {
-                      cpu: '100m',
-                      memory: '100Mi',
+                      cpu: pgParams.initContainers.setupScripts.requests.cpu,
+                      memory: pgParams.initContainers.setupScripts.requests.memory,
                     },
                     'setup-arbitrary-user': {
-                      cpu: '100m',
-                      memory: '100Mi',
+                      cpu: pgParams.initContainers.setupArbitraryUser.requests.cpu,
+                      memory: pgParams.initContainers.setupArbitraryUser.requests.memory,
                     },
                     'cluster-reconciliation-cycle': {
-                      cpu: '100m',
-                      memory: '100Mi',
+                      cpu: pgParams.initContainers.clusterReconciliationCycle.requests.cpu,
+                      memory: pgParams.initContainers.clusterReconciliationCycle.requests.memory,
                     },
                     'dbops.set-dbops-running': {
-                      cpu: '250m',
-                      memory: '256Mi',
+                      cpu: pgParams.initContainers.setDbopsRunning.requests.cpu,
+                      memory: pgParams.initContainers.setDbopsRunning.requests.memory,
                     },
                   },
                 },
@@ -922,6 +922,7 @@ local composition(restore=false) =
                 emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
                 externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
                 quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
+                sideCars: std.toString(pgParams.sideCars),
               },
             },
             container: {
@@ -1018,6 +1019,7 @@ local plansCM = kube.ConfigMap('vshnpostgresqlplans') + {
   },
   data: {
     plans: std.toString(pgPlans),
+    sideCars: std.toString(pgParams.sideCars),
   },
 };
 
