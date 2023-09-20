@@ -1,0 +1,31 @@
+= Minio
+
+Installing Minio and generating the providerconfigs can be managed via the component.
+
+This setup has multiple parts to it:
+
+* provider
+* composition functions
+* deployments via composition function
+
+== Provider
+
+The provider section `appcat.provider.minio` can take multiple variations of provider configs:
+
+* By referencing an existing provider config by name
+* By creating additional configs through the `additionalProviderConfigs` field
+* Automatically injected configs from the `appcat.services.vshn.minio.instance`` field
+
+== Composition Function
+
+The composition here is very bare bones, the whole composition is via functions.
+The compositions are generated depending on how many provider configs there are.
+Each composition will handle exactly one provider config.
+This is the mechanism we can use so that a user can choose between different minio instances.
+We already use this mechanism to choose between different clouds for the `ObjectBuckets`.
+The default composition can easily be set.
+
+== Deployment
+
+Via `appcat.services.vshn.minio.instance` it's possible to deploy arbitrary amounts of minio instances to a cluster.
+As mentioned above, the provider configs will then be injected automatically and new compositions are generated accordingly.

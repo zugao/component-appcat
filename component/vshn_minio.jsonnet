@@ -17,8 +17,8 @@ local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
 local connectionSecretKeys = [
   'MINIO_URL',
-  'MINIO_USERNAME',
-  'MINIO_PASSWORD',
+  'AWS_SECRET_ACCESS_KEY',
+  'AWS_ACCESS_KEY_ID',
 ];
 
 local minioPlans = common.FilterDisabledParams(minioParams.plans);
@@ -33,7 +33,7 @@ local xrd = xrds.XRDFromCRD(
 local composition =
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'vshnminio.vshn.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaVshn('Minio', 'distributed', 'true', minioPlans) +
+  common.VshnMetaVshn('Minio', 'distributed', 'false', minioPlans) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
@@ -56,6 +56,7 @@ local composition =
                 minioChartVersion: params.charts.minio.version,
                 plans: std.toString(minioPlans),
                 defaultPlan: minioParams.defaultPlan,
+                providerEnabled: std.toString(params.providers.minio.enabled),
               },
             },
             container: {
@@ -71,8 +72,21 @@ local composition =
     },
   };
 
+
+local instances = [
+  kube._Object('vshn.appcat.vshn.io/v1', 'VSHNMinio', instance.name) + {
+    metadata+: {
+      namespace: instance.namespace,
+      annotations+: common.ArgoCDAnnotations(),
+    },
+    spec+: instance.spec,
+  }
+  for instance in minioParams.instances
+];
+
 if params.services.vshn.enabled && minioParams.enabled then {
   '20_xrd_vshn_minio': xrd,
   '20_rbac_vshn_minio': xrds.CompositeClusterRoles(xrd),
   '21_composition_vshn_minio': composition,
+  [if std.length(instances) != 0 then '22_minio_instances']: instances,
 } else {}

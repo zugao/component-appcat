@@ -6,6 +6,7 @@
 * xref:explanations/add-to-openshift-catalog.adoc[]
 * xref:explanations/exoscale-plans.adoc[]
 * xref:explanations/redisrestore.adoc[]
+* xref:explanations/minio.adoc[]
 
 .Tutorials
 * xref:tutorials/install-cloudscale.adoc[Install Cloudscale Stack]
@@ -21,6 +22,7 @@
 ** xref:references/provider-cloudscale.adoc[Provider Cloudscale]
 ** xref:references/provider-exoscale.adoc[Provider Exoscale]
 ** xref:references/provider-kubernetes.adoc[Provider Kubernetes]
+** xref:references/provider-minio.adoc[Provider Minio]
 
 * Service Parameters
 ** xref:references/services-exoscale.adoc[Exoscale Services]

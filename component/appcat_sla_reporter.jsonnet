@@ -59,12 +59,7 @@ local ObjectStorage = kube._Object('appcat.vshn.io/v1', 'ObjectBucket', 'appcat-
   metadata: {
     namespace: slos_params.namespace,
     name: 'appcat-sla-reports',
-    annotations: {
-      // Our current ArgoCD configuration can't handle the claim -> composite
-      // relationship
-      'argocd.argoproj.io/compare-options': 'IgnoreExtraneous',
-      'argocd.argoproj.io/sync-options': 'Prune=false',
-    },
+    annotations: common.ArgoCDAnnotations(),
   },
   spec: {
     parameters: {

@@ -241,9 +241,64 @@ local compositionExoscale =
     },
   };
 
+local minioComp(name) =
+  local compParams = objStoParams.compositions.minio;
+
+  kube._Object('apiextensions.crossplane.io/v1', 'Composition', name + '.objectbuckets.appcat.vshn.io') +
+  common.SyncOptions +
+  common.VshnMetaObjectStorage('Minio-' + name) +
+  {
+    spec: {
+      compositeTypeRef: comp.CompositeRef(xrd),
+      writeConnectionSecretsToNamespace: compParams.secretNamespace,
+      functions:
+        [
+          {
+            name: 'minio-func',
+            type: 'Container',
+            config: kube.ConfigMap('xfn-config') + {
+              metadata: {
+                labels: {
+                  name: 'xfn-config',
+                },
+                name: 'xfn-config',
+              },
+              data: {
+                providerConfig: name,
+              },
+            },
+            container: {
+              image: 'miniobucket',
+              imagePullPolicy: 'IfNotPresent',
+              timeout: '20s',
+              runner: {
+                endpoint: objStoParams.compositions.minio.grpcEndpoint,
+              },
+            },
+          },
+        ],
+    },
+  };
+
+local compositionMinio =
+  local provider = params.providers.minio;
+  [
+    minioComp(config.name)
+    for config in provider.additionalProviderConfigs
+  ] + [
+    minioComp(configRef)
+    for configRef in provider.providerConfigRefs
+  ] + [
+    // Automagically add the defined instances as well
+    minioComp(instance.name)
+    for instance in params.services.vshn.minio.instances
+  ];
+
+
 if objStoParams.enabled then {
   '20_xrd_objectstorage': xrd,
   '20_rbac_objectstorage': xrds.CompositeClusterRoles(xrd),
   [if objStoParams.compositions.cloudscale.enabled then '21_composition_objectstorage_cloudscale']: compositionCloudscale,
   [if objStoParams.compositions.exoscale.enabled then '21_composition_objectstorage_exoscale']: compositionExoscale,
+  [if objStoParams.compositions.minio.enabled then '21_composition_objectstorage_minio']: compositionMinio,
 } else {}

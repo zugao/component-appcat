@@ -220,3 +220,34 @@ type:: string
 default:: `standard-1`
 
 The default plan used for Redis by VSHN, if the service user doesn't specify a plan.
+
+== minio
+[horizontal]
+type:: dict
+
+Configuration option for VSHN Minio.
+You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
+
+It's disabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
+
+=== instances
+[horizontal]
+type:: array
+
+Array of minio instances to deploy to a given cluster.
+
+.Examples
+[source,yaml]
+----
+instances:
+  - name: my-minio
+    namespace: default
+    spec:
+      parameters:
+        service:
+          mode: standalone
+        size:
+          disk: 1Gi
+      writeConnectionSecretToRef:
+        name: my-minio-creds
+----
