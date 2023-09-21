@@ -72,7 +72,7 @@ local kustomization =
       namespace_patch: namespace_patch,
     }
   else {
-    kustomization: {},
+    kustomization: { resources: [] },
   };
 
 
