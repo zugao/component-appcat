@@ -25,7 +25,7 @@ local maintenanceRole = kube.ClusterRole(maintenanceRoleName) {
     {
       apiGroups: [ 'helm.crossplane.io' ],
       resources: [ 'releases' ],
-      verbs: [ 'patch', 'get', 'list', 'watch' ],
+      verbs: [ 'patch', 'get', 'list', 'watch', 'update' ],
     },
   ],
 };

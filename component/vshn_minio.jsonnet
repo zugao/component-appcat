@@ -57,6 +57,8 @@ local composition =
                 plans: std.toString(minioPlans),
                 defaultPlan: minioParams.defaultPlan,
                 providerEnabled: std.toString(params.providers.minio.enabled),
+                controlNamespace: params.services.controlNamespace,
+                maintenanceSA: 'helm-based-service-maintenance',
               },
             },
             container: {
