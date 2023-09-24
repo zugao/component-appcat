@@ -8,7 +8,7 @@ metadata:
   namespace: syn-appcat
 spec:
   groups:
-    - name: appcat-billing
+    - name: appcat-billing-rules
       rules:
         - expr: |
             sum by (label_appcat_vshn_io_claim_namespace,label_appcat_vshn_io_sla,product,provider,architecture, category, claim_namespace,tenant_id) (

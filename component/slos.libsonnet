@@ -66,8 +66,8 @@ local prometheusRule(name) =
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}]))  by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
+            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
           },
         },
         alerting+: {
@@ -82,14 +82,36 @@ local prometheusRule(name) =
         },
       },
     ],
+    'vshn-postgresql-ha': [
+      newSLO('uptime', 'vshn-postgresql-ha', params.slos.vshn.postgres.uptime) {
+        description: 'Uptime SLO for High Available PostgreSQL by VSHN',
+        sli: {
+          events: {
+            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
+            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) > 0',
+            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL",  ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) > 0',
+          },
+        },
+        alerting+: {
+          name: 'SLO_AppCat_HAVSHNPosgtreSQLUptime',
+          annotations+: {
+            summary: 'Probes to HA PostgreSQL by VSHN instance fail',
+          },
+          labels+: {
+            service: 'VSHNPostgreSQL',
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+          },
+        },
+      },
+    ],
     'vshn-redis': [
       newSLO('uptime', 'vshn-Redis', params.slos.vshn.redis.uptime) {
         description: 'Uptime SLO for Redis by VSHN',
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
+            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
           },
         },
         alerting+: {
