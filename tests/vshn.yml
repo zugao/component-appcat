@@ -107,6 +107,17 @@ parameters:
         minio:
           enabled: true
           # grpcEndpoint: host.docker.internal:9547
+          instances:
+            - name: my-minio
+              namespace: myns
+              spec:
+                parameters:
+                  service:
+                    mode: standalone
+                  size:
+                    disk: 1Gi
+                writeConnectionSecretToRef:
+                  name: my-minio-creds
 
       generic:
         objectstorage:

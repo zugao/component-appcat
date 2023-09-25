@@ -74,12 +74,19 @@ local composition =
 
 
 local instances = [
-  kube._Object('vshn.appcat.vshn.io/v1', 'VSHNMinio', instance.name) + {
+  kube._Object('vshn.appcat.vshn.io/v1', 'VSHNMinio', instance.name) +
+  {
     metadata+: {
       namespace: instance.namespace,
       annotations+: common.ArgoCDAnnotations(),
     },
     spec+: instance.spec,
+  } + common.SyncOptions + {
+    metadata+: {
+      annotations+: {
+        'argocd.argoproj.io/sync-options': 'Prune=false,SkipDryRunOnMissingResource=true',
+      },
+    },
   }
   for instance in minioParams.instances
 ];
