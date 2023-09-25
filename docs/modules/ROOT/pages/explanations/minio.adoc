@@ -29,3 +29,36 @@ The default composition can easily be set.
 
 Via `appcat.services.vshn.minio.instance` it's possible to deploy arbitrary amounts of minio instances to a cluster.
 As mentioned above, the provider configs will then be injected automatically and new compositions are generated accordingly.
+
+
+== Example Config
+
+[source,yaml]
+----
+appcat:
+  providers:
+    minio:
+      enabled: true
+  services:
+    generic:
+      objectstorage:
+        enabled: true
+        compositions:
+          minio:
+            enabled: true
+    minio:
+      enabled: true
+      instances:
+        - name: my-minio
+          namespace: myns
+          spec:
+            parameters:
+              service:
+                mode: standalone <1>
+              size:
+                disk: 1Gi
+            writeConnectionSecretToRef:
+              name: my-minio-creds
+
+----
+<1> Single instance deployment
