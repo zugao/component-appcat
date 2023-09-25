@@ -46,19 +46,20 @@ appcat:
         compositions:
           minio:
             enabled: true
-    minio:
-      enabled: true
-      instances:
-        - name: my-minio
-          namespace: myns
-          spec:
-            parameters:
-              service:
-                mode: standalone <1>
-              size:
-                disk: 1Gi
-            writeConnectionSecretToRef:
-              name: my-minio-creds
+    vshn:
+      minio:
+        enabled: true
+        instances:
+          - name: my-minio
+            namespace: myns
+            spec:
+              parameters:
+                service:
+                  mode: standalone <1>
+                size:
+                  disk: 1Gi
+              writeConnectionSecretToRef:
+                name: my-minio-creds
 
 ----
 <1> Single instance deployment
