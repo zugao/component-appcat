@@ -23,8 +23,10 @@ spec:
     - config:
         apiVersion: v1
         data:
+          controlNamespace: syn-appcat-control
           defaultPlan: standard-1
-          imageTag: v4.27.0
+          imageTag: v4.28.0
+          maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
           minioChartVersion: 5.0.13
           plans: '{"standard-1": {"size": {"cpu": "1", "disk": "50Gi", "enabled":
