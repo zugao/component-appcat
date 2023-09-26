@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: missing_redis_url
+        tag: v4.30.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
