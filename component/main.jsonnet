@@ -163,7 +163,8 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
-  '10_appcat_recording_rule': promRule,
+  '10_appcat_billing_recording_rule': promRule,
+  '10_appcat_maintenance_recording_rule': maintenanceRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
 
 } + if params.slos.enabled then {
