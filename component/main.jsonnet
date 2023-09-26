@@ -112,6 +112,25 @@ local promQueryTemplate = importstr 'promql/appcat.promql';
 local promQueryWithLabel = std.strReplace(promQueryTemplate, '{{ORGLABEL}}', tenant.label);
 local promQuery = std.strReplace(promQueryWithLabel, '{{TENANT_REPLACE}}', tenant.replace);
 
+local maintenanceRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-maintenance') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-cluster-maintenance',
+        rules: [
+          {
+            expr: 'scalar(max(max_over_time(openshift_upgrade_controller_upgradejob_state{state="active"}[10m])) or vector(0))',
+            record: 'appcat:cluster:maintenance',
+          },
+        ],
+      },
+    ],
+  },
+};
+
 local promRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
   metadata+: {
     namespace: params.namespace,
@@ -119,7 +138,7 @@ local promRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'app
   spec: {
     groups: [
       {
-        name: 'appcat-billing',
+        name: 'appcat-billing-rules',
         rules: [
           {
             expr: promQuery,
@@ -149,6 +168,7 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
 
 } + if params.slos.enabled then {
   [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
-  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
+  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
+  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
 }
 else {}

@@ -11,9 +11,9 @@ spec:
     - name: sloth-slo-sli-recordings-appcat-vshn-redis-uptime
       rules:
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[5m]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[5m]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[5m]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[5m]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[5m])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[5m])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -21,9 +21,9 @@ spec:
             sloth_window: 5m
           record: slo:sli_error:ratio_rate5m
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[30m]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[30m]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[30m]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[30m]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[30m])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[30m])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -31,9 +31,9 @@ spec:
             sloth_window: 30m
           record: slo:sli_error:ratio_rate30m
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[1h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[1h]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[1h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[1h]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[1h])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[1h])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -41,9 +41,9 @@ spec:
             sloth_window: 1h
           record: slo:sli_error:ratio_rate1h
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[2h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[2h]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[2h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[2h]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[2h])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[2h])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -51,9 +51,9 @@ spec:
             sloth_window: 2h
           record: slo:sli_error:ratio_rate2h
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[6h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[6h]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[6h]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[6h]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[6h])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[6h])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -61,9 +61,9 @@ spec:
             sloth_window: 6h
           record: slo:sli_error:ratio_rate6h
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[1d]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[1d]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[1d]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[1d]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[1d])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[1d])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -71,9 +71,9 @@ spec:
             sloth_window: 1d
           record: slo:sli_error:ratio_rate1d
         - expr: |
-            (sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[3d]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[3d]))  by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[3d]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[3d]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
             /
-            (sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[3d])) by (service, namespace, name, organization, sla))
+            ((sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[3d])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0)
           labels:
             sloth_id: appcat-vshn-redis-uptime
             sloth_service: appcat-vshn-redis
@@ -145,3 +145,56 @@ spec:
             sloth_spec: prometheus/v1
             sloth_version: v0.11.0
           record: sloth_slo_info
+    - name: sloth-slo-alerts-appcat-vshn-redis-uptime
+      rules:
+        - alert: SLO_AppCat_VSHNRedisUptime
+          annotations:
+            for: 6m
+            summary: Probes to Redis by VSHN instance fail
+            title: (page) {{$labels.sloth_service}} {{$labels.sloth_slo}} SLO error
+              budget burn rate is too fast.
+          expr: |
+            (
+                max(slo:sli_error:ratio_rate5m{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (14.4 * 0.0009999999999999432)) without (sloth_window)
+                and
+                max(slo:sli_error:ratio_rate1h{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (14.4 * 0.0009999999999999432)) without (sloth_window)
+            )
+            or
+            (
+                max(slo:sli_error:ratio_rate30m{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (6 * 0.0009999999999999432)) without (sloth_window)
+                and
+                max(slo:sli_error:ratio_rate6h{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (6 * 0.0009999999999999432)) without (sloth_window)
+            )
+          for: 6m
+          labels:
+            severity: critical
+            slo: 'true'
+            sloth_severity: page
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar
+        - alert: SLO_AppCat_VSHNRedisUptime
+          annotations:
+            runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-Redis.html#uptime
+            summary: Probes to Redis by VSHN instance fail
+            title: (ticket) {{$labels.sloth_service}} {{$labels.sloth_slo}} SLO error
+              budget burn rate is too fast.
+          expr: |
+            (
+                max(slo:sli_error:ratio_rate2h{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (3 * 0.0009999999999999432)) without (sloth_window)
+                and
+                max(slo:sli_error:ratio_rate1d{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (3 * 0.0009999999999999432)) without (sloth_window)
+            )
+            or
+            (
+                max(slo:sli_error:ratio_rate6h{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (1 * 0.0009999999999999432)) without (sloth_window)
+                and
+                max(slo:sli_error:ratio_rate3d{sloth_id="appcat-vshn-redis-uptime", sloth_service="appcat-vshn-redis", sloth_slo="uptime"} > (1 * 0.0009999999999999432)) without (sloth_window)
+            )
+          labels:
+            severity: warning
+            slo: 'true'
+            sloth_severity: ticket
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar
