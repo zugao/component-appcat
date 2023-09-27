@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.31.0
+        tag: v4.32.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -366,20 +366,16 @@ parameters:
               enabled: true
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:exoscale:connectionSecretNamespace}
-              bucketDeletionPolicy: ${appcat:services:generic:objectstorage:bucketDeletionPolicy}
             cloudscale:
               enabled: true
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
-              bucketDeletionPolicy: ${appcat:services:generic:objectstorage:bucketDeletionPolicy}
             minio:
               enabled: false
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
-              bucketDeletionPolicy: ${appcat:services:generic:objectstorage:bucketDeletionPolicy}
               grpcEndpoint: ${appcat:grpcEndpoint}
               providerConfig: minio
 
           # Generic config for objecstorage composite
           secretNamespace: ${crossplane:namespace}
-          bucketDeletionPolicy: DeleteAll
