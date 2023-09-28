@@ -64,7 +64,7 @@ local compositionCloudscale =
         },
         endpointURL: '',
         region: '',
-        bucketDeletionPolicy: compParams.bucketDeletionPolicy,
+        bucketDeletionPolicy: '',
       },
     },
   };
@@ -120,6 +120,7 @@ local compositionCloudscale =
             comp.ToCompositeFieldPath('status.conditions', 'status.bucketConditions'),
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.credentialsSecretRef.name'),
+            comp.FromCompositeFieldPath('spec.parameters.bucketDeletionPolicy', 'spec.forProvider.bucketDeletionPolicy'),
             comp.FromCompositeFieldPath('spec.parameters.region', 'spec.forProvider.region') {
               transforms: [
                 {
@@ -174,7 +175,7 @@ local compositionExoscale =
       forProvider: {
         bucketName: '',
         zone: '',
-        bucketDeletionPolicy: compParams.bucketDeletionPolicy,
+        bucketDeletionPolicy: '',
       },
       providerConfigRef: {
         name: 'exoscale',
@@ -235,6 +236,7 @@ local compositionExoscale =
             comp.ToCompositeFieldPath('status.conditions', 'status.bucketConditions'),
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),
             comp.FromCompositeFieldPath('spec.parameters.region', 'spec.forProvider.zone'),
+            comp.FromCompositeFieldPath('spec.parameters.bucketDeletionPolicy', 'spec.forProvider.bucketDeletionPolicy'),
           ],
         },
       ],

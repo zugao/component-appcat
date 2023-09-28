@@ -66,7 +66,7 @@ spec:
         metadata: {}
         spec:
           forProvider:
-            bucketDeletionPolicy: DeleteAll
+            bucketDeletionPolicy: ''
             bucketName: ''
             credentialsSecretRef:
               name: ''
@@ -98,6 +98,9 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: spec.forProvider.credentialsSecretRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.bucketDeletionPolicy
+          toFieldPath: spec.forProvider.bucketDeletionPolicy
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.region
