@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.32.0
+        tag: v4.33.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -76,12 +76,12 @@ parameters:
 
     stsResizer:
       resources:
-          requests:
-            cpu: 100m
-            memory: 50Mi
-          limits:
-            cpu: 250m
-            memory: 200Mi
+        requests:
+          cpu: 100m
+          memory: 50Mi
+        limits:
+          cpu: 250m
+          memory: 200Mi
 
     apiserver:
       enabled: false
@@ -230,7 +230,7 @@ parameters:
       controlNamespace: "syn-appcat-control"
       vshn:
         enabled: false
-        externalDatabaseConnectionsEnabled: 'false'
+        externalDatabaseConnectionsEnabled: "false"
         quotasEnabled: ${appcat:quotasEnabled}
         secretNamespace: ${crossplane:namespace}
         emailAlerting:
@@ -272,6 +272,106 @@ parameters:
                 cpu: "1900m"
                 memory: "7872Mi"
                 disk: 80Gi
+          sideCars:
+            createBackup:
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            clusterController:
+              requests:
+                cpu: "32m"
+                memory: "188Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            runDbops:
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            setDbopsResult:
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            envoy:
+              requests:
+                cpu: "32m"
+                memory: "64Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            pgbouncer:
+              requests:
+                cpu: "16m"
+                memory: "32Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            postgresUtil:
+              requests:
+                cpu: "10m"
+                memory: "4Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            prometheusPostgresExporter:
+              requests:
+                cpu: "10m"
+                memory: "32Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+          initContainers:
+            pgbouncerAuthFile:
+              requests:
+                cpu: "100m"
+                memory: "100Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            relocateBinaries:
+              requests:
+                cpu: "100m"
+                memory: "100Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            setupScripts:
+              requests:
+                cpu: "100m"
+                memory: "100Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            setupArbitraryUser:
+              requests:
+                cpu: "100m"
+                memory: "100Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            clusterReconciliationCycle:
+              requests:
+                cpu: "100m"
+                memory: "100Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
+            setDbopsRunning:
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+              limits:
+                cpu: "600m"
+                memory: "768Mi"
         redis:
           enabled: true
           enableNetworkPolicy: true
