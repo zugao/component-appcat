@@ -275,103 +275,103 @@ parameters:
           sideCars:
             createBackup:
               requests:
-                cpu: "250m"
-                memory: "256Mi"
+                cpu: "100m"
+                memory: "64Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "400m"
+                memory: "500Mi"
             clusterController:
               requests:
                 cpu: "32m"
-                memory: "188Mi"
+                memory: "30Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "32m"
+                memory: "200Mi"
             runDbops:
               requests:
+                cpu: "100m"
+                memory: "64Mi"
+              limits:
                 cpu: "250m"
                 memory: "256Mi"
-              limits:
-                cpu: "600m"
-                memory: "768Mi"
             setDbopsResult:
               requests:
+                cpu: "100m"
+                memory: "64Mi"
+              limits:
                 cpu: "250m"
                 memory: "256Mi"
-              limits:
-                cpu: "600m"
-                memory: "768Mi"
             envoy:
               requests:
                 cpu: "32m"
                 memory: "64Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "64m"
+                memory: "64Mi"
             pgbouncer:
               requests:
                 cpu: "16m"
-                memory: "32Mi"
+                memory: "4Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "32m"
+                memory: "10Mi"
             postgresUtil:
               requests:
                 cpu: "10m"
                 memory: "4Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "20m"
+                memory: "10Mi"
             prometheusPostgresExporter:
               requests:
                 cpu: "10m"
-                memory: "32Mi"
+                memory: "16Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "150m"
+                memory: "256Mi"
           initContainers:
             pgbouncerAuthFile:
               requests:
                 cpu: "100m"
                 memory: "100Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "100m"
+                memory: "100Mi"
             relocateBinaries:
               requests:
                 cpu: "100m"
                 memory: "100Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "100m"
+                memory: "100Mi"
             setupScripts:
               requests:
                 cpu: "100m"
                 memory: "100Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "100m"
+                memory: "100Mi"
             setupArbitraryUser:
               requests:
                 cpu: "100m"
                 memory: "100Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "100m"
+                memory: "100Mi"
             clusterReconciliationCycle:
               requests:
                 cpu: "100m"
                 memory: "100Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "100m"
+                memory: "100Mi"
             setDbopsRunning:
               requests:
                 cpu: "250m"
                 memory: "256Mi"
               limits:
-                cpu: "600m"
-                memory: "768Mi"
+                cpu: "250m"
+                memory: "256Mi"
         redis:
           enabled: true
           enableNetworkPolicy: true
