@@ -364,7 +364,7 @@ parameters:
                 memory: "100Mi"
               limits:
                 cpu: "100m"
-                memory: "100Mi"
+                memory: "200Mi"
             setDbopsRunning:
               requests:
                 cpu: "250m"
