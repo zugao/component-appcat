@@ -283,7 +283,7 @@ local sgInstanceProfile = {
                         cpu: pgParams.initContainers.setDbopsRunning.requests.cpu,
                         memory: pgParams.initContainers.setDbopsRunning.requests.memory,
                       },
-                    }
+                    },
                   },
                   containers: {
                     'backup.create-backup': {

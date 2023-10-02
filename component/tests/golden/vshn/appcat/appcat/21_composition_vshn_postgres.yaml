@@ -36,13 +36,13 @@ spec:
           imageTag: v4.34.0
           quotasEnabled: 'false'
           sgNamespace: stackgres
-          sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "200Mi"},
+          sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "2Gi"},
             "requests": {"cpu": "32m", "memory": "30Mi"}}, "createBackup": {"limits":
             {"cpu": "400m", "memory": "500Mi"}, "requests": {"cpu": "100m", "memory":
             "64Mi"}}, "envoy": {"limits": {"cpu": "64m", "memory": "64Mi"}, "requests":
             {"cpu": "32m", "memory": "64Mi"}}, "pgbouncer": {"limits": {"cpu": "32m",
-            "memory": "10Mi"}, "requests": {"cpu": "16m", "memory": "4Mi"}}, "postgresUtil":
-            {"limits": {"cpu": "20m", "memory": "10Mi"}, "requests": {"cpu": "10m",
+            "memory": "20Mi"}, "requests": {"cpu": "16m", "memory": "4Mi"}}, "postgresUtil":
+            {"limits": {"cpu": "20m", "memory": "20Mi"}, "requests": {"cpu": "10m",
             "memory": "4Mi"}}, "prometheusPostgresExporter": {"limits": {"cpu": "150m",
             "memory": "256Mi"}, "requests": {"cpu": "10m", "memory": "16Mi"}}, "runDbops":
             {"limits": {"cpu": "250m", "memory": "256Mi"}, "requests": {"cpu": "100m",
@@ -305,7 +305,7 @@ spec:
                     memory: 500Mi
                   cluster-controller:
                     cpu: 32m
-                    memory: 200Mi
+                    memory: 2Gi
                   dbops.run-dbops:
                     cpu: 250m
                     memory: 256Mi
@@ -317,33 +317,33 @@ spec:
                     memory: 64Mi
                   pgbouncer:
                     cpu: 32m
-                    memory: 10Mi
+                    memory: 20Mi
                   postgres-util:
                     cpu: 20m
-                    memory: 10Mi
+                    memory: 20Mi
                   prometheus-postgres-exporter:
                     cpu: 150m
                     memory: 256Mi
                 cpu: ''
                 initContainers:
                   cluster-reconciliation-cycle:
-                    cpu: 100m
-                    memory: 100Mi
+                    cpu: 300m
+                    memory: 200Mi
                   dbops.set-dbops-running:
                     cpu: 250m
                     memory: 256Mi
                   pgbouncer-auth-file:
-                    cpu: 100m
-                    memory: 100Mi
+                    cpu: 300m
+                    memory: 500Mi
                   relocate-binaries:
-                    cpu: 100m
-                    memory: 100Mi
+                    cpu: 300m
+                    memory: 500Mi
                   setup-arbitrary-user:
-                    cpu: 100m
-                    memory: 100Mi
+                    cpu: 300m
+                    memory: 500Mi
                   setup-scripts:
-                    cpu: 100m
-                    memory: 100Mi
+                    cpu: 300m
+                    memory: 500Mi
                 memory: ''
                 requests:
                   containers:
@@ -372,6 +372,25 @@ spec:
                       cpu: 10m
                       memory: 16Mi
                   cpu: null
+                  initContainers:
+                    cluster-reconciliation-cycle:
+                      cpu: 100m
+                      memory: 100Mi
+                    dbops.set-dbops-running:
+                      cpu: 250m
+                      memory: 256Mi
+                    pgbouncer-auth-file:
+                      cpu: 100m
+                      memory: 100Mi
+                    relocate-binaries:
+                      cpu: 100m
+                      memory: 100Mi
+                    setup-arbitrary-user:
+                      cpu: 100m
+                      memory: 500Mi
+                    setup-scripts:
+                      cpu: 100m
+                      memory: 500Mi
                   memory: null
           providerConfigRef:
             name: kubernetes
