@@ -45,6 +45,8 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(redisPlans, redisParams.defaultPlan);
 
+local promRuleRedisSLA = common.PromRuleSLA(params.services.vshn.redis.sla, 'VSHNRedis');
+
 local restoreServiceAccount = kube.ServiceAccount('redisrestoreserviceaccount') + {
   metadata+: {
     namespace: params.services.controlNamespace,
@@ -691,5 +693,6 @@ if params.services.vshn.enabled && redisParams.enabled then {
   '20_rbac_vshn_redis_resize': [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
   '20_plans_vshn_redis': plansCM,
   '21_composition_vshn_redis': composition,
+  '22_prom_rule_sla_redis': promRuleRedisSLA,
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
 } else {}
