@@ -66,12 +66,12 @@ local prometheusRule(name) =
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
-            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
+            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0',
+            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0',
           },
         },
         alerting+: {
-          name: 'SLO_AppCat_VSHNPosgtreSQLUptime',
+          name: 'SLO_AppCat_VSHNPostgreSQLUptime',
           annotations+: {
             summary: 'Probes to PostgreSQL by VSHN instance fail',
           },
@@ -110,8 +110,8 @@ local prometheusRule(name) =
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
-            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - appcat:cluster:maintenance > 0',
+            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0',
+            total_query: '(sum(rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0',
           },
         },
         alerting+: {

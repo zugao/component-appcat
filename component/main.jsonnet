@@ -122,7 +122,7 @@ local maintenanceRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule
         name: 'appcat-cluster-maintenance',
         rules: [
           {
-            expr: 'scalar(max(max_over_time(openshift_upgrade_controller_upgradejob_state{state="active"}[10m])) or vector(0))',
+            expr: 'max(max_over_time(openshift_upgrade_controller_upgradejob_state{state="active"}[10m])) or vector(0)',
             record: 'appcat:cluster:maintenance',
           },
         ],

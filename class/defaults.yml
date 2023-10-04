@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.33.0
+        tag: v4.34.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -381,6 +381,7 @@ parameters:
           bucket_region: "lpg"
           grpcEndpoint: ${appcat:grpcEndpoint}
           defaultPlan: standard-1
+          sla: 99.25
           plans:
             standard-512m:
               size:
