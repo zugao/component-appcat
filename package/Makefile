@@ -7,12 +7,23 @@ SHELL := bash
 
 include Makefile.vars.mk
 
-.PHONY: all
-all: help
-
 .PHONY: help
 help: ## Show this help
 	@grep -E -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: ).*?## "}; {gsub(/\\:/,":", $$1)}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: all
+all: lint
+
+.PHONY: lint
+lint: lint_commodore lint_yaml lint_adoc ## All-in-one linting
+
+.PHONY: lint_commodore
+lint_commodore:  ## Run commodore linter on package
+	$(COMMODORE_CMD) inventory lint .
+
+.PHONY: lint_yaml
+lint_yaml: ## Lint yaml files
+	$(YAMLLINT_DOCKER) -f parsable -c $(YAMLLINT_CONFIG) $(YAMLLINT_ARGS) -- .
 
 .PHONY: lint_adoc
 lint_adoc: ## Lint documentation
@@ -21,3 +32,7 @@ lint_adoc: ## Lint documentation
 .PHONY: docs-serve
 docs-serve: ## Preview the documentation
 	$(ANTORA_PREVIEW_CMD)
+
+.PHONY: clean
+clean: ## Clean the project
+	rm -rf .cache compiled dependencies vendor helmcharts jsonnetfile*.json || true
