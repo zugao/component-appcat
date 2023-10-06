@@ -93,6 +93,25 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
     },
   ],
 };
+local helmMonitoringClusterRoleName = 'allow-helm-monitoring-resources';
+local helmMonitoringClusterRole = kube.ClusterRole(helmMonitoringClusterRoleName) {
+  rules: [
+    {
+      apiGroups: [ 'monitoring.coreos.com' ],
+      resources: [ 'servicemonitors' ],
+      verbs: [ '*' ],
+    },
+  ],
+};
+local helmMonitoringServiceAccount = kube.ServiceAccount('provider-helm') + {
+  metadata+: {
+    namespace: "syn-crossplane",
+  },
+};
+local helmMonitoringClusterRoleBinding = kube.ClusterRoleBinding('system:serviceaccount:syn-crossplane:provider-helm') + {
+  roleRef_: helmMonitoringClusterRole,
+  subjects_: [ helmMonitoringServiceAccount ],
+};
 
 local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:restorejob') + {
   roleRef_: restoreRole,
@@ -377,6 +396,13 @@ local composition =
             version: redisParams.helmChartVersion,
           },
           values: {
+            metrics: {
+              enabled: true,
+              serviceMonitor: {
+                enabled: true,
+                namespace: '',  // patched
+              },
+            },
             fullnameOverride: 'redis',
             global: {
               imageRegistry: redisParams.imageRegistry,
@@ -613,6 +639,8 @@ local composition =
             comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
             comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
 
+            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.values.metrics.serviceMonitor.namespace', 'vshn-redis'),
+
             comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
                                                         'spec.forProvider.values.master.nodeSelector',
                                                         std.mapWithKey(function(key, x)
@@ -691,6 +719,7 @@ if params.services.vshn.enabled && redisParams.enabled then {
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
   '20_rbac_vshn_redis_resize': [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
+  '20_rbac_vshn_redis_metrics_servicemonitor': [ helmMonitoringClusterRole, helmMonitoringClusterRoleBinding ],
   '20_plans_vshn_redis': plansCM,
   '21_composition_vshn_redis': composition,
   '22_prom_rule_sla_redis': promRuleRedisSLA,

@@ -699,6 +699,11 @@ spec:
                   requests:
                     cpu: ''
                     memory: ''
+              metrics:
+                enabled: true
+                serviceMonitor:
+                  enabled: true
+                  namespace: ''
               networkPolicy:
                 allowExternal: false
                 enabled: true
@@ -836,6 +841,14 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.tls.authClients
           toFieldPath: spec.forProvider.values.tls.authClients
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.labels[crossplane.io/composite]
+          toFieldPath: spec.forProvider.values.metrics.serviceMonitor.namespace
+          transforms:
+            - string:
+                fmt: vshn-redis-%s
+                type: Format
+              type: string
           type: FromCompositeFieldPath
         - fromFieldPath: spec.parameters.size.plan
           toFieldPath: spec.forProvider.values.master.nodeSelector
