@@ -1,0 +1,21 @@
+name: Pull Request (package)
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  PACKAGE_NAME: appcat
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        command:
+          - lint_yaml
+          - lint_commodore
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ${{ matrix.command }}
+        run: make -C package ${{ matrix.command }}
