@@ -105,7 +105,7 @@ local helmMonitoringClusterRole = kube.ClusterRole(helmMonitoringClusterRoleName
 };
 local helmMonitoringServiceAccount = kube.ServiceAccount('provider-helm') + {
   metadata+: {
-    namespace: "syn-crossplane",
+    namespace: 'syn-crossplane',
   },
 };
 local helmMonitoringClusterRoleBinding = kube.ClusterRoleBinding('system:serviceaccount:syn-crossplane:provider-helm') + {
