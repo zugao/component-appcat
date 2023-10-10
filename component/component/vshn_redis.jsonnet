@@ -93,8 +93,8 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
     },
   ],
 };
-local helmMonitoringClusterRoleName = 'allow-helm-monitoring-resources';
-local helmMonitoringClusterRole = kube.ClusterRole(helmMonitoringClusterRoleName) {
+
+local helmMonitoringClusterRole = kube.ClusterRole('allow-helm-monitoring-resources') {
   rules: [
     {
       apiGroups: [ 'monitoring.coreos.com' ],
