@@ -398,6 +398,9 @@ local composition =
           values: {
             metrics: {
               enabled: true,
+              containerSecurityContext: {
+                enabled: false,
+              },
               serviceMonitor: {
                 enabled: true,
                 namespace: '',  // patched

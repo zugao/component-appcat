@@ -700,6 +700,8 @@ spec:
                     cpu: ''
                     memory: ''
               metrics:
+                containerSecurityContext:
+                  enabled: false
                 enabled: true
                 serviceMonitor:
                   enabled: true
