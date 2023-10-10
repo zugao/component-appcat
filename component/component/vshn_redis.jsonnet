@@ -399,7 +399,7 @@ local composition =
             metrics: {
               enabled: true,
               containerSecurityContext: {
-                enabled: false,
+                enabled: securityContext,
               },
               serviceMonitor: {
                 enabled: true,

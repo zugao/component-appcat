@@ -701,7 +701,7 @@ spec:
                     memory: ''
               metrics:
                 containerSecurityContext:
-                  enabled: false
+                  enabled: true
                 enabled: true
                 serviceMonitor:
                   enabled: true
