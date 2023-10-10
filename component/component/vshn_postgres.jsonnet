@@ -224,65 +224,125 @@ local sgInstanceProfile = {
                   requests: {
                     cpu: null,
                     memory: null,
+                    containers: {
+                      'backup.create-backup': {
+                        cpu: pgParams.sideCars.createBackup.requests.cpu,
+                        memory: pgParams.sideCars.createBackup.requests.memory,
+                      },
+                      'cluster-controller': {
+                        cpu: pgParams.sideCars.clusterController.requests.cpu,
+                        memory: pgParams.sideCars.clusterController.requests.memory,
+                      },
+                      'dbops.run-dbops': {
+                        cpu: pgParams.sideCars.runDbops.requests.cpu,
+                        memory: pgParams.sideCars.runDbops.requests.memory,
+                      },
+                      'dbops.set-dbops-result': {
+                        cpu: pgParams.sideCars.setDbopsResult.requests.cpu,
+                        memory: pgParams.sideCars.setDbopsResult.requests.memory,
+                      },
+                      envoy: {
+                        cpu: pgParams.sideCars.envoy.requests.cpu,
+                        memory: pgParams.sideCars.envoy.requests.memory,
+                      },
+                      pgbouncer: {
+                        cpu: pgParams.sideCars.pgbouncer.requests.cpu,
+                        memory: pgParams.sideCars.pgbouncer.requests.memory,
+                      },
+                      'postgres-util': {
+                        cpu: pgParams.sideCars.postgresUtil.requests.cpu,
+                        memory: pgParams.sideCars.postgresUtil.requests.memory,
+                      },
+                      'prometheus-postgres-exporter': {
+                        cpu: pgParams.sideCars.prometheusPostgresExporter.requests.cpu,
+                        memory: pgParams.sideCars.prometheusPostgresExporter.requests.memory,
+                      },
+                    },
+                    initContainers: {
+                      'pgbouncer-auth-file': {
+                        cpu: pgParams.initContainers.pgbouncerAuthFile.requests.cpu,
+                        memory: pgParams.initContainers.pgbouncerAuthFile.requests.memory,
+                      },
+                      'relocate-binaries': {
+                        cpu: pgParams.initContainers.relocateBinaries.requests.cpu,
+                        memory: pgParams.initContainers.relocateBinaries.requests.memory,
+                      },
+                      'setup-scripts': {
+                        cpu: pgParams.initContainers.setupScripts.requests.cpu,
+                        memory: pgParams.initContainers.setupScripts.requests.memory,
+                      },
+                      'setup-arbitrary-user': {
+                        cpu: pgParams.initContainers.setupArbitraryUser.requests.cpu,
+                        memory: pgParams.initContainers.setupArbitraryUser.requests.memory,
+                      },
+                      'cluster-reconciliation-cycle': {
+                        cpu: pgParams.initContainers.clusterReconciliationCycle.requests.cpu,
+                        memory: pgParams.initContainers.clusterReconciliationCycle.requests.memory,
+                      },
+                      'dbops.set-dbops-running': {
+                        cpu: pgParams.initContainers.setDbopsRunning.requests.cpu,
+                        memory: pgParams.initContainers.setDbopsRunning.requests.memory,
+                      },
+                    },
                   },
                   containers: {
                     'backup.create-backup': {
-                      cpu: pgParams.sideCars.createBackup.requests.cpu,
-                      memory: pgParams.sideCars.createBackup.requests.memory,
+                      cpu: pgParams.sideCars.createBackup.limits.cpu,
+                      memory: pgParams.sideCars.createBackup.limits.memory,
                     },
                     'cluster-controller': {
-                      cpu: pgParams.sideCars.clusterController.requests.cpu,
-                      memory: pgParams.sideCars.clusterController.requests.memory,
+                      cpu: pgParams.sideCars.clusterController.limits.cpu,
+                      memory: pgParams.sideCars.clusterController.limits.memory,
                     },
                     'dbops.run-dbops': {
-                      cpu: pgParams.sideCars.runDbops.requests.cpu,
-                      memory: pgParams.sideCars.runDbops.requests.memory,
+                      cpu: pgParams.sideCars.runDbops.limits.cpu,
+                      memory: pgParams.sideCars.runDbops.limits.memory,
                     },
                     'dbops.set-dbops-result': {
-                      cpu: pgParams.sideCars.setDbopsResult.requests.cpu,
-                      memory: pgParams.sideCars.setDbopsResult.requests.memory,
+                      cpu: pgParams.sideCars.setDbopsResult.limits.cpu,
+                      memory: pgParams.sideCars.setDbopsResult.limits.memory,
                     },
                     envoy: {
-                      cpu: pgParams.sideCars.envoy.requests.cpu,
-                      memory: pgParams.sideCars.envoy.requests.memory,
+                      cpu: pgParams.sideCars.envoy.limits.cpu,
+                      memory: pgParams.sideCars.envoy.limits.memory,
                     },
                     pgbouncer: {
-                      cpu: pgParams.sideCars.pgbouncer.requests.cpu,
-                      memory: pgParams.sideCars.pgbouncer.requests.memory,
+                      cpu: pgParams.sideCars.pgbouncer.limits.cpu,
+                      memory: pgParams.sideCars.pgbouncer.limits.memory,
                     },
                     'postgres-util': {
-                      cpu: pgParams.sideCars.postgresUtil.requests.cpu,
-                      memory: pgParams.sideCars.postgresUtil.requests.memory,
+                      cpu: pgParams.sideCars.postgresUtil.limits.cpu,
+                      memory: pgParams.sideCars.postgresUtil.limits.memory,
                     },
                     'prometheus-postgres-exporter': {
-                      cpu: pgParams.sideCars.prometheusPostgresExporter.requests.cpu,
-                      memory: pgParams.sideCars.prometheusPostgresExporter.requests.memory,
+                      cpu: pgParams.sideCars.prometheusPostgresExporter.limits.cpu,
+                      memory: pgParams.sideCars.prometheusPostgresExporter.limits.memory,
                     },
                   },
                   initContainers: {
                     'pgbouncer-auth-file': {
-                      cpu: pgParams.initContainers.pgbouncerAuthFile.requests.cpu,
-                      memory: pgParams.initContainers.pgbouncerAuthFile.requests.memory,
+                      cpu: pgParams.initContainers.pgbouncerAuthFile.limits.cpu,
+                      memory: pgParams.initContainers.pgbouncerAuthFile.limits.memory,
                     },
                     'relocate-binaries': {
-                      cpu: pgParams.initContainers.relocateBinaries.requests.cpu,
-                      memory: pgParams.initContainers.relocateBinaries.requests.memory,
+                      cpu: pgParams.initContainers.relocateBinaries.limits.cpu,
+                      memory: pgParams.initContainers.relocateBinaries.limits.memory,
                     },
                     'setup-scripts': {
-                      cpu: pgParams.initContainers.setupScripts.requests.cpu,
-                      memory: pgParams.initContainers.setupScripts.requests.memory,
+                      cpu: pgParams.initContainers.setupScripts.limits.cpu,
+                      memory: pgParams.initContainers.setupScripts.limits.memory,
                     },
                     'setup-arbitrary-user': {
-                      cpu: pgParams.initContainers.setupArbitraryUser.requests.cpu,
-                      memory: pgParams.initContainers.setupArbitraryUser.requests.memory,
+                      cpu: pgParams.initContainers.setupArbitraryUser.limits.cpu,
+                      memory: pgParams.initContainers.setupArbitraryUser.limits.memory,
                     },
                     'cluster-reconciliation-cycle': {
-                      cpu: pgParams.initContainers.clusterReconciliationCycle.requests.cpu,
-                      memory: pgParams.initContainers.clusterReconciliationCycle.requests.memory,
+                      cpu: pgParams.initContainers.clusterReconciliationCycle.limits.cpu,
+                      memory: pgParams.initContainers.clusterReconciliationCycle.limits.memory,
                     },
                     'dbops.set-dbops-running': {
-                      cpu: pgParams.initContainers.setDbopsRunning.requests.cpu,
-                      memory: pgParams.initContainers.setDbopsRunning.requests.memory,
+                      cpu: pgParams.initContainers.setDbopsRunning.limits.cpu,
+                      memory: pgParams.initContainers.setDbopsRunning.limits.memory,
                     },
                   },
                 },
@@ -372,10 +432,16 @@ local sgCluster = {
                     persistentVolume: {
                       size: '',
                     },
+                    resources: {
+                      enableClusterLimitsRequirements: true,
+                    },
                   },
                   nonProductionOptions: {
                     enableSetPatroniCpuRequests: true,
                     enableSetPatroniMemoryRequests: true,
+                    enableSetClusterCpuRequests: true,
+                    enableSetClusterMemoryRequests: true,
+
                   },
                 },
               },
