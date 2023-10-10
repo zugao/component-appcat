@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: 'master'
+          token: ${{ secrets.GH_ACTION_PAT }}
       - name: set tag env
         run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Change version in package
@@ -43,6 +44,6 @@ jobs:
           yq -i '.parameters."pkg.appcat".componentVersion = "${{ env.TAG_VERSION }}"' package/main.yaml
       - uses: actions-js/push@v1.4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_ACTION_PAT }}
           message: "Update component version in package to ${{ env.TAG_VERSION }}"
           branch: 'master'
