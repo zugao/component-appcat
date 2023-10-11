@@ -398,7 +398,7 @@ local composition =
           values: {
             metrics: {
               enabled: true,
-              // before all Your warning lapmp start flashing,
+              // before all Your warning lamps start blinking,
               // this is internal communication on loopback interface
               // full mTLS isn't necessary
               extraEnvVars: [
