@@ -398,12 +398,15 @@ local composition =
           values: {
             metrics: {
               enabled: true,
-              extraEvnVars: [
-                // before all Your warning lapmp start flashing,
-                // this is internal communication on loopback interface
-                // full mTLS isn't necessary
-                'REDIS_EXPORTER_SKIP_TLS_VERIFICATION',
-                'true',
+              // before all Your warning lapmp start flashing,
+              // this is internal communication on loopback interface
+              // full mTLS isn't necessary
+              extraEnvVars: [
+                {
+                  name: 'REDIS_EXPORTER_SKIP_TLS_VERIFICATION',
+                  value: 'true',
+
+                },
               ],
               containerSecurityContext: {
                 enabled: securityContext,
