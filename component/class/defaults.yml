@@ -3,7 +3,7 @@ parameters:
     charts:
       redis:
         source: https://charts.bitnami.com/bitnami
-        version: 18.1.3
+        version: 17.7.1
       minio:
         source: https://charts.min.io
         version: 5.0.13
