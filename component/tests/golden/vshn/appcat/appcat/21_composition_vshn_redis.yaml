@@ -703,6 +703,9 @@ spec:
                 containerSecurityContext:
                   enabled: true
                 enabled: true
+                extraEvnVars:
+                  - REDIS_EXPORTER_SKIP_TLS_VERIFICATION
+                  - 'true'
                 serviceMonitor:
                   enabled: true
                   namespace: ''
