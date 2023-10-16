@@ -83,4 +83,4 @@ spec:
         - fromFieldPath: spec.parameters.maintenance.timeOfDay
           toFieldPath: spec.forProvider.maintenance.timeOfDay
           type: FromCompositeFieldPath
-  writeConnectionSecretsToNamespace: syn-crossplane
+  writeConnectionSecretsToNamespace: crossplane-system

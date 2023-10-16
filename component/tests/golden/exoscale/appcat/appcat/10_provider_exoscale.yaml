@@ -8,7 +8,7 @@ metadata:
     name: exoscale
   name: exoscale
 spec:
-  package: ghcr.io/vshn/provider-exoscale/provider:v0.10.3
+  package: ghcr.io/vshn/provider-exoscale/provider:v0.10.4
 ---
 apiVersion: exoscale.crossplane.io/v1
 kind: ProviderConfig
@@ -23,7 +23,7 @@ spec:
   credentials:
     apiSecretRef:
       name: exoscale-api-access
-      namespace: syn-crossplane
+      namespace: crossplane-system
     source: InjectedIdentity
 ---
 apiVersion: v1
@@ -34,7 +34,7 @@ metadata:
   labels:
     name: exoscale-api-access
   name: exoscale-api-access
-  namespace: syn-crossplane
+  namespace: crossplane-system
 stringData:
   EXOSCALE_API_KEY: t-silent-test-1234/c-green-test-1234/appcat/provider-exoscale/access-key
   EXOSCALE_API_SECRET: t-silent-test-1234/c-green-test-1234/appcat/provider-exoscale/secret-key
