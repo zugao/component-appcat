@@ -9,7 +9,7 @@ parameters:
     cloud: exoscale
 
   crossplane:
-    namespace: syn-crossplane
+    namespace: crossplane-system
 
   appcat:
     providers:
