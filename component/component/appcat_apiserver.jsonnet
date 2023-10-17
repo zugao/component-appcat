@@ -92,6 +92,28 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
               env+: com.envList(apiserverParams.extraEnv),
               resources: apiserverParams.resources,
+              livenessProbe: {
+                httpGet: {
+                  path: '/livez',
+                  port: 9443,
+                  scheme: 'HTTPS',
+                },
+                timeoutSeconds: 2,
+                successThreshold: 1,
+                initialDelaySeconds: 10,
+                failureThreshold: 3,
+              },
+              readinessProbe: {
+                httpGet: {
+                  path: '/livez',
+                  port: 9443,
+                  scheme: 'HTTPS',
+                },
+                timeoutSeconds: 2,
+                successThreshold: 1,
+                initialDelaySeconds: 10,
+                failureThreshold: 3,
+              },
             }
           else
             c
