@@ -33,7 +33,25 @@ spec:
             - configMapRef:
                 name: apiserver-envs
           image: ghcr.io/vshn/appcat-apiserver:v0.1.2
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /livez
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           name: apiserver
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           resources:
             limits:
               cpu: 200m
