@@ -46,7 +46,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /livez
+              path: /readyz
               port: 9443
               scheme: HTTPS
             initialDelaySeconds: 10

@@ -105,7 +105,7 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
               },
               readinessProbe: {
                 httpGet: {
-                  path: '/livez',
+                  path: '/readyz',
                   port: 9443,
                   scheme: 'HTTPS',
                 },
