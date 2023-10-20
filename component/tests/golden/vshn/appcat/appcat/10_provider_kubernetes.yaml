@@ -233,6 +233,7 @@ rules:
       - prometheusrules
       - podmonitors
       - alertmanagerconfigs
+      - servicemonitors
     verbs:
       - get
       - list
