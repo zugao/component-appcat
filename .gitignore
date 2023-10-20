@@ -24,6 +24,7 @@ sloth-output/
 /component/compiled
 
 /package/.cache
+/packages/compiled
 /package/dependencies
 /package/helmcharts
 /package/manifests
@@ -31,5 +32,9 @@ sloth-output/
 /package/jsonnetfile.lock.json
 /package/crds
 /package/compiled
+
+/compiled
+/dependencies
+/vendor
 
 # Additional entries
