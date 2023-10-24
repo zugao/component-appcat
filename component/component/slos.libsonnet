@@ -129,7 +129,7 @@ local prometheusRule(name) =
     ],
     'vshn-redis-ha': [
       newSLO('uptime', 'vshn-redis-ha', params.slos.vshn.redis.uptime) {
-        description: 'HA Uptime SLO for Redis by VSHN',
+        description: 'Uptime SLO for High Available Redis by VSHN',
         sli: {
           events: {
             // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
@@ -138,7 +138,7 @@ local prometheusRule(name) =
           },
         },
         alerting+: {
-          name: 'SLO_AppCat_VSHNRedisUptimeHA',
+          name: 'SLO_AppCat_HAVSHNRedisUptime',
           annotations+: {
             summary: 'Probes to HA Redis by VSHN instance fail',
           },

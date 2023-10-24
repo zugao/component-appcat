@@ -147,7 +147,7 @@ spec:
           record: sloth_slo_info
     - name: sloth-slo-alerts-appcat-vshn-redis-ha-uptime
       rules:
-        - alert: SLO_AppCat_VSHNRedisUptimeHA
+        - alert: SLO_AppCat_HAVSHNRedisUptime
           annotations:
             for: 6m
             summary: Probes to HA Redis by VSHN instance fail
@@ -176,7 +176,7 @@ spec:
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: SLO_AppCat_VSHNRedisUptimeHA
+        - alert: SLO_AppCat_HAVSHNRedisUptime
           annotations:
             runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-redis-ha.html#uptime
             summary: Probes to HA Redis by VSHN instance fail
