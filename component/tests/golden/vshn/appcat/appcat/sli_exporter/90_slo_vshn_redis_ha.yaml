@@ -147,10 +147,10 @@ spec:
           record: sloth_slo_info
     - name: sloth-slo-alerts-appcat-vshn-redis-ha-uptime
       rules:
-        - alert: SLO_AppCat_VSHNRedisUptime
+        - alert: SLO_AppCat_VSHNRedisUptimeHA
           annotations:
             for: 6m
-            summary: Probes to Redis by VSHN instance fail
+            summary: Probes to HA Redis by VSHN instance fail
             title: (page) {{$labels.sloth_service}} {{$labels.sloth_slo}} SLO error
               budget burn rate is too fast.
           expr: |
@@ -176,10 +176,10 @@ spec:
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: SLO_AppCat_VSHNRedisUptime
+        - alert: SLO_AppCat_VSHNRedisUptimeHA
           annotations:
             runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-redis-ha.html#uptime
-            summary: Probes to Redis by VSHN instance fail
+            summary: Probes to HA Redis by VSHN instance fail
             title: (ticket) {{$labels.sloth_service}} {{$labels.sloth_slo}} SLO error
               budget burn rate is too fast.
           expr: |
