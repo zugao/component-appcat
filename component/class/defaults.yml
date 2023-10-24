@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: redis-alerting
+        tag: v4.36.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
