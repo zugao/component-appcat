@@ -3,7 +3,7 @@ applications:
   - crossplane
 parameters:
   pkg.appcat:
-    componentVersion: v2.3.0
+    componentVersion: v2.4.0
     image:
       registry: ghcr.io
       repository: vshn/appcat
