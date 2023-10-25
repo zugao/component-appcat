@@ -37,3 +37,43 @@ spec:
       name: minio-func
       type: Container
   writeConnectionSecretsToNamespace: syn-crossplane
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+    metadata.appcat.vshn.io/description: S3 compatible object storage hosted by Minio-minio-cluster
+    metadata.appcat.vshn.io/displayname: Minio-minio-cluster Object Storage
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/objstor
+    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/objectstorage.html
+    metadata.appcat.vshn.io/zone: default
+  labels:
+    metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/serviceID: minio-minio-cluster-objectbucket
+    name: minio-cluster.objectbuckets.appcat.vshn.io
+  name: minio-cluster.objectbuckets.appcat.vshn.io
+spec:
+  compositeTypeRef:
+    apiVersion: appcat.vshn.io/v1
+    kind: XObjectBucket
+  functions:
+    - config:
+        apiVersion: v1
+        data:
+          providerConfig: minio-cluster
+        kind: ConfigMap
+        metadata:
+          labels:
+            name: xfn-config
+          name: xfn-config
+      container:
+        image: miniobucket
+        imagePullPolicy: IfNotPresent
+        runner:
+          endpoint: unix-abstract:crossplane/fn/default.sock
+        timeout: 20s
+      name: minio-func
+      type: Container
+  writeConnectionSecretsToNamespace: syn-crossplane

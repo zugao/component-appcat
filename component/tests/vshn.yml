@@ -106,7 +106,18 @@ parameters:
               note: "Will be scheduled on APPUiO Cloud plus nodes"
         minio:
           enabled: true
-          grpcEndpoint: 172.18.0.1:9547
+          instances:
+            - name: minio-cluster
+              namespace: syn-appcat
+              spec:
+                parameters:
+                  service:
+                    mode: standalone
+                  size:
+                    disk: 20Gi
+                writeConnectionSecretToRef:
+                  name: minio-cluster-credentials
+          # grpcEndpoint: host.docker.internal:9547
 
       generic:
         objectstorage:

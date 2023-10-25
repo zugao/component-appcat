@@ -49,4 +49,4 @@ parameters:
           enabled: false
         minio:
           enabled: true
-          grpcEndpoint: 172.18.0.1:9547
+          #grpcEndpoint: 172.18.0.1:9547
