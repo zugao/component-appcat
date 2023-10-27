@@ -621,7 +621,7 @@ spec:
             - dependsOn:
                 apiVersion: stackgres.io/v1
                 kind: SGBackup
-      name: cluster-restore
+      name: cluster
       patches:
         - fromFieldPath: status.conditions
           toFieldPath: status.pgclusterConditions
