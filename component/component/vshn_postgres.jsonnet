@@ -739,7 +739,7 @@ local copyJob = {
 };
 
 local clusterRestoreConfig = {
-  name: 'cluster-restore',
+  name: 'cluster',
   base+: {
     spec+: {
       references+: [
