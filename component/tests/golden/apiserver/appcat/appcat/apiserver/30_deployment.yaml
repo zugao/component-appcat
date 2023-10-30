@@ -32,7 +32,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: apiserver-envs
-          image: ghcr.io/vshn/appcat-apiserver:v0.1.2
+          image: ghcr.io/vshn/appcat-apiserver:v0.1.4
           livenessProbe:
             failureThreshold: 3
             httpGet:

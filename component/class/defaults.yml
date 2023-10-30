@@ -43,7 +43,7 @@ parameters:
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
-        tag: v0.1.2
+        tag: v0.1.4
 
     =_crd_version: ${appcat:images:appcat:tag}
 
