@@ -43,6 +43,7 @@ appcat:
     generic:
       objectstorage:
         enabled: true
+        defaultComposition: my-minio <1>
         compositions:
           minio:
             enabled: true
@@ -55,11 +56,12 @@ appcat:
             spec:
               parameters:
                 service:
-                  mode: standalone <1>
+                  mode: standalone <2>
                 size:
                   disk: 1Gi
               writeConnectionSecretToRef:
                 name: my-minio-creds
 
 ----
-<1> Single instance deployment
+<1> Name of the default composition reference, use the name of any of the instances from `appcat.vshn.minio.instances`. NOTE: don't use the FQDN of the composition, the component will amend it correctly for you
+<2> Single instance deployment
