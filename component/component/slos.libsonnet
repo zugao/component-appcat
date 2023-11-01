@@ -58,17 +58,25 @@ local prometheusRule(name) =
     spec: patchedRules,
   };
 
+local getEvents(serviceName) = {
+  // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
+  error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0 or sum(0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+  total_query: 'sum(rate(appcat_probes_seconds_count{service="' + serviceName + '", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+};
+
+local getEventsHA(serviceName) = {
+  // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
+  error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla) or sum(0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+  total_query: 'sum(rate(appcat_probes_seconds_count{service="' + serviceName + '", ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+};
+
 {
   slothInput: {
     'vshn-postgresql': [
       newSLO('uptime', 'vshn-postgresql', params.slos.vshn.postgres.uptime) {
         description: 'Uptime SLO for PostgreSQL by VSHN',
         sli: {
-          events: {
-            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0 or sum(0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-          },
+          events: getEvents('VSHNPostgreSQL'),
         },
         alerting+: {
           name: 'SLO_AppCat_VSHNPostgreSQLUptime',
@@ -86,11 +94,7 @@ local prometheusRule(name) =
       newSLO('uptime', 'vshn-postgresql-ha', params.slos.vshn.postgres.uptime) {
         description: 'Uptime SLO for High Available PostgreSQL by VSHN',
         sli: {
-          events: {
-            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla) or sum(0*rate(appcat_probes_seconds_count{service="VSHNPostgreSQL"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNPostgreSQL", ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-          },
+          events: getEventsHA('VSHNPostgreSQL'),
         },
         alerting+: {
           name: 'SLO_AppCat_HAVSHNPosgtreSQLUptime',
@@ -109,11 +113,7 @@ local prometheusRule(name) =
       newSLO('uptime', 'vshn-redis', params.slos.vshn.redis.uptime) {
         description: 'Uptime SLO for Redis by VSHN',
         sli: {
-          events: {
-            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0 or sum(0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNRedis", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-          },
+          events: getEvents('VSHNRedis'),
         },
         alerting+: {
           name: 'SLO_AppCat_VSHNRedisUptime',
@@ -131,11 +131,7 @@ local prometheusRule(name) =
       newSLO('uptime', 'vshn-redis-ha', params.slos.vshn.redis.uptime) {
         description: 'Uptime SLO for High Available Redis by VSHN',
         sli: {
-          events: {
-            // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-            error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}]))  by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0 or sum(0*rate(appcat_probes_seconds_count{service="VSHNRedis"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-            total_query: 'sum(rate(appcat_probes_seconds_count{service="VSHNRedis", ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla)',
-          },
+          events: getEventsHA('VSHNRedis'),
         },
         alerting+: {
           name: 'SLO_AppCat_HAVSHNRedisUptime',
@@ -144,6 +140,42 @@ local prometheusRule(name) =
           },
           labels+: {
             service: 'VSHNRedis',
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+          },
+        },
+      },
+    ],
+    'vshn-minio': [
+      newSLO('uptime', 'vshn-minio', params.slos.vshn.minio.uptime) {
+        description: 'Uptime SLO for Minio by VSHN',
+        sli: {
+          events: getEvents('VSHNMinio'),
+        },
+        alerting+: {
+          name: 'SLO_AppCat_VSHNMinioUptime',
+          annotations+: {
+            summary: 'Probes to Minio by VSHN instance fail',
+          },
+          labels+: {
+            service: 'VSHNMinio',
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+          },
+        },
+      },
+    ],
+    'vshn-minio-ha': [
+      newSLO('uptime', 'vshn-postgresql-ha', params.slos.vshn.minio.uptime) {
+        description: 'Uptime SLO for High Available Minio by VSHN',
+        sli: {
+          events: getEventsHA('VSHNMinio'),
+        },
+        alerting+: {
+          name: 'SLO_AppCat_HAVSHNMinioUptime',
+          annotations+: {
+            summary: 'Probes to HA Minio by VSHN instance fail',
+          },
+          labels+: {
+            service: 'VSHNMinio',
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
           },
         },

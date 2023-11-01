@@ -8,6 +8,8 @@ local crossplane = import 'lib/crossplane.libsonnet';
 local common = import 'common.libsonnet';
 local xrds = import 'xrds.libsonnet';
 
+local slos = import 'slos.libsonnet';
+
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local minioParams = params.services.vshn.minio;
@@ -20,6 +22,8 @@ local connectionSecretKeys = [
   'AWS_SECRET_ACCESS_KEY',
   'AWS_ACCESS_KEY_ID',
 ];
+
+local promRuleMinioSLA = common.PromRuleSLA(params.services.vshn.minio.sla, 'VSHNMinio');
 
 local minioPlans = common.FilterDisabledParams(minioParams.plans);
 
@@ -97,5 +101,8 @@ if params.services.vshn.enabled && minioParams.enabled then {
   '20_xrd_vshn_minio': xrd,
   '20_rbac_vshn_minio': xrds.CompositeClusterRoles(xrd),
   '21_composition_vshn_minio': composition,
+  '22_prom_rule_sla_minio': promRuleMinioSLA,
   [if std.length(instances) != 0 then '22_minio_instances']: instances,
+  [if params.services.vshn.enabled && params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio']: slos.Get('vshn-minio'),
+  [if params.services.vshn.enabled && params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio_ha']: slos.Get('vshn-minio-ha'),
 } else {}

@@ -33,7 +33,11 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
+<<<<<<< HEAD
           imageTag: v4.39.0
+=======
+          imageTag: sli_minio
+>>>>>>> 713106c (Switch to sli_minio image)
           quotasEnabled: 'false'
           sgNamespace: stackgres
           sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "2Gi"},
