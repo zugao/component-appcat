@@ -386,6 +386,14 @@ local composition =
                    },
                  };
 
+  local prometheusRule = common.GeneratePrometheusNonSLORules('redis', 'redis', []) + {
+    patches: [
+      comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'prometheusrule'),
+      comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+    ],
+  };
+
+
   local redisHelmChart =
     {
       apiVersion: 'helm.crossplane.io/v1beta1',
@@ -407,7 +415,10 @@ local composition =
                 {
                   name: 'REDIS_EXPORTER_SKIP_TLS_VERIFICATION',
                   value: 'true',
-
+                },
+                {
+                  name: 'REDIS_EXPORTER_INCL_SYSTEM_METRICS',
+                  value: 'true',
                 },
               ],
               containerSecurityContext: {
@@ -537,6 +548,7 @@ local composition =
             comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
           ],
         },
+        prometheusRule,
         {
           name: 'namespace-conditions',
           base: namespace,
