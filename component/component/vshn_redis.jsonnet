@@ -8,6 +8,8 @@ local crossplane = import 'lib/crossplane.libsonnet';
 local common = import 'common.libsonnet';
 local xrds = import 'xrds.libsonnet';
 
+local slos = import 'slos.libsonnet';
+
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local redisParams = params.services.vshn.redis;
@@ -737,4 +739,6 @@ if params.services.vshn.enabled && redisParams.enabled then {
   '21_composition_vshn_redis': composition,
   '22_prom_rule_sla_redis': promRuleRedisSLA,
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
+  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
+  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
 } else {}

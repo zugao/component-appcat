@@ -9,6 +9,8 @@ local crossplane = import 'lib/crossplane.libsonnet';
 local common = import 'common.libsonnet';
 local xrds = import 'xrds.libsonnet';
 
+local slos = import 'slos.libsonnet';
+
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
@@ -1101,4 +1103,6 @@ if params.services.vshn.enabled && pgParams.enabled then
     '21_composition_vshn_postgresrestore': restoreComp,
     '22_prom_rule_sla_postgres': promRulePostgresSLA,
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
+    [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
+    [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
   } else {}
