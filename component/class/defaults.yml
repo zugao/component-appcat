@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: sli_minio
+        tag: v4.40.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver

@@ -30,11 +30,7 @@ spec:
         data:
           bucketRegion: lpg
           controlNamespace: syn-appcat-control
-<<<<<<< HEAD
-          imageTag: v4.39.0
-=======
-          imageTag: sli_minio
->>>>>>> 713106c (Switch to sli_minio image)
+          imageTag: v4.40.0
           maintenanceSA: helm-based-service-maintenance
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
