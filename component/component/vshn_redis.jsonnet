@@ -522,7 +522,7 @@ local composition =
                 controlNamespace: params.services.controlNamespace,
                 restoreSA: 'redisrestoreserviceaccount',
                 quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
-              },
+              } + common.EmailAlerting(params.services.vshn.emailAlerting),
             },
             container: {
               image: 'redis',

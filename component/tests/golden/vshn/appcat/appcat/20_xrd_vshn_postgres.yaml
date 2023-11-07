@@ -118,7 +118,7 @@ spec:
                         alertmanagerConfigRef:
                           description: AlertmanagerConfigRef contains the name of
                             the AlertmanagerConfig that should be copied over to the
-                            namespace of the PostgreSQL instance.
+                            namespace of the instance.
                           type: string
                         alertmanagerConfigSecretRef:
                           description: AlertmanagerConfigSecretRef contains the name

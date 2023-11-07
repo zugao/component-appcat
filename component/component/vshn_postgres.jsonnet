@@ -912,16 +912,10 @@ local composition(restore=false) =
               data: {
                 imageTag: common.GetAppCatImageTag(),
                 sgNamespace: pgParams.sgNamespace,
-                emailAlertingEnabled: std.toString(params.services.vshn.emailAlerting.enabled),
-                emailAlertingSecretNamespace: params.services.vshn.emailAlerting.secretNamespace,
-                emailAlertingSecretName: params.services.vshn.emailAlerting.secretName,
-                emailAlertingSmtpFromAddress: params.services.vshn.emailAlerting.smtpFromAddress,
-                emailAlertingSmtpUsername: params.services.vshn.emailAlerting.smtpUsername,
-                emailAlertingSmtpHost: params.services.vshn.emailAlerting.smtpHost,
                 externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
                 quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                 sideCars: std.toString(pgParams.sideCars),
-              },
+              } + common.EmailAlerting(params.services.vshn.emailAlerting),
             },
             container: {
               image: 'postgresql',
