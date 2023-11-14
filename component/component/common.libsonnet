@@ -255,7 +255,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                   },
                 ],
               },
-            ]+ additionalAlertsRuleGroup,
+            ] + additionalAlertsRuleGroup,
           },
         },
       },
