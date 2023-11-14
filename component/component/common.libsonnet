@@ -210,7 +210,6 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
               {
                 name: '%s-general-alerts' % serviceNameLower,
                 rules: [
-
                   {
                     name: '%s-storage' % serviceNameLower,
                     alert: serviceName + 'PersistentVolumeFillingUp',
@@ -254,9 +253,9 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                       syn_team: 'schedar',
                     },
                   },
-                ] + additionalAlerts,
+                ],
               },
-            ],
+            ]+ additionalAlerts,
           },
         },
       },
