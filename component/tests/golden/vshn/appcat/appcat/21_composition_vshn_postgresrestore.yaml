@@ -1117,7 +1117,7 @@ spec:
                           kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")
                         for: 120m
                         labels:
-                          severity: warning
+                          severity: critical
                           syn_team: schedar
                         name: postgresql-memory
                   - name: postgresql-connections

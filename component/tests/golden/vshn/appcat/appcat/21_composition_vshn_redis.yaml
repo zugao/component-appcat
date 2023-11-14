@@ -152,7 +152,7 @@ spec:
                           kube_namespace_labels, "name", "$1", "namespace", "vshn-redis-(.+)-.+")
                         for: 120m
                         labels:
-                          severity: warning
+                          severity: critical
                           syn_team: schedar
                         name: redis-memory
           providerConfigRef:

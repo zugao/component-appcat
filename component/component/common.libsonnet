@@ -249,7 +249,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                     expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 90') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
                     'for': '120m',
                     labels: {
-                      severity: 'warning',
+                      severity: 'critical',
                       syn_team: 'schedar',
                     },
                   },
