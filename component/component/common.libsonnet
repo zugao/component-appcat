@@ -176,7 +176,7 @@ local argoCDAnnotations() = {
 local bottomPod(query) = 'label_replace( bottomk(1, %(query)s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-replacemeplease-(.+)-.+")' % query;
 local topPod(query) = 'label_replace( topk(1, %(query)s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-replacemeplease-(.+)-.+")' % query;
 
-local generatePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlerts) = {
+local generatePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlertsRuleGroup) = {
   // standardized lowercase regardless of what came as input
   local serviceNameLower = std.asciiLower(serviceName),
   local toReplace = 'vshn-replacemeplease',
@@ -255,7 +255,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                   },
                 ],
               },
-            ]+ additionalAlerts,
+            ]+ additionalAlertsRuleGroup,
           },
         },
       },
@@ -294,8 +294,8 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
     removeField(obj, name),
   ArgoCDAnnotations():
     argoCDAnnotations(),
-  GeneratePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlerts):
-    generatePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlerts),
+  GeneratePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlertsRuleGroup):
+    generatePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlertsRuleGroup),
   topPod(query):
     topPod(query),
   bottomPod(query):
