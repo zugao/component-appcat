@@ -1059,10 +1059,10 @@ spec:
               metadata:
                 apiVersion: monitoring.coreos.com/v1
                 kind: PrometheusRule
-                name: PostgreSQL-rules
+                name: postgresql-rules
               spec:
                 groups:
-                  - name: PostgreSQL-general-alerts
+                  - name: postgresql-general-alerts
                     rules:
                       - alert: PostgreSQLPersistentVolumeFillingUp
                         annotations:
@@ -1083,7 +1083,7 @@ spec:
                         labels:
                           severity: critical
                           syn_team: schedar
-                        name: PostgreSQL-storage
+                        name: postgresql-storage
                       - alert: PostgreSQLPersistentVolumeFillingUp
                         annotations:
                           description: Based on recent sampling, the volume claimed
@@ -1105,7 +1105,6 @@ spec:
                         for: 1h
                         labels:
                           severity: warning
-                        name: PostgreSQL-storage
                       - alert: PostgreSQLMemoryCritical
                         annotations:
                           description: |-

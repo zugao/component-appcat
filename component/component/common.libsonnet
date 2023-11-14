@@ -203,23 +203,23 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
           metadata: {
             apiVersion: 'monitoring.coreos.com/v1',
             kind: 'PrometheusRule',
-            name: '%s-rules' % serviceName,
+            name: '%s-rules' % serviceNameLower,
           },
           spec: {
             groups: [
               {
-                name: '%s-general-alerts' % serviceName,
+                name: '%s-general-alerts' % serviceNameLower,
                 rules: [
 
                   {
-                    name: '%s-storage' % serviceName,
+                    name: '%s-storage' % serviceNameLower,
                     alert: serviceName + 'PersistentVolumeFillingUp',
                     annotations: {
                       description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
                       runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
                       summary: 'PersistentVolume is filling up.',
                     },
-                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
+                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries), toReplace, 'vshn-' + serviceNameLower),
                     'for': '1m',
                     labels: {
                       severity: 'critical',
@@ -227,14 +227,13 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                     },
                   },
                   {
-                    name: '%s-storage' % serviceName,
                     alert: serviceName + 'PersistentVolumeFillingUp',
                     annotations: {
                       description: 'Based on recent sampling, the volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.',
                       runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
                       summary: 'PersistentVolume is filling up.',
                     },
-                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
+                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries), toReplace, 'vshn-' + serviceNameLower),
                     'for': '1h',
                     labels: {
                       severity: 'warning',
@@ -248,7 +247,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                       // runbook_url: 'TBD',
                       summary: 'Memory usage critical',
                     },
-                    expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 90') % memoryContainerName, toReplace, 'vshn-' + std.asciiLower(serviceName)),
+                    expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 90') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
                     'for': '120m',
                     labels: {
                       severity: 'warning',
