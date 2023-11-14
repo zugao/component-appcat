@@ -180,6 +180,12 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
   // standardized lowercase regardless of what came as input
   local serviceNameLower = std.asciiLower(serviceName),
   local toReplace = 'vshn-replacemeplease',
+  local queries = {
+    availableStorage: 'kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}',
+    availablePercent: '(%s / kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"})' % queries.availableStorage,
+    usedStorage: 'kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"}',
+    unlessExcluded: 'unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+  },
   name: 'prometheusrule',
   base: {
 
@@ -204,44 +210,35 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
               {
                 name: '%s-general-alerts' % serviceName,
                 rules: [
+
                   {
                     name: '%s-storage' % serviceName,
-                    local queries = {
-                      availableStorage: 'kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}',
-                      availablePercent: '(%s / kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"})' % queries.availableStorage,
-                      usedStorage: 'kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"}',
-                      unlessExcluded: 'unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
+                    alert: serviceName + 'PersistentVolumeFillingUp',
+                    annotations: {
+                      description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
+                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
+                      summary: 'PersistentVolume is filling up.',
                     },
-                    rules:
-                      [
-                        {
-                          alert: serviceName + 'PersistentVolumeFillingUp',
-                          annotations: {
-                            description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
-                            runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
-                            summary: 'PersistentVolume is filling up.',
-                          },
-                          expr: std.strReplace(bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
-                          'for': '1m',
-                          labels: {
-                            severity: 'critical',
-                            syn_team: 'schedar',
-                          },
-                        },
-                        {
-                          alert: serviceName + 'PersistentVolumeFillingUp',
-                          annotations: {
-                            description: 'Based on recent sampling, the volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.',
-                            runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
-                            summary: 'PersistentVolume is filling up.',
-                          },
-                          expr: std.strReplace(bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
-                          'for': '1h',
-                          labels: {
-                            severity: 'warning',
-                          },
-                        },
-                      ],
+                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
+                    'for': '1m',
+                    labels: {
+                      severity: 'critical',
+                      syn_team: 'schedar',
+                    },
+                  },
+                  {
+                    name: '%s-storage' % serviceName,
+                    alert: serviceName + 'PersistentVolumeFillingUp',
+                    annotations: {
+                      description: 'Based on recent sampling, the volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.',
+                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
+                      summary: 'PersistentVolume is filling up.',
+                    },
+                    expr: std.strReplace(bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries), toReplace, 'vshn-' + std.asciiLower(serviceName)),
+                    'for': '1h',
+                    labels: {
+                      severity: 'warning',
+                    },
                   },
                   {
                     alert: serviceName + 'MemoryCritical',
