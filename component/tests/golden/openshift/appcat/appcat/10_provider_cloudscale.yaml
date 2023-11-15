@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: cloudscale
-  name: cloudscale
+    name: provider-cloudscale
+  name: provider-cloudscale
 spec:
   controllerConfigRef:
     name: cloudscale

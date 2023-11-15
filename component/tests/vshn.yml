@@ -56,7 +56,8 @@ parameters:
           enabled: true
           smtpPassword: "whatever"
         postgres:
-          # grpcEndpoint: host.docker.internal:9547
+          # grpcEndpoint: host.docker.internal:9443
+          # proxyFunction: true
           sgNamespace: stackgres
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
@@ -76,7 +77,8 @@ parameters:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
         redis:
-          # grpcEndpoint: host.docker.internal:9547
+          # grpcEndpoint: host.docker.internal:9443
+          # proxyFunction: true
           plans:
             standard-8:
               enabled: false
@@ -105,7 +107,7 @@ parameters:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
         minio:
-          enabled: true
+          enabled: false
           instances:
             - name: minio-cluster
               namespace: syn-appcat
@@ -117,7 +119,8 @@ parameters:
                     disk: 20Gi
                 writeConnectionSecretToRef:
                   name: minio-cluster-credentials
-          # grpcEndpoint: host.docker.internal:9547
+          # grpcEndpoint: host.docker.internal:9443
+          # proxyFunction: true
 
       generic:
         objectstorage:
@@ -131,4 +134,5 @@ parameters:
               enabled: false
             minio:
               enabled: true
-              # grpcEndpoint: host.docker.internal:9547
+              # grpcEndpoint: host.docker.internal:9443
+              # proxyFunction: true

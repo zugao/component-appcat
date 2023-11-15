@@ -3,11 +3,11 @@ applications:
   - crossplane
 parameters:
   pkg.appcat:
-    componentVersion: v2.9.0
+    componentVersion: v2.10.0
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.42.0
+      tag: v4.43.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
@@ -30,6 +30,11 @@ parameters:
       env:
         APPCAT_HANDLER_ENABLED: "true"
   crossplane:
+    charts:
+      crossplane: 1.14.1
+    images:
+      crossplane:
+        tag: v1.14.1
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
     monitoring:
@@ -37,25 +42,8 @@ parameters:
     helmValues:
       xfn:
         enabled: true
-        securityContext:
-          seccompProfile: null
-          capabilities:
-            add: []
-        image:
-          repository: ${pkg.appcat:image:registry}/${pkg.appcat:image:repository}
-          tag: ${pkg.appcat:image:tag}
-        resources:
-          requests:
-            cpu: 100m
-            memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 128Mi
-        args:
-          - grpc
       args:
         - --enable-environment-configs
-        - --enable-composition-functions
       rbacManager:
         managementPolicy: Basic
       resourcesCrossplane:

@@ -19,30 +19,27 @@ spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
     kind: XVSHNMinio
-  functions:
-    - config:
+  mode: Pipeline
+  pipeline:
+    - functionRef:
+        name: function-appcat
+      input:
         apiVersion: v1
         data:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
-          imageTag: v4.42.0
+          imageTag: v4.43.0
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
           minioChartVersion: 5.0.13
           plans: '{"standard-1": {"size": {"cpu": "1", "disk": "50Gi", "enabled":
             true, "memory": "1Gi"}}}'
           providerEnabled: 'false'
+          serviceName: minio
         kind: ConfigMap
         metadata:
           labels:
             name: xfn-config
           name: xfn-config
-      container:
-        image: minio
-        imagePullPolicy: IfNotPresent
-        runner:
-          endpoint: unix-abstract:crossplane/fn/default.sock
-        timeout: 20s
-      name: minio-func
-      type: Container
+      step: minio-func
   writeConnectionSecretsToNamespace: syn-crossplane

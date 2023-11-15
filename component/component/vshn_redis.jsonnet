@@ -503,12 +503,169 @@ local composition =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: redisParams.secretNamespace,
-      functions:
+      mode: 'Pipeline',
+      pipeline:
         [
           {
-            name: 'redis-func',
-            type: 'Container',
-            config: kube.ConfigMap('xfn-config') + {
+            step: 'patch-and-transform',
+            functionRef: {
+              name: 'function-patch-and-transform',
+            },
+            input: {
+              apiVersion: 'pt.fn.crossplane.io/v1beta1',
+              kind: 'Resources',
+              resources: [
+                {
+                  name: 'ns-observer',
+                  base: namespace {
+                    spec+: {
+                      managementPolicy: 'Observe',
+                    },
+                  },
+                  patches: [
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
+                    comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
+                  ],
+                },
+                prometheusRule,
+                {
+                  name: 'namespace-conditions',
+                  base: namespace,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
+                    comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
+                    comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
+                  ],
+                },
+                comp.NamespacePermissions('vshn-redis'),
+                {
+                  name: 'self-signed-issuer',
+                  base: selfSignedIssuer,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerConditions'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'selfsigned-issuer'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'selfsigned-issuer'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                  ],
+                },
+                {
+                  name: 'local-ca',
+                  base: caIssuer,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-issuer'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca-issuer'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                  ],
+                },
+                {
+                  name: 'certificate',
+                  base: caCertificate,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateConditions'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-certificate'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
+
+                  ],
+                },
+                {
+                  name: 'server-certificate',
+                  base: serverCertificate,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateConditions'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'server-certificate'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'server'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
+
+                  ],
+                },
+                {
+                  name: 'client-certificate',
+                  base: clientCertificate,
+                  patches: [
+                    comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateConditions'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'client-certificate'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'client'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
+                  ],
+                },
+                {
+                  name: 'connection',
+                  base: secret,
+                  connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
+                  patches: [
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'connection'),
+
+                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.REDIS_HOST', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'connection'),
+                  ],
+                },
+                {
+                  name: 'release',
+                  base: redisHelmChart,
+                  patches: [
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.values.networkPolicy.ingressNSMatchLabels[kubernetes.io/metadata.name]'),
+
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
+                    comp.FromCompositeFieldPath('spec.parameters.size.memoryRequests', 'spec.forProvider.values.master.resources.requests.memory'),
+                    comp.FromCompositeFieldPath('spec.parameters.size.memoryLimits', 'spec.forProvider.values.master.resources.limits.memory'),
+
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
+                    comp.FromCompositeFieldPath('spec.parameters.size.cpuRequests', 'spec.forProvider.values.master.resources.requests.cpu'),
+                    comp.FromCompositeFieldPath('spec.parameters.size.cpuLimits', 'spec.forProvider.values.master.resources.limits.cpu'),
+
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.persistence.size', std.mapWithKey(function(key, x) x.size.disk, redisPlans)),
+                    comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.values.master.persistence.size'),
+
+                    comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
+                    comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
+
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.values.metrics.serviceMonitor.namespace', 'vshn-redis'),
+
+                    comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
+                                                                'spec.forProvider.values.master.nodeSelector',
+                                                                std.mapWithKey(function(key, x)
+                                                                                 std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
+                                                                               redisPlans)),
+                    comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
+                    comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
+                  ],
+                },
+              ],
+            },
+          },
+          {
+            step: 'redis-func',
+            functionRef: {
+              name: 'function-appcat',
+            },
+            input: kube.ConfigMap('xfn-config') + {
               metadata: {
                 labels: {
                   name: 'xfn-config',
@@ -516,175 +673,20 @@ local composition =
                 name: 'xfn-config',
               },
               data: {
-                imageTag: common.GetAppCatImageTag(),
-                bucketRegion: redisParams.bucket_region,
-                maintenanceSA: 'helm-based-service-maintenance',
-                controlNamespace: params.services.controlNamespace,
-                restoreSA: 'redisrestoreserviceaccount',
-                quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
-              } + common.EmailAlerting(params.services.vshn.emailAlerting),
-            },
-            container: {
-              image: 'redis',
-              imagePullPolicy: 'IfNotPresent',
-              timeout: '20s',
-              runner: {
-                endpoint: redisParams.grpcEndpoint,
-              },
+                      serviceName: 'redis',
+                      imageTag: common.GetAppCatImageTag(),
+                      bucketRegion: redisParams.bucket_region,
+                      maintenanceSA: 'helm-based-service-maintenance',
+                      controlNamespace: params.services.controlNamespace,
+                      restoreSA: 'redisrestoreserviceaccount',
+                      quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
+                    } + common.EmailAlerting(params.services.vshn.emailAlerting)
+                    + if redisParams.proxyFunction then {
+                      proxyEndpoint: redisParams.grpcEndpoint,
+                    } else {},
             },
           },
         ],
-      resources: [
-        {
-          name: 'ns-observer',
-          base: namespace {
-            spec+: {
-              managementPolicy: 'Observe',
-            },
-          },
-          patches: [
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
-            comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
-          ],
-        },
-        prometheusRule,
-        {
-          name: 'namespace-conditions',
-          base: namespace,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
-            comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
-            comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
-          ],
-        },
-        comp.NamespacePermissions('vshn-redis'),
-        {
-          name: 'self-signed-issuer',
-          base: selfSignedIssuer,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.selfSignedIssuerConditions'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'selfsigned-issuer'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'selfsigned-issuer'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-          ],
-        },
-        {
-          name: 'local-ca',
-          base: caIssuer,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-issuer'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca-issuer'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-          ],
-        },
-        {
-          name: 'certificate',
-          base: caCertificate,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.caCertificateConditions'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ca-certificate'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'ca'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'selfsigned-issuer'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
-
-          ],
-        },
-        {
-          name: 'server-certificate',
-          base: serverCertificate,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.serverCertificateConditions'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'server-certificate'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'server'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
-
-          ],
-        },
-        {
-          name: 'client-certificate',
-          base: clientCertificate,
-          patches: [
-            comp.ToCompositeFieldPath('status.conditions', 'status.clientCertificateConditions'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'client-certificate'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'client'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name', 'ca-issuer'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
-          ],
-        },
-        {
-          name: 'connection',
-          base: secret,
-          connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
-          patches: [
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'connection'),
-
-            comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.REDIS_HOST', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'connection'),
-          ],
-        },
-        {
-          name: 'release',
-          base: redisHelmChart,
-          patches: [
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-            comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.values.networkPolicy.ingressNSMatchLabels[kubernetes.io/metadata.name]'),
-
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
-            comp.FromCompositeFieldPath('spec.parameters.size.memoryRequests', 'spec.forProvider.values.master.resources.requests.memory'),
-            comp.FromCompositeFieldPath('spec.parameters.size.memoryLimits', 'spec.forProvider.values.master.resources.limits.memory'),
-
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.cpu', std.mapWithKey(function(key, x) x.size.cpu, redisPlans)),
-            comp.FromCompositeFieldPath('spec.parameters.size.cpuRequests', 'spec.forProvider.values.master.resources.requests.cpu'),
-            comp.FromCompositeFieldPath('spec.parameters.size.cpuLimits', 'spec.forProvider.values.master.resources.limits.cpu'),
-
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.persistence.size', std.mapWithKey(function(key, x) x.size.disk, redisPlans)),
-            comp.FromCompositeFieldPath('spec.parameters.size.disk', 'spec.forProvider.values.master.persistence.size'),
-
-            comp.FromCompositeFieldPath('spec.parameters.tls.enabled', 'spec.forProvider.values.tls.enabled'),
-            comp.FromCompositeFieldPath('spec.parameters.tls.authClients', 'spec.forProvider.values.tls.authClients'),
-
-            comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.values.metrics.serviceMonitor.namespace', 'vshn-redis'),
-
-            comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
-                                                        'spec.forProvider.values.master.nodeSelector',
-                                                        std.mapWithKey(function(key, x)
-                                                                         std.get(std.get(x, 'scheduling', default={}), 'nodeSelector', default={}),
-                                                                       redisPlans)),
-            comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.values.master.nodeSelector'),
-            comp.FromCompositeFieldPath('spec.parameters.service.redisSettings', 'spec.forProvider.values.commonConfiguration'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.master.podAnnotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.persistence.annotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.service.annotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.replica.podAnnotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.persistence.annotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.service.annotations[appcat.vshn.io/forward-events-to]', 'vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s'),
-          ],
-        },
-      ],
     },
   };
 

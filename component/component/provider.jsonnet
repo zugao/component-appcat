@@ -56,7 +56,7 @@ local controllerConfigRef(config) =
 
     local controllerConf = controllerConfig('cloudscale', provider.controllerConfig);
     [
-      crossplane.Provider('cloudscale') {
+      crossplane.Provider('provider-cloudscale') {
         spec+: provider.spec + controllerConfigRef(controllerConf),
       },
       crossplane.ProviderConfig('cloudscale') {
@@ -85,7 +85,7 @@ local controllerConfigRef(config) =
 
     local controllerConf = controllerConfig('exoscale', provider.controllerConfig);
     [
-      crossplane.Provider('exoscale') {
+      crossplane.Provider('provider-exoscale') {
         spec+: provider.spec + controllerConfigRef(controllerConf),
       },
       crossplane.ProviderConfig('exoscale') {
@@ -220,6 +220,11 @@ local controllerConfigRef(config) =
           resources: [ 'providerconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'appcat.vshn.io' ],
+          resources: [ 'objectbuckets' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
@@ -230,7 +235,9 @@ local controllerConfigRef(config) =
     local controllerConf = controllerConfig('kubernetes', provider.controllerConfig);
 
     [
-      crossplane.Provider('kubernetes') {
+      // Very important: DON'T NAME THIS JUST `kubernetes` YOU WILL BREAK ALL PROVIDERS!
+      // https://crossplane.slack.com/archives/CEG3T90A1/p1699871771723179
+      crossplane.Provider('provider-kubernetes') {
         spec+: provider.spec + controllerConfigRef(controllerConf),
       },
     ]
@@ -248,7 +255,6 @@ local controllerConfigRef(config) =
           }
         ),
       },
-      sa,
       role,
       rolebinding,
     ],
@@ -298,7 +304,7 @@ local controllerConfigRef(config) =
     local controllerConf = controllerConfig('helm', provider.controllerConfig);
 
     [
-      crossplane.Provider('helm') {
+      crossplane.Provider('provider-helm') {
         spec+: provider.spec + controllerConfigRef(controllerConf),
       },
     ]
@@ -316,7 +322,6 @@ local controllerConfigRef(config) =
           }
         ),
       },
-      sa,
       role,
       rolebinding,
     ],
@@ -351,7 +356,7 @@ local controllerConfigRef(config) =
     local controllerConf = controllerConfig('minio', provider.controllerConfig);
 
     [
-      crossplane.Provider('minio') {
+      crossplane.Provider('provider-minio') {
         spec+: provider.spec + controllerConfigRef(controllerConf),
       },
     ]
@@ -371,7 +376,6 @@ local controllerConfigRef(config) =
       for config in provider.additionalProviderConfigs
     ] +
     [
-      sa,
       role,
       rolebinding,
     ],

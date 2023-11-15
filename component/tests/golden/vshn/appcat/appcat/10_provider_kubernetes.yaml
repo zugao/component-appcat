@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: kubernetes
-  name: kubernetes
+    name: provider-kubernetes
+  name: provider-kubernetes
 spec:
   controllerConfigRef:
     name: kubernetes
@@ -36,15 +36,6 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations: {}
-  labels:
-    name: provider-kubernetes
-  name: provider-kubernetes
-  namespace: syn-crossplane
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -276,6 +267,18 @@ rules:
       - minio.crossplane.io
     resources:
       - providerconfigs
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - appcat.vshn.io
+    resources:
+      - objectbuckets
     verbs:
       - get
       - list
