@@ -30,7 +30,7 @@ spec:
         data:
           bucketRegion: lpg
           controlNamespace: syn-appcat-control
-          imageTag: v4.40.0
+          imageTag: v4.41.0
           maintenanceSA: helm-based-service-maintenance
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
@@ -879,4 +879,67 @@ spec:
         - fromFieldPath: spec.parameters.service.redisSettings
           toFieldPath: spec.forProvider.values.commonConfiguration
           type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.master.podAnnotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.persistence.annotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.service.annotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.replica.podAnnotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.persistence.annotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: vshn.appcat.vshn.io/v1/VSHNRedis/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.service.annotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
   writeConnectionSecretsToNamespace: syn-crossplane

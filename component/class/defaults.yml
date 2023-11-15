@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.40.0
+        tag: v4.41.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
