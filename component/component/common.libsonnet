@@ -200,9 +200,9 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
       },
       forProvider+: {
         manifest+: {
+          apiVersion: 'monitoring.coreos.com/v1',
+          kind: 'PrometheusRule',
           metadata: {
-            apiVersion: 'monitoring.coreos.com/v1',
-            kind: 'PrometheusRule',
             name: '%s-rules' % serviceNameLower,
           },
           spec: {
@@ -242,11 +242,11 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                     alert: serviceName + 'MemoryCritical',
                     name: std.asciiLower(serviceName) + '-memory',
                     annotations: {
-                      description: 'The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 90% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
+                      description: 'The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
                       // runbook_url: 'TBD',
                       summary: 'Memory usage critical',
                     },
-                    expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 90') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
+                    expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 85') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
                     'for': '120m',
                     labels: {
                       severity: 'critical',

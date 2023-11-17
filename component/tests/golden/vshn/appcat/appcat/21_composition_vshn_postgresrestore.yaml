@@ -1056,9 +1056,9 @@ spec:
         spec:
           forProvider:
             manifest:
+              apiVersion: monitoring.coreos.com/v1
+              kind: PrometheusRule
               metadata:
-                apiVersion: monitoring.coreos.com/v1
-                kind: PrometheusRule
                 name: postgresql-rules
               spec:
                 groups:
@@ -1108,12 +1108,12 @@ spec:
                       - alert: PostgreSQLMemoryCritical
                         annotations:
                           description: |-
-                            The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 90% for 2 hours.
+                            The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.
                               Please reducde the load of this instance, or increase the memory.
                           summary: Memory usage critical
                         expr: label_replace( topk(1, (container_memory_working_set_bytes{container="patroni"}  /
                           on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"}
-                          * 100) > 90) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace)
+                          * 100) > 85) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace)
                           kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")
                         for: 120m
                         labels:
