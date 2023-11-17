@@ -191,6 +191,11 @@ local controllerConfigRef(config) =
           verbs: [ 'get', 'update' ],
         },
         {
+          apiGroups: [ 'appcat.vshn.io' ],
+          resources: [ 'objectbuckets' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
           apiGroups: [ 'vshn.appcat.vshn.io' ],
           resources: [ 'vshnredis' ],
           verbs: [ 'get', 'update' ],
