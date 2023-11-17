@@ -1009,6 +1009,7 @@ spec:
                           description: |-
                             The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.
                               Please reducde the load of this instance, or increase the memory.
+                          runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-generic.html#MemoryCritical
                           summary: Memory usage critical
                         expr: label_replace( topk(1, (container_memory_working_set_bytes{container="patroni"}  /
                           on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"}

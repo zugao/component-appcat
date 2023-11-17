@@ -1,4 +1,3 @@
-local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -7,9 +6,9 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
-local xrds = import 'xrds.libsonnet';
-
+local prom = import 'prometheus.libsonnet';
 local slos = import 'slos.libsonnet';
+local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -50,7 +49,7 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
 
-local promRulePostgresSLA = common.PromRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
+local promRulePostgresSLA = prom.PromRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
 
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {
@@ -763,7 +762,7 @@ local clusterRestoreConfig = {
 };
 
 
-local prometheusRule = common.GeneratePrometheusNonSLORules(
+local prometheusRule = prom.GeneratePrometheusNonSLORules(
   'PostgreSQL',
   'patroni',
   [
@@ -778,7 +777,7 @@ local prometheusRule = common.GeneratePrometheusNonSLORules(
             summary: 'Connection usage critical',
           },
 
-          expr: std.strReplace(common.topPod('sum(pg_stat_activity_count) by (pod, namespace) > 90/100 * sum(pg_settings_max_connections) by (pod, namespace)'), 'vshn-replacemeplease', 'vshn-' + std.asciiLower('PostgreSQL')),
+          expr: std.strReplace(prom.TopPod('sum(pg_stat_activity_count) by (pod, namespace) > 90/100 * sum(pg_settings_max_connections) by (pod, namespace)'), 'vshn-replacemeplease', 'vshn-' + std.asciiLower('PostgreSQL')),
           'for': '120m',
           labels: {
             severity: 'critical',

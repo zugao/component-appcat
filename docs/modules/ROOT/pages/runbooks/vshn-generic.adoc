@@ -1,0 +1,9 @@
+= Generic alerts
+
+[[memoryCritical]]
+== MemoryCritical
+
+The instance uses more than 85% of the memory limit set on the pod.
+A further increase in memory usage might lead to the pod being OOM-killed by Kubernetes.
+
+Either adjust the limits of the affected instance or reduce the workload on the instance to lower memory consumption (this depends highly on the used service).
