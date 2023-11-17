@@ -208,10 +208,10 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
           spec: {
             groups: [
               {
-                name: '%s-general-alerts' % serviceNameLower,
+                name: '%s-storage' % serviceNameLower,
                 rules: [
                   {
-                    name: '%s-storage' % serviceNameLower,
+
                     alert: serviceName + 'PersistentVolumeFillingUp',
                     annotations: {
                       description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
@@ -238,9 +238,13 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                       severity: 'warning',
                     },
                   },
+                ],
+              },
+              {
+                name: std.asciiLower(serviceName) + '-memory',
+                rules: [
                   {
                     alert: serviceName + 'MemoryCritical',
-                    name: std.asciiLower(serviceName) + '-memory',
                     annotations: {
                       description: 'The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
                       // runbook_url: 'TBD',

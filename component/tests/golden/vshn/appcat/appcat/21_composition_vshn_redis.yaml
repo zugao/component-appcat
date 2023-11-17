@@ -97,7 +97,7 @@ spec:
                 name: redis-rules
               spec:
                 groups:
-                  - name: redis-general-alerts
+                  - name: redis-storage
                     rules:
                       - alert: redisPersistentVolumeFillingUp
                         annotations:
@@ -118,7 +118,6 @@ spec:
                         labels:
                           severity: critical
                           syn_team: schedar
-                        name: redis-storage
                       - alert: redisPersistentVolumeFillingUp
                         annotations:
                           description: Based on recent sampling, the volume claimed
@@ -140,6 +139,8 @@ spec:
                         for: 1h
                         labels:
                           severity: warning
+                  - name: redis-memory
+                    rules:
                       - alert: redisMemoryCritical
                         annotations:
                           description: |-
@@ -154,7 +155,6 @@ spec:
                         labels:
                           severity: critical
                           syn_team: schedar
-                        name: redis-memory
           providerConfigRef:
             name: kubernetes
       name: prometheusrule

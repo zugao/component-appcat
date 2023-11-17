@@ -774,7 +774,7 @@ local prometheusRule = common.GeneratePrometheusNonSLORules(
           alert: 'PostgreSQLConnectionsCritical',
           annotations: {
             description: 'The number of connections to the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
-            // runbook_url: 'TBD',
+            runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLConnectionsCritical',
             summary: 'Connection usage critical',
           },
 
@@ -787,7 +787,6 @@ local prometheusRule = common.GeneratePrometheusNonSLORules(
         },
       ],
     },
-    // new
     {
       name: 'postgresql-replication',
       rules: [
