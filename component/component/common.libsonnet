@@ -134,31 +134,6 @@ local getAppCatImageString() = params.images.appcat.registry + '/' + params.imag
 
 local getApiserverImageString() = params.images.apiserver.registry + '/' + params.images.apiserver.repository + ':' + getApiserverImageTag();
 
-local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'vshn-' + std.asciiLower(service) + '-sla') {
-  metadata+: {
-    labels: {
-      name: 'vshn-' + std.asciiLower(service) + '-sla',
-    },
-    namespace: params.slos.namespace,
-  },
-  spec: {
-    groups: [
-      {
-        name: 'appcat-' + std.asciiLower(service) + '-sla-target',
-        rules: [
-          {
-            expr: 'vector(' + value + ')',
-            labels: {
-              service: service,
-            },
-            record: 'sla:objective:ratio',
-          },
-        ],
-      },
-    ],
-  },
-};
-
 local removeField(obj, name) = {
   // We don't want the name field in the actual providerConfig
   [k]: obj[k]
@@ -172,6 +147,7 @@ local argoCDAnnotations() = {
   'argocd.argoproj.io/compare-options': 'IgnoreExtraneous',
   'argocd.argoproj.io/sync-options': 'Prune=false',
 };
+
 
 {
   SyncOptions: syncOptions,
@@ -197,8 +173,6 @@ local argoCDAnnotations() = {
     getApiserverImageTag(),
   GetApiserverImageString():
     getApiserverImageString(),
-  PromRuleSLA(value, service):
-    promRuleSLA(value, service),
   RemoveField(obj, name):
     removeField(obj, name),
   ArgoCDAnnotations():

@@ -167,8 +167,15 @@ This alert fires when there are issues with statefullset responsible for replica
 
 ```
 kubectl describe -n vshn-postgresql-<instance> sts <instance>
-## for exmaple:  kubectl -n vshn-postgresql-test-cluster-always-true-jnlj4 describe sts test-cluster-always-true-jnlj4
+## for example:  kubectl -n vshn-postgresql-test-cluster-always-true-jnlj4 describe sts test-cluster-always-true-jnlj4
 
 ## get events from affected namespace and look for issues
 k -n vshn-postgresql-test-cluster-always-true-jnlj4 get events
 ```
+
+[[PostgreSQLConnectionsCritical]]
+== PostgreSQLConnectionsCritical
+
+This alert fires when the used connection is over 90% of the configured `max_connections` limit (defaults to 100).
+It means that either the connection limit is set too low or an application is misbehaving and spawning too many connections.
+You either need to raise the `max_connections` parameter on the PostgreSQL instance or debug the application, as it might be misbehaving and spawning too many connections.

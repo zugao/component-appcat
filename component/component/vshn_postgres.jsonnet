@@ -1,4 +1,3 @@
-local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -7,9 +6,9 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
-local xrds = import 'xrds.libsonnet';
-
+local prom = import 'prometheus.libsonnet';
 local slos = import 'slos.libsonnet';
+local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -50,7 +49,7 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan);
 
-local promRulePostgresSLA = common.PromRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
+local promRulePostgresSLA = prom.PromRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
 
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {
@@ -762,159 +761,90 @@ local clusterRestoreConfig = {
   ],
 };
 
-local prometheusRule = {
-  name: 'prometheusrule',
-  base: comp.KubeObject('monitoring.coreos.com/v1', 'PrometheusRule') + {
-    spec+: {
-      forProvider+: {
-        manifest+: {
-          metadata: {
-            name: 'postgresql-rules',
+
+local prometheusRule = prom.GeneratePrometheusNonSLORules(
+  'PostgreSQL',
+  'patroni',
+  [
+    {
+      name: 'postgresql-connections',
+      rules: [
+        {
+          alert: 'PostgreSQLConnectionsCritical',
+          annotations: {
+            description: 'The number of connections to the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
+            runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLConnectionsCritical',
+            summary: 'Connection usage critical',
           },
-          local bottomPod(query) = 'label_replace( bottomk(1, %s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")' % query,
-          local topPod(query) = 'label_replace( topk(1, %s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")' % query,
-          spec: {
-            groups: [
-              {
-                name: 'postgresql-storage',
-                local queries = {
-                  availableStorage: 'kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}',
-                  availablePercent: '(%s / kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"})' % queries.availableStorage,
-                  usedStorage: 'kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"}',
-                  unlessExcluded: 'unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1',
-                },
-                rules: [
-                  {
-                    alert: 'PostgreSQLPersistentVolumeFillingUp',
-                    annotations: {
-                      description: 'The volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is only {{ $value | humanizePercentage }} free.',
-                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
-                      summary: 'PersistentVolume is filling up.',
-                    },
-                    expr: bottomPod('%(availablePercent)s < 0.03 and %(usedStorage)s > 0 %(unlessExcluded)s' % queries),
-                    'for': '1m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                  {
-                    alert: 'PostgreSQLPersistentVolumeFillingUp',
-                    annotations: {
-                      description: 'Based on recent sampling, the volume claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.',
-                      runbook_url: 'https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup',
-                      summary: 'PersistentVolume is filling up.',
-                    },
-                    expr: bottomPod('%(availablePercent)s < 0.15 and %(usedStorage)s > 0 and predict_linear(%(availableStorage)s[6h], 4 * 24 * 3600) < 0  %(unlessExcluded)s' % queries),
-                    'for': '1h',
-                    labels: {
-                      severity: 'warning',
-                    },
-                  },
-                ],
-              },
-              {
-                name: 'postgresql-memory',
-                rules: [
-                  {
-                    alert: 'PostgreSQLMemoryCritical',
-                    annotations: {
-                      description: 'The memory claimed by the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} has been over 85% for 2 hours.\n  Please reducde the load of this instance, or increase the memory.',
-                      // runbook_url: 'TBD',
-                      summary: 'Memory usage critical',
-                    },
-                    expr: topPod('(container_memory_working_set_bytes{container="patroni"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 85'),
-                    'for': '120m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                ],
-              },
-              {
-                name: 'postgresql-connections',
-                rules: [
-                  {
-                    alert: 'PostgreSQLConnectionsCritical',
-                    annotations: {
-                      description: 'The number of connections to the instance {{ $labels.name }} in namespace {{ $labels.label_appcat_vshn_io_claim_namespace }} have been over 90% of the configured connections for 2 hours.\n  Please reduce the load of this instance.',
-                      // runbook_url: 'TBD',
-                      summary: 'Connection usage critical',
-                    },
-                    expr: topPod('sum(pg_stat_activity_count) by (pod, namespace) > 90/100 * sum(pg_settings_max_connections) by (pod, namespace)'),
-                    'for': '120m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                ],
-              },
-              // new
-              {
-                name: 'postgresql-replication',
-                rules: [
-                  {
-                    alert: 'PostgreSQLReplicationCritical',
-                    annotations: {
-                      description: 'The number of replicas for the instance {{ $labels.cluster_name }} in namespace {{ $labels.namespace }}. Please check pod counts in affected namespace.',
-                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCritical',
-                      summary: 'Replication status check',
-                    },
-                    expr: 'pg_replication_slots_active == 0',
-                    'for': '10m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                ],
-              },
-              {
-                name: 'postgresql-replication-lag',
-                rules: [
-                  {
-                    alert: 'PostgreSQLReplicationLagCritical',
-                    annotations: {
-                      description: 'Replication lag size on namespace {{$labels.exported_namespace}} instance ({{$labels.application_name}}) is currently {{ $value | humanize1024}}B behind the leader.',
-                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationLagCritical',
-                      summary: 'Replication lag status check',
-                    },
-                    expr: 'pg_replication_status_lag_size > 1e+09',
-                    'for': '5m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                ],
-              },
-              {
-                name: 'postgresql-replication-count',
-                rules: [
-                  {
-                    alert: 'PostgreSQLPodReplicasCritical',
-                    annotations: {
-                      description: 'Replication is broken in namespace {{$labels.namespace}}, check statefulset ({{$labels.statefulset}}).',
-                      runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLPodReplicasCritical',
-                      summary: 'Replication lag status check',
-                    },
-                    expr: 'kube_statefulset_status_replicas_available{statefulset=~".+", namespace=~"vshn-postgresql-.+"} != kube_statefulset_replicas{statefulset=~".+",namespace=~"vshn-postgresql-.+"}',
-                    'for': '5m',
-                    labels: {
-                      severity: 'critical',
-                      syn_team: 'schedar',
-                    },
-                  },
-                ],
-              },
-            ],
+
+          expr: std.strReplace(prom.TopPod('sum(pg_stat_activity_count) by (pod, namespace) > 90/100 * sum(pg_settings_max_connections) by (pod, namespace)'), 'vshn-replacemeplease', 'vshn-' + std.asciiLower('PostgreSQL')),
+          'for': '120m',
+          labels: {
+            severity: 'critical',
+            syn_team: 'schedar',
           },
         },
-      },
+      ],
     },
-  },
+    {
+      name: 'postgresql-replication',
+      rules: [
+        {
+          alert: 'PostgreSQLReplicationCritical',
+          annotations: {
+            description: 'The number of replicas for the instance {{ $labels.cluster_name }} in namespace {{ $labels.namespace }}. Please check pod counts in affected namespace.',
+            runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationCritical',
+            summary: 'Replication status check',
+          },
+          expr: 'pg_replication_slots_active == 0',
+          'for': '10m',
+          labels: {
+            severity: 'critical',
+            syn_team: 'schedar',
+          },
+        },
+      ],
+    },
+    {
+      name: 'postgresql-replication-lag',
+      rules: [
+        {
+          alert: 'PostgreSQLReplicationLagCritical',
+          annotations: {
+            description: 'Replication lag size on namespace {{$labels.exported_namespace}} instance ({{$labels.application_name}}) is currently {{ $value | humanize1024}}B behind the leader.',
+            runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLReplicationLagCritical',
+            summary: 'Replication lag status check',
+          },
+          expr: 'pg_replication_status_lag_size > 1e+09',
+          'for': '5m',
+          labels: {
+            severity: 'critical',
+            syn_team: 'schedar',
+          },
+        },
+      ],
+    },
+    {
+      name: 'postgresql-replication-count',
+      rules: [
+        {
+          alert: 'PostgreSQLPodReplicasCritical',
+          annotations: {
+            description: 'Replication is broken in namespace {{$labels.namespace}}, check statefulset ({{$labels.statefulset}}).',
+            runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#PostgreSQLPodReplicasCritical',
+            summary: 'Replication lag status check',
+          },
+          expr: 'kube_statefulset_status_replicas_available{statefulset=~".+", namespace=~"vshn-postgresql-.+"} != kube_statefulset_replicas{statefulset=~".+",namespace=~"vshn-postgresql-.+"}',
+          'for': '5m',
+          labels: {
+            severity: 'critical',
+            syn_team: 'schedar',
+          },
+        },
+      ],
+    },
+  ]
+) + {
   patches: [
     comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'prometheusrule'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),

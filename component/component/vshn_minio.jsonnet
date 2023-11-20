@@ -6,9 +6,9 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
-local xrds = import 'xrds.libsonnet';
-
+local prom = import 'prometheus.libsonnet';
 local slos = import 'slos.libsonnet';
+local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -23,7 +23,7 @@ local connectionSecretKeys = [
   'AWS_ACCESS_KEY_ID',
 ];
 
-local promRuleMinioSLA = common.PromRuleSLA(params.services.vshn.minio.sla, 'VSHNMinio');
+local promRuleMinioSLA = prom.PromRuleSLA(params.services.vshn.minio.sla, 'VSHNMinio');
 
 local minioPlans = common.FilterDisabledParams(minioParams.plans);
 
