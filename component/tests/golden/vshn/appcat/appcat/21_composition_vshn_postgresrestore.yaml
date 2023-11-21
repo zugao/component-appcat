@@ -33,7 +33,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.41.1
+          imageTag: v4.42.0
           quotasEnabled: 'false'
           sgNamespace: stackgres
           sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "2Gi"},
@@ -1113,8 +1113,8 @@ spec:
                               Please reducde the load of this instance, or increase the memory.
                           runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-generic.html#MemoryCritical
                           summary: Memory usage critical
-                        expr: label_replace( topk(1, (container_memory_working_set_bytes{container="patroni"}  /
-                          on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"}
+                        expr: label_replace( topk(1, (max(container_memory_working_set_bytes{container="patroni"})
+                          without (name, id)  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"}
                           * 100) > 85) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace)
                           kube_namespace_labels, "name", "$1", "namespace", "vshn-postgresql-(.+)-.+")
                         for: 120m

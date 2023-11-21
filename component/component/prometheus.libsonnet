@@ -107,7 +107,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
                       runbook_url: 'https://hub.syn.tools/appcat/runbooks/vshn-generic.html#MemoryCritical',
                       summary: 'Memory usage critical',
                     },
-                    expr: std.strReplace(topPod('(container_memory_working_set_bytes{container="%s"}  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 85') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
+                    expr: std.strReplace(topPod('(max(container_memory_working_set_bytes{container="%s"}) without (name, id)  / on(container,pod,namespace)  kube_pod_container_resource_limits{resource="memory"} * 100) > 85') % memoryContainerName, toReplace, 'vshn-' + serviceNameLower),
                     'for': '120m',
                     labels: {
                       severity: 'critical',

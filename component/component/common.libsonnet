@@ -126,6 +126,15 @@ local openShiftTemplate(name, displayName, description, iconClass, tags, message
   message: message,
 };
 
+local emailAlerting(alertingSettings) = {
+  emailAlertingEnabled: std.toString(alertingSettings.enabled),
+  emailAlertingSecretNamespace: alertingSettings.secretNamespace,
+  emailAlertingSecretName: alertingSettings.secretName,
+  emailAlertingSmtpFromAddress: alertingSettings.smtpFromAddress,
+  emailAlertingSmtpUsername: alertingSettings.smtpUsername,
+  emailAlertingSmtpHost: alertingSettings.smtpHost,
+};
+
 local getAppCatImageTag() = std.strReplace(params.images.appcat.tag, '/', '_');
 
 local getApiserverImageTag() = std.strReplace(params.images.apiserver.tag, '/', '_');
@@ -177,4 +186,6 @@ local argoCDAnnotations() = {
     removeField(obj, name),
   ArgoCDAnnotations():
     argoCDAnnotations(),
+  EmailAlerting(alertingSettings):
+    emailAlerting(alertingSettings),
 }
