@@ -96,25 +96,6 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
   ],
 };
 
-local helmMonitoringClusterRole = kube.ClusterRole('allow-helm-monitoring-resources') {
-  rules: [
-    {
-      apiGroups: [ 'monitoring.coreos.com' ],
-      resources: [ 'servicemonitors' ],
-      verbs: [ '*' ],
-    },
-  ],
-};
-local helmMonitoringServiceAccount = kube.ServiceAccount('provider-helm') + {
-  metadata+: {
-    namespace: 'syn-crossplane',
-  },
-};
-local helmMonitoringClusterRoleBinding = kube.ClusterRoleBinding('system:serviceaccount:syn-crossplane:provider-helm') + {
-  roleRef_: helmMonitoringClusterRole,
-  subjects_: [ helmMonitoringServiceAccount ],
-};
-
 local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:restorejob') + {
   roleRef_: restoreRole,
   subjects_: [ restoreServiceAccount ],
@@ -756,7 +737,6 @@ if params.services.vshn.enabled && redisParams.enabled then {
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
   '20_rbac_vshn_redis_resize': [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
-  '20_rbac_vshn_redis_metrics_servicemonitor': [ helmMonitoringClusterRole, helmMonitoringClusterRoleBinding ],
   '20_plans_vshn_redis': plansCM,
   '21_composition_vshn_redis': composition,
   '22_prom_rule_sla_redis': promRuleRedisSLA,

@@ -178,7 +178,7 @@ spec:
             syn_team: schedar
         - alert: SLO_AppCat_HAVSHNRedisUptime
           annotations:
-            runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-redis-ha.html#uptime
+            runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-redis.html#uptime
             summary: Probes to HA Redis by VSHN instance fail
             title: (ticket) {{$labels.sloth_service}} {{$labels.sloth_slo}} SLO error
               budget burn rate is too fast.

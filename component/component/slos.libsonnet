@@ -28,7 +28,7 @@ local newSLO(name, group, sloParams) =
         labels: params.slos.alerting.ticket_labels,
         annotations: {
           [if std.objectHas(slo.alerting.ticket_alert, 'for') then 'for']: std.get(slo.alerting.ticket_alert, 'for'),
-          runbook_url: 'https://hub.syn.tools/appcat/runbooks/%s.html#%s' % [ group, name ],
+          runbook_url: 'https://hub.syn.tools/appcat/runbooks/%s.html#%s' % [ std.rstripChars(group, '-ha'), name ],
         },
       },
     } + com.makeMergeable(sloParams.alerting),
@@ -70,117 +70,47 @@ local getEventsHA(serviceName) = {
   total_query: 'sum(rate(appcat_probes_seconds_count{service="' + serviceName + '", ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla)',
 };
 
+local generateSlothInput(name, uptime) =
+  local nameLower = std.asciiLower(name);
+  {
+    ['vshn-%s' % nameLower]: [
+      newSLO('uptime', 'vshn-' + nameLower, uptime) {
+        description: 'Uptime SLO for ' + name + ' by VSHN',
+        sli: {
+          events: getEvents('VSHN' + name),
+        },
+        alerting+: {
+          name: 'SLO_AppCat_VSHN' + name + 'Uptime',
+          annotations+: {
+            summary: 'Probes to ' + name + ' by VSHN instance fail',
+          },
+          labels+: {
+            service: 'VSHN' + name,
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+          },
+        },
+      },
+    ],
+    ['vshn-%s-ha' % nameLower]: [
+      newSLO('uptime', 'vshn-' + nameLower + '-ha', uptime) {
+        description: 'Uptime SLO for High Available ' + name + ' by VSHN',
+        sli: {
+          events: getEventsHA('VSHN' + name),
+        },
+        alerting+: {
+          name: 'SLO_AppCat_HAVSHN' + name + 'Uptime',
+          annotations+: {
+            summary: 'Probes to HA ' + name + ' by VSHN instance fail',
+          },
+          labels+: {
+            service: 'VSHN' + name,
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+          },
+        },
+      },
+    ],
+  };
 {
-  slothInput: {
-    'vshn-postgresql': [
-      newSLO('uptime', 'vshn-postgresql', params.slos.vshn.postgres.uptime) {
-        description: 'Uptime SLO for PostgreSQL by VSHN',
-        sli: {
-          events: getEvents('VSHNPostgreSQL'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_VSHNPostgreSQLUptime',
-          annotations+: {
-            summary: 'Probes to PostgreSQL by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNPostgreSQL',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-    'vshn-postgresql-ha': [
-      newSLO('uptime', 'vshn-postgresql-ha', params.slos.vshn.postgres.uptime) {
-        description: 'Uptime SLO for High Available PostgreSQL by VSHN',
-        sli: {
-          events: getEventsHA('VSHNPostgreSQL'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_HAVSHNPosgtreSQLUptime',
-          annotations+: {
-            summary: 'Probes to HA PostgreSQL by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNPostgreSQL',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-    // redis without HA
-    'vshn-redis': [
-      newSLO('uptime', 'vshn-redis', params.slos.vshn.redis.uptime) {
-        description: 'Uptime SLO for Redis by VSHN',
-        sli: {
-          events: getEvents('VSHNRedis'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_VSHNRedisUptime',
-          annotations+: {
-            summary: 'Probes to Redis by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNRedis',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-    'vshn-redis-ha': [
-      newSLO('uptime', 'vshn-redis-ha', params.slos.vshn.redis.uptime) {
-        description: 'Uptime SLO for High Available Redis by VSHN',
-        sli: {
-          events: getEventsHA('VSHNRedis'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_HAVSHNRedisUptime',
-          annotations+: {
-            summary: 'Probes to HA Redis by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNRedis',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-    'vshn-minio': [
-      newSLO('uptime', 'vshn-minio', params.slos.vshn.minio.uptime) {
-        description: 'Uptime SLO for Minio by VSHN',
-        sli: {
-          events: getEvents('VSHNMinio'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_VSHNMinioUptime',
-          annotations+: {
-            summary: 'Probes to Minio by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNMinio',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-    'vshn-minio-ha': [
-      newSLO('uptime', 'vshn-postgresql-ha', params.slos.vshn.minio.uptime) {
-        description: 'Uptime SLO for High Available Minio by VSHN',
-        sli: {
-          events: getEventsHA('VSHNMinio'),
-        },
-        alerting+: {
-          name: 'SLO_AppCat_HAVSHNMinioUptime',
-          annotations+: {
-            summary: 'Probes to HA Minio by VSHN instance fail',
-          },
-          labels+: {
-            service: 'VSHNMinio',
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
-          },
-        },
-      },
-    ],
-  },
+  slothInput: std.foldl(function(objOut, name) objOut + generateSlothInput(name, params.slos.vshn[name].uptime), std.objectFields(params.slos.vshn), {}),
   Get(name): prometheusRule(name),
 }

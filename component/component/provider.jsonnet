@@ -285,6 +285,11 @@ local runtimeConfigRef(name) = {
           resources: [ 'jobs' ],
           verbs: [ 'get', 'list', 'watch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'monitoring.coreos.com' ],
+          resources: [ 'servicemonitors' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-helm:system:custom') {

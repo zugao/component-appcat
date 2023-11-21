@@ -4,6 +4,9 @@ parameters:
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
+      mariadb:
+        source: https://charts.bitnami.com/bitnami
+        version: 10.1.3
       minio:
         source: https://charts.min.io
         version: 5.0.13
@@ -39,7 +42,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.44.1
+        tag: v4.44.2
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -64,7 +67,54 @@ parameters:
     tenantID: ${cluster:tenant}
     quotasEnabled: false
     grpcEndpoint: host.docker.internal:9443
-
+    defaultRestoreRoleRules:
+      - apiGroups:
+          - vshn.appcat.vshn.io
+        resources:
+          - "*"
+        verbs:
+          - get
+      - apiGroups:
+          - "k8up.io"
+        resources:
+          - snapshots
+        verbs:
+          - get
+      - apiGroups:
+          - ""
+        resources:
+          - secrets
+        verbs:
+          - get
+          - create
+          - delete
+      - apiGroups:
+          - apps
+        resources:
+          - statefulsets/scale
+        verbs:
+          - update
+          - patch
+      - apiGroups:
+          - apps
+        resources:
+          - statefulsets
+        verbs:
+          - get
+      - apiGroups:
+          - batch
+        resources:
+          - jobs
+        verbs:
+          - get
+      - apiGroups:
+          - ""
+        resources:
+          - events
+        verbs:
+          - get
+          - create
+          - patch
     controller:
       enabled: false
       namespace: ${appcat:namespace}
@@ -101,6 +151,7 @@ parameters:
         APPCAT_HANDLER_ENABLED: "true"
         VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "false"
         VSHN_REDIS_BACKUP_HANDLER_ENABLED: "false"
+        VSHN_MARIADB_BACKUP_HANDLER_ENABLED: "false"
       extraArgs: []
       extraEnv: {}
       apiservice:
@@ -118,6 +169,15 @@ parameters:
     slos:
       enabled: true
       alertsEnabled: true
+      uptimeDefaults:
+        objective: 99.9
+        alerting:
+          page_alert:
+            # This should reduce non actionable alerts because of single instance restarts.
+            # The page alert looks (ammong other things) at the burn rate over the last 5min.
+            # If the alert is pending for more than 5m this indicates a real problem.
+            for: 6m
+          ticket_alert: {}
       namespace: appcat-slos
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}
@@ -157,36 +217,14 @@ parameters:
         ticket_labels:
           severity: "warning"
       vshn:
-        postgres:
-          uptime:
-            objective: 99.9
-            alerting:
-              page_alert:
-                # This should reduce non actionable alerts because of single instance restarts.
-                # The page alert looks (ammong other things) at the burn rate over the last 5min.
-                # If the alert is pending for more than 5m this indicates a real problem.
-                for: 6m
-              ticket_alert: {}
-        redis:
-          uptime:
-            objective: 99.9
-            alerting:
-              page_alert:
-                # This should reduce non actionable alerts because of single instance restarts.
-                # The page alert looks (ammong other things) at the burn rate over the last 5min.
-                # If the alert is pending for more than 5m this indicates a real problem.
-                for: 6m
-              ticket_alert: {}
-        minio:
-          uptime:
-            objective: 99.9
-            alerting:
-              page_alert:
-                # This should reduce non actionable alerts because of single instance restarts.
-                # The page alert looks (ammong other things) at the burn rate over the last 5min.
-                # If the alert is pending for more than 5m this indicates a real problem.
-                for: 6m
-              ticket_alert: {}
+        PostgreSQL:
+          uptime: ${appcat:slos:uptimeDefaults}
+        Redis:
+          uptime: ${appcat:slos:uptimeDefaults}
+        Minio:
+          uptime: ${appcat:slos:uptimeDefaults}
+        MariaDB:
+          uptime: ${appcat:slos:uptimeDefaults}
 
     providers:
       cloudscale:
@@ -254,6 +292,7 @@ parameters:
       vshn:
         enabled: false
         externalDatabaseConnectionsEnabled: "false"
+        e2eTests: false
         quotasEnabled: ${appcat:quotasEnabled}
         secretNamespace: ${crossplane:namespace}
         emailAlerting:
@@ -455,6 +494,70 @@ parameters:
                 memory: "1Gi"
                 disk: 50Gi
           instances: []
+        services:
+          mariadb:
+            serviceName: VSHNMariaDB
+            connectionSecretKeys:
+              - ca.crt
+              - MARIADB_HOST
+              - MARIADB_PORT
+              - MARIADB_USERNAME
+              - MARIADB_PASSWORD
+              - MARIADB_URL
+            mode: standalone
+            offered: true
+            enabled: false
+            restoreSA: mariadbrestoreserviceaccount
+            restoreRoleRules: ${appcat:defaultRestoreRoleRules}
+            hasSts: true
+            openshiftTemplate:
+              serviceName: mariadbbyvshn
+              description: "The open source relational database management system (DBMS) that is a compatible drop-in replacement for the widely used MySQL database technology"
+              message: 'Your MariaDB by VSHN instance is being provisioned, please see \${SECRET_NAME} for access.'
+              url: https://vs.hn/vshn-mariadb
+              tags: "database,sql,mariadb"
+              icon: "icon-mariadb"
+              defaultVersion: "11.2"
+            enableNetworkPolicy: false
+            secretNamespace: ${appcat:services:vshn:secretNamespace}
+            helmChartVersion: ${appcat:charts:mariadb:version}
+            imageRegistry: ""
+            bucket_region: "lpg"
+            grpcEndpoint: ${appcat:grpcEndpoint}
+            proxyFunction: false
+            defaultPlan: standard-1
+            sla: 99.25
+            plans:
+              standard-512m:
+                size:
+                  enabled: true
+                  cpu: "125m"
+                  memory: "512Mi"
+                  disk: 16Gi
+              standard-1:
+                size:
+                  enabled: true
+                  cpu: "250m"
+                  memory: "1Gi"
+                  disk: 16Gi
+              standard-2:
+                size:
+                  enabled: true
+                  cpu: "500m"
+                  memory: "2Gi"
+                  disk: 16Gi
+              standard-4:
+                size:
+                  enabled: true
+                  cpu: "1"
+                  memory: "4Gi"
+                  disk: 16Gi
+              standard-8:
+                size:
+                  enabled: true
+                  cpu: "2"
+                  memory: "8Gi"
+                  disk: 16Gi
 
       # Config for exoscale composites
       exoscale:
