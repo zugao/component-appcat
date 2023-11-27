@@ -106,7 +106,7 @@ local compositionCloudscale =
               },
             },
           ],
-        },
+        } + common.DefaultReadinessCheck(),
         {
           base: baseBucket,
           connectionDetails: [
@@ -133,7 +133,7 @@ local compositionCloudscale =
               ],
             },
           ],
-        },
+        } + common.DefaultReadinessCheck(),
       ],
     },
   };
@@ -253,12 +253,15 @@ local minioComp(name) =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
-      functions:
+      mode: 'Pipeline',
+      pipeline:
         [
           {
-            name: 'minio-func',
-            type: 'Container',
-            config: kube.ConfigMap('xfn-config') + {
+            step: 'miniobucket-func',
+            functionRef: {
+              name: 'function-appcat',
+            },
+            input: kube.ConfigMap('xfn-config') + {
               metadata: {
                 labels: {
                   name: 'xfn-config',
@@ -267,15 +270,10 @@ local minioComp(name) =
               },
               data: {
                 providerConfig: name,
-              },
-            },
-            container: {
-              image: 'miniobucket',
-              imagePullPolicy: 'IfNotPresent',
-              timeout: '20s',
-              runner: {
-                endpoint: objStoParams.compositions.minio.grpcEndpoint,
-              },
+                serviceName: 'miniobucket',
+              } + if compParams.proxyFunction then {
+                proxyEndpoint: compParams.grpcEndpoint,
+              } else {},
             },
           },
         ],

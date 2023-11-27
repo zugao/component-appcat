@@ -410,7 +410,6 @@ local sgCluster = {
                       [
                         {
                           sgObjectStorage: '',
-                          cronSchedule: '',
                           retention: 6,
                         },
                       ],
@@ -472,7 +471,6 @@ local sgCluster = {
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
 
-    comp.FromCompositeFieldPath('spec.parameters.backup.schedule', 'spec.forProvider.manifest.spec.configurations.backups[0].cronSchedule'),
     comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
   ],
 };
@@ -630,7 +628,6 @@ local sgObjectStorage = {
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.bucket'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.spec.writeConnectionSecretToRef.namespace'),
 
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 'pgbucket'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 'pgbucket'),
@@ -897,12 +894,46 @@ local composition(restore=false) =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: pgParams.secretNamespace,
-      functions:
+      mode: 'Pipeline',
+      pipeline:
         [
           {
-            name: 'pgsql-func',
-            type: 'Container',
-            config: kube.ConfigMap('xfn-config') + {
+            step: 'patch-and-transform',
+            functionRef: {
+              name: 'function-patch-and-transform',
+            },
+            input: {
+              apiVersion: 'pt.fn.crossplane.io/v1beta1',
+              kind: 'Resources',
+              resources: [
+                           claimNamespaceObserve,
+                           instanceNamespace,
+                           comp.NamespacePermissions('vshn-postgresql'),
+                           localca,
+                           certificate,
+                         ] +
+                         copyJobFunction(restore) +
+                         [
+                           sgInstanceProfile,
+                           sgPostgresConfig,
+                           sgCluster +
+                           if restore then clusterRestoreConfig else {},
+                           secret,
+                           xobjectBucket,
+                           sgObjectStorage,
+                           podMonitor,
+                           prometheusRule,
+                         ] + if pgParams.enableNetworkPolicy == true then [
+                networkPolicy,
+              ] else [],
+            },
+          },
+          {
+            step: 'pgsql-func',
+            functionRef: {
+              name: 'function-appcat',
+            },
+            input: kube.ConfigMap('xfn-config') + {
               metadata: {
                 labels: {
                   name: 'xfn-config',
@@ -910,44 +941,19 @@ local composition(restore=false) =
                 name: 'xfn-config',
               },
               data: {
-                imageTag: common.GetAppCatImageTag(),
-                sgNamespace: pgParams.sgNamespace,
-                externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
-                quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
-                sideCars: std.toString(pgParams.sideCars),
-              } + common.EmailAlerting(params.services.vshn.emailAlerting),
-            },
-            container: {
-              image: 'postgresql',
-              imagePullPolicy: 'IfNotPresent',
-              timeout: '20s',
-              runner: {
-                endpoint: pgParams.grpcEndpoint,
-              },
+                      serviceName: 'postgresql',
+                      imageTag: common.GetAppCatImageTag(),
+                      sgNamespace: pgParams.sgNamespace,
+                      externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
+                      quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
+                      sideCars: std.toString(pgParams.sideCars),
+                    } + common.EmailAlerting(params.services.vshn.emailAlerting)
+                    + if pgParams.proxyFunction then {
+                      proxyEndpoint: pgParams.grpcEndpoint,
+                    } else {},
             },
           },
         ],
-      resources: [
-                   claimNamespaceObserve,
-                   instanceNamespace,
-                   comp.NamespacePermissions('vshn-postgresql'),
-                   localca,
-                   certificate,
-                 ] +
-                 copyJobFunction(restore) +
-                 [
-                   sgInstanceProfile,
-                   sgPostgresConfig,
-                   sgCluster +
-                   if restore then clusterRestoreConfig else {},
-                   secret,
-                   xobjectBucket,
-                   sgObjectStorage,
-                   podMonitor,
-                   prometheusRule,
-                 ] + if pgParams.enableNetworkPolicy == true then [
-        networkPolicy,
-      ] else [],
     },
   };
 

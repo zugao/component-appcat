@@ -60,6 +60,11 @@ spec:
               - fromFieldPath: metadata.labels[crossplane.io/claim-name]
           toFieldPath: spec.forProvider.displayName
           type: CombineFromComposite
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
     - base:
         apiVersion: cloudscale.crossplane.io/v1
         kind: Bucket
@@ -110,4 +115,9 @@ spec:
                 rma: rma
               type: map
           type: FromCompositeFieldPath
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
   writeConnectionSecretsToNamespace: syn-crossplane

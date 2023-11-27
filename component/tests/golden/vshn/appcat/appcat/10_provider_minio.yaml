@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: minio
-  name: minio
+    name: provider-minio
+  name: provider-minio
 spec:
   controllerConfigRef:
     name: minio
@@ -39,15 +39,6 @@ spec:
       name: minio-secret
       namespace: syn-crossplane
   minioURL: http://minio-server.minio.svc:9000/
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations: {}
-  labels:
-    name: provider-minio
-  name: provider-minio
-  namespace: syn-crossplane
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

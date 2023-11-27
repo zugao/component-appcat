@@ -42,12 +42,15 @@ local composition =
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
       writeConnectionSecretsToNamespace: minioParams.secretNamespace,
-      functions:
+      mode: 'Pipeline',
+      pipeline:
         [
           {
-            name: 'minio-func',
-            type: 'Container',
-            config: kube.ConfigMap('xfn-config') + {
+            step: 'minio-func',
+            functionRef: {
+              name: 'function-appcat',
+            },
+            input: kube.ConfigMap('xfn-config') + {
               metadata: {
                 labels: {
                   name: 'xfn-config',
@@ -55,6 +58,7 @@ local composition =
                 name: 'xfn-config',
               },
               data: {
+                serviceName: 'minio',
                 imageTag: common.GetAppCatImageTag(),
                 minioChartRepository: params.charts.minio.source,
                 minioChartVersion: params.charts.minio.version,
@@ -63,15 +67,9 @@ local composition =
                 providerEnabled: std.toString(params.providers.minio.enabled),
                 controlNamespace: params.services.controlNamespace,
                 maintenanceSA: 'helm-based-service-maintenance',
-              },
-            },
-            container: {
-              image: 'minio',
-              imagePullPolicy: 'IfNotPresent',
-              timeout: '20s',
-              runner: {
-                endpoint: minioParams.grpcEndpoint,
-              },
+              } + if minioParams.proxyFunction then {
+                proxyEndpoint: minioParams.grpcEndpoint,
+              } else {},
             },
           },
         ],

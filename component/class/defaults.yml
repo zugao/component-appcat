@@ -39,10 +39,18 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.42.0
+        tag: v4.43.1
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
+        tag: v0.1.4
+      functionAppcat:
+        registry: ${appcat:images:appcat:registry}
+        repository: ${appcat:images:appcat:repository}
+        tag: ${appcat:images:appcat:tag}-func
+      functionpnt:
+        registry: xpkg.upbound.io
+        repository: crossplane-contrib/function-patch-and-transform
         tag: v0.1.4
 
     =_crd_version: ${appcat:images:appcat:tag}
@@ -54,7 +62,7 @@ parameters:
     appuioManaged: true
     tenantID: ${cluster:tenant}
     quotasEnabled: false
-    grpcEndpoint: unix-abstract:crossplane/fn/default.sock
+    grpcEndpoint: host.docker.internal:9443
 
     controller:
       enabled: false
@@ -258,6 +266,7 @@ parameters:
           bucket_endpoint: ""
           enabled: true
           grpcEndpoint: ${appcat:grpcEndpoint}
+          proxyFunction: false
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
@@ -390,6 +399,7 @@ parameters:
           imageRegistry: ""
           bucket_region: "lpg"
           grpcEndpoint: ${appcat:grpcEndpoint}
+          proxyFunction: false
           defaultPlan: standard-1
           sla: 99.25
           plans:
@@ -429,6 +439,7 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:minio:version}
           grpcEndpoint: ${appcat:grpcEndpoint}
+          proxyFunction: false
           defaultPlan: standard-1
           sla: 99.25
           plans:
@@ -487,6 +498,7 @@ parameters:
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
               grpcEndpoint: ${appcat:grpcEndpoint}
+              proxyFunction: false
               providerConfig: minio
 
           # Generic config for objecstorage composite

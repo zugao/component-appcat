@@ -5,8 +5,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: exoscale
-  name: exoscale
+    name: provider-exoscale
+  name: provider-exoscale
 spec:
   controllerConfigRef:
     name: exoscale

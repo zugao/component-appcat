@@ -157,6 +157,18 @@ local argoCDAnnotations() = {
   'argocd.argoproj.io/sync-options': 'Prune=false',
 };
 
+local defaultReadinessCheck() = {
+  readinessChecks: [
+    {
+      matchCondition: {
+        status: 'True',
+        type: 'Ready',
+      },
+
+      type: 'MatchCondition',
+    },
+  ],
+};
 
 {
   SyncOptions: syncOptions,
@@ -188,4 +200,6 @@ local argoCDAnnotations() = {
     argoCDAnnotations(),
   EmailAlerting(alertingSettings):
     emailAlerting(alertingSettings),
+  DefaultReadinessCheck():
+    defaultReadinessCheck(),
 }
