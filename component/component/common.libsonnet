@@ -170,6 +170,34 @@ local defaultReadinessCheck() = {
   ],
 };
 
+local defaultRuntimeConfigWithSaName(name) = {
+  apiVersion: 'pkg.crossplane.io/v1beta1',
+  kind: 'DeploymentRuntimeConfig',
+  metadata: {
+    name: name,
+  },
+  spec: {
+    deploymentTemplate: {
+      spec: {
+        selector: {},
+        template: {
+          spec:
+            {
+              containers: [
+                {
+                  name: 'package-runtime',
+                  securityContext: {},
+                },
+              ],
+              securityContext: {},
+              serviceAccountName: name,
+            },
+        },
+      },
+    },
+  },
+};
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -202,4 +230,6 @@ local defaultReadinessCheck() = {
     emailAlerting(alertingSettings),
   DefaultReadinessCheck():
     defaultReadinessCheck(),
+  DefaultRuntimeConfigWithSaName(name):
+    defaultRuntimeConfigWithSaName(name),
 }

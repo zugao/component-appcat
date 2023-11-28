@@ -9,6 +9,8 @@ metadata:
   name: provider-exoscale
 spec:
   package: ghcr.io/vshn/provider-exoscale/provider:v0.10.4
+  runtimeConfigRef:
+    name: provider-exoscale
 ---
 apiVersion: exoscale.crossplane.io/v1
 kind: ProviderConfig
@@ -25,6 +27,31 @@ spec:
       name: exoscale-api-access
       namespace: crossplane-system
     source: InjectedIdentity
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: provider-exoscale
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: provider-exoscale
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-exoscale
+  name: provider-exoscale
+  namespace: crossplane-system
 ---
 apiVersion: v1
 data: {}

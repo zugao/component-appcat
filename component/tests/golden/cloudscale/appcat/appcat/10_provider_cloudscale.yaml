@@ -9,6 +9,8 @@ metadata:
   name: provider-cloudscale
 spec:
   package: ghcr.io/vshn/provider-cloudscale/provider:v0.5.0
+  runtimeConfigRef:
+    name: provider-cloudscale
 ---
 apiVersion: cloudscale.crossplane.io/v1
 kind: ProviderConfig
@@ -25,6 +27,31 @@ spec:
       name: cloudscale-api-token
       namespace: syn-crossplane
     source: InjectedIdentity
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: provider-cloudscale
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: provider-cloudscale
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-cloudscale
+  name: provider-cloudscale
+  namespace: syn-crossplane
 ---
 apiVersion: v1
 data: {}

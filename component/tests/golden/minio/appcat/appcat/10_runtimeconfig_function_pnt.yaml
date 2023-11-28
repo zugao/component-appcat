@@ -1,7 +1,7 @@
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
-  name: default
+  name: function-patch-and-transform
 spec:
   deploymentTemplate:
     spec:
@@ -12,3 +12,4 @@ spec:
             - name: package-runtime
               securityContext: {}
           securityContext: {}
+          serviceAccountName: function-patch-and-transform

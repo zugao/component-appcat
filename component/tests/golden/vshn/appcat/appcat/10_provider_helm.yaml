@@ -8,21 +8,25 @@ metadata:
     name: provider-helm
   name: provider-helm
 spec:
-  controllerConfigRef:
-    name: helm
   package: xpkg.upbound.io/crossplane-contrib/provider-helm:v0.15.0
+  runtimeConfigRef:
+    name: provider-helm
 ---
-apiVersion: pkg.crossplane.io/v1alpha1
-kind: ControllerConfig
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
-  labels:
-    name: helm
-  name: helm
+  name: provider-helm
 spec:
-  serviceAccountName: provider-helm
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: provider-helm
 ---
 apiVersion: helm.crossplane.io/v1beta1
 kind: ProviderConfig
@@ -36,6 +40,15 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-helm
+  name: provider-helm
+  namespace: syn-crossplane
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
