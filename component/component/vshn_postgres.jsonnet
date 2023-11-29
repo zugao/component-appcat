@@ -125,6 +125,7 @@ local instanceNamespace = {
     comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
     comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
     comp.FromCompositeFieldPath('spec.parameters.service.serviceLevel', 'spec.forProvider.manifest.metadata.labels[appcat.vshn.io/sla]'),
     comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),

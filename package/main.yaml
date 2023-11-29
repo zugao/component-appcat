@@ -3,11 +3,11 @@ applications:
   - crossplane
 parameters:
   pkg.appcat:
-    componentVersion: v2.10.1
+    componentVersion: v2.10.2
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.43.1
+      tag: v4.43.2
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git

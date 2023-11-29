@@ -535,6 +535,7 @@ local composition =
                   patches: [
                     comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
                     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
+                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'vshn-redis'),
                     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
                     comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
                     comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
