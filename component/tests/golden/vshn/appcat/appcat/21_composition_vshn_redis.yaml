@@ -196,6 +196,14 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
+              - fromFieldPath: metadata.labels[crossplane.io/composite]
+                toFieldPath: spec.forProvider.manifest.metadata.name
+                transforms:
+                  - string:
+                      fmt: vshn-redis-%s
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
               - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
                 toFieldPath: spec.forProvider.manifest.metadata.labels[appcat.vshn.io/claim-namespace]
                 type: FromCompositeFieldPath
