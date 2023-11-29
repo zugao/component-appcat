@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: connect-mariadb
+spec:
+  backoffLimit: 20
+  template:
+    metadata:
+      labels:
+        e2e-test: mariadb
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: connect
+          image: dockerhub.vshn.net/bitnami/mariadb:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+          args:
+            - -c
+            - echo "Testing Select...\n" && mariadb -h $MARIADB_HOST -u $MARIADB_USERNAME --password="$MARIADB_PASSWORD" -P $MARIADB_PORT --ssl-verify-server-cert --ssl-ca=/etc/mariadb-tls/ca.crt -e "select 1;"
+          envFrom:
+            - secretRef:
+                name: mariadb-creds
+          volumeMounts:
+            - name: mariadb-tls-secrets
+              mountPath: /etc/mariadb-tls
+              readOnly: true
+      volumes:
+        - name: mariadb-tls-secrets
+          secret:
+            secretName: mariadb-creds
+            items:
+              - key: ca.crt
+                path: ca.crt

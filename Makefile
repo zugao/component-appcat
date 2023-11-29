@@ -8,6 +8,9 @@ SHELL := bash
 include Makefile.vars.mk
 include docs/antora-preview.mk
 
+# testing
+include tests/tests.mk
+
 .PHONY: all
 all: help
 

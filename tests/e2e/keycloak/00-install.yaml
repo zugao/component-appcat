@@ -1,0 +1,12 @@
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNKeycloak
+metadata:
+  name: keycloak-e2e
+spec:
+  parameters:
+    service:
+      postgreSQLParameters:
+        backup:
+          deletionProtection: false
+  writeConnectionSecretToRef:
+    name: keycloak-e2e
