@@ -1,7 +1,7 @@
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
-  name: appcat-runtime-config
+  name: function-appcat
 spec:
   deploymentTemplate:
     spec:
@@ -16,3 +16,4 @@ spec:
               name: package-runtime
               securityContext: {}
           securityContext: {}
+          serviceAccountName: function-appcat

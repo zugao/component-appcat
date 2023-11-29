@@ -10,7 +10,7 @@ local params = inv.parameters.appcat;
 local appcatImage = params.images.functionAppcat;
 local pntImage = params.images.functionpnt;
 
-local getFunction(name, package) = {
+local getFunction(name, package, runtimeConfigName) = {
   apiVersion: 'pkg.crossplane.io/v1beta1',
   kind: 'Function',
   metadata: {
@@ -18,6 +18,9 @@ local getFunction(name, package) = {
   },
   spec: {
     package: package,
+    runtimeConfigRef: {
+      name: runtimeConfigName,
+    },
   },
 };
 
@@ -25,7 +28,7 @@ local appcatRuntimeConfig = {
   apiVersion: 'pkg.crossplane.io/v1beta1',
   kind: 'DeploymentRuntimeConfig',
   metadata: {
-    name: 'appcat-runtime-config',
+    name: 'function-appcat',
   },
   spec: {
     deploymentTemplate: {
@@ -43,58 +46,39 @@ local appcatRuntimeConfig = {
                 },
               ],
               securityContext: {},
+              serviceAccountName: 'function-appcat',
             },
         },
       },
     },
   },
 };
-
-local defaultRuntimeConfig = {
-  apiVersion: 'pkg.crossplane.io/v1beta1',
-  kind: 'DeploymentRuntimeConfig',
-  metadata: {
-    name: 'default',
-  },
-  spec: {
-    deploymentTemplate: {
-      spec: {
-        selector: {},
-        template: {
-          spec:
-            {
-              containers: [
-                {
-                  name: 'package-runtime',
-                  securityContext: {},
-                },
-              ],
-              securityContext: {},
-            },
-        },
-      },
-    },
-  },
-};
-
 
 local appcatImageTag = std.strReplace(appcatImage.tag, '/', '_');
 
 local appcatFunctionImage = appcatImage.registry + '/' + appcatImage.repository + ':' + appcatImageTag;
 
-local appcat = getFunction('function-appcat', appcatFunctionImage) + {
-  spec+: {
-    runtimeConfigRef: {
-      name: 'appcat-runtime-config',
-    },
+local appcat = getFunction('function-appcat', appcatFunctionImage, 'function-appcat');
+
+local saAppCat = kube.ServiceAccount('function-appcat') {
+  metadata+: {
+    namespace: params.crossplaneNamespace,
+  },
+};
+
+local saPnT = kube.ServiceAccount('function-patch-and-transform') {
+  metadata+: {
+    namespace: params.crossplaneNamespace,
   },
 };
 
 local pntFunctionImage = pntImage.registry + '/' + pntImage.repository + ':' + pntImage.tag;
 
 {
-  '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage),
+  '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage, 'function-patch-and-transform'),
   '10_function_appcat': appcat,
-  '10_runtimeconfig_appcat': appcatRuntimeConfig,
-  '10_runtimeconfig_default': defaultRuntimeConfig,
+  '10_runtimeconfig_function_appcat': appcatRuntimeConfig,
+  '10_runtimeconfig_function_pnt': common.DefaultRuntimeConfigWithSaName('function-patch-and-transform'),
+  '20_serviceaccount_appcat': saAppCat,
+  '20_serviceaccount_pnt': saPnT,
 }

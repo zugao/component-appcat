@@ -21,43 +21,26 @@ local providerSecret(credentials) =
     stringData: credentials.data,
   };
 
-
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-local openshiftControllerConfig =
-  (if isOpenshift then {
-     podSecurityContext: {},
-     securityContext: {},
-   }
-   else {});
-
-
-local controllerConfig(name, config) =
-  local spec = config + openshiftControllerConfig;
-  if spec != {} then
-    [
-      crossplane.ControllerConfig(name) {
-        spec+: spec,
-      },
-    ]
-  else [];
-
-local controllerConfigRef(config) =
-  if config != [] then
-    {
-      controllerConfigRef: {
-        name: config[0].metadata.name,
-      },
-    }
-  else {};
+local runtimeConfigRef(name) = {
+  runtimeConfigRef: {
+    name: name,
+  },
+};
 
 {
   [if params.providers.cloudscale.enabled then '10_provider_cloudscale']:
     local provider = params.providers.cloudscale;
 
-    local controllerConf = controllerConfig('cloudscale', provider.controllerConfig);
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
+      metadata+: {
+        namespace: provider.namespace,
+      },
+    };
+
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
     [
       crossplane.Provider('provider-cloudscale') {
-        spec+: provider.spec + controllerConfigRef(controllerConf),
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
       },
       crossplane.ProviderConfig('cloudscale') {
         apiVersion: 'cloudscale.crossplane.io/v1',
@@ -74,19 +57,26 @@ local controllerConfigRef(config) =
       },
     ]
     +
-    controllerConf
+    runtimeConf
     +
     [
+      sa,
       providerSecret(provider.credentials),
       kube.Namespace(provider.connectionSecretNamespace),
     ],
   [if params.providers.exoscale.enabled then '10_provider_exoscale']:
     local provider = params.providers.exoscale;
 
-    local controllerConf = controllerConfig('exoscale', provider.controllerConfig);
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
+      metadata+: {
+        namespace: provider.namespace,
+      },
+    };
+
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
     [
       crossplane.Provider('provider-exoscale') {
-        spec+: provider.spec + controllerConfigRef(controllerConf),
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
       },
       crossplane.ProviderConfig('exoscale') {
         apiVersion: 'exoscale.crossplane.io/v1',
@@ -103,16 +93,17 @@ local controllerConfigRef(config) =
       },
     ]
     +
-    controllerConf
+    runtimeConf
     +
     [
+      sa,
       providerSecret(provider.credentials),
       kube.Namespace(provider.connectionSecretNamespace),
     ],
   [if params.providers.kubernetes.enabled then '10_provider_kubernetes']:
     local provider = params.providers.kubernetes;
 
-    local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
       metadata+: {
         namespace: provider.namespace,
       },
@@ -232,17 +223,17 @@ local controllerConfigRef(config) =
       subjects_: [ sa ],
     };
 
-    local controllerConf = controllerConfig('kubernetes', provider.controllerConfig);
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
 
     [
       // Very important: DON'T NAME THIS JUST `kubernetes` YOU WILL BREAK ALL PROVIDERS!
       // https://crossplane.slack.com/archives/CEG3T90A1/p1699871771723179
       crossplane.Provider('provider-kubernetes') {
-        spec+: provider.spec + controllerConfigRef(controllerConf),
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
-    controllerConf
+    runtimeConf
     +
     [
 
@@ -255,13 +246,14 @@ local controllerConfigRef(config) =
           }
         ),
       },
+      sa,
       role,
       rolebinding,
     ],
   [if params.providers.helm.enabled then '10_provider_helm']:
     local provider = params.providers.helm;
 
-    local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
       metadata+: {
         namespace: provider.namespace,
       },
@@ -301,15 +293,15 @@ local controllerConfigRef(config) =
     };
 
 
-    local controllerConf = controllerConfig('helm', provider.controllerConfig);
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
 
     [
       crossplane.Provider('provider-helm') {
-        spec+: provider.spec + controllerConfigRef(controllerConf),
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
-    controllerConf
+    runtimeConf
     +
     [
 
@@ -322,13 +314,14 @@ local controllerConfigRef(config) =
           }
         ),
       },
+      sa,
       role,
       rolebinding,
     ],
   [if params.providers.minio.enabled then '10_provider_minio']:
     local provider = params.providers.minio;
 
-    local sa = kube.ServiceAccount(provider.controllerConfig.serviceAccountName) {
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
       metadata+: {
         namespace: provider.namespace,
       },
@@ -353,15 +346,15 @@ local controllerConfigRef(config) =
     };
 
 
-    local controllerConf = controllerConfig('minio', provider.controllerConfig);
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
 
     [
       crossplane.Provider('provider-minio') {
-        spec+: provider.spec + controllerConfigRef(controllerConf),
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
-    controllerConf
+    runtimeConf
     +
     [
       crossplane.ProviderConfig(config.name) {
@@ -376,6 +369,7 @@ local controllerConfigRef(config) =
       for config in provider.additionalProviderConfigs
     ] +
     [
+      sa,
       role,
       rolebinding,
     ],

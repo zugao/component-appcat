@@ -8,23 +8,25 @@ metadata:
     name: provider-kubernetes
   name: provider-kubernetes
 spec:
-  controllerConfigRef:
-    name: kubernetes
   package: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.9.0
+  runtimeConfigRef:
+    name: provider-kubernetes
 ---
-apiVersion: pkg.crossplane.io/v1alpha1
-kind: ControllerConfig
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
-  labels:
-    name: kubernetes
-  name: kubernetes
+  name: provider-kubernetes
 spec:
-  podSecurityContext: {}
-  securityContext: {}
-  serviceAccountName: provider-kubernetes
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: provider-kubernetes
 ---
 apiVersion: kubernetes.crossplane.io/v1alpha1
 kind: ProviderConfig
@@ -38,6 +40,15 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-kubernetes
+  name: provider-kubernetes
+  namespace: syn-crossplane
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
