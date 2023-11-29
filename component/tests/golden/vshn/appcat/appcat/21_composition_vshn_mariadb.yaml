@@ -29,7 +29,7 @@ spec:
         data:
           bucketRegion: lpg
           chartRepository: https://charts.bitnami.com/bitnami
-          chartVersion: 10.1.3
+          chartVersion: 11.6.2
           controlNamespace: syn-appcat-control
           imageTag: v4.60.4
           isOpenshift: 'false'

@@ -424,6 +424,12 @@ local sgCluster = {
                   },
                   postgres: {
                     version: '',
+                    extensions: [
+                      {
+                        name: 'pg_repack',
+                        version: '1.5.0',
+                      },
+                    ],
                     ssl: {
                       enabled: true,
                       certificateSecretKeySelector: {
