@@ -24,49 +24,8 @@ A ticket alert should have a label `severity: warning`.
 * A page alert means that the error rate is significantly higher than the objective.
 Immediate action is necessary to not miss the objective.
 
-=== icon:bug[] Steps for debugging
-
-Failed probes can have a multitude of reasons, but in general there are two different kinds of issue clases.
-Either the instance itself is failing or provisioning or updating the instance failed.
-
-In any case, you should first figure out where the effected instance runs.
-The alert will provide you with three labels: `cluster_id`, `namespace`, and `name`.
-
-Connect to the Kubernetes cluster with the provided `cluster_id` and get the effected claim.
-
-[source,shell]
-----
-export NAMESPACE={{ namespace }}
-export NAME={{ name }}
-
-export COMPOSITE=$(kubectl -n $NAMESPACE get vshnmariadb $NAME -o jsonpath="{.spec.resourceRef.name}")
-kubectl -n $NAMESPACE get vshnmariadb $NAME
-----
-
-If the claim is not `SYNCED` this might indicate that there is an issue with provisioning.
-If it is synced there is most likely an issue with the instance itself, you can skip to the next subsection.
-
-==== Debugging Provisioning
-
-To figure out what went wrong with provisioning it usually helps to take a closer look at the composite.
-
-[source,shell]
-----
-kubectl --as cluster-admin describe xvshnmariadb $COMPOSITE
-----
-
-If there are sync issues there usually are events that point to the root cause of the issue.
-
-Further it can help to look at the `Object` resources that are created for this instance.
-
-[source,shell]
-----
-kubectl --as cluster-admin get object -l crossplane.io/composite=$COMPOSITE
-----
-
-If any of them are not synced, describing them should point you in the right direction.
-
-Finally, it might also be helpful to look at the logs of various crossplane components in namespace `syn-crossplane`.
+:service: vshnmariadb
+include::vshn-helm-debugging-partial.adoc[]
 
 ==== Debugging MariaDB Instance
 
