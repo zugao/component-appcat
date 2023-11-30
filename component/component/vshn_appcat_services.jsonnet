@@ -26,7 +26,6 @@ local getServiceNamePlural(serviceName) =
 
 local vshn_appcat_service(name) =
   local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-  local securityContext = !isOpenshift;
 
   local serviceParams = params.services.vshn.services[name];
   local connectionSecretKeys = serviceParams.connectionSecretKeys;
@@ -49,42 +48,6 @@ local vshn_appcat_service(name) =
   local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:' + name + ':restorejob') + {
     roleRef_: restoreRole,
     subjects_: [ restoreServiceAccount ],
-  };
-
-  local resizeServiceAccount = kube.ServiceAccount('sa-sts-deleter') + {
-    metadata+: {
-      namespace: params.services.controlNamespace,
-    },
-  };
-
-  local resizeClusterRole = kube.ClusterRole('appcat:job:' + name + ':resizejob') {
-    rules: [
-      {
-        apiGroups: [ 'helm.crossplane.io' ],
-        resources: [ 'releases' ],
-        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-      },
-      {
-        apiGroups: [ 'apps' ],
-        resources: [ 'statefulsets' ],
-        verbs: [ 'delete', 'get', 'watch', 'list', 'update', 'patch' ],
-      },
-      {
-        apiGroups: [ 'helm.crossplane.io' ],
-        resources: [ 'releases' ],
-        verbs: [ 'update', 'get' ],
-      },
-      {
-        apiGroups: [ '' ],
-        resources: [ 'pods' ],
-        verbs: [ 'list', 'get', 'update', 'delete' ],
-      },
-    ],
-  };
-
-  local resizeClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:' + name + ':resizejob') + {
-    roleRef_: resizeClusterRole,
-    subjects_: [ resizeServiceAccount ],
   };
 
   local xrd = xrds.XRDFromCRD(
@@ -201,7 +164,6 @@ local vshn_appcat_service(name) =
     ['20_rbac_vshn_%s' % name]: xrds.CompositeClusterRoles(xrd),
     ['21_composition_vshn_%s' % name]: composition,
     ['20_role_vshn_%s_restore' % name]: [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
-    [if serviceParams.hasSts then '20_rbac_vshn_%s_resize' % name]: [ resizeClusterRole, resizeServiceAccount, resizeClusterRoleBinding ],
     ['20_plans_vshn_%s' % name]: plansCM,
     ['22_prom_rule_sla_%s' % name]: promRuleSLA,
     [if isOpenshift then '21_openshift_template_%s_vshn' % name]: osTemplate,
