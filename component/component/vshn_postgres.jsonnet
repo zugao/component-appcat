@@ -20,10 +20,6 @@ local defaultPort = '5432';
 
 local certificateSecretName = 'tls-certificate';
 
-local serviceNameLabelKey = 'appcat.vshn.io/servicename';
-local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
-local slaLabelKey = 'appcat.vshn.io/sla';
-
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 
 // Filter out disabled plans
