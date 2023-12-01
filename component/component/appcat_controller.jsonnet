@@ -58,7 +58,7 @@ local controller = loadManifest('deployment.yaml') {
     namespace: controllersParams.namespace,
   },
   spec+: {
-    replicas: 2,
+    replicas: 1,
     template+: {
       spec+: {
         volumes: [

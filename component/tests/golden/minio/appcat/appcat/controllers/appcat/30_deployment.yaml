@@ -6,7 +6,7 @@ metadata:
   name: appcat-controller
   namespace: syn-appcat
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       appcat-controller: appcat-controller
