@@ -39,7 +39,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.43.1
+        tag: fix/duplicate_finalizer
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
