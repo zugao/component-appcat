@@ -55,6 +55,11 @@ parameters:
         emailAlerting:
           enabled: true
           smtpPassword: "whatever"
+        services:
+          mariadb:
+            enabled: true
+            # grpcEndpoint: host.docker.internal:9443
+            # proxyFunction: true
         postgres:
           # grpcEndpoint: host.docker.internal:9443
           # proxyFunction: true

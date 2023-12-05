@@ -167,10 +167,14 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   '10_appcat_maintenance_recording_rule': maintenanceRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
 
-} + if params.slos.enabled then {
-  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
-  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
-  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
-  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
+} + if params.slos.enabled && params.services.vshn.enabled then {
+  [if params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
+  [if params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
+  [if params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
+  [if params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
+  [if params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio']: slos.Get('vshn-minio'),
+  [if params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio_ha']: slos.Get('vshn-minio-ha'),
+  [if params.services.vshn.services.mariadb.enabled then 'sli_exporter/90_slo_vshn_mariadb']: slos.Get('vshn-mariadb'),
+  [if params.services.vshn.services.mariadb.enabled then 'sli_exporter/90_slo_vshn_mariadb_ha']: slos.Get('vshn-mariadb-ha'),
 }
 else {}

@@ -66,10 +66,47 @@ local deployment = loadManifest('config/manager/manager.yaml') + {
   },
 };
 
+local resizeServiceAccount = kube.ServiceAccount('sa-sts-deleter') + {
+  metadata+: {
+    namespace: params.services.controlNamespace,
+  },
+};
+
+local resizeClusterRole = kube.ClusterRole('appcat:job:resizejob') {
+  rules: [
+    {
+      apiGroups: [ 'helm.crossplane.io' ],
+      resources: [ 'releases' ],
+      verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+    },
+    {
+      apiGroups: [ 'apps' ],
+      resources: [ 'statefulsets' ],
+      verbs: [ 'delete', 'get', 'watch', 'list', 'update', 'patch' ],
+    },
+    {
+      apiGroups: [ 'helm.crossplane.io' ],
+      resources: [ 'releases' ],
+      verbs: [ 'update', 'get' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'pods' ],
+      verbs: [ 'list', 'get', 'update', 'delete' ],
+    },
+  ],
+};
+
+local resizeClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:resizejob') + {
+  roleRef_: resizeClusterRole,
+  subjects_: [ resizeServiceAccount ],
+};
+
 // Curently we only need this for redis.
-if params.services.vshn.enabled && params.services.vshn.redis.enabled then {
+if params.services.vshn.enabled && (params.services.vshn.redis.enabled || params.services.vshn.services.mariadb.enabled) then {
   'controllers/sts-resizer/10_role': role,
   'controllers/sts-resizer/10_sa': sa,
   'controllers/sts-resizer/10_binding': binding,
   'controllers/sts-resizer/10_deployment': deployment,
+  'controllers/sts-resizer/20_rbac_resize_job': [ resizeServiceAccount, resizeClusterRole, resizeClusterRoleBinding ],
 }

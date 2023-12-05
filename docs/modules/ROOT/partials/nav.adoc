@@ -34,3 +34,9 @@
 
 .Runbooks
 * xref:runbooks/vshn-postgresql.adoc[]
+* xref:runbooks/vshn-redis.adoc[]
+* xref:runbooks/vshn-minio.adoc[]
+* xref:runbooks/vshn-mariadb.adoc[]
+* xref:runbooks/vshn-generic.adoc[]
+
+

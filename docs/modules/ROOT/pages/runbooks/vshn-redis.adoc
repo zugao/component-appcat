@@ -1,0 +1,77 @@
+= Redis by VSHN
+
+
+[[uptime]]
+== Uptime
+
+[IMPORTANT]
+We don't yet have a lot of operational experience with this service.
+If you received this alert, please add any insights you gained to improve this runbook.
+
+=== icon:glasses[] Overview
+
+The SLI measures the uptime of each Redis by VSHN instance.
+This SLI is measured by a prober that executes a `Ping` every second.
+
+If this SLI results in an alert, it means that a significant number of `pings` failed and that we risk missing the SLO.
+
+There are two types of alerts that fire if we expect to miss the configured objective.
+
+* A ticket alert means that the error rate is slightly higher than the objective.
+If we don't intervene at some point after receiving this alert, we can expect to miss the objective.
+However, no immediate, urgent action is necessary.
+A ticket alert should have a label `severity: warning`.
+* A page alert means that the error rate is significantly higher than the objective.
+Immediate action is necessary to not miss the objective.
+
+:service: vshnminio
+include::vshn-helm-debugging-partial.adoc[]
+
+==== Debugging Redis Instance
+
+If the instance is synced, but still not running, we'll need to look at the redis pods themselves.
+
+First see if the pods are running.
+
+[source,shell]
+----
+export INSTANCE_NAMESPACE=$(kubectl -n $NAMESPACE get vshnredis $NAME -o jsonpath="{.status.instanceNamespace}")
+kubectl --as cluster-admin -n $INSTANCE_NAMESPACE get pod
+----
+
+If they're running, check the logs if there are any obvious error messages
+
+[source,shell]
+----
+kubectl --as cluster-admin -n $INSTANCE_NAMESPACE sts/redis-master
+----
+
+If you can't see any pods at all, then there might be an issue with the statefulset (eg. faulty configuration).
+Check the corresponding statefulset and events.
+
+[source,shell]
+----
+kubectl --as cluster-admin -n $INSTANCE_NAMESPACE describe sts redis-master
+----
+
+=== icon:wrench[] Tune
+
+If this alert isn't actionable, noisy, or was raised too late you may want to tune the SLO.
+
+You have the option tune the SLO through the component parameters.
+You can modify the objective, disable the page or ticket alert, or completely disable the SLO.
+
+The example below will set the SLO set the objective to 99.25% and disable the page alert.
+
+[source,yaml]
+----
+appcat:
+  slos:
+    vshn:
+      redis:
+        uptime:
+          objective: 99.25
+          alerting:
+            page_alert:
+              enabled: false
+----

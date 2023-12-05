@@ -1,0 +1,45 @@
+=== icon:bug[] Steps for debugging
+
+Failed probes can have a multitude of reasons, but in general there are two different kinds of issue classes.
+Either the instance itself is failing or provisioning or updating the instance failed.
+
+In any case, you should first figure out where the effected instance runs.
+The alert will provide you with three labels: `cluster_id`, `namespace`, and `name`.
+Connect to the Kubernetes cluster with the provided `cluster_id` and get the effected claim.
+
+[source,shell,subs="attributes"]
+----
+export NAMESPACE={{ namespace }}
+export NAME={{ name }}
+
+export COMPOSITE=$(kubectl -n $NAMESPACE get {service} $NAME -o jsonpath="{.spec.resourceRef.name}")
+kubectl -n $NAMESPACE get {service} $NAME
+----
+
+If the claim is not `SYNCED` this might indicate that there is an issue with provisioning.
+If it is synced there is most likely an issue with the instance itself, you can skip to the next subsection.
+
+==== Debugging Provisioning
+
+To figure out what went wrong with provisioning it usually helps to take a closer look at the composite.
+
+[source,shell,subs="attributes"]
+----
+kubectl --as cluster-admin describe x{service} $COMPOSITE
+----
+
+If there are sync issues there usually are events that point to the root cause of the issue.
+
+Furthermore, it can help to look at the `Object` resources that are created for this instance or the `releases.helm.crossplane.io` object associated with the instance.
+
+[source,shell]
+----
+kubectl --as cluster-admin get object -l crossplane.io/composite=$COMPOSITE
+kubectl --as cluster-admin get object $OBJECT_NAME
+kubectl --as cluster-admin get releases.helm.crossplane.io -l crossplane.io/composite=$COMPOSITE
+kubectl --as cluster-admin describe releases.helm.crossplane.io -l crossplane.io/composite=$COMPOSITE
+----
+
+If any of them are not synced, describing them should point you in the right direction.
+
+Finally, it might also be helpful to look at the logs of various crossplane components in namespace `syn-crossplane`.
