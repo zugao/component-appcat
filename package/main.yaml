@@ -3,11 +3,11 @@ applications:
   - crossplane
 parameters:
   pkg.appcat:
-    componentVersion: v2.10.2
+    componentVersion: v2.10.3
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.43.2
+      tag: fix/duplicate_finalizer
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
@@ -31,10 +31,10 @@ parameters:
         APPCAT_HANDLER_ENABLED: "true"
   crossplane:
     charts:
-      crossplane: 1.14.1
+      crossplane: 1.14.3
     images:
       crossplane:
-        tag: v1.14.1
+        tag: v1.14.3
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
     monitoring:
