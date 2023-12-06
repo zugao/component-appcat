@@ -102,24 +102,6 @@ local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:rest
 };
 
 local composition =
-  local namespace = comp.KubeObject('v1', 'Namespace') +
-                    {
-                      spec+: {
-                        forProvider+: {
-                          manifest+: {
-                            metadata: {
-                              name: '',
-                              labels: {
-                                [serviceNameLabelKey]: 'redis-standalone',
-                                [serviceNamespaceLabelKey]: '',
-                                'appuio.io/no-rbac-creation': 'true',
-                                'appuio.io/billing-name': 'appcat-redis',
-                              },
-                            },
-                          },
-                        },
-                      },
-                    };
   local selfSignedIssuer = comp.KubeObject('cert-manager.io/v1', 'Issuer') +
                            {
                              spec+: {
@@ -460,33 +442,7 @@ local composition =
               apiVersion: 'pt.fn.crossplane.io/v1beta1',
               kind: 'Resources',
               resources: [
-                {
-                  name: 'ns-observer',
-                  base: namespace {
-                    spec+: {
-                      managementPolicy: 'Observe',
-                    },
-                  },
-                  patches: [
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
-                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
-                    comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
-                  ],
-                },
                 prometheusRule,
-                {
-                  name: 'namespace-conditions',
-                  base: namespace,
-                  patches: [
-                    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'vshn-redis'),
-                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
-                    comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
-                    comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
-                  ],
-                },
-                comp.NamespacePermissions('vshn-redis'),
                 {
                   name: 'self-signed-issuer',
                   base: selfSignedIssuer,

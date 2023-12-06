@@ -83,55 +83,6 @@ local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:postgres:c
   subjects_: [ restoreServiceAccount ],
 };
 
-local namespace = comp.KubeObject('v1', 'Namespace') +
-                  {
-                    spec+: {
-                      forProvider+: {
-                        manifest+: {
-                          metadata: {
-                            name: '',
-                            labels: {
-                              [serviceNameLabelKey]: 'postgresql-standalone',
-                              [serviceNamespaceLabelKey]: '',
-                              [slaLabelKey]: '',
-                              'appuio.io/no-rbac-creation': 'true',
-                              'appuio.io/organization': 'vshn',
-                              'appuio.io/billing-name': 'appcat-postgresql',
-                            },
-                          },
-                        },
-                      },
-                    },
-                  };
-
-local claimNamespaceObserve = {
-  name: 'ns-observer',
-  base: namespace {
-    spec+: {
-      managementPolicy: 'Observe',
-    },
-  },
-  patches: [
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'ns-observer'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.name'),
-    comp.ToCompositeFieldPath('status.atProvider.manifest.metadata.labels[appuio.io/organization]', 'metadata.labels[appuio.io/organization]'),
-  ],
-};
-
-local instanceNamespace = {
-  name: 'namespace-conditions',
-  base: namespace,
-  patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.namespaceConditions'),
-    comp.ToCompositeFieldPath('metadata.name', 'status.instanceNamespace'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.metadata.labels[%s]' % serviceNamespaceLabelKey),
-    comp.FromCompositeFieldPath('spec.parameters.service.serviceLevel', 'spec.forProvider.manifest.metadata.labels[appcat.vshn.io/sla]'),
-    comp.FromCompositeFieldPath('metadata.labels[appuio.io/organization]', 'spec.forProvider.manifest.metadata.labels[appuio.io/organization]'),
-  ],
-};
-
 local localca = {
   name: 'local-ca',
   base: comp.KubeObject('cert-manager.io/v1', 'Issuer') +
@@ -907,9 +858,6 @@ local composition(restore=false) =
               apiVersion: 'pt.fn.crossplane.io/v1beta1',
               kind: 'Resources',
               resources: [
-                           claimNamespaceObserve,
-                           instanceNamespace,
-                           comp.NamespacePermissions('vshn-postgresql'),
                            localca,
                            certificate,
                          ] +
