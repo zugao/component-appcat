@@ -59,6 +59,10 @@ parameters:
         registry: ghcr.io
         repository: appuio/appuio-reporting
         tag: v0.1.1
+      collector:
+        registry: ghcr.io
+        repository: vshn/billing-collector-cloudservices
+        tag: v3.0.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -74,6 +78,7 @@ parameters:
     billing:
       namespace: ${appcat:namespace}
       tenantID: ${cluster:tenant}
+      clusterID: ${cluster:name}
       instanceUOM: uom_uom_45_1e112771
       enableMockOrgInfo: false
       salesOrder: "" # TODO: Update once the fact is available in Leutenant
@@ -83,6 +88,59 @@ parameters:
         schedule: 30 * * * *
         # Deploy metering prometheus rules
         meteringRules: false
+      cloud:
+        secrets:
+          exoscale:
+            credentials:
+              stringData:
+                EXOSCALE_API_KEY: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/exoscale-key}"
+                EXOSCALE_API_SECRET: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/exoscale-secret}"
+                KUBERNETES_SERVER_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-server}"
+                KUBERNETES_SERVER_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-token}"
+                CONTROL_API_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-url}"
+                CONTROL_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-token}"
+          cloudscale:
+            credentials:
+              stringData:
+                CLOUDSCALE_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloudscale-token}"
+                KUBERNETES_SERVER_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-server}"
+                KUBERNETES_SERVER_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-token}"
+                CONTROL_API_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-url}"
+                CONTROL_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-token}"
+        # Unit of measure map "cloud service value": "odoo16 value"
+        uom:
+          GB: uom_uom_71_6f28fc21
+          GBDay: uom_uom_78_b847edc1
+          KReq: uom_uom_60_a83156c7
+          InstanceHour: uom_uom_45_1e112771
+        exoscale:
+          enabled: false
+          dbaas:
+            enabled: false
+            # in minutes
+            collectIntervalMinutes: 15
+          # Exoscale metrics are generally fast
+          # and we are less likely to miss and dbaas instances
+          # in hours
+          objectStorage:
+            enabled: false
+            collectIntervalHours: 23
+            # Run the tool only after 6 in the morning.+
+            # in hours
+            billingHour: 6
+
+        cloudscale:
+          enabled: false
+          # cloudscale.ch queries are rather slow.
+          # Also the metrics are fetched for the previous day, won't change often.
+          # in hours
+          collectIntervalHours: 23
+          # Run the tool only after 6 in the morning.+
+          # in hours
+          billingHour: 6
+          # How many days ago to get the metrics
+          # The result is always 1 day of metrics
+          days: 1
       monitoring:
         enabled: true
         alerts:
