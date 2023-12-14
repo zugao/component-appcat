@@ -1,7 +1,6 @@
 applications:
   - appcat
   - crossplane
-  - appuio-reporting as appcat-reporting
 parameters:
   pkg.appcat:
     componentVersion: v2.14.0
