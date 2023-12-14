@@ -1,0 +1,21 @@
+= Billing
+
+== VSHN Managed Services
+
+The billing for VSHN Managed Services consists of two distinct parts:
+
+* Aggregating the metrics and push them to Mimir
+* Transfer the metrics from Mimir to Odoo 16
+
+The first part has to be available on every cluster, where AppCat is billed.
+Here, we also have to make the distinction between APPUiO Cloud and APPUiO Managed, as the queries are slightly different.
+PrometheusRules are used to aggregate the metrics prior to sending them to Mimir.
+To determine the cost for any instance we need pod and namespace metrics from Prometheus.
+Sending them all to Mimir would quickly generate a huge amount of data and costs, that's why each cluster contains those PrometheusRules.
+
+The second part is only deployed to APPUiO Cloud LPG2 as all data is available in Mimir.
+The reporting tool connects to Mimir and collects the metrics for the given time frame.
+It will then write them to Odoo according to the templates.
+Here, we have slightly different queries as well.
+
+== Cloud Services

@@ -1,0 +1,521 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-minio-besteffort
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-minio-besteffort-cloud
+  name: appcat-vshn-minio-besteffort-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-minio-besteffort
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-minio-besteffort-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-minio-besteffort
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="besteffort"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "minio by VSHN besteffort
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "minio by VSHN besteffort"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-minio-guaranteed
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-minio-guaranteed-cloud
+  name: appcat-vshn-minio-guaranteed-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-minio-guaranteed
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-minio-guaranteed-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-minio-guaranteed
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="guaranteed"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "minio by VSHN guaranteed
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "minio by VSHN guaranteed"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-postgres-besteffort
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-postgres-besteffort-cloud
+  name: appcat-vshn-postgres-besteffort-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-postgres-besteffort
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-postgres-besteffort-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-postgres-besteffort
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="besteffort"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "postgres by VSHN besteffort
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "postgres by VSHN besteffort"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-postgres-guaranteed
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-postgres-guaranteed-cloud
+  name: appcat-vshn-postgres-guaranteed-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-postgres-guaranteed
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-postgres-guaranteed-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-postgres-guaranteed
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="guaranteed"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "postgres by VSHN guaranteed
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "postgres by VSHN guaranteed"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-redis-besteffort
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-redis-besteffort-cloud
+  name: appcat-vshn-redis-besteffort-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-redis-besteffort
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-redis-besteffort-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-redis-besteffort
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="besteffort"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "redis by VSHN besteffort
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "redis by VSHN besteffort"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    product-id: appcat-vshn-redis-guaranteed
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: appuio-reporting
+    app.kubernetes.io/part-of: syn
+    name: appcat-vshn-redis-guaranteed-cloud
+  name: appcat-vshn-redis-guaranteed-cloud
+  namespace: syn-appcat
+spec:
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    metadata:
+      annotations:
+        product-id: appcat-vshn-redis-guaranteed
+      labels:
+        app.kubernetes.io/managed-by: commodore
+        app.kubernetes.io/name: appuio-reporting
+        app.kubernetes.io/part-of: syn
+        cron-job-name: appcat-vshn-redis-guaranteed-cloud
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: commodore
+            app.kubernetes.io/name: appuio-reporting
+            app.kubernetes.io/part-of: syn
+        spec:
+          containers:
+            - args:
+                - appuio-reporting report --timerange 1h --begin=$(date -d "now -3
+                  hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u -Iseconds)
+              command:
+                - sh
+                - -c
+              env:
+                - name: AR_ODOO_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: token_endpoint
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_id
+                      name: odoo-credentials
+                - name: AR_ODOO_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: client_secret
+                      name: odoo-credentials
+                - name: AR_ODOO_URL
+                  value: https://test.central.vshn.ch/api/v2/product_usage_report_POST
+                - name: AR_PROM_URL
+                  value: http://prometheus-operated.prometheus-system:9090/prometheus
+                - name: AR_ORG_ID
+                  value: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+                - name: AR_PRODUCT_ID
+                  value: appcat-vshn-redis-guaranteed
+                - name: AR_QUERY
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="guaranteed"}
+                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info,
+                    "label_appuio_io_organization", "$1", "organization", "(.*)")
+                - name: AR_INSTANCE_JSONNET
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                    % labels
+                - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
+                  value: 'local labels = std.extVar("labels"); "redis by VSHN guaranteed
+                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                    % labels'
+                - name: AR_ITEM_DESCRIPTION_JSONNET
+                  value: local labels = std.extVar("labels"); "redis by VSHN guaranteed"
+                    % labels
+                - name: AR_UNIT_ID
+                  value: uom_uom_45_1e112771
+              image: ghcr.io/appuio/appuio-reporting:v0.1.1
+              name: backfill
+              resources: {}
+          initContainers: []
+          restartPolicy: OnFailure
+  schedule: 30 * * * *
+  startingDeadlineSeconds: 180
+  successfulJobsHistoryLimit: 3

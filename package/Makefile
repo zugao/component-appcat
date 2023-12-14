@@ -33,6 +33,35 @@ lint_adoc: ## Lint documentation
 docs-serve: ## Preview the documentation
 	$(ANTORA_PREVIEW_CMD)
 
+.PHONY: compile
+.compile:
+	mkdir -p dependencies
+	$(COMPILE_CMD)
+
+.PHONY: test
+test: .compile ## Compile the package
+.PHONY: gen-golden
+gen-golden: clean .compile ## Update the reference version for target `golden-diff`.
+	@rm -rf tests/golden/$(instance)
+	@mkdir -p tests/golden/$(instance)
+	@cp -R compiled/. tests/golden/$(instance)/.
+
+.PHONY: golden-diff
+golden-diff: clean .compile ## Diff compile output against the reference version. Review output and run `make gen-golden golden-diff` if this target fails.
+	@git diff --exit-code --minimal --no-index -- tests/golden/$(instance) compiled/
+
+.PHONY: golden-diff-all
+golden-diff-all: recursive_target=golden-diff
+golden-diff-all: $(test_instances) ## Run golden-diff for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
+
+.PHONY: gen-golden-all
+gen-golden-all: recursive_target=gen-golden
+gen-golden-all: $(test_instances) ## Run gen-golden for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
+
+.PHONY: $(test_instances)
+$(test_instances):
+	$(MAKE) $(recursive_target) -e instance=$(basename $(@F))
+
 .PHONY: clean
 clean: ## Clean the project
 	rm -rf .cache compiled dependencies vendor helmcharts jsonnetfile*.json || true

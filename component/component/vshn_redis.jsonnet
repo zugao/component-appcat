@@ -23,6 +23,7 @@ local clientCertificateSecretName = 'tls-client-certificate';
 
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
+local serviceCLaimNameLabelKey = 'appcat.vshn.io/claim-name';
 
 local connectionSecretKeys = [
   'ca.crt',

@@ -31,13 +31,13 @@ spec:
                             # Populate tenant_id
                             label_replace(
                               # Fetch all namespaces with label label_appuio_io_billing_name=~"appcat-.+"
-                              kube_namespace_labels{ label_appuio_io_billing_name=~"appcat-.+"} *
+                              kube_namespace_labels{label_appuio_io_organization=~".+", label_appuio_io_billing_name=~"appcat-.+"} *
                               on (namespace) group_right(label_appuio_io_organization,label_appcat_vshn_io_claim_namespace,label_appcat_vshn_io_sla, label_appuio_io_billing_name)
                               kube_pod_info{created_by_kind!="Job"},
                               "tenant_id",
-            "t-silent-test-1234",
-            "",
-            ""
+            "$1",
+            "label_appuio_io_organization",
+            "(.*)"
 
                             ),
                             "claim_namespace",

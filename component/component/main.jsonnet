@@ -95,7 +95,7 @@ local tenant = {
     "$1",
     "",
     ""
-  |||, '$1', params.tenantID),
+  |||, '$1', params.billing.tenantID),
   [if params.appuioManaged then 'label']: '',
 
   // We use the organization label on appuio cloud
@@ -111,6 +111,10 @@ local tenant = {
 local promQueryTemplate = importstr 'promql/appcat.promql';
 local promQueryWithLabel = std.strReplace(promQueryTemplate, '{{ORGLABEL}}', tenant.label);
 local promQuery = std.strReplace(promQueryWithLabel, '{{TENANT_REPLACE}}', tenant.replace);
+
+local meteringQueryCloud = importstr 'promql/metering_cloud.promql';
+local meteringQueryManagedRaw = importstr 'promql/metering_managed.promql';
+local meteringQueryManaged = std.strReplace(meteringQueryManagedRaw, '{{salesOrder}}', params.salesOrder);
 
 local maintenanceRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-maintenance') {
   metadata+: {
@@ -131,7 +135,7 @@ local maintenanceRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule
   },
 };
 
-local promRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
+local legacyBillingRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -143,6 +147,56 @@ local promRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'app
           {
             expr: promQuery,
             record: 'appcat:billing',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local meteringRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-metering') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-metering-rules',
+        rules: [
+          {
+            expr: if params.appuioManaged then meteringQueryManaged else meteringQueryCloud,
+            record: 'appcat:metering',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local mockOrgInfo = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'mock-org-info') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'mock-org-info',
+        rules: [
+          {
+            expr: '1',
+            record: 'appuio_control_organization_info',
+            labels: {
+              organization: 'awesomekorp',
+              sales_order: 'ST10120',
+            },
+          },
+          {
+            expr: '1',
+            record: 'appuio_control_organization_info',
+            labels: {
+              organization: 'notvshn',
+              sales_order: 'invalid',
+            },
           },
         ],
       },
@@ -163,9 +217,11 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
-  '10_appcat_billing_recording_rule': promRule,
+  '10_appcat_legacy_billing_recording_rule': legacyBillingRule,
+  [if params.billing.vshn.meteringRules then '10_appcat_metering_recording_rule']: meteringRule,
   '10_appcat_maintenance_recording_rule': maintenanceRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
+  [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
 
 } + if params.slos.enabled && params.services.vshn.enabled then {
   [if params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),

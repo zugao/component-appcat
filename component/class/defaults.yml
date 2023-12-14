@@ -55,6 +55,10 @@ parameters:
         registry: xpkg.upbound.io
         repository: crossplane-contrib/function-patch-and-transform
         tag: v0.1.4
+      reporting:
+        registry: ghcr.io
+        repository: appuio/appuio-reporting
+        tag: v0.1.1
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -64,9 +68,50 @@ parameters:
     crossplaneNamespace: ${crossplane:namespace}
 
     appuioManaged: true
-    tenantID: ${cluster:tenant}
     quotasEnabled: false
     grpcEndpoint: host.docker.internal:9443
+
+    billing:
+      namespace: ${appcat:namespace}
+      tenantID: ${cluster:tenant}
+      instanceUOM: uom_uom_45_1e112771
+      enableMockOrgInfo: false
+      salesOrder: "" # TODO: Update once the fact is available in Leutenant
+      vshn:
+        # The reporting for VSHN service should only run on APPUiO Cloud LPG2
+        enableCronjobs: false
+        schedule: 30 * * * *
+        # Deploy metering prometheus rules
+        meteringRules: false
+      monitoring:
+        enabled: true
+        alerts:
+          APPUiOReportingDatabaseBackfillingFailed:
+            enabled: true
+            rule:
+              annotations:
+                description: AppCat Reporting backfilling metrics into Odoo failed
+                message: AppCat Reporting backfilling metrics into Odoo failed.
+                runbook_url: TBD
+                summary: AppCat Reporting backfilling metrics into Odoo failed.
+              expr: |
+                kube_job_failed{job="kube-state-metrics",namespace="${appcat:namespace}",job_name=~"backfill-.*"} > 0
+              for: 10m
+              labels:
+                severity: warning
+                syn_team: schedar
+      network_policies:
+        target_namespaces: {}
+      prometheus:
+        url: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc:8080/prometheus
+        org_id: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
+      odoo:
+        url: "https://test.central.vshn.ch/api/v2/product_usage_report_POST"
+        oauth:
+          url: "https://test.central.vshn.ch/api/v2/authentication/oauth2/token"
+          clientID: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/odoo-oauth-client-id}"
+          clientSecret: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/odoo-oauth-client-secret}"
+
     defaultRestoreRoleRules:
       - apiGroups:
           - vshn.appcat.vshn.io
@@ -306,6 +351,7 @@ parameters:
         stsResizer:
           enabled: true
         postgres:
+          billing: true
           # bucket_region: 'lpg' || 'ch-gva-2'
           bucket_region: ""
           # bucket_endpoint: 'https://objects.lpg.cloudscale.ch' || 'https://sos-ch-gva-2.exo.io'
@@ -438,6 +484,7 @@ parameters:
                 cpu: "250m"
                 memory: "256Mi"
         redis:
+          billing: true
           enabled: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
@@ -480,6 +527,7 @@ parameters:
                 memory: "8Gi"
                 disk: 16Gi
         minio:
+          billing: true
           enabled: false
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}

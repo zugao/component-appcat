@@ -1,9 +1,10 @@
 applications:
   - appcat
   - crossplane
+  - appuio-reporting as appcat-reporting
 parameters:
   pkg.appcat:
-    componentVersion: v2.13.1
+    componentVersion: v2.14.0
     image:
       registry: ghcr.io
       repository: vshn/appcat
@@ -16,6 +17,9 @@ parameters:
     crossplane:
       url: https://github.com/projectsyn/component-crossplane.git
       version: v3.4.0
+    appuio-reporting:
+      url: https://github.com/appuio/component-appuio-reporting
+      version: v0.2.2
   appcat:
     images:
       appcat:
