@@ -91,6 +91,7 @@ local composition =
             comp.FromCompositeFieldPath('spec.parameters.maintenance.timeOfDay', 'spec.forProvider.maintenance.timeOfDay'),
             comp.FromCompositeFieldPath('spec.parameters.service.version', 'spec.forProvider.version'),
             comp.ToCompositeFieldPath('status.atProvider.version', 'status.version'),
+            comp.FromCompositeFieldPath('spec.parameters.service.zone', 'metadata.annotations[appcat.vshn.io/cloudzone]'),
           ],
         },
       ],
