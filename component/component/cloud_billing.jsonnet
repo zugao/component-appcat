@@ -23,6 +23,8 @@ local secret(key, suf) = [
       stringData+: {
         ODOO_OAUTH_CLIENT_ID: params.odoo.oauth.clientID,
         ODOO_OAUTH_CLIENT_SECRET: params.odoo.oauth.clientSecret,
+        CONTROL_API_URL: params.controlAPI.url,
+        CONTROL_API_TOKEN: params.controlAPI.token,
       },
     } + com.makeMergeable(paramsCloud.secrets[key][s])
   for s in std.objectFields(paramsCloud.secrets[key])

@@ -1,0 +1,354 @@
+= AppCat Billing
+
+== `images.collector`
+[horizontal]
+type:: dict
+default:: https://github.com/vshn/component-appcat/blob/master/component/class/defaults.yml[See class/defaults.yml]
+
+Dictionary containing the container image used by this component.
+
+'''
+
+The parent key for all of the following parameters is `appcat.billing`.
+
+== `namespace`
+
+[horizontal]
+type:: string
+default:: `${appcat:namespace}`
+
+The namespace in which to deploy the cloud billing.
+
+== `tenantID`
+
+[horizontal]
+type:: string
+default:: `${cluster:tenant}`
+
+The name of the tenant the cluster belongs to. Defaults to the `cluster:tenant` lieutenant fact.
+
+== `clusterID`
+
+[horizontal]
+type:: string
+default:: `${cluster:name}`
+
+The name of the cluster. Defaults to the `cluster:name` lieutenant fact.
+
+== `instanceUOM`
+
+[horizontal]
+type:: string
+default:: `uom_uom_45_1e112771`
+
+Unit of measurement for the instances.
+
+== `enableMockOrgInfo`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+If a PrometheusRule with mock recording rules should be created. If enabled it will create two the following two metrics:
+
+```prometheus
+appuio_control_organization_info{organization="awesomekorp", sales_order="ST10120"} 1
+appuio_control_organization_info'{organization="notvshn", sales_order="invalid"}  1
+```
+
+== `salesOrder`
+
+[horizontal]
+type:: string
+default:: `TBD`
+
+The sales order to be used on that cluster (only relevant for APPUiO Managed)
+
+== `vshn.enableCronjobs`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+If the billing cronjob for VSHN Appcat services should be enabled.
+
+== `vshn.schedule`
+
+[horizontal]
+type:: string
+default:: "30 * * * *"
+
+The schedule used for the billing cronjob.
+
+== `vshn.meteringRules`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+If metering prometheus rules should be deployed. Used for alerting.
+
+== `cloud.uom`
+
+[horizontal]
+type:: dict
+default:: `{GB: uom_uom_71_6f28fc21, GBDay: uom_uom_78_b847edc1, KReq: uom_uom_60_a83156c7, InstanceHour: uom_uom_45_1e112771}`
+
+Unit of measure map that translates the cloud serivce value to the odoo16 value
+Format: "cloud service value": "odoo16 value"
+
+== `cloud.exoscale.enabled`
+
+[horizontal]
+type:: bool
+default:: `false`
+
+Set to true if you want to deploy the exosacle metrics collector components.
+
+=== `cloud.exoscale.objectStorage.enabled`
+
+[horizontal]
+type:: bool
+default:: `true`
+
+Enable exoscale object storage collector.
+
+=== `cloud.exoscale.objectStorage.collectIntervalHours`
+
+[horizotanl]
+type:: int
+default:: 23
+
+The interval (in hours) that the collector collects billing metrics for Exoscale object storage service.
+
+=== `cloud.exoscale.objectStorage.billingHours`
+
+[horizotanl]
+type:: int
+default:: 6
+
+Only collect billing metrics after a certain hour of the day.
+
+=== `cloud.exoscale.dbaas.enabled`
+
+[horizontal]
+type:: bool
+default:: `false`
+
+Enable exoscale dbaas collector.
+
+=== `cloud.exoscale.dbaas.collectIntervalMinutes`
+
+[horizotanl]
+type:: int
+default:: 15
+
+The interval (in minutes) that the collector collects billing metrics for Exoscale DBaaS services.
+
+=== `cloud.secrets.exoscale.credentials.stringData.EXOSCALE_API_KEY`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The Exoscale API key.
+
+You need to get the token from the https://portal.exoscale.com[Exoscale Console].
+You need to select the correct account (token is limited to one account), choose "IAM" in the menu and generate a new key pair.
+
+=== `cloud.secrets.exoscale.credentials.stringData.EXOSCALE_API_SECRET`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The Exoscale API secret.
+
+Second part of the Exoscale API credentials.
+See EXOSCALE_API_KEY for instructions.
+
+=== `cloud.secrets.exoscale.credentials.stringData.KUBERNETES_SERVER_URL`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The Kubernetes server URL.
+
+=== `cloud.secrets.exoscale.credentials.stringData.KUBERNETES_SERVER_TOKEN`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The token to connect to a Kubernetes cluster.
+
+The Service Account connected to this token should have `get` and `list` permissions to the following managed resources:
+
+* `buckets.exoscale.crossplane.io`
+* `postgresqls.exoscale.crossplane.io`
+
+== `cloud.cloudscale.enabled`
+
+[horizontal]
+type:: bool
+default:: `false`
+
+Set to true if you want to deploy the cloudscale metrics collector components.
+
+=== `cloud.cloudscale.objectStorage.enabled`
+
+[horizontal]
+type:: bool
+default:: `true`
+
+Enable cloudscale object storage collector.
+
+=== `cloud.cloudscale.objectStorage.collectIntervalHours`
+
+[horizotanl]
+type:: int
+default:: 23
+
+The interval (in hours) that the collector collects billing metrics for Cloudscale object storage service.
+
+=== `cloud.cloudscale.objectStorage.billingHours`
+
+[horizotanl]
+type:: int
+default:: 6
+
+Only collect billing metrics after a certain hour of the day.
+
+=== `cloud.cloudscale.objectStorage.days`
+
+[horizotanl]
+type:: int
+default:: 1
+
+How many days ago to get the billing metrics from cloudscale. The returned metrics are always for one day.
+
+== `cloud.secrets.cloudscale.credentials.stringData.CLOUDSCALE_API_TOKEN`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The cloudscale API token.
+
+You need to get the token from the https://control.cloudscale.ch[Cloudscale Control Panel].
+You need to select the correct Project (token is limited to one project), choose "API Tokens" in the menu and generate a new one.
+
+== `cloud.secrets.cloudscale.credentials.stringData.KUBERNETES_SERVER_URL`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The Kubernetes server URL.
+
+== `cloud.secrets.cloudscale.credentials.stringData.KUBERNETES_SERVER_TOKEN`
+
+[horizontal]
+type:: string
+default:: Required.
+
+The token to connect to a Kubernetes cluster.
+
+The Service Account connected to this token should have `get` and `list` permissions to `buckets.cloudscale.crossplane.io` managed resource, and `get` and `list` permissions for namespaces.
+
+== `monitoring.enabled`
+
+[horizontal]
+type:: boolean
+default:: true
+
+Whether to enable monitoring for the billing monitoirng
+
+=== `alerts`
+
+[horizontal]
+type:: dict
+default:: https://github.com/vshn/component-appcat/blob/master/component/class/defaults.yml[See class/defaults.yml]
+
+List of alerting rules to deploy.
+
+== `network_policies.target_namespaces`:
+
+[horizontal]
+type:: dict
+default:: {}
+
+List of namespaces to which the billing tool should have access to.
+
+== `prometheus`
+
+=== `prometheus.url`
+
+[horizontal]
+type:: string
+default:: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc:8080/prometheus
+
+URL to the prometheus instance that holds the `appuio_control_organization_info` to find the correct `salesOrder`
+
+=== `prometheus.org_id`
+
+[horizontal]
+type:: string
+default:: "appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0"
+
+The (optional) organization id to use for the prometheus query (required for mimir)
+
+== `odoo`
+
+=== `odoo.url`
+
+[horizontal]
+type:: string
+default:: "https://test.central.vshn.ch/api/v2/product_usage_report_POST"
+
+URL to the odoo endpoint used to send billing metrics to.
+
+=== `odoo.oauth.url`
+
+[horizontal]
+type:: string
+default:: "https://test.central.vshn.ch/api/v2/authentication/oauth2/token"
+
+URL to the odoo oauth endpoint
+
+=== `odoo.oauth.clientID`
+
+[horizontal]
+type:: string
+default:: vault reference
+
+clientID to connect to Odoo via oauth
+
+=== `odoo.oauth.clientSecret`
+
+[horizontal]
+type:: string
+default:: vault reference
+
+clientSecret to connect to Odoo via oauth
+
+== `cloudAPI`
+
+=== `cloudAPI.url`
+
+[horizontal]
+type:: string
+default:: vault reference
+
+URL to the APPUiO Control API cluster
+
+=== `cloudAPI.token`
+
+[horizontal]
+type:: string
+default:: vault reference
+
+The token to connect to the APPUiO Control API cluster.
+
+The Service Account connected to this token should have `get` and `list` permissions to `organizations.organization.appuio.io` managed resource.

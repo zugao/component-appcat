@@ -97,16 +97,12 @@ parameters:
                 EXOSCALE_API_SECRET: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/exoscale-secret}"
                 KUBERNETES_SERVER_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-server}"
                 KUBERNETES_SERVER_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-token}"
-                CONTROL_API_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-url}"
-                CONTROL_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-token}"
           cloudscale:
             credentials:
               stringData:
                 CLOUDSCALE_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloudscale-token}"
                 KUBERNETES_SERVER_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-server}"
                 KUBERNETES_SERVER_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cluster-token}"
-                CONTROL_API_URL: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-url}"
-                CONTROL_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-token}"
         # Unit of measure map "cloud service value": "odoo16 value"
         uom:
           GB: uom_uom_71_6f28fc21
@@ -169,6 +165,9 @@ parameters:
           url: "https://test.central.vshn.ch/api/v2/authentication/oauth2/token"
           clientID: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/odoo-oauth-client-id}"
           clientSecret: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/odoo-oauth-client-secret}"
+      controlAPI:
+        url: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-url}"
+        token: "?{vaultkv:${cluster:tenant}/${cluster:name}/billing-collector-cloudservices/cloud-api-token}"
 
     defaultRestoreRoleRules:
       - apiGroups:
