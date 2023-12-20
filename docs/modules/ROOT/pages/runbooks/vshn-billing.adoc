@@ -1,0 +1,39 @@
+= Billing Backfill Jobs
+
+== AppCatReportingDatabaseBackfillingFailed
+
+=== icon:glasses[] Overview
+
+These jobs are responsible for transmitting data from Mimir to Odoo 16 for billing.
+If anything in the process fails, then the jobs will fail as whole.
+
+=== icon:bug[] Steps for debugging
+
+Check the logs of the failed jobs for any indication what went wrong.
+
+[source,shell]
+----
+export NAMESPACE=syn-appcat
+
+kubectl -n $NAMESPACE get pods
+kubectl -n $NAMESPACE log $FAILED_POD
+----
+
+As the jobs connect to various other systems, the necessary steps to fix the issues can differ from case to case.
+However these might be most probable culprits:
+
+* Mimir not reachable
+* Odoo 16 not reachable
+* Wrong Odoo 16 credentials
+
+After identifying and fixing the issues, manually trigger a cronjob again.
+
+[source,shell]
+----
+export NAMESPACE=syn-appcat
+
+kubectl -n $NAMESPACE create job --from cronjob/$FAILED_CRON_JOB mybackfill
+----
+
+This will spawn a new job with the default backfill of three hours.
+If the gap is larger than three hours, then craft a custom job from the existing cronjob and adjust the `--begin` and `--repeat-until` parameters of the command.

@@ -86,16 +86,16 @@ parameters:
       monitoring:
         enabled: true
         alerts:
-          APPUiOReportingDatabaseBackfillingFailed:
+          AppCatReportingDatabaseBackfillingFailed:
             enabled: true
             rule:
               annotations:
                 description: AppCat Reporting backfilling metrics into Odoo failed
                 message: AppCat Reporting backfilling metrics into Odoo failed.
-                runbook_url: TBD
+                runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-billing.html#AppCatReportingDatabaseBackfillingFailed
                 summary: AppCat Reporting backfilling metrics into Odoo failed.
               expr: |
-                kube_job_failed{job="kube-state-metrics",namespace="${appcat:namespace}",job_name=~"backfill-.*"} > 0
+                kube_job_failed{job="kube-state-metrics",namespace="${appcat:namespace}",job_name=~"appcat-.*"} > 0
               for: 10m
               labels:
                 severity: warning
