@@ -14,9 +14,8 @@ parameters:
   appcat:
     quotasEnabled: false
     appuioManaged: false
-    salesOrderID: ST10120
-
     billing:
+      salesOrder: ST10120
       vshn:
         enableCronjobs: true
         meteringRules: true

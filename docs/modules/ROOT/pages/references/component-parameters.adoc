@@ -123,3 +123,10 @@ type:: dict
 reference:: xref:references/service-objectstorage.adoc[See service parameters]
 
 This parameter allows enabling and configuring the generic objectstorage AppCat service.
+
+== `billing`
+[horizontal]
+type:: dict
+reference:: xref:references/appcat-billing.adoc[See AppCat billing parameters]
+
+This parameter allows configuring billing for AppCat.

@@ -69,6 +69,10 @@ parameters:
           - ${_base_directory}/component/billing.jsonnet
         input_type: jsonnet
         output_path: appcat/
+      - input_paths:
+          - ${_base_directory}/component/cloud_billing.jsonnet
+        input_type: jsonnet
+        output_path: appcat/cloud_billing
 
       - input_paths:
           - ${_base_directory}/component/appcat_sli_exporter.jsonnet

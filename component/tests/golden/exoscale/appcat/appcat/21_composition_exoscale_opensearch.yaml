@@ -95,4 +95,7 @@ spec:
         - fromFieldPath: spec.parameters.backup.timeOfDay
           toFieldPath: spec.forProvider.backup.timeOfDay
           type: FromCompositeFieldPath
+        - fromFieldPath: spec.parameters.service.zone
+          toFieldPath: metadata.annotations[appcat.vshn.io/cloudzone]
+          type: FromCompositeFieldPath
   writeConnectionSecretsToNamespace: crossplane-system
