@@ -193,7 +193,7 @@ if params.billing.vshn.enableCronjobs then
         },
       },
     },
-    [if std.length(params.billing.network_policies.target_namespaces) != 0 then 'billing/01_netpol']: netPol.Policies,
+    [if std.length(std.filter(function(name) params.billing.network_policies.target_namespaces[name] == true, std.objectFields(params.billing.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
     'billing/10_odoo_secret': odooSecret,
     'billing/11_backfill': billingCronjobs,
     [if params.billing.monitoring.enabled then 'billing/50_alerts']: alerts.Alerts,

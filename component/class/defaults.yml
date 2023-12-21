@@ -155,7 +155,8 @@ parameters:
                 severity: warning
                 syn_team: schedar
       network_policies:
-        target_namespaces: {}
+        target_namespaces:
+          vshn-appuio-mimir: true
       prometheus:
         url: http://vshn-appuio-mimir-query-frontend.vshn-appuio-mimir.svc:8080/prometheus
         org_id: appuio-cloud-metering-c-appuio-cloudscale-lpg-2|appuio-cloud-metering-c-appuio-exoscale-ch-gva-2-0
