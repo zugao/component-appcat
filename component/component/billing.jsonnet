@@ -186,13 +186,6 @@ local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateClou
 
 if params.billing.vshn.enableCronjobs then
   {
-    'billing/00_namespace': kube.Namespace(params.billing.namespace) {
-      metadata+: {
-        labels+: common.Labels {
-          'openshift.io/cluster-monitoring': 'true',
-        },
-      },
-    },
     [if std.length(std.filter(function(name) params.billing.network_policies.target_namespaces[name] == true, std.objectFields(params.billing.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
     'billing/10_odoo_secret': odooSecret,
     'billing/11_backfill': billingCronjobs,
