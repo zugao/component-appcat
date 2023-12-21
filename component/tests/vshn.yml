@@ -21,6 +21,9 @@ parameters:
         meteringRules: true
       enableMockOrgInfo: true
       instanceUOM: uom_uom_45_1e112771
+      network_policies:
+        target_namespaces:
+          vshn-appuio-mimir: false
       prometheus:
         url: http://prometheus-operated.prometheus-system:9090/prometheus
 

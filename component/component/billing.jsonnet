@@ -152,7 +152,7 @@ local generateCloudAndManaged = function(name)
   local queryName = if name == 'postgres' then name + 'ql' else name;
 
   local managedQuery = 'appcat:metering{label_appuio_io_billing_name="appcat-' + queryName + '",label_appcat_vshn_io_sla="%s"}';
-  local cloudQuery = managedQuery + ' * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info, "label_appuio_io_organization", "$1", "organization", "(.*)")';
+  local cloudQuery = managedQuery + ' * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"}, "label_appuio_io_organization", "$1", "organization", "(.*)")';
 
   local permutations = [
     {
@@ -193,7 +193,7 @@ if params.billing.vshn.enableCronjobs then
         },
       },
     },
-    [if std.length(params.billing.network_policies.target_namespaces) != 0 then 'billing/01_netpol']: netPol.Policies,
+    [if std.length(std.filter(function(name) params.billing.network_policies.target_namespaces[name] == true, std.objectFields(params.billing.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
     'billing/10_odoo_secret': odooSecret,
     'billing/11_backfill': billingCronjobs,
     [if params.billing.monitoring.enabled then 'billing/50_alerts']: alerts.Alerts,
