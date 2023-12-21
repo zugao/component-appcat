@@ -152,7 +152,7 @@ local generateCloudAndManaged = function(name)
   local queryName = if name == 'postgres' then name + 'ql' else name;
 
   local managedQuery = 'appcat:metering{label_appuio_io_billing_name="appcat-' + queryName + '",label_appcat_vshn_io_sla="%s"}';
-  local cloudQuery = managedQuery + ' * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info, "label_appuio_io_organization", "$1", "organization", "(.*)")';
+  local cloudQuery = managedQuery + ' * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"}, "label_appuio_io_organization", "$1", "organization", "(.*)")';
 
   local permutations = [
     {
