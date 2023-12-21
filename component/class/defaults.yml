@@ -62,7 +62,7 @@ parameters:
       collector:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
-        tag: v3.0.0
+        tag: v3.0.1
 
     =_crd_version: ${appcat:images:appcat:tag}
 
