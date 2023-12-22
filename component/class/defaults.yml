@@ -62,7 +62,7 @@ parameters:
       collector:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
-        tag: v3.0.2
+        tag: v3.0.3
 
     =_crd_version: ${appcat:images:appcat:tag}
 
@@ -79,6 +79,7 @@ parameters:
       namespace: ${appcat:namespace}
       tenantID: ${cluster:tenant}
       clusterID: ${cluster:name}
+      cloudZone: ${global:appuio_metered_billing_zone_label_map:${cluster:name}}
       instanceUOM: uom_uom_45_1e112771
       enableMockOrgInfo: false
       salesOrder: "" # TODO: Update once the fact is available in Leutenant

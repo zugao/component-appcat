@@ -9,10 +9,14 @@ parameters:
     # This is not resolving during "commodore package compile", so we provide it explicitly
     namespace: syn-crossplane
 
-  appcat:
-    facts:
-      cloud: exoscale
+  facts:
+    cloud: exoscale
 
+  global:
+    appuio_metered_billing_zone_label_map:
+      c-green-test-1234: 'Kind - Local Test 0'
+
+  appcat:
     billing:
       salesOrderID: "12345"
       cloud:
