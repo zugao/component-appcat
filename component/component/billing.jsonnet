@@ -77,11 +77,9 @@ local commonEnv = std.prune([
 
 local backfillCJ = function(name, query, sla, type)
 
-  local nameSLA = common.Capitalize(if name == 'postgres' then 'PostgreSQL' else name) + ' by VSHN ' + sla;
-
   local typeDesc = if type == 'cloud' then 'APPUiO Cloud - Zone: ' else 'APPUiO Managed - Cluster: ';
 
-  local itemDescJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % nameSLA;
+  local itemDescJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(label_appcat_vshn_io_claim_name)s';
 
   local clusterID = if paramsBilling.enableMockOrgInfo then 'kind' else '%(cluster_id)s';
 
@@ -91,7 +89,7 @@ local backfillCJ = function(name, query, sla, type)
 
   local itemGroupDescJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % itemGroupDesc;
 
-  local instanceJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s';
+  local instanceJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s';
 
   local productID = 'appcat-vshn-%(name)s-%(sla)s' % { name: name, sla: sla };
 

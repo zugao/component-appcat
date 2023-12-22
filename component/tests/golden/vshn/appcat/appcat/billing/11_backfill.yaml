@@ -65,14 +65,14 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "Minio by VSHN besteffort"
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -152,14 +152,14 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "Minio by VSHN guaranteed"
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -239,15 +239,15 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "PostgreSQL by VSHN
-                    besteffort" % labels
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
+                    % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
               image: ghcr.io/appuio/appuio-reporting:v0.2.0
@@ -326,15 +326,15 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "PostgreSQL by VSHN
-                    guaranteed" % labels
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
+                    % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
               image: ghcr.io/appuio/appuio-reporting:v0.2.0
@@ -413,14 +413,14 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "Redis by VSHN besteffort"
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -500,14 +500,14 @@ spec:
                     * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
                     Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "Redis by VSHN guaranteed"
+                  value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
