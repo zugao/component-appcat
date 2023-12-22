@@ -198,6 +198,9 @@ local defaultRuntimeConfigWithSaName(name) = {
   },
 };
 
+local capitalize = function(str)
+  std.join('', std.mapWithIndex(function(i, c) if i == 0 then std.asciiUpper(c) else c, std.stringChars(str)));
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -232,4 +235,6 @@ local defaultRuntimeConfigWithSaName(name) = {
     defaultReadinessCheck(),
   DefaultRuntimeConfigWithSaName(name):
     defaultRuntimeConfigWithSaName(name),
+  Capitalize(str):
+    capitalize(str),
 }

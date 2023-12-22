@@ -9,6 +9,10 @@ parameters:
     cloud: cloudscale
     distribution: openshift4
 
+  global:
+    appuio_metered_billing_zone_label_map:
+      c-green-test-1234: 'Kind - Local Test 0'
+
   crossplane:
     # This is not resolving during "commodore package compile", so we provide it explicitly
     namespace: syn-crossplane

@@ -43,7 +43,7 @@ spec:
                 name: cloudscale-env
             - secretRef:
                 name: credentials-cloudscale
-          image: ghcr.io/vshn/billing-collector-cloudservices:v3.0.1
+          image: ghcr.io/vshn/billing-collector-cloudservices:v3.0.3
           imagePullPolicy: IfNotPresent
           name: exporter
           ports: []

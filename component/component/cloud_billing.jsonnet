@@ -2,6 +2,7 @@ local kap = import 'lib/kapitan.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat.billing;
 local paramsCloud = inv.parameters.appcat.billing.cloud;
+local common = import 'common.libsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local collectorImage = '%(registry)s/%(repository)s:%(tag)s' % inv.parameters.appcat.images.collector;
@@ -155,6 +156,7 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
     ODOO_OAUTH_TOKEN_URL: std.toString(params.odoo.oauth.url),
     CLUSTER_ID: std.toString(params.clusterID),
     APPUIO_MANAGED_SALES_ORDER: if appuioManaged then std.toString(params.salesOrder) else '',
+    CLOUD_ZONE: params.cloudZone,
     UOM: std.toString(paramsCloud.uom),
   },
 } + extraConfig;

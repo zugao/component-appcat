@@ -1,12 +1,14 @@
 // main template for appuio-reporting
 local alerts = import 'billing_alerts.libsonnet';
-local common = import 'billing_cronjob.libsonnet';
+local cronjob = import 'billing_cronjob.libsonnet';
 local netPol = import 'billing_netpol.libsonnet';
+local common = import 'common.libsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.appcat;
+local paramsBilling = params.billing;
 
 local formatImage = function(ref) '%(registry)s/%(repository)s:%(tag)s' % ref;
 
@@ -21,13 +23,13 @@ local escape = function(str)
 
 local odooSecret = kube.Secret('odoo-credentials') {
   metadata+: {
-    namespace: params.billing.namespace,
-    labels+: common.Labels,
+    namespace: paramsBilling.namespace,
+    labels+: cronjob.Labels,
   },
   stringData: {
-    client_id: params.billing.odoo.oauth.clientID,
-    client_secret: params.billing.odoo.oauth.clientSecret,
-    token_endpoint: params.billing.odoo.oauth.url,
+    client_id: paramsBilling.odoo.oauth.clientID,
+    client_secret: paramsBilling.odoo.oauth.clientSecret,
+    token_endpoint: paramsBilling.odoo.oauth.url,
   },
 };
 
@@ -61,27 +63,31 @@ local commonEnv = std.prune([
   },
   {
     name: 'AR_ODOO_URL',
-    value: params.billing.odoo.url,
+    value: paramsBilling.odoo.url,
   },
   {
     name: 'AR_PROM_URL',
-    value: params.billing.prometheus.url,
+    value: paramsBilling.prometheus.url,
   },
-  if params.billing.prometheus.org_id != null then {
+  if paramsBilling.prometheus.org_id != null then {
     name: 'AR_ORG_ID',
-    value: params.billing.prometheus.org_id,
+    value: paramsBilling.prometheus.org_id,
   },
 ]);
 
 local backfillCJ = function(name, query, sla, type)
 
-  local nameSLA = name + ' by VSHN ' + sla;
+  local nameSLA = common.Capitalize(if name == 'postgres' then 'PostgreSQL' else name) + ' by VSHN ' + sla;
+
+  local typeDesc = if type == 'cloud' then 'APPUiO Cloud - Zone: ' else 'APPUiO Managed - Cluster: ';
 
   local itemDescJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % nameSLA;
 
-  local clusterID = if params.billing.enableMockOrgInfo then 'kind' else '%(cluster_id)s';
+  local clusterID = if paramsBilling.enableMockOrgInfo then 'kind' else '%(cluster_id)s';
 
-  local itemGroupDesc = nameSLA + ' - Zone: ' + clusterID + ' / Namespace: %(label_appcat_vshn_io_claim_namespace)s';
+  local zoneOrCluster = if type == 'cloud' then paramsBilling.cloudZone else clusterID;
+
+  local itemGroupDesc = typeDesc + zoneOrCluster + ' / Namespace: %(label_appcat_vshn_io_claim_namespace)s';
 
   local itemGroupDescJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % itemGroupDesc;
 
@@ -112,10 +118,10 @@ local backfillCJ = function(name, query, sla, type)
     },
     {
       name: 'AR_UNIT_ID',
-      value: params.billing.instanceUOM,
+      value: paramsBilling.instanceUOM,
     },
   ]);
-  common.CronJob('%(product)s-%(type)s' % { product: escape(productID), type: type }, 'backfill', {
+  cronjob.CronJob('%(product)s-%(type)s' % { product: escape(productID), type: type }, 'backfill', {
     containers: [
       {
         name: 'backfill',
@@ -184,10 +190,10 @@ local keysAndValues(obj) = std.map(function(x) { name: x, value: obj[x] }, std.o
 local vshnServices = std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, 'billing') && r.value.billing, keysAndValues(params.services.vshn));
 local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name) ], vshnServices));
 
-if params.billing.vshn.enableCronjobs then
+if paramsBilling.vshn.enableCronjobs then
   {
-    [if std.length(std.filter(function(name) params.billing.network_policies.target_namespaces[name] == true, std.objectFields(params.billing.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
+    [if std.length(std.filter(function(name) paramsBilling.network_policies.target_namespaces[name] == true, std.objectFields(paramsBilling.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
     'billing/10_odoo_secret': odooSecret,
     'billing/11_backfill': billingCronjobs,
-    [if params.billing.monitoring.enabled then 'billing/50_alerts']: alerts.Alerts,
+    [if paramsBilling.monitoring.enabled then 'billing/50_alerts']: alerts.Alerts,
   } else {}

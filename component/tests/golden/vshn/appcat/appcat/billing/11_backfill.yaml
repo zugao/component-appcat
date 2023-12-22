@@ -68,11 +68,11 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "minio by VSHN besteffort
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "minio by VSHN besteffort"
+                  value: local labels = std.extVar("labels"); "Minio by VSHN besteffort"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -155,11 +155,11 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "minio by VSHN guaranteed
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "minio by VSHN guaranteed"
+                  value: local labels = std.extVar("labels"); "Minio by VSHN guaranteed"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -242,12 +242,12 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "postgres by VSHN besteffort
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "postgres by VSHN besteffort"
-                    % labels
+                  value: local labels = std.extVar("labels"); "PostgreSQL by VSHN
+                    besteffort" % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
               image: ghcr.io/appuio/appuio-reporting:v0.2.0
@@ -329,12 +329,12 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "postgres by VSHN guaranteed
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "postgres by VSHN guaranteed"
-                    % labels
+                  value: local labels = std.extVar("labels"); "PostgreSQL by VSHN
+                    guaranteed" % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
               image: ghcr.io/appuio/appuio-reporting:v0.2.0
@@ -416,11 +416,11 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "redis by VSHN besteffort
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "redis by VSHN besteffort"
+                  value: local labels = std.extVar("labels"); "Redis by VSHN besteffort"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
@@ -503,11 +503,11 @@ spec:
                   value: local labels = std.extVar("labels"); "%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
-                  value: 'local labels = std.extVar("labels"); "redis by VSHN guaranteed
-                    - Zone: kind / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
+                  value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:
+                    Kind - Local Test 0 / Namespace: %(label_appcat_vshn_io_claim_namespace)s"
                     % labels'
                 - name: AR_ITEM_DESCRIPTION_JSONNET
-                  value: local labels = std.extVar("labels"); "redis by VSHN guaranteed"
+                  value: local labels = std.extVar("labels"); "Redis by VSHN guaranteed"
                     % labels
                 - name: AR_UNIT_ID
                   value: uom_uom_45_1e112771
