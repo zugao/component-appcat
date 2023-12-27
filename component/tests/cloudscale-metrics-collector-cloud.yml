@@ -22,3 +22,4 @@ parameters:
       cloud:
         cloudscale:
           enabled: true
+      cloudZone: ${global:appuio_metered_billing_zone_label_map:${cluster:name}}

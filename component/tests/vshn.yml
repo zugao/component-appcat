@@ -30,6 +30,7 @@ parameters:
           vshn-appuio-mimir: false
       prometheus:
         url: http://prometheus-operated.prometheus-system:9090/prometheus
+      cloudZone: ${global:appuio_metered_billing_zone_label_map:${cluster:name}}
 
     slos:
       enabled: true
