@@ -32,6 +32,10 @@ jobs:
           - apiserver
           - controllers
           - minio
+          - cloudscale-metrics-collector-cloud
+          - cloudscale-metrics-collector-managed
+          - exoscale-metrics-collector-cloud
+          - exoscale-metrics-collector-managed
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}
@@ -54,6 +58,10 @@ jobs:
           - apiserver
           - controllers
           - minio
+          - cloudscale-metrics-collector-cloud
+          - cloudscale-metrics-collector-managed
+          - exoscale-metrics-collector-cloud
+          - exoscale-metrics-collector-managed
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}
