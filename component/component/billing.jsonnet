@@ -127,7 +127,7 @@ local backfillCJ = function(name, query, sla, type)
         env+: commonEnv + jobEnv,
         command: [ 'sh', '-c' ],
         args: [
-          'appuio-reporting report --timerange 1h --begin=$(date -d "now -3 hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u +"%Y-%m-%dT%H:00:00Z)',
+          'appuio-reporting report --timerange 1h --begin=$(date -d "now -3 hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u +"%Y-%m-%dT%H:00:00Z")',
         ],
         resources: {},
       },
