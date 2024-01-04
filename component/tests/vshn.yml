@@ -75,11 +75,11 @@ parameters:
         services:
           mariadb:
             enabled: true
-            # grpcEndpoint: host.docker.internal:9443
-            # proxyFunction: true
+            grpcEndpoint: 172.17.0.1:9443
+            proxyFunction: true
         postgres:
-          # grpcEndpoint: host.docker.internal:9443
-          # proxyFunction: true
+          grpcEndpoint: 172.17.0.1:9443
+          proxyFunction: true
           sgNamespace: stackgres
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
@@ -99,8 +99,8 @@ parameters:
                   appuio.io/node-class: "plus"
               note: "Will be scheduled on APPUiO Cloud plus nodes"
         redis:
-          # grpcEndpoint: host.docker.internal:9443
-          # proxyFunction: true
+          grpcEndpoint: 172.17.0.1:9443
+          proxyFunction: true
           plans:
             standard-8:
               enabled: false
@@ -141,8 +141,8 @@ parameters:
                     disk: 20Gi
                 writeConnectionSecretToRef:
                   name: minio-cluster-credentials
-          # grpcEndpoint: host.docker.internal:9443
-          # proxyFunction: true
+          grpcEndpoint: 172.17.0.1:9443
+          proxyFunction: true
 
       generic:
         objectstorage:
@@ -156,5 +156,5 @@ parameters:
               enabled: false
             minio:
               enabled: true
-              # grpcEndpoint: host.docker.internal:9443
-              # proxyFunction: true
+              grpcEndpoint: 172.17.0.1:9443
+              proxyFunction: true

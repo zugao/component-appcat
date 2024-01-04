@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.45.2
+      tag: upgrade/stackgres_version
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
