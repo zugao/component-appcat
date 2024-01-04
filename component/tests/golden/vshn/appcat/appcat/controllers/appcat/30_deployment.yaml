@@ -23,7 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:upgrade_stackgres_version
+          image: ghcr.io/vshn/appcat:v4.45.2
           livenessProbe:
             httpGet:
               path: /healthz

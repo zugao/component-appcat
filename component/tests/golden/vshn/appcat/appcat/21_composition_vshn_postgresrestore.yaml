@@ -1118,8 +1118,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: upgrade_stackgres_version
-          proxyEndpoint: 172.17.0.1:9443
+          imageTag: v4.45.2
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

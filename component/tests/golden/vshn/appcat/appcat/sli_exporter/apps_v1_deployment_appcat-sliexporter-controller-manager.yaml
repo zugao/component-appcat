@@ -28,7 +28,7 @@ spec:
           value: "true"
         - name: APPCAT_SLI_VSHNREDIS
           value: "true"
-        image: ghcr.io/vshn/appcat:upgrade_stackgres_version
+        image: ghcr.io/vshn/appcat:v4.45.2
         livenessProbe:
           httpGet:
             path: /healthz
