@@ -251,68 +251,6 @@ local composition =
                                 },
                               },
                             };
-  local secret = comp.KubeObject('v1', 'Secret') +
-                 {
-                   spec+: {
-                     forProvider+: {
-                       manifest+: {
-                         metadata: {},
-                         stringData: {
-                           REDIS_USERNAME: defaultUser,
-                           REDIS_PORT: defaultPort,
-                           REDIS_HOST: '',
-                         },
-                       },
-                     },
-                     references: [
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           namespace: '',
-                           name: 'redis',
-                           fieldPath: 'data.redis-password',
-                         },
-                         toFieldPath: 'data.REDIS_PASSWORD',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: clientCertificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[ca.crt]',
-                         },
-                         toFieldPath: 'data[ca.crt]',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: clientCertificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[tls.crt]',
-                         },
-                         toFieldPath: 'data[tls.crt]',
-                       },
-                       {
-                         patchesFrom: {
-                           apiVersion: 'v1',
-                           kind: 'Secret',
-                           name: clientCertificateSecretName,
-                           namespace: '',
-                           fieldPath: 'data[tls.key]',
-                         },
-                         toFieldPath: 'data[tls.key]',
-                       },
-                     ],
-                     // Make crossplane aware of the connection secret we are creating in this object
-                     writeConnectionSecretToRef: {
-                       name: 'redis',
-                       namespace: '',
-                     },
-                   },
-                 };
 
   local prometheusRule = prom.GeneratePrometheusNonSLORules('redis', 'redis', []) + {
     patches: [
@@ -503,24 +441,6 @@ local composition =
                     comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
                     comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[0]', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
                     comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.dnsNames[1]', 'redis-headless.vshn-redis-%s.svc'),
-                  ],
-                },
-                {
-                  name: 'connection',
-                  base: secret,
-                  connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
-                  patches: [
-                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'connection'),
-
-                    comp.CombineCompositeFromOneFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.REDIS_HOST', 'redis-headless.vshn-redis-%s.svc.cluster.local'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-redis'),
-                    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'connection'),
                   ],
                 },
                 {
