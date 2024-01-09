@@ -60,13 +60,13 @@ local prometheusRule(name) =
 
 local getEvents(serviceName) = {
   // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-  error_query: '(sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla) or vector(0)) - scalar(appcat:cluster:maintenance) > 0 or sum(0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+  error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="false", maintenance="false"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
   total_query: 'sum(rate(appcat_probes_seconds_count{service="' + serviceName + '", ha="false"}[{{.window}}])) by (service, namespace, name, organization, sla)',
 };
 
 local getEventsHA(serviceName) = {
   // The  0*rate(...) makes sure that the query reports an error rate for all instances, even if that instance has never produced a single error
-  error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla) or sum(0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
+  error_query: 'sum(rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="true"}[{{.window}}]) or 0*rate(appcat_probes_seconds_count{service="' + serviceName + '"}[{{.window}}])) by (service, namespace, name, organization, sla)',
   total_query: 'sum(rate(appcat_probes_seconds_count{service="' + serviceName + '", ha="true"}[{{.window}}])) by (service, namespace, name, organization, sla)',
 };
 
