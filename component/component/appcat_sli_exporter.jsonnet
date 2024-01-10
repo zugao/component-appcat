@@ -30,6 +30,10 @@ local deployment_patch = kube._Object('apps/v1', 'Deployment', 'controller-manag
                 name: 'APPCAT_SLI_VSHNREDIS',
                 value: std.manifestJson(params.services.vshn.enabled && params.services.vshn.redis.enabled),
               },
+              {
+                name: 'APPCAT_SLI_TRACK_OC_MAINTENANCE_STATUS',
+                value: std.manifestJson(params.services.vshn.enabled && params.slos.sli_exporter.enableMaintenceObserver),
+              },
             ],
           },
         ],

@@ -116,25 +116,6 @@ local meteringQueryCloud = importstr 'promql/metering_cloud.promql';
 local meteringQueryManagedRaw = importstr 'promql/metering_managed.promql';
 local meteringQueryManaged = std.strReplace(meteringQueryManagedRaw, '{{salesOrder}}', params.salesOrder);
 
-local maintenanceRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-maintenance') {
-  metadata+: {
-    namespace: params.namespace,
-  },
-  spec: {
-    groups: [
-      {
-        name: 'appcat-cluster-maintenance',
-        rules: [
-          {
-            expr: 'max(max_over_time(openshift_upgrade_controller_upgradejob_state{state="active"}[10m])) or vector(0)',
-            record: 'appcat:cluster:maintenance',
-          },
-        ],
-      },
-    ],
-  },
-};
-
 local legacyBillingRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
   metadata+: {
     namespace: params.namespace,
@@ -219,7 +200,6 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   '10_appcat_namespace': ns,
   '10_appcat_legacy_billing_recording_rule': legacyBillingRule,
   [if params.billing.vshn.meteringRules then '10_appcat_metering_recording_rule']: meteringRule,
-  '10_appcat_maintenance_recording_rule': maintenanceRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
   [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
 

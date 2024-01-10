@@ -42,7 +42,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.46.0
+        tag: v4.47.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -301,6 +301,7 @@ parameters:
         slo_mimir_namespace: vshn-appuio-mimir
         mimir_organization: appuio-managed-openshift-metrics
       sli_exporter:
+        enableMaintenceObserver: false
         resources:
           requests:
             cpu: 10m
