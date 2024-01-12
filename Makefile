@@ -6,6 +6,7 @@ SHELL := bash
 .SUFFIXES:
 
 include Makefile.vars.mk
+include docs/antora-preview.mk
 
 .PHONY: all
 all: help
