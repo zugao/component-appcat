@@ -1,0 +1,85 @@
+= Manually Restore MariaDB instance
+
+[source,bash]
+----
+export NAMESPACE=<instanceNamespace>
+export NAME=<xvshnmariadbname>
+export RESTIC_REPOSITORY=$(k -n "$NAMESPACE" get secrets backup-bucket-credentials -ojson | jq -r '.data.ENDPOINT_URL' | base64 -d)
+export RESTIC_REPOSITORY="s3:$RESTIC_REPOSITORY$(k -n "$NAMESPACE" get secrets backup-bucket-credentials -ojson | jq -r '.data.BUCKET_NAME' | base64 -d)"
+
+k -n $NAMESPACE scale statefulset $NAME --replicas 0
+
+cat <<EOF | kubectl apply -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore
+  namespace: $NAMESPACE
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: restic
+        image: ghcr.io/k8up-io/k8up:master
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: backup-bucket-credentials
+                key: AWS_ACCESS_KEY_ID
+          - name: RESTIC_REPOSITORY
+            value: $RESTIC_REPOSITORY
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-bucket-credentials
+                key: AWS_SECRET_ACCESS_KEY
+          - name: RESTIC_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: k8up-repository-password
+                key: password
+        securityContext:
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          runAsUser: 1001
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        command: ["/bin/sh","-c"]
+        args:
+          - |
+              rm -rfv /data/data/*
+              restic restore latest --target /data/data
+      containers:
+      - name: mariabackup
+        image: docker.io/bitnami/mariadb-galera
+        securityContext:
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          runAsUser: 1001
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        command: ["/bin/sh","-c"]
+        args:
+          - |
+              cd /data/data
+              cat *.xb | mbstream -x
+              mariadb-backup --prepare --target-dir=/data/data
+              rm /data/data/*.xb
+      restartPolicy: Never
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: data-$NAME-0
+  backoffLimit: 4
+EOF
+
+k -n $NAMESPACE scale statefulset $NAME --replicas 0
+
+----
