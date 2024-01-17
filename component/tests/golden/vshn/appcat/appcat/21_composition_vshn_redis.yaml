@@ -114,7 +114,7 @@ spec:
                   name: kubernetes
             name: prometheusrule
             patches:
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -122,7 +122,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -152,7 +152,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.selfSignedIssuerConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -160,7 +160,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -168,7 +168,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -198,7 +198,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.localCAConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -206,7 +206,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -214,7 +214,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -258,7 +258,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.caCertificateConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -266,7 +266,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -274,7 +274,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
                 transforms:
                   - string:
@@ -282,7 +282,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -295,7 +295,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc.cluster.local
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
                 type: CombineFromComposite
               - combine:
@@ -303,7 +303,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
           - base:
@@ -345,7 +345,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.serverCertificateConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -353,7 +353,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -361,7 +361,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
                 transforms:
                   - string:
@@ -369,7 +369,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -382,7 +382,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc.cluster.local
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
                 type: CombineFromComposite
               - combine:
@@ -390,7 +390,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
           - base:
@@ -431,7 +431,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.clientCertificateConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -439,7 +439,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -447,7 +447,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
                 transforms:
                   - string:
@@ -455,7 +455,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -468,7 +468,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc.cluster.local
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
                 type: CombineFromComposite
               - combine:
@@ -476,7 +476,7 @@ spec:
                   string:
                     fmt: redis-headless.vshn-redis-%s.svc
                   variables:
-                    - fromFieldPath: metadata.labels[crossplane.io/composite]
+                    - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
           - base:
@@ -544,10 +544,10 @@ spec:
                   name: helm
             name: release
             patches:
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.namespace
                 transforms:
                   - string:
@@ -555,7 +555,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -563,7 +563,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
               - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
@@ -660,7 +660,7 @@ spec:
               - fromFieldPath: spec.parameters.tls.authClients
                 toFieldPath: spec.forProvider.values.tls.authClients
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.values.metrics.serviceMonitor.namespace
                 transforms:
                   - string:
@@ -706,7 +706,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.52.0
+          imageTag: v4.53.0
           maintenanceSA: helm-based-service-maintenance
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount

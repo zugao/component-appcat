@@ -24,10 +24,9 @@ local getServiceNamePlural(serviceName) =
   else
     serviceNameLower + 's';
 
-local vshn_appcat_service(name) =
+local vshn_appcat_service(name, serviceParams) =
   local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 
-  local serviceParams = params.services.vshn.services[name];
   local connectionSecretKeys = serviceParams.connectionSecretKeys;
   local promRuleSLA = prom.PromRuleSLA(serviceParams.sla, serviceParams.serviceName);
   local plans = common.FilterDisabledParams(serviceParams.plans);
@@ -172,4 +171,4 @@ local vshn_appcat_service(name) =
   } else {}
 ;
 
-std.foldl(function(objOut, name) objOut + vshn_appcat_service(name), std.objectFields(params.services.vshn.services), {})
+std.foldl(function(objOut, newObj) objOut + vshn_appcat_service(newObj.name, newObj.value), common.FilterServiceByBoolean('compFunctionsOnly'), {})

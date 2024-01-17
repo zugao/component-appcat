@@ -1,3 +1,4 @@
+local common = import 'common.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -193,6 +194,7 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
     password: params.services.vshn.emailAlerting.smtpPassword,
   },
 };
+
 {
   '10_clusterrole_view': xrdBrowseRole,
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
@@ -202,15 +204,4 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   [if params.billing.vshn.meteringRules then '10_appcat_metering_recording_rule']: meteringRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
   [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
-
-} + if params.slos.enabled && params.services.vshn.enabled then {
-  [if params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
-  [if params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
-  [if params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
-  [if params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
-  [if params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio']: slos.Get('vshn-minio'),
-  [if params.services.vshn.minio.enabled then 'sli_exporter/90_slo_vshn_minio_ha']: slos.Get('vshn-minio-ha'),
-  [if params.services.vshn.services.mariadb.enabled then 'sli_exporter/90_slo_vshn_mariadb']: slos.Get('vshn-mariadb'),
-  [if params.services.vshn.services.mariadb.enabled then 'sli_exporter/90_slo_vshn_mariadb_ha']: slos.Get('vshn-mariadb-ha'),
 }
-else {}
