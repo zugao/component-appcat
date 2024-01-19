@@ -423,90 +423,6 @@ local sgCluster = {
   ],
 };
 
-local secret = {
-  name: 'connection',
-  base: comp.KubeObject('v1', 'Secret') +
-        {
-          spec+: {
-            forProvider+: {
-              manifest+: {
-                metadata: {},
-                stringData: {
-                  POSTGRESQL_USER: defaultUser,
-                  POSTGRESQL_PORT: defaultPort,
-                  POSTGRESQL_DB: defaultDB,
-                  POSTGRESQL_HOST: '',
-                },
-              },
-            },
-            references: [
-              {
-                patchesFrom: {
-                  apiVersion: 'v1',
-                  kind: 'Secret',
-                  namespace: '',
-                  name: '',
-                  fieldPath: 'data.superuser-password',
-                },
-                toFieldPath: 'data.POSTGRESQL_PASSWORD',
-              },
-              {
-                patchesFrom: {
-                  apiVersion: 'v1',
-                  kind: 'Secret',
-                  name: certificateSecretName,
-                  namespace: '',
-                  fieldPath: 'data[ca.crt]',
-                },
-                toFieldPath: 'data[ca.crt]',
-              },
-              {
-                patchesFrom: {
-                  apiVersion: 'v1',
-                  kind: 'Secret',
-                  name: certificateSecretName,
-                  namespace: '',
-                  fieldPath: 'data[tls.crt]',
-                },
-                toFieldPath: 'data[tls.crt]',
-              },
-              {
-                patchesFrom: {
-                  apiVersion: 'v1',
-                  kind: 'Secret',
-                  name: certificateSecretName,
-                  namespace: '',
-                  fieldPath: 'data[tls.key]',
-                },
-                toFieldPath: 'data[tls.key]',
-              },
-            ],
-            // Make crossplane aware of the connection secret we are creating in this object
-            writeConnectionSecretToRef: {
-              name: '',
-              namespace: '',
-            },
-          },
-        },
-  connectionDetails: comp.conn.AllFromSecretKeys(connectionSecretKeys),
-  patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.secretConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'connection'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.manifest.metadata.name', 'connection'),
-
-    comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/composite]', 'metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.stringData.POSTGRESQL_HOST', '%s.vshn-postgresql-%s.svc.cluster.local'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.references[0].patchesFrom.name'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/claim-name]', 'spec.writeConnectionSecretToRef.name', 'connection'),
-
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[1].patchesFrom.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[2].patchesFrom.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[3].patchesFrom.namespace', 'vshn-postgresql'),
-  ],
-};
-
 local xobjectBucket = {
   name: 'pg-bucket',
   base: {
@@ -904,7 +820,6 @@ local composition(restore=false) =
                            sgPostgresConfig,
                            sgCluster +
                            if restore then clusterRestoreConfig else {},
-                           secret,
                            xobjectBucket,
                            sgObjectStorage,
                            podMonitor,
