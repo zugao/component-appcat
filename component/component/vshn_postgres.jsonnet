@@ -21,6 +21,63 @@ local defaultPort = '5432';
 local certificateSecretName = 'tls-certificate';
 
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local operatorlib = import 'lib/openshift4-operators.libsonnet';
+
+local stackgresOperatorNs = kube.Namespace(params.stackgres.namespace) {
+  metadata+: {
+    labels+: {
+      // include namespace in cluster monitoring
+      'openshift.io/cluster-monitoring': 'true',
+      // ignore namespace in user-workload monitoring
+      'openshift.io/user-monitoring': 'false',
+    },
+    annotations+: {
+      'openshift.io/node-selector': '',
+    },
+  },
+};
+
+local stackgresNetworkPolicy = kube.NetworkPolicy('allow-stackgres-api') + {
+  metadata+: {
+    namespace: params.stackgres.namespace,
+  },
+  spec+: {
+    policyTypes: [ 'Ingress' ],
+    podSelector: {
+      matchLabels: {
+        app: 'StackGresConfig',
+      },
+    },
+    ingress: [
+      {
+        from: [
+          {
+            namespaceSelector: {
+              matchLabels: {
+                'appcat.vshn.io/servicename': 'postgresql-standalone',
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local stackgresOperator = [
+  operatorlib.OperatorGroup(params.stackgres.namespace) {
+    metadata+: {
+      namespace: params.stackgres.namespace,
+    },
+  },
+  operatorlib.namespacedSubscription(
+    params.stackgres.namespace,
+    'stackgres',
+    params.stackgres.operator.channel,
+    'redhat-marketplace',
+    installPlanApproval=params.stackgres.operator.installPlanApproval,
+  ),
+];
 
 // Filter out disabled plans
 local pgPlans = common.FilterDisabledParams(pgParams.plans);
@@ -934,6 +991,9 @@ if params.services.vshn.enabled && pgParams.enabled then
     '21_composition_vshn_postgresrestore': restoreComp,
     '22_prom_rule_sla_postgres': promRulePostgresSLA,
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
+    [if isOpenshift then '10_stackgres_openshift_operator_ns']: stackgresOperatorNs,
+    [if isOpenshift then '11_stackgres_openshift_operator']: stackgresOperator,
+    [if isOpenshift then '12_stackgres_openshift_operator_netpol']: stackgresNetworkPolicy,
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
   } else {}

@@ -42,7 +42,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.51.1
+        tag: v4.52.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -237,6 +237,11 @@ parameters:
           cpu: 200m
           memory: 200Mi
 
+    stackgres:
+      namespace: syn-stackgres-operator
+      operator:
+        channel: stable
+        installPlanApproval: Manual
     stsResizer:
       resources:
         requests:
