@@ -35,7 +35,6 @@ spec:
           plans: '{"standard-1": {"size": {"cpu": "1", "disk": "50Gi", "enabled":
             true, "memory": "1Gi"}}}'
           providerEnabled: 'false'
-          proxyEndpoint: 172.17.0.1:9443
           serviceName: minio
         kind: ConfigMap
         metadata:
