@@ -76,7 +76,7 @@ parameters:
 
     appuioManaged: true
     quotasEnabled: false
-    grpcEndpoint: host.docker.internal:9443
+    grpcEndpoint: 172.17.0.1:9443
 
     billing:
       namespace: ${appcat:namespace}
@@ -428,7 +428,7 @@ parameters:
           bucket_endpoint: ""
           enabled: true
           grpcEndpoint: ${appcat:grpcEndpoint}
-          proxyFunction: false
+          proxyFunction: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
@@ -562,7 +562,7 @@ parameters:
           imageRegistry: ""
           bucket_region: "lpg"
           grpcEndpoint: ${appcat:grpcEndpoint}
-          proxyFunction: false
+          proxyFunction: true
           defaultPlan: standard-1
           sla: 99.25
           plans:
@@ -603,7 +603,7 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:minio:version}
           grpcEndpoint: ${appcat:grpcEndpoint}
-          proxyFunction: false
+          proxyFunction: true
           defaultPlan: standard-1
           sla: 99.25
           plans:
@@ -776,7 +776,7 @@ parameters:
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
               grpcEndpoint: ${appcat:grpcEndpoint}
-              proxyFunction: false
+              proxyFunction: true
               providerConfig: minio
 
           # Generic config for objecstorage composite
