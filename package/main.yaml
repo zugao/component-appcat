@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.51.1
+      tag: v4.52.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
@@ -16,6 +16,10 @@ parameters:
     crossplane:
       url: https://github.com/projectsyn/component-crossplane.git
       version: v3.4.0
+    openshift4-operators:
+      url: https://github.com/appuio/component-openshift4-operators
+      version: v1.4.0
+
   appcat:
     images:
       appcat:

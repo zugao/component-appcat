@@ -4,6 +4,9 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
         output_path: vendor/lib/crossplane.libsonnet
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/component-openshift4-operators/v1.4.0/lib/openshift4-operators.libsonnet
+        output_path: vendor/lib/openshift4-operators.libsonnet
 
   facts:
     cloud: cloudscale
@@ -160,3 +163,6 @@ parameters:
               enabled: true
               # grpcEndpoint: host.docker.internal:9443
               # proxyFunction: true
+
+  openshift4_operators:
+    defaultSourceNamespace: openshift-marketplace
