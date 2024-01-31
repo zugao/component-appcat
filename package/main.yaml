@@ -3,7 +3,7 @@ applications:
   - crossplane
 parameters:
   pkg.appcat:
-    componentVersion: v2.21.6
+    componentVersion: v2.22.0
     image:
       registry: ghcr.io
       repository: vshn/appcat
@@ -19,7 +19,6 @@ parameters:
     openshift4-operators:
       url: https://github.com/appuio/component-openshift4-operators
       version: v1.4.0
-
   appcat:
     images:
       appcat:
