@@ -184,8 +184,7 @@ local generateCloudAndManaged = function(name)
 
   std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type) ], permutations);
 
-local keysAndValues(obj) = std.map(function(x) { name: x, value: obj[x] }, std.objectFields(obj));
-local vshnServices = std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, 'billing') && r.value.billing, keysAndValues(params.services.vshn));
+local vshnServices = common.FilterServiceByBoolean('billing');
 local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name) ], vshnServices));
 
 if paramsBilling.vshn.enableCronjobs then

@@ -158,9 +158,9 @@ local localca = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.localCAConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'localca'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'localca'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
   ],
 };
 
@@ -209,10 +209,14 @@ local certificate = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.certificateConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'certificate'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.issuerRef.name'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'certificate'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.spec.issuerRef.name'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+
+    // We should actually set the dns name...
+    comp.CombineCompositeFromTwoFieldPaths('metadata.name', 'metadata.name', 'spec.forProvider.manifest.spec.dnsNames[0]', '%s.vshn-postgresql-%s.svc.cluster.local'),
+    comp.CombineCompositeFromTwoFieldPaths('metadata.name', 'metadata.name', 'spec.forProvider.manifest.spec.dnsNames[1]', '%s.vshn-postgresql-%s.svc'),
   ],
 };
 
@@ -358,9 +362,9 @@ local sgInstanceProfile = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.profileConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'profile'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'profile'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
 
     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.manifest.spec.cpu', std.mapWithKey(function(key, x) x.size.cpu, pgPlans)),
     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.manifest.spec.memory', std.mapWithKey(function(key, x) x.size.memory, pgPlans)),
@@ -389,9 +393,9 @@ local sgPostgresConfig = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.pgconfigConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'pgconf'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'pgconf'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
 
     comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgresVersion'),
     comp.FromCompositeFieldPath('spec.parameters.service.pgSettings', 'spec.forProvider.manifest.spec[postgresql.conf]'),
@@ -455,9 +459,9 @@ local sgCluster = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.pgclusterConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'cluster'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'cluster'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
 
     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan',
                                                 'spec.forProvider.manifest.spec.pods.persistentVolume.size',
@@ -472,9 +476,9 @@ local sgCluster = {
     comp.FromCompositeFieldPath('spec.parameters.scheduling.nodeSelector', 'spec.forProvider.manifest.spec.pods.scheduling.nodeSelector'),
 
     comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.forProvider.manifest.spec.postgres.version'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.spec.sgInstanceProfile'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.spec.configurations.sgPostgresConfig'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage', 'sgbackup'),
 
     comp.FromCompositeFieldPath('spec.parameters.backup.retention', 'spec.forProvider.manifest.spec.configurations.backups[0].retention'),
   ],
@@ -499,11 +503,11 @@ local xobjectBucket = {
   },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.objectBackupConfigConditions'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.parameters.bucketName'),
+    comp.FromCompositeFieldPath('metadata.name', 'metadata.name'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.parameters.bucketName'),
 
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name', 'pgbucket'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.writeConnectionSecretToRef.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.writeConnectionSecretToRef.name', 'pgbucket'),
   ],
 };
 
@@ -545,13 +549,13 @@ local sgObjectStorage = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.objectBucketConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'object-storage'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.bucket'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'object-storage'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.name', 'sgbackup'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.spec.s3Compatible.bucket'),
 
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 'pgbucket'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 'pgbucket'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name', 'pgbucket'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name', 'pgbucket'),
   ],
 };
 
@@ -595,9 +599,9 @@ local networkPolicy = {
         },
   patches: [
     comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'network-policy'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'network-policy'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
 
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
   ],
@@ -648,12 +652,12 @@ local copyJob = {
     },
   },
   patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'copyjob'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.name', 'copyjob'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'copyjob'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'spec.forProvider.manifest.metadata.name', 'copyjob'),
     comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[0].value'),
     comp.FromCompositeFieldPath('spec.parameters.restore.claimName', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[1].value'),
     comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[2].value'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[3].value', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.spec.template.spec.containers[0].env[3].value', 'vshn-postgresql'),
   ],
 };
 
@@ -674,7 +678,7 @@ local clusterRestoreConfig = {
   patches+: [
     comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.forProvider.manifest.spec.initialData.restore.fromBackup.name'),
     comp.FromCompositeFieldPath('spec.parameters.restore.recoveryTimeStamp', 'spec.forProvider.manifest.spec.initialData.restore.fromBackup.pointInTimeRecovery.restoreToTimestamp'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.references[0].dependsOn.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.references[0].dependsOn.namespace', 'vshn-postgresql'),
     comp.FromCompositeFieldPath('spec.parameters.restore.backupName', 'spec.references[0].dependsOn.name'),
   ],
 };
@@ -764,8 +768,8 @@ local prometheusRule = prom.GeneratePrometheusNonSLORules(
   ]
 ) + {
   patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'prometheusrule'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'prometheusrule'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
   ],
 };
 
@@ -836,10 +840,10 @@ local podMonitor = {
     },
   },
   patches: [
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.labels[crossplane.io/composite]', 'metadata.name', 'podmonitor'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.labels[crossplane.io/composite]', 'spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]', 'vshn-postgresql'),
+    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'podmonitor'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
+    comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]'),
+    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]', 'vshn-postgresql'),
   ],
 };
 

@@ -52,7 +52,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.localCAConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -60,10 +60,10 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -111,7 +111,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.certificateConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -119,13 +119,13 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -133,6 +133,24 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
+              - combine:
+                  strategy: string
+                  string:
+                    fmt: '%s.vshn-postgresql-%s.svc.cluster.local'
+                  variables:
+                    - fromFieldPath: metadata.name
+                    - fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
+                type: CombineFromComposite
+              - combine:
+                  strategy: string
+                  string:
+                    fmt: '%s.vshn-postgresql-%s.svc'
+                  variables:
+                    - fromFieldPath: metadata.name
+                    - fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
+                type: CombineFromComposite
           - base:
               apiVersion: kubernetes.crossplane.io/v1alpha1
               kind: Object
@@ -244,7 +262,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.profileConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -252,7 +270,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -260,7 +278,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.size.plan
@@ -315,7 +333,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.pgconfigConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -323,7 +341,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -331,7 +349,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.service.majorVersion
@@ -385,7 +403,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.pgclusterConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -393,7 +411,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -401,7 +419,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.size.plan
@@ -435,13 +453,13 @@ spec:
               - fromFieldPath: spec.parameters.service.majorVersion
                 toFieldPath: spec.forProvider.manifest.spec.postgres.version
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.sgInstanceProfile
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.configurations.sgPostgresConfig
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.configurations.backups[0].sgObjectStorage
                 transforms:
                   - string:
@@ -468,13 +486,13 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.objectBackupConfigConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.parameters.bucketName
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.writeConnectionSecretToRef.namespace
                 transforms:
                   - string:
@@ -482,7 +500,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.writeConnectionSecretToRef.name
                 transforms:
                   - string:
@@ -524,7 +542,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.objectBucketConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -532,7 +550,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -540,7 +558,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -548,10 +566,10 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.s3Compatible.bucket
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.accessKeyId.name
                 transforms:
                   - string:
@@ -559,7 +577,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.s3Compatible.awsCredentials.secretKeySelectors.secretAccessKey.name
                 transforms:
                   - string:
@@ -593,7 +611,7 @@ spec:
                   name: kubernetes
             name: podmonitor
             patches:
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -601,7 +619,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -609,10 +627,10 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.selector.matchLabels[stackgres.io/cluster-name]
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.namespaceSelector.matchNames[0]
                 transforms:
                   - string:
@@ -762,7 +780,7 @@ spec:
                   name: kubernetes
             name: prometheusrule
             patches:
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -770,7 +788,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -807,7 +825,7 @@ spec:
               - fromFieldPath: status.conditions
                 toFieldPath: status.networkPolicyConditions
                 type: ToCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: metadata.name
                 transforms:
                   - string:
@@ -815,7 +833,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.namespace
                 transforms:
                   - string:
@@ -823,7 +841,7 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/composite]
+              - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.metadata.name
                 transforms:
                   - string:
@@ -847,7 +865,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.52.0
+          imageTag: v4.53.0
+          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

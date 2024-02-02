@@ -39,7 +39,7 @@ parameters:
       enabled: true
       alertsEnabled: true
       sli_exporter:
-        enableMaintenceObserver: true
+        enableMaintenceObserver: false
       sla_reporter:
         enabled: true
         slo_mimir_svc: kube-prometheus-kube-prome-prometheus
@@ -77,14 +77,17 @@ parameters:
         emailAlerting:
           enabled: true
           smtpPassword: "whatever"
-        services:
-          mariadb:
-            enabled: true
-            # grpcEndpoint: host.docker.internal:9443
-            # proxyFunction: true
-        postgres:
+        mariadb:
+          enabled: true
           # grpcEndpoint: host.docker.internal:9443
           # proxyFunction: true
+        keycloak:
+          enabled: true
+          # grpcEndpoint: host.docker.internal:9443
+          # proxyFunction: true
+        postgres:
+          grpcEndpoint: host.docker.internal:9443
+          proxyFunction: true
           sgNamespace: stackgres
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
@@ -163,6 +166,3 @@ parameters:
               enabled: true
               # grpcEndpoint: host.docker.internal:9443
               # proxyFunction: true
-
-  openshift4_operators:
-    defaultSourceNamespace: openshift-marketplace

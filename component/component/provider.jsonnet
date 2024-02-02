@@ -148,7 +148,7 @@ local runtimeConfigRef(name) = {
         },
         {
           apiGroups: [ 'stackgres.io' ],
-          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops' ],
+          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops', 'sgpoolconfigs' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
         {
@@ -288,6 +288,11 @@ local runtimeConfigRef(name) = {
         {
           apiGroups: [ 'monitoring.coreos.com' ],
           resources: [ 'servicemonitors' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'networking.k8s.io' ],
+          resources: [ 'ingresses' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
       ],

@@ -10,6 +10,9 @@ parameters:
       minio:
         source: https://charts.min.io
         version: 5.0.13
+      keycloak:
+        source: https://charts.bitnami.com/bitnami
+        version: 18.3.0
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
@@ -42,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.52.0
+        tag: v4.53.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -335,6 +338,8 @@ parameters:
           uptime: ${appcat:slos:uptimeDefaults}
         MariaDB:
           uptime: ${appcat:slos:uptimeDefaults}
+        Keycloak:
+          uptime: ${appcat:slos:uptimeDefaults}
 
     providers:
       cloudscale:
@@ -609,69 +614,120 @@ parameters:
                 memory: "1Gi"
                 disk: 50Gi
           instances: []
-        services:
-          mariadb:
-            serviceName: VSHNMariaDB
-            connectionSecretKeys:
-              - ca.crt
-              - MARIADB_HOST
-              - MARIADB_PORT
-              - MARIADB_USERNAME
-              - MARIADB_PASSWORD
-              - MARIADB_URL
-            mode: standalone
-            offered: true
-            enabled: false
-            restoreSA: mariadbrestoreserviceaccount
-            restoreRoleRules: ${appcat:defaultRestoreRoleRules}
-            openshiftTemplate:
-              serviceName: mariadbbyvshn
-              description: "The open source relational database management system (DBMS) that is a compatible drop-in replacement for the widely used MySQL database technology"
-              message: 'Your MariaDB by VSHN instance is being provisioned, please see \${SECRET_NAME} for access.'
-              url: https://vs.hn/vshn-mariadb
-              tags: "database,sql,mariadb"
-              icon: "icon-mariadb"
-              defaultVersion: "11.2"
-            enableNetworkPolicy: false
-            secretNamespace: ${appcat:services:vshn:secretNamespace}
-            helmChartVersion: ${appcat:charts:mariadb:version}
-            imageRegistry: ""
-            bucket_region: "lpg"
-            grpcEndpoint: ${appcat:grpcEndpoint}
-            proxyFunction: false
-            defaultPlan: standard-1
-            sla: 99.25
-            plans:
-              standard-512m:
-                size:
-                  enabled: true
-                  cpu: "125m"
-                  memory: "512Mi"
-                  disk: 16Gi
-              standard-1:
-                size:
-                  enabled: true
-                  cpu: "250m"
-                  memory: "1Gi"
-                  disk: 16Gi
-              standard-2:
-                size:
-                  enabled: true
-                  cpu: "500m"
-                  memory: "2Gi"
-                  disk: 16Gi
-              standard-4:
-                size:
-                  enabled: true
-                  cpu: "1"
-                  memory: "4Gi"
-                  disk: 16Gi
-              standard-8:
-                size:
-                  enabled: true
-                  cpu: "2"
-                  memory: "8Gi"
-                  disk: 16Gi
+        mariadb:
+          billing: true
+          serviceName: VSHNMariaDB
+          compFunctionsOnly: true
+          connectionSecretKeys:
+            - ca.crt
+            - MARIADB_HOST
+            - MARIADB_PORT
+            - MARIADB_USERNAME
+            - MARIADB_PASSWORD
+            - MARIADB_URL
+          mode: standalone
+          offered: true
+          enabled: false
+          restoreSA: mariadbrestoreserviceaccount
+          restoreRoleRules: ${appcat:defaultRestoreRoleRules}
+          openshiftTemplate:
+            serviceName: mariadbbyvshn
+            description: "The open source relational database management system (DBMS) that is a compatible drop-in replacement for the widely used MySQL database technology"
+            message: 'Your MariaDB by VSHN instance is being provisioned, please see \${SECRET_NAME} for access.'
+            url: https://vs.hn/vshn-mariadb
+            tags: "database,sql,mariadb"
+            icon: "icon-mariadb"
+            defaultVersion: "11.2"
+          enableNetworkPolicy: false
+          secretNamespace: ${appcat:services:vshn:secretNamespace}
+          helmChartVersion: ${appcat:charts:mariadb:version}
+          imageRegistry: ""
+          bucket_region: "lpg"
+          grpcEndpoint: ${appcat:grpcEndpoint}
+          proxyFunction: false
+          defaultPlan: standard-1
+          sla: 99.25
+          plans:
+            standard-512m:
+              size:
+                enabled: true
+                cpu: "125m"
+                memory: "512Mi"
+                disk: 16Gi
+            standard-1:
+              size:
+                enabled: true
+                cpu: "250m"
+                memory: "1Gi"
+                disk: 16Gi
+            standard-2:
+              size:
+                enabled: true
+                cpu: "500m"
+                memory: "2Gi"
+                disk: 16Gi
+            standard-4:
+              size:
+                enabled: true
+                cpu: "1"
+                memory: "4Gi"
+                disk: 16Gi
+            standard-8:
+              size:
+                enabled: true
+                cpu: "2"
+                memory: "8Gi"
+                disk: 16Gi
+        keycloak:
+          billing: true
+          serviceName: VSHNKeycloak
+          compFunctionsOnly: true
+          connectionSecretKeys:
+            - KEYCLOAK_HOST
+            - KEYCLOAK_PASSWORD
+            - KEYCLOAK_URL
+            - KEYCLOAK_USERNAME
+          mode: standalone
+          offered: true
+          enabled: false
+          restoreSA: mariadbrestoreserviceaccount
+          restoreRoleRules: ${appcat:defaultRestoreRoleRules}
+          openshiftTemplate:
+            serviceName: keycloakbyvshn
+            description: "Keycloak is an open source identity and access management solution."
+            message: 'Your Keycloak by VSHN instance is being provisioned, please see \${SECRET_NAME} for access.'
+            url: https://vs.hn/vshn-keycloak
+            tags: "idp,keycloak"
+            icon: "icon-keycloak"
+            defaultVersion: "22"
+          enableNetworkPolicy: false
+          secretNamespace: ${appcat:services:vshn:secretNamespace}
+          helmChartVersion: ${appcat:charts:keycloak:version}
+          imageRegistry: ""
+          bucket_region: "lpg"
+          grpcEndpoint: ${appcat:grpcEndpoint}
+          proxyFunction: false
+          defaultPlan: standard-2
+          sla: 99.25
+          plans:
+            standard-2:
+              size:
+                enabled: true
+                cpu: "500m"
+                memory: "2Gi"
+                disk: 16Gi
+            standard-4:
+              size:
+                enabled: true
+                cpu: "1"
+                memory: "4Gi"
+                disk: 16Gi
+            standard-8:
+              size:
+                enabled: true
+                cpu: "2"
+                memory: "8Gi"
+                disk: 16Gi
 
       # Config for exoscale composites
       exoscale:

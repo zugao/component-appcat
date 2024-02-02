@@ -145,6 +145,7 @@ rules:
       - sgobjectstorages
       - sgbackups
       - sgdbops
+      - sgpoolconfigs
     verbs:
       - get
       - list
