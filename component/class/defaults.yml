@@ -11,8 +11,8 @@ parameters:
         source: https://charts.min.io
         version: 5.0.13
       keycloak:
-        source: https://charts.bitnami.com/bitnami
-        version: 18.3.0
+        source: https://codecentric.github.io/helm-charts
+        version: 2.3.0
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.56.0
+        tag: v4.57.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -692,6 +692,9 @@ parameters:
           enabled: false
           restoreSA: mariadbrestoreserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
+          additionalInputs:
+            registry_username: "?{vaultkv:__shared__/__shared__/appcat/inventage_registry_username}"
+            registry_password: "?{vaultkv:__shared__/__shared__/appcat/inventage_registry_password}"
           openshiftTemplate:
             serviceName: keycloakbyvshn
             description: "Keycloak is an open source identity and access management solution."
