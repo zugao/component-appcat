@@ -884,7 +884,6 @@ local composition(restore=false) =
                            xobjectBucket,
                            sgObjectStorage,
                            podMonitor,
-                           // prometheusRule,
                          ] + if pgParams.enableNetworkPolicy == true then [
                 networkPolicy,
               ] else [],
