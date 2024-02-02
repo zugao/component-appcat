@@ -28,7 +28,11 @@ spec:
         data:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
+<<<<<<< HEAD
           imageTag: v4.57.0
+=======
+          imageTag: add_keycloak_maintenance
+>>>>>>> f2ab54a (Add maintenance for Keycloak)
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
           minioChartVersion: 5.0.13

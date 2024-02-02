@@ -23,7 +23,11 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.57.0
+=======
+          image: ghcr.io/vshn/appcat:add_keycloak_maintenance
+>>>>>>> f2ab54a (Add maintenance for Keycloak)
           livenessProbe:
             httpGet:
               path: /healthz
