@@ -381,7 +381,6 @@ local composition =
               apiVersion: 'pt.fn.crossplane.io/v1beta1',
               kind: 'Resources',
               resources: [
-                prometheusRule,
                 {
                   name: 'self-signed-issuer',
                   base: selfSignedIssuer,
