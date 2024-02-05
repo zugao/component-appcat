@@ -707,7 +707,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.53.0
+          imageTag: v4.54.0
           proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           serviceName: postgresql
