@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: add/keycloak_maintenance
+        tag: add/keycloak_provider_themes
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
