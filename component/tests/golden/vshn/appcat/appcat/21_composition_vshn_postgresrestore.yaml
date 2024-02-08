@@ -9,8 +9,8 @@ metadata:
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-postgresqlrestore
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/plans: '{"plus-2":{"note":"Will be scheduled on APPUiO
-      Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1728Mi"}},"plus-4":{"note":"Will
-      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3776Mi"}},"standard-2":{"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1728Mi"}},"standard-4":{"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3776Mi"}}}'
+      Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"plus-4":{"note":"Will
+      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}},"standard-2":{"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"standard-4":{"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}}}'
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/postgresqlrestore.html
     metadata.appcat.vshn.io/zone: rma1
   labels:
@@ -376,10 +376,10 @@ spec:
                 toFieldPath: spec.forProvider.manifest.spec.memory
                 transforms:
                   - map:
-                      plus-2: 1728Mi
-                      plus-4: 3776Mi
-                      standard-2: 1728Mi
-                      standard-4: 3776Mi
+                      plus-2: 1936Mi
+                      plus-4: 3984Mi
+                      standard-2: 1936Mi
+                      standard-4: 3984Mi
                     type: map
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.size.memory
