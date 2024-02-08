@@ -215,7 +215,7 @@ spec:
                             memory: 64Mi
                           cluster-controller:
                             cpu: 32m
-                            memory: 30Mi
+                            memory: 128Mi
                           dbops.run-dbops:
                             cpu: 100m
                             memory: 64Mi
@@ -713,7 +713,7 @@ spec:
           serviceName: postgresql
           sgNamespace: stackgres
           sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "256Mi"},
-            "requests": {"cpu": "32m", "memory": "30Mi"}}, "createBackup": {"limits":
+            "requests": {"cpu": "32m", "memory": "128Mi"}}, "createBackup": {"limits":
             {"cpu": "400m", "memory": "500Mi"}, "requests": {"cpu": "100m", "memory":
             "64Mi"}}, "envoy": {"limits": {"cpu": "64m", "memory": "64Mi"}, "requests":
             {"cpu": "32m", "memory": "64Mi"}}, "pgbouncer": {"limits": {"cpu": "32m",

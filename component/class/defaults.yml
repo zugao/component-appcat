@@ -464,7 +464,7 @@ parameters:
             clusterController:
               requests:
                 cpu: "32m"
-                memory: "30Mi"
+                memory: "128Mi"
               limits:
                 cpu: "32m"
                 memory: "256Mi"
