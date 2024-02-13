@@ -3,6 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-  package: ghcr.io/vshn/appcat:fixredisprober-func
+  package: ghcr.io/vshn/appcat:v4.55.0-func
   runtimeConfigRef:
     name: function-appcat
