@@ -9,8 +9,8 @@ metadata:
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-postgresql
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/plans: '{"plus-2":{"note":"Will be scheduled on APPUiO
-      Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1728Mi"}},"plus-4":{"note":"Will
-      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3776Mi"}},"standard-2":{"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1728Mi"}},"standard-4":{"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3776Mi"}}}'
+      Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"plus-4":{"note":"Will
+      be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}},"standard-2":{"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"standard-4":{"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}}}'
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/postgresql.html
     metadata.appcat.vshn.io/zone: rma1
   labels:
@@ -168,7 +168,7 @@ spec:
                           memory: 500Mi
                         cluster-controller:
                           cpu: 32m
-                          memory: 2Gi
+                          memory: 256Mi
                         dbops.run-dbops:
                           cpu: 250m
                           memory: 256Mi
@@ -215,7 +215,7 @@ spec:
                             memory: 64Mi
                           cluster-controller:
                             cpu: 32m
-                            memory: 30Mi
+                            memory: 128Mi
                           dbops.run-dbops:
                             cpu: 100m
                             memory: 64Mi
@@ -295,10 +295,10 @@ spec:
                 toFieldPath: spec.forProvider.manifest.spec.memory
                 transforms:
                   - map:
-                      plus-2: 1728Mi
-                      plus-4: 3776Mi
-                      standard-2: 1728Mi
-                      standard-4: 3776Mi
+                      plus-2: 1936Mi
+                      plus-4: 3984Mi
+                      standard-2: 1936Mi
+                      standard-4: 3984Mi
                     type: map
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.size.memory
@@ -712,8 +712,8 @@ spec:
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres
-          sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "2Gi"},
-            "requests": {"cpu": "32m", "memory": "30Mi"}}, "createBackup": {"limits":
+          sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "256Mi"},
+            "requests": {"cpu": "32m", "memory": "128Mi"}}, "createBackup": {"limits":
             {"cpu": "400m", "memory": "500Mi"}, "requests": {"cpu": "100m", "memory":
             "64Mi"}}, "envoy": {"limits": {"cpu": "64m", "memory": "64Mi"}, "requests":
             {"cpu": "32m", "memory": "64Mi"}}, "pgbouncer": {"limits": {"cpu": "32m",

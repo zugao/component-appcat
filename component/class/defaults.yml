@@ -439,19 +439,19 @@ parameters:
               size:
                 enabled: true
                 cpu: "400m"
-                memory: "1728Mi"
+                memory: "1936Mi"
                 disk: 20Gi
             standard-4:
               size:
                 enabled: true
                 cpu: "900m"
-                memory: "3776Mi"
+                memory: "3984Mi"
                 disk: 40Gi
             standard-8:
               size:
                 enabled: true
                 cpu: "1900m"
-                memory: "7872Mi"
+                memory: "8080Mi"
                 disk: 80Gi
           sideCars:
             createBackup:
@@ -464,10 +464,10 @@ parameters:
             clusterController:
               requests:
                 cpu: "32m"
-                memory: "30Mi"
+                memory: "128Mi"
               limits:
                 cpu: "32m"
-                memory: "2Gi"
+                memory: "256Mi"
             runDbops:
               requests:
                 cpu: "100m"
