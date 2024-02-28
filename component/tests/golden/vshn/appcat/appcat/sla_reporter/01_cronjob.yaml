@@ -30,15 +30,7 @@ spec:
               envFrom:
                 - secretRef:
                     name: appcat-sla-reports-creds
-<<<<<<< HEAD
-<<<<<<< HEAD
-              image: ghcr.io/vshn/appcat:v4.57.0
-=======
-              image: ghcr.io/vshn/appcat:add_keycloak_maintenance
->>>>>>> f2ab54a (Add maintenance for Keycloak)
-=======
               image: ghcr.io/vshn/appcat:add_keycloak_provider_themes
->>>>>>> 1b9d104 (Add support for custom themes and provider for Keycloak)
               name: sla-reporter
               resources:
                 limits:

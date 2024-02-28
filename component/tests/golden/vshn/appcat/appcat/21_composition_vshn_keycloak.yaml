@@ -31,15 +31,7 @@ spec:
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-<<<<<<< HEAD
-<<<<<<< HEAD
-          imageTag: v4.57.0
-=======
-          imageTag: add_keycloak_maintenance
->>>>>>> f2ab54a (Add maintenance for Keycloak)
-=======
           imageTag: add_keycloak_provider_themes
->>>>>>> 1b9d104 (Add support for custom themes and provider for Keycloak)
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           plans: '{"standard-2": {"size": {"cpu": "500m", "disk": "16Gi", "enabled":

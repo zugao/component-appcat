@@ -608,15 +608,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-<<<<<<< HEAD
-<<<<<<< HEAD
-          imageTag: v4.57.0
-=======
-          imageTag: add_keycloak_maintenance
->>>>>>> f2ab54a (Add maintenance for Keycloak)
-=======
           imageTag: add_keycloak_provider_themes
->>>>>>> 1b9d104 (Add support for custom themes and provider for Keycloak)
           maintenanceSA: helm-based-service-maintenance
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount

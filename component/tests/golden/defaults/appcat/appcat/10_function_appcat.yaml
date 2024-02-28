@@ -3,14 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-<<<<<<< HEAD
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.57.0-func
-=======
-  package: ghcr.io/vshn/appcat:add_keycloak_maintenance-func
->>>>>>> f2ab54a (Add maintenance for Keycloak)
-=======
   package: ghcr.io/vshn/appcat:add_keycloak_provider_themes-func
->>>>>>> 1b9d104 (Add support for custom themes and provider for Keycloak)
   runtimeConfigRef:
     name: function-appcat
