@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: add/keycloak_maintenance
+      tag: v4.58.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
