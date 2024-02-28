@@ -80,20 +80,22 @@ local vshn_appcat_service(name, serviceParams) =
                   name: 'xfn-config',
                 },
                 data: {
-                  serviceName: name,
-                  imageTag: common.GetAppCatImageTag(),
-                  chartRepository: params.charts[name].source,
-                  chartVersion: params.charts[name].version,
-                  bucketRegion: serviceParams.bucket_region,
-                  maintenanceSA: 'helm-based-service-maintenance',
-                  controlNamespace: params.services.controlNamespace,
-                  plans: std.toString(plans),
-                  restoreSA: serviceParams.restoreSA,
-                  quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
-                  isOpenshift: std.toString(isOpenshift),
-                } + if serviceParams.proxyFunction then {
-                  proxyEndpoint: serviceParams.grpcEndpoint,
-                } else {},
+                        serviceName: name,
+                        imageTag: common.GetAppCatImageTag(),
+                        chartRepository: params.charts[name].source,
+                        chartVersion: params.charts[name].version,
+                        bucketRegion: serviceParams.bucket_region,
+                        maintenanceSA: 'helm-based-service-maintenance',
+                        controlNamespace: params.services.controlNamespace,
+                        plans: std.toString(plans),
+                        restoreSA: serviceParams.restoreSA,
+                        quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
+                        isOpenshift: std.toString(isOpenshift),
+                      }
+                      + std.get(serviceParams, 'additionalInputs', default={}, inc_hidden=true)
+                      + if serviceParams.proxyFunction then {
+                        proxyEndpoint: serviceParams.grpcEndpoint,
+                      } else {},
               },
             },
           ],
@@ -156,7 +158,6 @@ local vshn_appcat_service(name, serviceParams) =
       plans: std.toString(plans),
     },
   };
-
 
   if params.services.vshn.enabled && serviceParams.enabled then {
     ['20_xrd_vshn_%s' % name]: xrd,

@@ -28,10 +28,10 @@ spec:
         apiVersion: v1
         data:
           bucketRegion: lpg
-          chartRepository: https://charts.bitnami.com/bitnami
-          chartVersion: 18.3.0
+          chartRepository: https://codecentric.github.io/helm-charts
+          chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-          imageTag: v4.56.0
+          imageTag: v4.57.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           plans: '{"standard-2": {"size": {"cpu": "500m", "disk": "16Gi", "enabled":
@@ -39,6 +39,8 @@ spec:
             "enabled": true, "memory": "4Gi"}}, "standard-8": {"size": {"cpu": "2",
             "disk": "16Gi", "enabled": true, "memory": "8Gi"}}}'
           quotasEnabled: 'false'
+          registry_password: ''
+          registry_username: ''
           restoreSA: mariadbrestoreserviceaccount
           serviceName: keycloak
         kind: ConfigMap
