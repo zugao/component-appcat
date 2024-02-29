@@ -31,7 +31,7 @@ spec:
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-          imageTag: v4.58.0
+          imageTag: v4.58.1
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           plans: '{"standard-2": {"size": {"cpu": "500m", "disk": "16Gi", "enabled":
