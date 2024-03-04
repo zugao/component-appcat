@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.58.1
+      tag: v4.59.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
