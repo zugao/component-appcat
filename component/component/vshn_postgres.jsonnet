@@ -1,4 +1,3 @@
-local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 
@@ -908,6 +907,7 @@ local composition(restore=false) =
                       externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
                       quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                       sideCars: std.toString(pgParams.sideCars),
+                      controlNamespace: params.services.controlNamespace,
                     } + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if pgParams.proxyFunction then {
                       proxyEndpoint: pgParams.grpcEndpoint,

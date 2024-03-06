@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.59.0
+        tag: add/disable_billing
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver

@@ -30,7 +30,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_TRACK_OC_MAINTENANCE_STATUS
           value: "false"
-        image: ghcr.io/vshn/appcat:v4.59.0
+        image: ghcr.io/vshn/appcat:add_disable_billing
         livenessProbe:
           httpGet:
             path: /healthz
