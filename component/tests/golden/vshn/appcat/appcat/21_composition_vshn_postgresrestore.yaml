@@ -802,6 +802,7 @@ spec:
       input:
         apiVersion: v1
         data:
+          controlNamespace: syn-appcat-control
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
@@ -809,7 +810,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.59.0
+          imageTag: v4.60.0
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres
