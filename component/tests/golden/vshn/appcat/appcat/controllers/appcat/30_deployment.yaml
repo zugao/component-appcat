@@ -23,7 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.60.1
+          image: ghcr.io/vshn/appcat:v4.60.2
           livenessProbe:
             httpGet:
               path: /healthz
