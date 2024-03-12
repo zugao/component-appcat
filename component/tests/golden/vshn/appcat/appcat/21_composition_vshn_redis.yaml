@@ -608,7 +608,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.60.2
+          imageTag: v4.60.4
           maintenanceSA: helm-based-service-maintenance
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
