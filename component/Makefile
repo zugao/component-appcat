@@ -49,28 +49,32 @@ docs-serve: ## Preview the documentation
 	mkdir -p dependencies
 	$(COMPILE_CMD)
 
+.PHONY: ensure_git_hook
+ensure_git_hook: ## Ensure the git hook is installed
+	cp ../.githooks/pre-commit ../.git/hooks/pre-commit
+
 .PHONY: test
 test: commodore_args += -f tests/$(instance).yml
 test: .compile ## Compile the component
 .PHONY: gen-golden
 gen-golden: commodore_args += -f tests/$(instance).yml
-gen-golden: clean .compile ## Update the reference version for target `golden-diff`.
+gen-golden: clean .compile ensure_git_hook ## Update the reference version for target `golden-diff`.
 	@rm -rf tests/golden/$(instance)
 	@mkdir -p tests/golden/$(instance)
 	@cp -R compiled/. tests/golden/$(instance)/.
 
 .PHONY: golden-diff
 golden-diff: commodore_args += -f tests/$(instance).yml
-golden-diff: clean .compile ## Diff compile output against the reference version. Review output and run `make gen-golden golden-diff` if this target fails.
+golden-diff: clean .compile ensure_git_hook ## Diff compile output against the reference version. Review output and run `make gen-golden golden-diff` if this target fails.
 	@git diff --exit-code --minimal --no-index -- tests/golden/$(instance) compiled/
 
 .PHONY: golden-diff-all
 golden-diff-all: recursive_target=golden-diff
-golden-diff-all: $(test_instances) ## Run golden-diff for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
+golden-diff-all: ensure_git_hook $(test_instances) ## Run golden-diff for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
 
 .PHONY: gen-golden-all
 gen-golden-all: recursive_target=gen-golden
-gen-golden-all: $(test_instances) ## Run gen-golden for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
+gen-golden-all: ensure_git_hook $(test_instances) ## Run gen-golden for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
 
 .PHONY: lint_kubent_all
 lint_kubent_all: recursive_target=lint_kubent

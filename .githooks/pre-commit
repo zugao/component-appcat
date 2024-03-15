@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+
+# detect if specific yaml key exists in file ../../component/class/defaults.yaml
+# specifically find existing passwords and fail if they're non empty
+
+import yaml
+import sys
+import os
+
+def yaml_path_recursion(yaml_dict, path):
+    if len(path) == 1:
+        return len(yaml_dict[path[0]]) > 0 and not yaml_dict[path[0]].startswith("?{vaultkv")
+    else:
+        return yaml_path_recursion(yaml_dict.get(path[0], {}), path[1:])
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+tests_vshn_file = os.path.join(current_dir, '../../component/tests/vshn.yml')
+defaults_file = os.path.join(current_dir, '../../component/class/defaults.yml')
+
+
+keys_to_check_yaml = [
+    'parameters.appcat.services.vshn.keycloak.additionalInputs.registry_password',
+    'parameters.appcat.services.vshn.keycloak.additionalInputs.registry_username'
+    ]
+
+with open(tests_vshn_file, 'r') as f:
+    defaults = yaml.safe_load(f)
+    for key in keys_to_check_yaml:
+        splitted = key.split(".")
+        if yaml_path_recursion(defaults, splitted):
+            print(f'password is not empty in or broken vault declaration in {tests_vshn_file} for key {key}')
+            sys.exit(1)
+
+with open(defaults_file, 'r') as f:
+    defaults = yaml.safe_load(f)
+    for key in keys_to_check_yaml:
+        splitted = key.split(".")
+        if yaml_path_recursion(defaults, splitted):
+            print(f'password is not empty in or broken vault declaration in {defaults_file} for key {key}')
+            sys.exit(1)
+
+exit(0)
