@@ -12,10 +12,10 @@ spec:
       restartPolicy: Never
       containers:
         - name: connect
-          image: docker.io/appuio/oc:v4.14
+          image: curlimages/curl:8.6.0
           imagePullPolicy: IfNotPresent
           command:
-            - bash
+            - /bin/sh
           args:
             - -c
             - echo "Testing health...\n" && sleep 30 && curl -ivv http://$KEYCLOAK_HOST/health

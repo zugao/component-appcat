@@ -14,12 +14,14 @@ $(kuttl_bin): | $(go_bin)
 
 .PHONY: .e2e-test
 e2e-test: $(kuttl_bin) ## Run e2e tests
+	@kubectl create namespace schedar-e2e || true
 	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/e2e --config ./tests/e2e/kuttl-test.yaml --suppress-log=Events
 	@rm -f kubeconfig
 # kuttl leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
 
 .PHONY: .run-single-e2e
 run-single-e2e:
+	@kubectl create namespace schedar-e2e || true
 	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/e2e --config ./tests/e2e/kuttl-test.yaml --suppress-log=Events --test $(test)
 	@rm -f kubeconfig
 

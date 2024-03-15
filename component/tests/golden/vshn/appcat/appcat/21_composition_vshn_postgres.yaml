@@ -386,9 +386,6 @@ spec:
                         resources:
                           enableClusterLimitsRequirements: true
                       postgres:
-                        extensions:
-                          - name: pg_repack
-                            version: 1.5.0
                         ssl:
                           certificateSecretKeySelector:
                             key: tls.crt
