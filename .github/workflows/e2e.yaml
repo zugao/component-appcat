@@ -6,7 +6,7 @@ on:
     # daily midnight
     - cron: '0 0 * * *'
 jobs:
-  test-e2e:
+  test-e2e-lab:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,3 +20,33 @@ jobs:
         run: make e2e-test
         env:
           KUBECONFIG: kubeconfig
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: 'E2E tests for lab environement'
+          icon_emoji: ${{ job.status == 'success' && ':githubparrot:' || ':poop:' }}
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+  test-e2e-prod-lpg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get KUBECONFIG
+        shell: bash
+        env:
+          LPG_KUBECONFIG: ${{ secrets.LPG_KUBECONFIG }}
+        run: |
+          echo "$LPG_KUBECONFIG" > kubeconfig
+      - name: Run tests
+        run: make e2e-test
+        env:
+          KUBECONFIG: kubeconfig
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: 'E2E tests for LPG environement'
+          icon_emoji: ${{ job.status == 'success' && ':githubparrot:' || ':poop:' }}
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
