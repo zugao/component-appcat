@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: connect-keycloak-e2e
+spec:
+  backoffLimit: 20
+  template:
+    metadata:
+      labels:
+        e2e-test: keycloak-e2e
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: connect
+          image: curlimages/curl:8.6.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - echo "Testing health...\n" && sleep 30 && curl -ivv http://$KEYCLOAK_HOST/health
+          envFrom:
+            - secretRef:
+                name: keycloak-e2e

@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: connect-redis
+spec:
+  backoffLimit: 10
+  template:
+    metadata:
+      labels:
+        e2e-test: postgresql
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: connect
+          image: dockerhub.vshn.net/library/redis:7
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+          args:
+            - -c
+            - redis-cli -u rediss://$REDIS_USERNAME:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT --tls --cert /etc/redis-tls/tls.crt --key /etc/redis-tls/tls.key --cacert /etc/redis-tls/ca.crt PING
+          envFrom:
+            - secretRef:
+                name: redis-e2e-test-creds
+          volumeMounts:
+            - name: redis-tls-secrets
+              mountPath: /etc/redis-tls
+              readOnly: true
+      volumes:
+        - name: redis-tls-secrets
+          secret:
+            secretName: redis-e2e-test-creds

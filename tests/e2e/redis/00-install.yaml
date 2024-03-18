@@ -1,0 +1,10 @@
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNRedis
+metadata:
+  name: redis-e2e-test
+spec:
+  parameters:
+    size:
+      plan: standard-2
+  writeConnectionSecretToRef:
+    name: redis-e2e-test-creds
