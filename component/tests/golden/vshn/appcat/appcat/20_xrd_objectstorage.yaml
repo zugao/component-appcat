@@ -47,21 +47,22 @@ spec:
                   properties:
                     bucketDeletionPolicy:
                       default: DeleteAll
-                      description: BucketDeletionPolicy determines how buckets should
-                        be deleted when Bucket is deleted. `DeleteIfEmpty` only deletes
-                        the bucket if the bucket is empty. `DeleteAll` recursively
-                        deletes all objects in the bucket and then removes it.
+                      description: |-
+                        BucketDeletionPolicy determines how buckets should be deleted when Bucket is deleted.
+                         `DeleteIfEmpty` only deletes the bucket if the bucket is empty.
+                         `DeleteAll` recursively deletes all objects in the bucket and then removes it.
                       type: string
                     bucketName:
-                      description: BucketName is the name of the bucket to create.
-                        Cannot be changed after bucket is created. Name must be acceptable
-                        by the S3 protocol, which follows RFC 1123. Be aware that
-                        S3 providers may require a unique name across the platform
-                        or region.
+                      description: |-
+                        BucketName is the name of the bucket to create.
+                        Cannot be changed after bucket is created.
+                        Name must be acceptable by the S3 protocol, which follows RFC 1123.
+                        Be aware that S3 providers may require a unique name across the platform or region.
                       type: string
                     region:
-                      description: Region is the name of the region where the bucket
-                        shall be created. The region must be available in the S3 endpoint.
+                      description: |-
+                        Region is the name of the region where the bucket shall be created.
+                        The region must be available in the S3 endpoint.
                       type: string
                   required:
                     - bucketName
@@ -87,11 +88,9 @@ spec:
                         maxLength: 32768
                         type: string
                       observedGeneration:
-                        description: ObservedGeneration represents the .metadata.generation
-                          that the condition was set based upon. For instance, if
-                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
-                          is 9, the condition is out of date with respect to the current
-                          state of the instance.
+                        description: |-
+                          ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                          For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
                         format: int64
                         minimum: 0
                         type: integer
@@ -132,11 +131,9 @@ spec:
                         maxLength: 32768
                         type: string
                       observedGeneration:
-                        description: ObservedGeneration represents the .metadata.generation
-                          that the condition was set based upon. For instance, if
-                          .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
-                          is 9, the condition is out of date with respect to the current
-                          state of the instance.
+                        description: |-
+                          ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                          For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
                         format: int64
                         minimum: 0
                         type: integer
@@ -167,13 +164,15 @@ spec:
                     description: A Condition that may apply to a resource.
                     properties:
                       lastTransitionTime:
-                        description: LastTransitionTime is the last time this condition
-                          transitioned from one status to another.
+                        description: |-
+                          LastTransitionTime is the last time this condition transitioned from one
+                          status to another.
                         format: date-time
                         type: string
                       message:
-                        description: A Message containing details about this condition's
-                          last transition from one status to another, if any.
+                        description: |-
+                          A Message containing details about this condition's last transition from
+                          one status to another, if any.
                         type: string
                       reason:
                         description: A Reason for this condition's last transition
@@ -184,8 +183,9 @@ spec:
                           False, or Unknown?
                         type: string
                       type:
-                        description: Type of this condition. At most one of each condition
-                          type may apply to a resource at any point in time.
+                        description: |-
+                          Type of this condition. At most one of each condition type may apply to
+                          a resource at any point in time.
                         type: string
                     required:
                       - lastTransitionTime
