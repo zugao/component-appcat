@@ -18,7 +18,7 @@ spec:
             - /bin/sh
           args:
             - -c
-            - echo "Testing health...\n" && sleep 30 && curl -ivv http://$KEYCLOAK_HOST/health
+            - echo "Testing health...\n" && sleep 30 && curl -kivv https://$KEYCLOAK_HOST:8443/health
           envFrom:
             - secretRef:
                 name: keycloak-e2e

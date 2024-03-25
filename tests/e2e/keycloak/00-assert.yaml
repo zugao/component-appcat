@@ -37,4 +37,3 @@ status:
   conditions:
     - status: "True"
     - status: "True"
-
