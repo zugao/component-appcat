@@ -14,6 +14,7 @@ jobs:
         uses: dcarbone/install-jq-action@v2
         with:
           version: '1.7'
+          force: true
       - name: Get KUBECONFIG
         shell: bash
         env:
@@ -40,6 +41,7 @@ jobs:
         uses: dcarbone/install-jq-action@v2
         with:
           version: '1.7'
+          force: true
       - name: Get KUBECONFIG
         shell: bash
         env:
