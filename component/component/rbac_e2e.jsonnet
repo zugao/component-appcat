@@ -7,12 +7,12 @@ local params = inv.parameters.appcat;
 local e2eNs = kube.Namespace('appcat-e2e') + {
   metadata+: {
     labels+: {
-      'appuio.io/organization': 'vshn-e2e-tests',
+      'appuio.io/organization': 'vshn',
     },
   },
 };
 
-local e2eSA = kube.ServiceAccount('appcat-e2e') + {
+local e2eSA = kube.ServiceAccount('github-ci') + {
   metadata+: {
     namespace: 'appcat-e2e',
   },
@@ -41,11 +41,11 @@ local e2eClusterRoleBinding = kube.ClusterRoleBinding('appcat:e2e') {
   subjects_: [ e2eSA ],
 };
 
-local e2eSAToken = kube.Secret('appcat-e2e-github') + {
+local e2eSAToken = kube.Secret('github-ci-secret') + {
   metadata+: {
     namespace: 'appcat-e2e',
     annotations+: {
-      'kubernetes.io/service-account.name': 'appcat-e2e',
+      'kubernetes.io/service-account.name': 'github-ci',
       'argocd.argoproj.io/compare-options': 'IgnoreExtraneous',
     },
   },
@@ -53,5 +53,5 @@ local e2eSAToken = kube.Secret('appcat-e2e-github') + {
 };
 
 if params.services.vshn.e2eTests then {
-  '20_rbac_vshn_e2e_tests': [ e2eNs, e2eSA, e2eRoleBinding, e2eSAToken, e2eClusterRoleBinding, e2eClusterRole ],
+  '20_rbac_vshn_e2e_tests': [ e2eNs, e2eSA, e2eRoleBinding, e2eClusterRoleBinding, e2eClusterRole, e2eSAToken ],
 } else {}

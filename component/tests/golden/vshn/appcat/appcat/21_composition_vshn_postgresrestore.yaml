@@ -811,7 +811,6 @@ spec:
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
           imageTag: v4.61.0
-          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

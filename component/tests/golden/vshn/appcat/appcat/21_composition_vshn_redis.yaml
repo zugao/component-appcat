@@ -610,7 +610,6 @@ spec:
           emailAlertingSmtpUsername: myuser@example.com
           imageTag: v4.61.0
           maintenanceSA: helm-based-service-maintenance
-          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
           serviceName: redis
