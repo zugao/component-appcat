@@ -26,6 +26,21 @@ local e2eRoleBinding = kube.RoleBinding('appcat-e2e') + {
   subjects_: [ e2eSA ],
 };
 
+local e2eClusterRole = kube.ClusterRole('appcat:e2e') + {
+  rules: [
+    {
+      apiGroups: [ 'networking.k8s.io' ],
+      resources: [ 'ingresses' ],
+      verbs: [ 'get', 'list' ],
+    },
+  ],
+};
+
+local e2eClusterRoleBinding = kube.ClusterRoleBinding('appcat:e2e') {
+  roleRef_: e2eClusterRole,
+  subjects_: [ e2eSA ],
+};
+
 local e2eSAToken = kube.Secret('appcat-e2e-github') + {
   metadata+: {
     namespace: 'appcat-e2e',
@@ -38,5 +53,5 @@ local e2eSAToken = kube.Secret('appcat-e2e-github') + {
 };
 
 if params.services.vshn.e2eTests then {
-  '20_rbac_vshn_e2e_tests': [ e2eNs, e2eSA, e2eRoleBinding, e2eSAToken ],
+  '20_rbac_vshn_e2e_tests': [ e2eNs, e2eSA, e2eRoleBinding, e2eSAToken, e2eClusterRoleBinding, e2eClusterRole ],
 } else {}
