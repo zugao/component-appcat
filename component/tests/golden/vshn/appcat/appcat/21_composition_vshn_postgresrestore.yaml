@@ -810,7 +810,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.61.0
+          imageTag: keycloak_staging_le
+          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

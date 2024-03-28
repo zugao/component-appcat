@@ -21,7 +21,7 @@ parameters:
   appcat:
 
     grpcEndpoint: host.docker.internal:9443
-    proxyFunction: false
+    proxyFunction: true
 
     quotasEnabled: false
     appuioManaged: false
@@ -89,7 +89,9 @@ parameters:
             # https://vault-prod.syn.vshn.net/ui/vault/secrets/clusters%2Fkv/kv/__shared__%2F__shared__%2Fappcat/details?version=1
             registry_username: ""
             registry_password: ""
-            issuer_name: letsencrypt-staging
+            ingress_annotations: |
+              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+              cert-manager.io/cluster-issuer: letsencrypt-staging
         postgres:
           sgNamespace: stackgres
           bucket_region: 'us-east-1'

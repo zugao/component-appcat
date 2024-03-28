@@ -32,7 +32,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNMINIO
           value: "false"
-        image: ghcr.io/vshn/appcat:v4.61.0
+        image: ghcr.io/vshn/appcat:keycloak_staging_le
         livenessProbe:
           httpGet:
             path: /healthz

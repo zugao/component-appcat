@@ -31,14 +31,17 @@ spec:
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-          imageTag: v4.61.0
+          imageTag: keycloak_staging_le
+          ingress_annotations: |
+            nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+            cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'false'
-          issuer_name: letsencrypt-staging
           maintenanceSA: helm-based-service-maintenance
           plans: '{"standard-2": {"size": {"cpu": "500m", "disk": "16Gi", "enabled":
             true, "memory": "2Gi"}}, "standard-4": {"size": {"cpu": "1", "disk": "16Gi",
             "enabled": true, "memory": "4Gi"}}, "standard-8": {"size": {"cpu": "2",
             "disk": "16Gi", "enabled": true, "memory": "8Gi"}}}'
+          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           registry_password: ''
           registry_username: ''

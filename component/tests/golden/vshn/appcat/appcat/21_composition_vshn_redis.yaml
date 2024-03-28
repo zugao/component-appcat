@@ -608,8 +608,9 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.61.0
+          imageTag: keycloak_staging_le
           maintenanceSA: helm-based-service-maintenance
+          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
           serviceName: redis
