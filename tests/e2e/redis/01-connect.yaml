@@ -3,13 +3,14 @@ kind: Job
 metadata:
   name: connect-redis
 spec:
-  backoffLimit: 10
+  backoffLimit: 1
   template:
     metadata:
       labels:
-        e2e-test: postgresql
+        e2e-test: redis
     spec:
       restartPolicy: Never
+      activeDeadlineSeconds: 180
       containers:
         - name: connect
           image: dockerhub.vshn.net/library/redis:7
@@ -18,7 +19,12 @@ spec:
             - bash
           args:
             - -c
-            - redis-cli -u rediss://$REDIS_USERNAME:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT --tls --cert /etc/redis-tls/tls.crt --key /etc/redis-tls/tls.key --cacert /etc/redis-tls/ca.crt PING
+            - |
+              until redis-cli -u rediss://$REDIS_USERNAME:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT --tls --cert /etc/redis-tls/tls.crt --key /etc/redis-tls/tls.key --cacert /etc/redis-tls/ca.crt PING
+              do
+                sleep 1
+                echo "not ready"
+              done
           envFrom:
             - secretRef:
                 name: redis-e2e-test-creds

@@ -6,5 +6,8 @@ spec:
   parameters:
     service:
       fqdn: keycloak-e2e.example.com
+      postgreSQLParameters:
+        backup:
+          deletionProtection: false
   writeConnectionSecretToRef:
     name: keycloak-e2e

@@ -3,13 +3,18 @@ kind: Job
 metadata:
   name: connect-keycloak-e2e
 spec:
-  backoffLimit: 20
+  backoffLimit: 1
   template:
     metadata:
       labels:
         e2e-test: keycloak-e2e
     spec:
       restartPolicy: Never
+      activeDeadlineSeconds: 180
+      volumes:
+        - name: certs
+          secret:
+            secretName: keycloak-e2e
       containers:
         - name: connect
           image: curlimages/curl:8.6.0
@@ -18,7 +23,16 @@ spec:
             - /bin/sh
           args:
             - -c
-            - echo "Testing health...\n" && sleep 30 && curl -kivv https://$KEYCLOAK_HOST:8443/health
+            - |
+              echo "Testing health..."
+              while ! curl --cacert /certs/ca.crt -ivv https://$KEYCLOAK_HOST:8443/health
+              do
+                sleep 1
+                echo "not ready"
+              done
           envFrom:
             - secretRef:
                 name: keycloak-e2e
+          volumeMounts:
+            - name: certs
+              mountPath: /certs

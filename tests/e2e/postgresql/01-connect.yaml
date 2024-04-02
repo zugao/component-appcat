@@ -3,13 +3,14 @@ kind: Job
 metadata:
   name: connect-postgresql
 spec:
-  backoffLimit: 10
+  backoffLimit: 1
   template:
     metadata:
       labels:
         e2e-test: postgresql
     spec:
       restartPolicy: Never
+      activeDeadlineSeconds: 180
       containers:
         - name: connect
           image: dockerhub.vshn.net/library/postgres:15
@@ -18,7 +19,12 @@ spec:
             - bash
           args:
             - -c
-            - PGPASSWORD=$POSTGRESQL_PASSWORD psql "sslmode=verify-ca sslrootcert=/etc/postgresql-tls/ca.crt host=$POSTGRESQL_HOST port=$POSTGRESQL_PORT dbname=$POSTGRESQL_DB" -U $POSTGRESQL_USER -c "select 1;"
+            - |
+              until PGPASSWORD=$POSTGRESQL_PASSWORD psql "sslmode=verify-full sslrootcert=/etc/postgresql-tls/ca.crt host=$POSTGRESQL_HOST port=$POSTGRESQL_PORT dbname=$POSTGRESQL_DB" -U $POSTGRESQL_USER -c "select 1;"
+              do
+                sleep 1
+                echo "not ready"
+              done
           envFrom:
             - secretRef:
                 name: postgresql-e2e-test-creds
