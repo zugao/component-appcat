@@ -17,10 +17,6 @@ spec:
     backup: {}
     service:
       postgreSQLParameters:
-        backup:
-          deletionProtection: false
-          deletionRetention: 7
-          retention: 6
         instances: 1
       relativePath: /
       serviceLevel: besteffort

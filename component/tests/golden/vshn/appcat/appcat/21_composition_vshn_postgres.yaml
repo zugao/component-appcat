@@ -708,7 +708,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.61.0
+          imageTag: v4.62.0
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

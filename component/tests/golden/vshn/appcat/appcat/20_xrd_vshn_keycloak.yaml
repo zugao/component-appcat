@@ -16,6 +16,7 @@ spec:
     - KEYCLOAK_PASSWORD
     - KEYCLOAK_URL
     - KEYCLOAK_USERNAME
+    - ca.crt
   defaultCompositionRef:
     name: vshnkeycloak.vshn.appcat.vshn.io
   group: vshn.appcat.vshn.io
