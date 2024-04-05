@@ -31,7 +31,7 @@ spec:
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-          imageTag: v4.62.0
+          imageTag: fix_postgresql_exporter
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
