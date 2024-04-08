@@ -31,7 +31,7 @@ spec:
           chartRepository: https://charts.bitnami.com/bitnami
           chartVersion: 11.6.2
           controlNamespace: syn-appcat-control
-          imageTag: fix_postgresql_exporter
+          imageTag: v4.62.1
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           plans: '{"standard-1": {"size": {"cpu": "250m", "disk": "16Gi", "enabled":

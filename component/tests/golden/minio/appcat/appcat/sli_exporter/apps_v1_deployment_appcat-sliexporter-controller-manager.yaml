@@ -32,7 +32,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNMINIO
           value: "true"
-        image: ghcr.io/vshn/appcat:fix_postgresql_exporter
+        image: ghcr.io/vshn/appcat:v4.62.1
         livenessProbe:
           httpGet:
             path: /healthz
