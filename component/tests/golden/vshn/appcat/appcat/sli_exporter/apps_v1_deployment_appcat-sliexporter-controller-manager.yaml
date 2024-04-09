@@ -34,7 +34,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNKEYCLOAK
           value: "true"
-        image: ghcr.io/vshn/appcat:v4.63.1
+        image: ghcr.io/vshn/appcat:add_keycloak_metrics
         livenessProbe:
           httpGet:
             path: /healthz

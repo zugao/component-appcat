@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.63.1
+        tag: add/keycloak_metrics
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
