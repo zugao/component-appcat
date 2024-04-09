@@ -91,6 +91,7 @@ local vshn_appcat_service(name, serviceParams) =
                         restoreSA: serviceParams.restoreSA,
                         quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                         isOpenshift: std.toString(isOpenshift),
+                        sliNamespace: params.slos.namespace,
                       }
                       + std.get(serviceParams, 'additionalInputs', default={}, inc_hidden=true)
                       + if serviceParams.proxyFunction then {
