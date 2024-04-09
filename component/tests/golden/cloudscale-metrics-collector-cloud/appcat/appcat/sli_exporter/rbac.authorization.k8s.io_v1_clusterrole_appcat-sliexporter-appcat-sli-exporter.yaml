@@ -72,6 +72,20 @@ rules:
 - apiGroups:
   - vshn.appcat.vshn.io
   resources:
+  - xvshnkeycloaks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - vshn.appcat.vshn.io
+  resources:
+  - xvshnkeycloaks/status
+  verbs:
+  - get
+- apiGroups:
+  - vshn.appcat.vshn.io
+  resources:
   - xvshnminios
   verbs:
   - get

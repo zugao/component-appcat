@@ -38,6 +38,10 @@ local deployment_patch = kube._Object('apps/v1', 'Deployment', 'controller-manag
                 name: 'APPCAT_SLI_VSHNMINIO',
                 value: std.manifestJson(params.services.vshn.enabled && params.services.vshn.minio.enabled),
               },
+              {
+                name: 'APPCAT_SLI_VSHNKEYCLOAK',
+                value: std.manifestJson(params.services.vshn.enabled && params.services.vshn.keycloak.enabled),
+              },
             ],
           },
         ],
