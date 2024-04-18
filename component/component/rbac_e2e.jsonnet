@@ -15,6 +15,9 @@ local e2eNs = kube.Namespace('appcat-e2e') + {
 local e2eSA = kube.ServiceAccount('github-ci') + {
   metadata+: {
     namespace: 'appcat-e2e',
+    labels: {
+      'appuio.io/organization': 'vshn',
+    },
   },
 };
 
@@ -32,6 +35,11 @@ local e2eClusterRole = kube.ClusterRole('appcat:e2e') + {
       apiGroups: [ 'networking.k8s.io' ],
       resources: [ 'ingresses' ],
       verbs: [ 'get', 'list' ],
+    },
+    {
+      apiGroups: [ '' ],
+      resources: [ 'namespaces' ],
+      verbs: [ 'delete' ],
     },
   ],
 };

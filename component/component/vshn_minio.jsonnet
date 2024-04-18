@@ -67,6 +67,9 @@ local composition =
                 providerEnabled: std.toString(params.providers.minio.enabled),
                 controlNamespace: params.services.controlNamespace,
                 maintenanceSA: 'helm-based-service-maintenance',
+                ownerKind: xrd.spec.names.kind,
+                ownerGroup: xrd.spec.group,
+                ownerVersion: xrd.spec.versions[0].name,
               } + if minioParams.proxyFunction then {
                 proxyEndpoint: minioParams.grpcEndpoint,
               } else {},

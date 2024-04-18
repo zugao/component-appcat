@@ -502,6 +502,9 @@ local composition =
                       controlNamespace: params.services.controlNamespace,
                       restoreSA: 'redisrestoreserviceaccount',
                       quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
+                      ownerKind: xrd.spec.names.kind,
+                      ownerGroup: xrd.spec.group,
+                      ownerVersion: xrd.spec.versions[0].name,
                     } + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if redisParams.proxyFunction then {
                       proxyEndpoint: redisParams.grpcEndpoint,

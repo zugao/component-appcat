@@ -31,12 +31,15 @@ spec:
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.3.0
           controlNamespace: syn-appcat-control
-          imageTag: v4.62.2
+          imageTag: v4.64.0
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
+          ownerGroup: vshn.appcat.vshn.io
+          ownerKind: XVSHNKeycloak
+          ownerVersion: v1
           plans: '{"standard-2": {"size": {"cpu": "500m", "disk": "16Gi", "enabled":
             true, "memory": "2Gi"}}, "standard-4": {"size": {"cpu": "1", "disk": "16Gi",
             "enabled": true, "memory": "4Gi"}}, "standard-8": {"size": {"cpu": "2",

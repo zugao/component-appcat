@@ -908,6 +908,10 @@ local composition(restore=false) =
                       quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                       sideCars: std.toString(pgParams.sideCars),
                       controlNamespace: params.services.controlNamespace,
+                      ownerKind: xrd.spec.names.kind,
+                      ownerGroup: xrd.spec.group,
+                      ownerVersion: xrd.spec.versions[0].name,
+                      bucketRegion: pgParams.bucket_region,
                     } + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if pgParams.proxyFunction then {
                       proxyEndpoint: pgParams.grpcEndpoint,

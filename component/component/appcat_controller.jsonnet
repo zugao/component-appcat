@@ -143,46 +143,21 @@ local webhookCertificate = {
   },
 };
 
-local pgWebhook = loadManifest('pg-webhook.yaml') {
+local webhook = loadManifest('webhooks.yaml') {
   metadata+: {
-    name: 'appcat-pg-validation',
+    name: 'appcat-validation',
     annotations+: {
       'cert-manager.io/inject-ca-from': params.namespace + '/' + webhookCertificate.metadata.name,
     },
   },
   webhooks: [
-    if w.name == 'postgresql.vshn.appcat.vshn.io' then
-      w {
-        clientConfig+: {
-          service+: {
-            namespace: controllersParams.namespace,
-          },
+    w {
+      clientConfig+: {
+        service+: {
+          namespace: controllersParams.namespace,
         },
-      }
-    else
-      w
-    for w in super.webhooks
-  ],
-};
-
-local redisWebhook = loadManifest('redis-webhook.yaml') {
-  metadata+: {
-    name: 'appcat-redis-validation',
-    annotations+: {
-      'cert-manager.io/inject-ca-from': params.namespace + '/' + webhookCertificate.metadata.name,
-    },
-  },
-  webhooks: [
-    if w.name == 'vshnredis.vshn.appcat.vshn.io' then
-      w {
-        clientConfig+: {
-          service+: {
-            namespace: controllersParams.namespace,
-          },
-        },
-      }
-    else
-      w
+      },
+    }
     for w in super.webhooks
   ],
 };
@@ -192,8 +167,7 @@ if controllersParams.enabled then {
   'controllers/appcat/10_cluster_role': clusterRole,
   'controllers/appcat/10_role_binding_leader_election': roleBindingLeaderElection,
   'controllers/appcat/10_cluster_role_binding': clusterRoleBinding,
-  'controllers/appcat/10_pg_webhooks': pgWebhook,
-  'controllers/appcat/10_redis_webhooks': redisWebhook,
+  'controllers/appcat/10_webhooks': webhook,
   'controllers/appcat/10_webhook_service': webhookService,
   'controllers/appcat/10_webhook_issuer': webhookIssuer,
   'controllers/appcat/10_webhook_certificate': webhookCertificate,
