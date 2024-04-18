@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: add/keycloak_metrics
+      tag: v4.62.2
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
