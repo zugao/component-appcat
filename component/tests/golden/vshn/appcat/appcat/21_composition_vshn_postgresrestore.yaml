@@ -802,6 +802,7 @@ spec:
       input:
         apiVersion: v1
         data:
+          bucketRegion: us-east-1
           controlNamespace: syn-appcat-control
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
@@ -810,7 +811,10 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.62.2
+          imageTag: v4.64.0
+          ownerGroup: vshn.appcat.vshn.io
+          ownerKind: XVSHNPostgreSQL
+          ownerVersion: v1
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

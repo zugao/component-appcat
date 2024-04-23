@@ -92,6 +92,9 @@ local vshn_appcat_service(name, serviceParams) =
                         quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                         isOpenshift: std.toString(isOpenshift),
                         sliNamespace: params.slos.namespace,
+                        ownerKind: xrd.spec.names.kind,
+                        ownerGroup: xrd.spec.group,
+                        ownerVersion: xrd.spec.versions[0].name,
                       }
                       + std.get(serviceParams, 'additionalInputs', default={}, inc_hidden=true)
                       + if serviceParams.proxyFunction then {
