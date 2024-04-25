@@ -29,6 +29,10 @@ spec:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
           imageTag: v4.64.1
+<<<<<<< HEAD
+=======
+          isOpenshift: 'false'
+>>>>>>> e02abdfe (Bump AppCat)
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
           minioChartVersion: 5.0.13

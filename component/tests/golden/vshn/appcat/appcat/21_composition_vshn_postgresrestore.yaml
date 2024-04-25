@@ -812,6 +812,7 @@ spec:
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
           imageTag: v4.64.1
+          isOpenshift: 'false'
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
           ownerVersion: v1
