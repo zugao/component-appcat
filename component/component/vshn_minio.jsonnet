@@ -14,6 +14,8 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local minioParams = params.services.vshn.minio;
 
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 
@@ -70,6 +72,7 @@ local composition =
                 ownerKind: xrd.spec.names.kind,
                 ownerGroup: xrd.spec.group,
                 ownerVersion: xrd.spec.versions[0].name,
+                isOpenshift: std.toString(isOpenshift),
               } + if minioParams.proxyFunction then {
                 proxyEndpoint: minioParams.grpcEndpoint,
               } else {},

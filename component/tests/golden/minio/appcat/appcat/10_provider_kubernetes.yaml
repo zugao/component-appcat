@@ -123,11 +123,13 @@ rules:
       - apps
     resources:
       - statefulsets
+      - deployments
     verbs:
       - get
       - delete
       - watch
       - list
+      - patch
   - apiGroups:
       - rbac.authorization.k8s.io
     resourceNames:

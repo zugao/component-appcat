@@ -137,8 +137,8 @@ local runtimeConfigRef(name) = {
         },
         {
           apiGroups: [ 'apps' ],
-          resources: [ 'statefulsets' ],
-          verbs: [ 'get', 'delete', 'watch', 'list' ],
+          resources: [ 'statefulsets', 'deployments' ],
+          verbs: [ 'get', 'delete', 'watch', 'list', 'patch' ],
         },
         {
           apiGroups: [ 'rbac.authorization.k8s.io' ],

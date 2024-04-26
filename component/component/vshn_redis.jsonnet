@@ -505,6 +505,7 @@ local composition =
                       ownerKind: xrd.spec.names.kind,
                       ownerGroup: xrd.spec.group,
                       ownerVersion: xrd.spec.versions[0].name,
+                      isOpenshift: std.toString(isOpenshift),
                     } + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if redisParams.proxyFunction then {
                       proxyEndpoint: redisParams.grpcEndpoint,
