@@ -28,7 +28,7 @@ spec:
         data:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
-          imageTag: v4.65.0
+          imageTag: v4.66.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
