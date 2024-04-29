@@ -709,7 +709,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.64.3
+          imageTag: v4.65.0
           isOpenshift: 'false'
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
