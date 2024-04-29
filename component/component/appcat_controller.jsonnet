@@ -143,6 +143,23 @@ local webhookCertificate = {
   },
 };
 
+local clientConfig = {
+  clientConfig+: {
+    service+: {
+      namespace: controllersParams.namespace,
+    },
+  },
+};
+
+local selector = {
+  matchExpressions: [
+    {
+      key: 'appcat.vshn.io/ownerkind',
+      operator: 'Exists',
+    },
+  ],
+};
+
 local webhook = loadManifest('webhooks.yaml') {
   metadata+: {
     name: 'appcat-validation',
@@ -151,13 +168,10 @@ local webhook = loadManifest('webhooks.yaml') {
     },
   },
   webhooks: [
-    w {
-      clientConfig+: {
-        service+: {
-          namespace: controllersParams.namespace,
-        },
-      },
-    }
+    if w.name == 'pvc.vshn.appcat.vshn.io' then w { namespaceSelector: selector } + clientConfig else
+      if w.name == 'namespace.vshn.appcat.vshn.io' then w { objectSelector: selector } + clientConfig else
+        if w.name == 'xobjectbuckets.vshn.appcat.vshn.io' then w { objectSelector: selector } + clientConfig
+        else w + clientConfig
     for w in super.webhooks
   ],
 };
