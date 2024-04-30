@@ -30,10 +30,12 @@ local maintenanceRole = kube.ClusterRole(maintenanceRoleName) {
   ],
 };
 
+
 local maintenanceClusterRoleBinding = kube.ClusterRoleBinding('crossplane:appcat:job:helm:maintenance') + {
   roleRef_: maintenanceRole,
   subjects_: [ maintenanceServiceAccount ],
 };
+
 
 if params.services.vshn.enabled then {
   '10_namespace_vshn_control': controlNamespace,

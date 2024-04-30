@@ -4,10 +4,10 @@ metadata:
   name: postgresql-e2e-test
 spec:
   parameters:
-    service:
-      vacuumEnabled: true
-      repackEnabled: true
     size:
       plan: standard-2
+    service:
+      vacuumEnabled: false
+      repackEnabled: true
   writeConnectionSecretToRef:
     name: postgresql-e2e-test-creds

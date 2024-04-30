@@ -5647,6 +5647,11 @@ spec:
                                     settings.
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
+                                repackEnabled:
+                                  default: true
+                                  description: This is default option if neither repack
+                                    or vacuum are selected
+                                  type: boolean
                                 serviceLevel:
                                   default: besteffort
                                   description: ServiceLevel defines the service level
@@ -5656,6 +5661,9 @@ spec:
                                     - besteffort
                                     - guaranteed
                                   type: string
+                                vacuumEnabled:
+                                  default: false
+                                  type: boolean
                               type: object
                             size:
                               description: Size contains settings to control the sizing

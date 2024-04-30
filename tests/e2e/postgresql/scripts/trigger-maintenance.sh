@@ -1,0 +1,1 @@
+../../../e2e/common/scripts/trigger-maintenance.sh
