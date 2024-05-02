@@ -124,6 +124,16 @@ spec:
                             \ that node"
                           type: object
                       type: object
+                    security:
+                      description: Security defines the security of a service
+                      properties:
+                        allowedNamespaces:
+                          description: AllowedNamespaces defines a list of namespaces
+                            from where the service can be reached in the claim namespace
+                          items:
+                            type: string
+                          type: array
+                      type: object
                     service:
                       default: {}
                       description: Service contains keycloak DBaaS specific properties
@@ -5550,6 +5560,17 @@ spec:
                                     \ match a node\u2019s labels for the pod to be\
                                     \ scheduled on that node"
                                   type: object
+                              type: object
+                            security:
+                              description: Security defines the security of a service
+                              properties:
+                                allowedNamespaces:
+                                  description: AllowedNamespaces defines a list of
+                                    namespaces from where the service can be reached
+                                    in the claim namespace
+                                  items:
+                                    type: string
+                                  type: array
                               type: object
                             service:
                               description: Service contains PostgreSQL DBaaS specific

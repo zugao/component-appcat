@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.67.0
+        tag: v4.68.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -433,7 +433,6 @@ parameters:
             loadbalancerAnnotations: ""
           grpcEndpoint: ${appcat:grpcEndpoint}
           proxyFunction: ${appcat:proxyFunction}
-          enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
           defaultPlan: standard-2
@@ -560,7 +559,6 @@ parameters:
         redis:
           billing: true
           enabled: true
-          enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:redis:version}
           imageRegistry: ""
@@ -603,7 +601,6 @@ parameters:
         minio:
           billing: true
           enabled: false
-          enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:minio:version}
           grpcEndpoint: ${appcat:grpcEndpoint}
@@ -642,7 +639,6 @@ parameters:
             tags: "database,sql,mariadb"
             icon: "icon-mariadb"
             defaultVersion: "11.2"
-          enableNetworkPolicy: false
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:mariadb:version}
           imageRegistry: ""
@@ -710,7 +706,6 @@ parameters:
             tags: "idp,keycloak"
             icon: "icon-keycloak"
             defaultVersion: "22"
-          enableNetworkPolicy: false
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:keycloak:version}
           imageRegistry: ""

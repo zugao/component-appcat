@@ -84,13 +84,6 @@ You have to option to enable or disable it through the `enabled` parameter and c
 
 It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
 
-
-=== `postgres.enableNetworkPolicy`
-type:: bool
-default:: `true`
-
-Whether to enable NetworkPolicy in the PostgreSQL instance namespace. This allows to establish connections from claim's namespace to the PostgreSQL instance.
-
 === `postgres.bucket_region`
 type:: string
 default:: `''`
@@ -179,13 +172,6 @@ Configuration option for VSHN Redis.
 You have to option to enable or disable it through the `enabled` parameter and can set the `secretNamespace` and `providerSecretNamespace`.
 
 It's enabled by default and use the top level defined namespaces for `secretNamespace` and `providerSecretNamespace`.
-
-
-=== `redis.enableNetworkPolicy`
-type:: bool
-default:: `true`
-
-Whether to enable NetworkPolicy in the Redis instance namespace. This allows to establish connections from claim's namespace to the Redis instance.
 
 === `redis.bucket_region`
 type:: bool
