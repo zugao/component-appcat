@@ -36,56 +36,6 @@ local stackgresOperatorNs = kube.Namespace(params.stackgres.namespace) {
   },
 };
 
-
-local networkPolicy = {
-  name: 'network-policy',
-  base: comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
-        {
-          spec+: {
-            forProvider+: {
-              manifest+: {
-                metadata: {},
-                spec: {
-                  policyTypes: [
-                    'Ingress',
-                  ],
-                  podSelector: {},
-                  ingress: [
-                    {
-                      from: [
-                        {
-                          namespaceSelector: {
-                            matchLabels: {
-                              'kubernetes.io/metadata.name': '',
-                            },
-                          },
-                        },
-                        {
-                          namespaceSelector: {
-                            matchLabels: {
-                              'kubernetes.io/metadata.name': params.slos.namespace,
-                            },
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-  patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'network-policy'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
-
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
-  ],
-};
-
-
 local stackgresNetworkPolicy = kube.NetworkPolicy('allow-stackgres-api') + {
   metadata+: {
     namespace: params.stackgres.namespace,
@@ -885,9 +835,7 @@ local composition(restore=false) =
                            xobjectBucket,
                            sgObjectStorage,
                            podMonitor,
-                         ] + if pgParams.enableNetworkPolicy == true then [
-                networkPolicy,
-              ] else [],
+                         ],
             },
           },
           {
