@@ -428,6 +428,9 @@ parameters:
           # bucket_endpoint: 'https://objects.lpg.cloudscale.ch' || 'https://sos-ch-gva-2.exo.io'
           bucket_endpoint: ""
           enabled: true
+          additionalInputs:
+            # Depending on the cluster, this needs to be set
+            loadbalancerAnnotations: ""
           grpcEndpoint: ${appcat:grpcEndpoint}
           proxyFunction: ${appcat:proxyFunction}
           enableNetworkPolicy: true
