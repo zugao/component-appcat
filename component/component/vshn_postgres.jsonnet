@@ -913,7 +913,8 @@ local composition(restore=false) =
                       ownerVersion: xrd.spec.versions[0].name,
                       bucketRegion: pgParams.bucket_region,
                       isOpenshift: std.toString(isOpenshift),
-                    } + common.EmailAlerting(params.services.vshn.emailAlerting)
+                    } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
+                    + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if pgParams.proxyFunction then {
                       proxyEndpoint: pgParams.grpcEndpoint,
                     } else {},

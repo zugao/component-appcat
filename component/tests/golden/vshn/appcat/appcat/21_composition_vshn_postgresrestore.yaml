@@ -813,6 +813,8 @@ spec:
           externalDatabaseConnectionsEnabled: 'true'
           imageTag: v4.66.2
           isOpenshift: 'false'
+          loadbalancerAnnotations: |
+            foo: bar
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
           ownerVersion: v1

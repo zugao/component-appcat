@@ -96,6 +96,9 @@ parameters:
           sgNamespace: stackgres
           bucket_region: 'us-east-1'
           bucket_endpoint: 'http://minio-server.minio:9000'
+          additionalInputs:
+            loadbalancerAnnotations: |
+                foo: bar
           plans:
             standard-8:
               enabled: false

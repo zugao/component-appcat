@@ -157,6 +157,20 @@ default:: `standard-2`
 
 The default plan used for PostgreSQL by VSHN, if the service user doesn't specify a plan.
 
+=== `postgres.additionalInputs.loadbalancerAnnotations`
+type:: string
+default:: `""`
+
+Additional loadbalancer annotations. They need to be specified as yaml maps.
+
+.Examples
+[source,yaml]
+----
+loadbalancerAnnotations: |
+  foo: bar
+  important: label
+----
+
 == `redis`
 [horizontal]
 type:: dict
