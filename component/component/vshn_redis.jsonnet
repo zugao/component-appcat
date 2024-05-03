@@ -303,6 +303,26 @@ local composition =
               repository: 'bitnami/redis',
             },
             commonConfiguration: '',
+            networkPolicy: {
+              enabled: redisParams.enableNetworkPolicy,
+              allowExternal: false,
+              ingressNSMatchLabels: {
+                'kubernetes.io/metadata.name': '',
+              },
+              extraIngress: [
+                {
+                  from: [
+                    {
+                      namespaceSelector: {
+                        matchLabels: {
+                          'kubernetes.io/metadata.name': params.slos.namespace,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
             master: {
               persistence: {
                 size: '',
@@ -430,6 +450,7 @@ local composition =
                     comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.namespace', 'vshn-redis'),
                     comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-redis'),
                     comp.FromCompositeFieldPath('metadata.name', 'spec.forProvider.manifest.metadata.name'),
+                    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.values.networkPolicy.ingressNSMatchLabels[kubernetes.io/metadata.name]'),
 
                     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.requests.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
                     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.forProvider.values.master.resources.limits.memory', std.mapWithKey(function(key, x) x.size.memory, redisPlans)),
