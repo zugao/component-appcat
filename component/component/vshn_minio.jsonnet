@@ -73,6 +73,7 @@ local composition =
                 ownerGroup: xrd.spec.group,
                 ownerVersion: xrd.spec.versions[0].name,
                 isOpenshift: std.toString(isOpenshift),
+                sliNamespace: params.slos.namespace,
               } + if minioParams.proxyFunction then {
                 proxyEndpoint: minioParams.grpcEndpoint,
               } else {},

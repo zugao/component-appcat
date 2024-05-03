@@ -740,62 +740,6 @@ spec:
                       type: Format
                     type: string
                 type: FromCompositeFieldPath
-          - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: Object
-              metadata: {}
-              spec:
-                forProvider:
-                  manifest:
-                    apiVersion: networking.k8s.io/v1
-                    kind: NetworkPolicy
-                    metadata: {}
-                    spec:
-                      ingress:
-                        - from:
-                            - namespaceSelector:
-                                matchLabels:
-                                  kubernetes.io/metadata.name: ''
-                            - namespaceSelector:
-                                matchLabels:
-                                  kubernetes.io/metadata.name: appcat-slos
-                      podSelector: {}
-                      policyTypes:
-                        - Ingress
-                providerConfigRef:
-                  name: kubernetes
-            name: network-policy
-            patches:
-              - fromFieldPath: status.conditions
-                toFieldPath: status.networkPolicyConditions
-                type: ToCompositeFieldPath
-              - fromFieldPath: metadata.name
-                toFieldPath: metadata.name
-                transforms:
-                  - string:
-                      fmt: '%s-network-policy'
-                      type: Format
-                    type: string
-                type: FromCompositeFieldPath
-              - fromFieldPath: metadata.name
-                toFieldPath: spec.forProvider.manifest.metadata.namespace
-                transforms:
-                  - string:
-                      fmt: vshn-postgresql-%s
-                      type: Format
-                    type: string
-                type: FromCompositeFieldPath
-              - fromFieldPath: metadata.name
-                toFieldPath: spec.forProvider.manifest.metadata.name
-                transforms:
-                  - string:
-                      fmt: allow-from-claim-namespace-%s
-                      type: Format
-                    type: string
-                type: FromCompositeFieldPath
-              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-                toFieldPath: spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]
-                type: FromCompositeFieldPath
       step: patch-and-transform
     - functionRef:
         name: function-appcat
@@ -811,7 +755,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.67.0
+          imageTag: v4.68.0
           isOpenshift: 'false'
           loadbalancerAnnotations: |
             foo: bar
@@ -833,6 +777,7 @@ spec:
             {"limits": {"cpu": "250m", "memory": "256Mi"}, "requests": {"cpu": "100m",
             "memory": "64Mi"}}, "setDbopsResult": {"limits": {"cpu": "250m", "memory":
             "256Mi"}, "requests": {"cpu": "100m", "memory": "64Mi"}}}'
+          sliNamespace: appcat-slos
         kind: ConfigMap
         metadata:
           labels:

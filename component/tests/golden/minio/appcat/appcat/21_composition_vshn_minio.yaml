@@ -28,7 +28,7 @@ spec:
         data:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
-          imageTag: v4.67.0
+          imageTag: v4.68.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
@@ -40,6 +40,7 @@ spec:
             true, "memory": "1Gi"}}}'
           providerEnabled: 'false'
           serviceName: minio
+          sliNamespace: appcat-slos
         kind: ConfigMap
         metadata:
           labels:

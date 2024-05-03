@@ -558,54 +558,6 @@ local sgObjectStorage = {
   ],
 };
 
-local networkPolicy = {
-  name: 'network-policy',
-  base: comp.KubeObject('networking.k8s.io/v1', 'NetworkPolicy') +
-        {
-          spec+: {
-            forProvider+: {
-              manifest+: {
-                metadata: {},
-                spec: {
-                  policyTypes: [
-                    'Ingress',
-                  ],
-                  podSelector: {},
-                  ingress: [
-                    {
-                      from: [
-                        {
-                          namespaceSelector: {
-                            matchLabels: {
-                              'kubernetes.io/metadata.name': '',
-                            },
-                          },
-                        },
-                        {
-                          namespaceSelector: {
-                            matchLabels: {
-                              'kubernetes.io/metadata.name': params.slos.namespace,
-                            },
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-  patches: [
-    comp.ToCompositeFieldPath('status.conditions', 'status.networkPolicyConditions'),
-    comp.FromCompositeFieldPathWithTransformSuffix('metadata.name', 'metadata.name', 'network-policy'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.namespace', 'vshn-postgresql'),
-    comp.FromCompositeFieldPathWithTransformPrefix('metadata.name', 'spec.forProvider.manifest.metadata.name', 'allow-from-claim-namespace'),
-
-    comp.FromCompositeFieldPath('metadata.labels[crossplane.io/claim-namespace]', 'spec.forProvider.manifest.spec.ingress[0].from[0].namespaceSelector.matchLabels[kubernetes.io/metadata.name]'),
-  ],
-};
-
 local copyJob = {
   name: 'copy-job',
   base: comp.KubeObject('batch/v1', 'Job') + {
@@ -883,9 +835,7 @@ local composition(restore=false) =
                            xobjectBucket,
                            sgObjectStorage,
                            podMonitor,
-                         ] + if pgParams.enableNetworkPolicy == true then [
-                networkPolicy,
-              ] else [],
+                         ],
             },
           },
           {
@@ -913,6 +863,7 @@ local composition(restore=false) =
                       ownerVersion: xrd.spec.versions[0].name,
                       bucketRegion: pgParams.bucket_region,
                       isOpenshift: std.toString(isOpenshift),
+                      sliNamespace: params.slos.namespace,
                     } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
                     + common.EmailAlerting(params.services.vshn.emailAlerting)
                     + if pgParams.proxyFunction then {
@@ -1002,7 +953,6 @@ if params.services.vshn.enabled && pgParams.enabled then
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
     [if isOpenshift then '10_stackgres_openshift_operator_ns']: stackgresOperatorNs,
     [if isOpenshift then '11_stackgres_openshift_operator']: stackgresOperator,
-    [if isOpenshift then '12_stackgres_openshift_operator_netpol']: stackgresNetworkPolicy,
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
   } else {}
