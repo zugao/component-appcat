@@ -20,7 +20,7 @@ spec:
         retention: 6
     instances: 1
     service:
-      vacuumEnabled: true
+      vacuumEnabled: false
       repackEnabled: true
       majorVersion: "15"
       serviceLevel: besteffort

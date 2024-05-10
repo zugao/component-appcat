@@ -21,7 +21,7 @@ spec:
     instances: 1
     service:
       vacuumEnabled: true
-      repackEnabled: true
+      repackEnabled: false
       majorVersion: "15"
       serviceLevel: besteffort
     size:
