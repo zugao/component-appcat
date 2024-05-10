@@ -20,7 +20,7 @@ e2e-test: $(kuttl_bin) ## Run e2e tests
 # kuttl leaves kubeconfig garbage: https://github.com/kudobuilder/kuttl/issues/297
 
 .PHONY: .run-single-e2e
-run-single-e2e:
+run-single-e2e: $(kuttl_bin)
 	@kubectl create namespace appcat-e2e || true
 	GOBIN=$(go_bin) $(kuttl_bin) test ./tests/e2e --config ./tests/e2e/kuttl-test.yaml --suppress-log=Events --test $(test)
 	@rm -f kubeconfig
