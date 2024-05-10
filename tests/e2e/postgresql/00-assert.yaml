@@ -39,9 +39,6 @@ status:
   localCAConditions:
     - status: "True"
     - status: "True"
-  networkPolicyConditions:
-    - status: "True"
-    - status: "True"
   objectBackupConfigConditions:
     - status: "True"
     - status: "True"
