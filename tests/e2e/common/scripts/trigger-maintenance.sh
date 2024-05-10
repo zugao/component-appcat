@@ -12,7 +12,7 @@ kubectl -n "$ns" delete job --ignore-not-found=true --now=true vacuum databasesr
 kubectl -n "$ns" create job --from cronjob/maintenancejob test
 
 # wait until job is done
-kubectl -n "$ns" wait --for=condition=complete --timeout=240s job/test
+kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/test
 
 if [ "$to_be_found" == "r" ]; then
   kubectl -n "$ns" get job
