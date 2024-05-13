@@ -15,13 +15,13 @@ spec:
   compositionUpdatePolicy: Automatic
   parameters:
     backup:
-        deletionProtection: true
+        deletionProtection: false
         deletionRetention: 7
         retention: 6
     instances: 1
     service:
       vacuumEnabled: true
-      repackEnabled: true
+      repackEnabled: false
       majorVersion: "15"
       serviceLevel: besteffort
     size:

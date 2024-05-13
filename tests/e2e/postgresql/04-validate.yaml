@@ -1,0 +1,6 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  - script: scripts/trigger-maintenance.sh vshnpostgresql postgresql-e2e-test b
+    timeout: 1000
