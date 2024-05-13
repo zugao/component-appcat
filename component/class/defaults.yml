@@ -45,7 +45,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: vacuum_repack
+        tag: v4.70.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
