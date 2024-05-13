@@ -18,7 +18,7 @@ if [ "$to_be_found" == "b" ]; then
     if [ "$vacuum_enabled" == "true" ] && [ "$repack_enabled" == "true" ]; then
       break
     fi
-    echo "Waiting for envs: True True"
+    echo "Waiting for envs: vacuum: True repack: True"
     sleep 15
   done
 elif [ "$to_be_found" == "v" ]; then
