@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: connect-postgresql
 spec:
-  backoffLimit: 6
+  backoffLimit: 1
   template:
     metadata:
       labels:
