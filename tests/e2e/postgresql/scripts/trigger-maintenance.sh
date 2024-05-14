@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 type="$1"
 name="$2"
