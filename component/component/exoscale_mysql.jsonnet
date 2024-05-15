@@ -12,8 +12,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local mysqlParams = params.services.exoscale.mysql;
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 local connectionSecretKeys = [
   'MYSQL_URL',
   'MYSQL_DB',

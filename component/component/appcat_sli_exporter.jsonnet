@@ -8,8 +8,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local sli_exporter_params = params.slos.sli_exporter;
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 local deployment_patch = kube._Object('apps/v1', 'Deployment', 'controller-manager') {
   metadata+: {
     namespace: 'system',
