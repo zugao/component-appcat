@@ -14,8 +14,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local minioParams = params.services.vshn.minio;
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 local serviceNameLabelKey = 'appcat.vshn.io/servicename';
 local serviceNamespaceLabelKey = 'appcat.vshn.io/claim-namespace';
 

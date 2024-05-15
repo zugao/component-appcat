@@ -15,7 +15,7 @@ parameters:
       path: component
     crossplane:
       url: https://github.com/projectsyn/component-crossplane.git
-      version: v3.4.0
+      version: v3.5.0
     openshift4-operators:
       url: https://github.com/appuio/component-openshift4-operators
       version: v1.4.0
