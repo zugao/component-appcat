@@ -31,7 +31,7 @@ local xrdBrowseRole = kube.ClusterRole('appcat:browse') + {
 };
 
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 local finalizerRole = kube.ClusterRole('crossplane:appcat:finalizer') {
   metadata+: {
     labels: {

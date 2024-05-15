@@ -25,7 +25,7 @@ local getServiceNamePlural(serviceName) =
     serviceNameLower + 's';
 
 local vshn_appcat_service(name, serviceParams) =
-  local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+  local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 
   local connectionSecretKeys = serviceParams.connectionSecretKeys;
   local promRuleSLA = prom.PromRuleSLA(serviceParams.sla, serviceParams.serviceName);

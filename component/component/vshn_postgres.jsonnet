@@ -19,7 +19,7 @@ local defaultPort = '5432';
 
 local certificateSecretName = 'tls-certificate';
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
 local operatorlib = import 'lib/openshift4-operators.libsonnet';
 
 local stackgresOperatorNs = kube.Namespace(params.stackgres.namespace) {
