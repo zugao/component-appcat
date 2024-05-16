@@ -216,6 +216,16 @@ local runtimeConfigRef(name) = {
           resources: [ 'objectbuckets' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'postgresql.sql.crossplane.io' ],
+          resources: [ 'providerconfigs' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ 'apiextensions.crossplane.io' ],
+          resources: [ 'usages' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
@@ -378,6 +388,49 @@ local runtimeConfigRef(name) = {
       }
       for config in provider.additionalProviderConfigs
     ] +
+    [
+      sa,
+      role,
+      rolebinding,
+    ],
+  [if params.services.vshn.postgres.enabled then '10_provider_sql']:
+    local provider = params.providers.sql;
+
+    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
+      metadata+: {
+        namespace: provider.namespace,
+      },
+    };
+    local role = kube.ClusterRole('crossplane:provider:provider-sql:system:custom') {
+      rules: [
+        {
+          apiGroups: [ 'postgresql.sql.crossplane.io/v1alpha1' ],
+          resources: [ '*' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+        {
+          apiGroups: [ '' ],
+          resources: [ 'secrets' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
+      ],
+    };
+    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-sql:system:custom') {
+      roleRef_: role,
+      subjects_: [ sa ],
+    };
+
+
+    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
+
+    [
+      crossplane.Provider('provider-sql') {
+        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+      },
+    ]
+    +
+    runtimeConf
+    +
     [
       sa,
       role,
