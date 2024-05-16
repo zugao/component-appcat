@@ -653,7 +653,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.70.0
+          imageTag: v4.71.0
           isOpenshift: 'false'
           loadbalancerAnnotations: |
             foo: bar
