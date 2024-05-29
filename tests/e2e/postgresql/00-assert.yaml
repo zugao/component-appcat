@@ -31,31 +31,6 @@ spec:
     kind: XVSHNPostgreSQL
   writeConnectionSecretToRef:
     name: postgresql-e2e-test-creds
-status:
-  certificateConditions:
-    - status: "True"
-    - status: "True"
-  conditions:
-    - status: "True"
-    - status: "True"
-  localCAConditions:
-    - status: "True"
-    - status: "True"
-  objectBackupConfigConditions:
-    - status: "True"
-    - status: "True"
-  objectBucketConditions:
-    - status: "True"
-    - status: "True"
-  pgclusterConditions:
-    - status: "True"
-    - status: "True"
-  pgconfigConditions:
-    - status: "True"
-    - status: "True"
-  profileConditions:
-    - status: "True"
-    - status: "True"
 
 ---
 apiVersion: v1
