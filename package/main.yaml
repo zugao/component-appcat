@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: keycloak_mariadb_alerting
+      tag: v4.72.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
