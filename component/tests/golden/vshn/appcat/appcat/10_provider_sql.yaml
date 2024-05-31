@@ -1,0 +1,87 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+  labels:
+    name: provider-sql
+  name: provider-sql
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-sql:v0.9.0
+  runtimeConfigRef:
+    name: provider-sql
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: provider-sql
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: provider-sql
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    name: provider-sql
+  name: provider-sql
+  namespace: syn-crossplane
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations: {}
+  labels:
+    name: crossplane-provider-provider-sql-system-custom
+  name: crossplane:provider:provider-sql:system:custom
+rules:
+  - apiGroups:
+      - postgresql.sql.crossplane.io/v1alpha1
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations: {}
+  labels:
+    name: crossplane-provider-provider-sql-system-custom
+  name: crossplane:provider:provider-sql:system:custom
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane:provider:provider-sql:system:custom
+subjects:
+  - kind: ServiceAccount
+    name: provider-sql
+    namespace: syn-crossplane

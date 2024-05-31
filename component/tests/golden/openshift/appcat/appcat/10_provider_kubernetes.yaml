@@ -303,6 +303,30 @@ rules:
       - patch
       - create
       - delete
+  - apiGroups:
+      - postgresql.sql.crossplane.io
+    resources:
+      - providerconfigs
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - apiextensions.crossplane.io
+    resources:
+      - usages
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
