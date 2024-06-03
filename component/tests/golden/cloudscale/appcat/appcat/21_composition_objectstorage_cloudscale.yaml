@@ -22,7 +22,9 @@ spec:
     - base:
         apiVersion: cloudscale.crossplane.io/v1
         kind: ObjectsUser
-        metadata: {}
+        metadata:
+          annotations:
+            appcat.vshn.io/forward-events-to: ''
         spec:
           forProvider:
             displayName: ''
@@ -54,6 +56,15 @@ spec:
         - combine:
             strategy: string
             string:
+              fmt: cloudscale.crossplane.io/v1/ObjectsUser/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
               fmt: '%s.%s'
             variables:
               - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
@@ -68,7 +79,9 @@ spec:
     - base:
         apiVersion: cloudscale.crossplane.io/v1
         kind: Bucket
-        metadata: {}
+        metadata:
+          annotations:
+            appcat.vshn.io/forward-events-to: ''
         spec:
           forProvider:
             bucketDeletionPolicy: ''
@@ -107,6 +120,15 @@ spec:
         - fromFieldPath: spec.parameters.bucketDeletionPolicy
           toFieldPath: spec.forProvider.bucketDeletionPolicy
           type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: cloudscale.crossplane.io/v1/Bucket/%s/%s
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
+          type: CombineFromComposite
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.region
           transforms:

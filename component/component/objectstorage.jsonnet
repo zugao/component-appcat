@@ -26,13 +26,19 @@ local xrd = xrds.XRDFromCRD(
   ]
 );
 
+local eventForwarder = {
+  annotations+: {
+    'appcat.vshn.io/forward-events-to': '',
+  },
+};
+
 local compositionCloudscale =
   local compParams = objStoParams.compositions.cloudscale;
 
   local baseUser = {
     apiVersion: 'cloudscale.crossplane.io/v1',
     kind: 'ObjectsUser',
-    metadata: {},
+    metadata: {} + eventForwarder,
     spec: {
       forProvider: {
         displayName: '',
@@ -54,7 +60,7 @@ local compositionCloudscale =
   local baseBucket = {
     apiVersion: 'cloudscale.crossplane.io/v1',
     kind: 'Bucket',
-    metadata: {},
+    metadata: {} + eventForwarder,
     spec: {
       forProvider: {
         bucketName: '',
@@ -87,6 +93,7 @@ local compositionCloudscale =
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.accessUserConditions'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
+            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'cloudscale.crossplane.io/v1/ObjectsUser/%s/%s'),
             {
               type: 'CombineFromComposite',
               toFieldPath: 'spec.forProvider.displayName',
@@ -121,6 +128,7 @@ local compositionCloudscale =
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.forProvider.credentialsSecretRef.name'),
             comp.FromCompositeFieldPath('spec.parameters.bucketDeletionPolicy', 'spec.forProvider.bucketDeletionPolicy'),
+            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'cloudscale.crossplane.io/v1/Bucket/%s/%s'),
             comp.FromCompositeFieldPath('spec.parameters.region', 'spec.forProvider.region') {
               transforms: [
                 {
@@ -145,7 +153,7 @@ local compositionExoscale =
   local IAMKeyBase = {
     apiVersion: 'exoscale.crossplane.io/v1',
     kind: 'IAMKey',
-    metadata: {},
+    metadata: {} + eventForwarder,
     spec: {
       forProvider: {
         keyName: '',
@@ -170,7 +178,7 @@ local compositionExoscale =
   local bucketBase = {
     apiVersion: 'exoscale.crossplane.io/v1',
     kind: 'Bucket',
-    metadata: {},
+    metadata: {} + eventForwarder,
     spec: {
       forProvider: {
         bucketName: '',
@@ -200,6 +208,7 @@ local compositionExoscale =
           patches: [
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'metadata.name'),
             comp.ToCompositeFieldPath('status.conditions', 'status.accessUserConditions'),
+            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'exoscale.crossplane.io/v1/IAMKey/%s/%s'),
             comp.FromCompositeFieldPath('metadata.labels[crossplane.io/composite]', 'spec.writeConnectionSecretToRef.name'),
             {
               type: 'CombineFromComposite',
@@ -237,6 +246,7 @@ local compositionExoscale =
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.bucketName'),
             comp.FromCompositeFieldPath('spec.parameters.region', 'spec.forProvider.zone'),
             comp.FromCompositeFieldPath('spec.parameters.bucketDeletionPolicy', 'spec.forProvider.bucketDeletionPolicy'),
+            comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'exoscale.crossplane.io/v1/Bucket/%s/%s'),
           ],
         },
       ],
