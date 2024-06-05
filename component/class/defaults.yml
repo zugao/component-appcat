@@ -33,7 +33,7 @@ parameters:
       provider-minio:
         registry: ghcr.io
         repository: vshn/provider-minio/provider
-        tag: providersUpdates
+        tag: v0.3.0
       provider-sql:
         registry: xpkg.upbound.io
         repository: crossplane-contrib/provider-sql
