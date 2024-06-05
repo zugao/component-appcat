@@ -34,10 +34,7 @@ parameters:
         APPCAT_HANDLER_ENABLED: "true"
   crossplane:
     charts:
-      crossplane: 1.14.3
-    images:
-      crossplane:
-        tag: v1.14.3
+      crossplane: 1.16.0
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
     monitoring:
