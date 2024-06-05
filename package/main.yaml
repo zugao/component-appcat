@@ -35,6 +35,9 @@ parameters:
   crossplane:
     charts:
       crossplane: 1.16.0
+    images:
+      crossplane:
+        tag: v1.16.0
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
     monitoring:
