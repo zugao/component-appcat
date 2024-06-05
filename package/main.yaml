@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: v4.73.1
+      tag: v4.74.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git
@@ -34,10 +34,7 @@ parameters:
         APPCAT_HANDLER_ENABLED: "true"
   crossplane:
     charts:
-      crossplane: 1.14.3
-    images:
-      crossplane:
-        tag: v1.14.3
+      crossplane: 1.16.0
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
     monitoring:
