@@ -22,7 +22,7 @@ parameters:
   appcat:
 
     grpcEndpoint: host.docker.internal:9443
-    proxyFunction: false
+    proxyFunction: true
 
     quotasEnabled: false
     appuioManaged: false
@@ -83,6 +83,8 @@ parameters:
           enabled: true
           smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
         mariadb:
+          enabled: true
+        forgejo:
           enabled: true
         keycloak:
           enabled: true

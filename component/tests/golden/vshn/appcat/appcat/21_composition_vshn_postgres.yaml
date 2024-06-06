@@ -654,13 +654,14 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.75.0
+          imageTag: add_forgejo
           isOpenshift: 'false'
           loadbalancerAnnotations: |
             foo: bar
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
           ownerVersion: v1
+          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres
