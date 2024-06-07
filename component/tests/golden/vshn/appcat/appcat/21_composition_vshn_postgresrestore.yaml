@@ -582,7 +582,7 @@ spec:
                   region: us-east-1
                 writeConnectionSecretToRef:
                   name: ''
-                  namespace: ''
+                  namespace: syn-crossplane
             name: pg-bucket
             patches:
               - fromFieldPath: status.conditions
@@ -593,14 +593,6 @@ spec:
                 type: FromCompositeFieldPath
               - fromFieldPath: metadata.name
                 toFieldPath: spec.parameters.bucketName
-                type: FromCompositeFieldPath
-              - fromFieldPath: metadata.name
-                toFieldPath: spec.writeConnectionSecretToRef.namespace
-                transforms:
-                  - string:
-                      fmt: vshn-postgresql-%s
-                      type: Format
-                    type: string
                 type: FromCompositeFieldPath
               - fromFieldPath: metadata.name
                 toFieldPath: spec.writeConnectionSecretToRef.name
