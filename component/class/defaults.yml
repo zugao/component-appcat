@@ -710,7 +710,7 @@ parameters:
           mode: standalone
           offered: true
           enabled: false
-          restoreSA: mariadbrestoreserviceaccount
+          restoreSA: keycloakserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
             registry_username: "?{vaultkv:__shared__/__shared__/appcat/inventage_registry_username}"

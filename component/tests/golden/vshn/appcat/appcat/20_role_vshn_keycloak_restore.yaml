@@ -59,8 +59,8 @@ kind: ServiceAccount
 metadata:
   annotations: {}
   labels:
-    name: mariadbrestoreserviceaccount
-  name: mariadbrestoreserviceaccount
+    name: keycloakserviceaccount
+  name: keycloakserviceaccount
   namespace: syn-appcat-control
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -76,5 +76,5 @@ roleRef:
   name: crossplane:appcat:job:keycloak:restorejob
 subjects:
   - kind: ServiceAccount
-    name: mariadbrestoreserviceaccount
+    name: keycloakserviceaccount
     namespace: syn-appcat-control

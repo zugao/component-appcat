@@ -53,7 +53,7 @@ spec:
           quotasEnabled: 'false'
           registry_password: ''
           registry_username: ''
-          restoreSA: mariadbrestoreserviceaccount
+          restoreSA: keycloakserviceaccount
           serviceName: keycloak
           sliNamespace: appcat-slos
         kind: ConfigMap
