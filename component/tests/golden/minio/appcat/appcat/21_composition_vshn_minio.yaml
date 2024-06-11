@@ -28,7 +28,13 @@ spec:
         data:
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
-          imageTag: v4.75.0
+          emailAlertingEnabled: 'true'
+          emailAlertingSecretName: mailgun-smtp-credentials
+          emailAlertingSecretNamespace: syn-appcat
+          emailAlertingSmtpFromAddress: myuser@example.com
+          emailAlertingSmtpHost: smtp.eu.mailgun.org:465
+          emailAlertingSmtpUsername: myuser@example.com
+          imageTag: v4.76.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
