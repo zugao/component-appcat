@@ -654,7 +654,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: minioAlerting
+          imageTag: v4.76.0
           isOpenshift: 'false'
           loadbalancerAnnotations: |
             foo: bar

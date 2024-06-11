@@ -7,7 +7,7 @@ parameters:
     image:
       registry: ghcr.io
       repository: vshn/appcat
-      tag: minioAlerting
+      tag: v4.76.0
   components:
     appcat:
       url: https://github.com/vshn/component-appcat.git

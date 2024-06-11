@@ -49,7 +49,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: minioAlerting
+        tag: v4.76.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
