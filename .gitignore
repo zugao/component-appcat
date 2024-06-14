@@ -39,3 +39,4 @@ sloth-output/
 /vendor
 
 # Additional entries
+kubeconfig
