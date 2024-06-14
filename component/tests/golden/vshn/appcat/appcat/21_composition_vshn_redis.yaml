@@ -33,7 +33,7 @@ spec:
         kind: Resources
         resources:
           - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
+              apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
               metadata: {}
               spec:
@@ -79,7 +79,7 @@ spec:
                     type: string
                 type: FromCompositeFieldPath
           - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
+              apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
               metadata: {}
               spec:
@@ -125,7 +125,7 @@ spec:
                     type: string
                 type: FromCompositeFieldPath
           - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
+              apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
               metadata: {}
               spec:
@@ -209,7 +209,7 @@ spec:
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
           - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
+              apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
               metadata: {}
               spec:
@@ -296,7 +296,7 @@ spec:
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
           - base:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
+              apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
               metadata: {}
               spec:

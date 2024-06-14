@@ -122,7 +122,7 @@ local commonResources = {
     // It can be used to copy labels and annotations from the namespace to the composition.
     // Requirements: provider-kubernetes (https://github.com/crossplane-contrib/provider-kubernetes)
     base: {
-      apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+      apiVersion: 'kubernetes.crossplane.io/v1alpha2',
       kind: 'Object',
       spec: {
         managementPolicy: 'Observe',
@@ -175,7 +175,7 @@ local connFromFieldPath(name, field) = {
 };
 
 local kubeObject(apiVersion, kind) = {
-  apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+  apiVersion: 'kubernetes.crossplane.io/v1alpha2',
   kind: 'Object',
   metadata: {},
   spec: {
@@ -194,7 +194,7 @@ local kubeObject(apiVersion, kind) = {
 local namespacePermissions(namespacePrefix) = {
   name: 'namespace-permissions',
   base: {
-    apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+    apiVersion: 'kubernetes.crossplane.io/v1alpha',
     kind: 'Object',
     spec: {
       providerConfigRef: {

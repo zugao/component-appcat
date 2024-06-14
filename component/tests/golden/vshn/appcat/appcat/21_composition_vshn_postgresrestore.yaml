@@ -4,20 +4,20 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
-    metadata.appcat.vshn.io/description: PostgreSQL instances by VSHN
-    metadata.appcat.vshn.io/displayname: PostgreSQL by VSHN
-    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-postgresql
+    metadata.appcat.vshn.io/description: PostgreSQLRestore instances by VSHN
+    metadata.appcat.vshn.io/displayname: PostgreSQLRestore by VSHN
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-postgresqlrestore
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/plans: '{"plus-2":{"note":"Will be scheduled on APPUiO
       Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"plus-4":{"note":"Will
       be scheduled on APPUiO Cloud plus nodes","scheduling":{"nodeSelector":{"appuio.io/node-class":"plus"}},"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}},"standard-2":{"size":{"cpu":"400m","disk":"20Gi","enabled":true,"memory":"1936Mi"}},"standard-4":{"size":{"cpu":"900m","disk":"40Gi","enabled":true,"memory":"3984Mi"}}}'
-    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/postgresql.html
+    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/postgresqlrestore.html
     metadata.appcat.vshn.io/zone: rma1
   labels:
-    metadata.appcat.vshn.io/offered: 'true'
-    metadata.appcat.vshn.io/serviceID: vshn-postgresql
-    name: vshnpostgres.vshn.appcat.vshn.io
-  name: vshnpostgres.vshn.appcat.vshn.io
+    metadata.appcat.vshn.io/offered: 'false'
+    metadata.appcat.vshn.io/serviceID: vshn-postgresqlrestore
+    name: vshnpostgresrestore.vshn.appcat.vshn.io
+  name: vshnpostgresrestore.vshn.appcat.vshn.io
 spec:
   compositeTypeRef:
     apiVersion: vshn.appcat.vshn.io/v1
@@ -25,8 +25,6 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-<<<<<<< HEAD
-=======
         name: function-patch-and-transform
       input:
         apiVersion: pt.fn.crossplane.io/v1beta1
@@ -153,6 +151,87 @@ spec:
                     - fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.manifest.spec.dnsNames[1]
                 type: CombineFromComposite
+          - base:
+              apiVersion: kubernetes.crossplane.io/v1alpha2
+              kind: Object
+              metadata: {}
+              spec:
+                forProvider:
+                  manifest:
+                    apiVersion: batch/v1
+                    kind: Job
+                    metadata:
+                      namespace: syn-appcat-control
+                    spec:
+                      template:
+                        spec:
+                          containers:
+                            - args:
+                                - |
+                                  #!/bin/sh
+
+                                  set -e
+
+                                  xrdname=$(kubectl -n "${CLAIM_NAMESPACE}" get vshnpostgresqls "${CLAIM_NAME}" -ojson | jq -r '.spec.resourceRef.name')
+
+                                  source_namespace=$(kubectl -n "${CLAIM_NAMESPACE}" get vshnpostgresqls "${CLAIM_NAME}" -ojson | jq -r '.status.instanceNamespace')
+
+                                  echo "copy secret"
+                                  kubectl -n "${source_namespace}" get secret "pgbucket-${xrdname}" -ojson | jq 'del(.metadata.namespace) | del(.metadata.ownerReferences)' | kubectl -n "${TARGET_NAMESPACE}" apply -f -
+                                  echo "copy sgObjectStorage"
+                                  kubectl -n "${source_namespace}" get sgobjectstorages.stackgres.io "sgbackup-${xrdname}" -ojson | jq 'del(.metadata.namespace) | del(.metadata.ownerReferences)' | kubectl -n "$TARGET_NAMESPACE" apply -f -
+                                  echo "copy sgBackup"
+                                  kubectl -n "${source_namespace}" get sgbackups.stackgres.io "${BACKUP_NAME}" -ojson | jq '.spec.sgCluster = .metadata.namespace + "." + .spec.sgCluster | del(.metadata.namespace) | del(.metadata.ownerReferences)' | kubectl -n "${TARGET_NAMESPACE}" apply -f -
+                              command:
+                                - sh
+                                - -c
+                              env:
+                                - name: CLAIM_NAMESPACE
+                                - name: CLAIM_NAME
+                                - name: BACKUP_NAME
+                                - name: TARGET_NAMESPACE
+                              image: bitnami/kubectl:latest
+                              name: copyjob
+                          restartPolicy: Never
+                          serviceAccountName: copyserviceaccount
+                          ttlSecondsAfterFinished: 100
+                providerConfigRef:
+                  name: kubernetes
+            name: copy-job
+            patches:
+              - fromFieldPath: metadata.name
+                toFieldPath: metadata.name
+                transforms:
+                  - string:
+                      fmt: '%s-copyjob'
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
+              - fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.manifest.metadata.name
+                transforms:
+                  - string:
+                      fmt: '%s-copyjob'
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
+              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+                toFieldPath: spec.forProvider.manifest.spec.template.spec.containers[0].env[0].value
+                type: FromCompositeFieldPath
+              - fromFieldPath: spec.parameters.restore.claimName
+                toFieldPath: spec.forProvider.manifest.spec.template.spec.containers[0].env[1].value
+                type: FromCompositeFieldPath
+              - fromFieldPath: spec.parameters.restore.backupName
+                toFieldPath: spec.forProvider.manifest.spec.template.spec.containers[0].env[2].value
+                type: FromCompositeFieldPath
+              - fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.manifest.spec.template.spec.containers[0].env[3].value
+                transforms:
+                  - string:
+                      fmt: vshn-postgresql-%s
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
           - base:
               apiVersion: kubernetes.crossplane.io/v1alpha2
               kind: Object
@@ -400,6 +479,10 @@ spec:
                       sgInstanceProfile: ''
                 providerConfigRef:
                   name: kubernetes
+                references:
+                  - dependsOn:
+                      apiVersion: stackgres.io/v1
+                      kind: SGBackup
             name: cluster
             patches:
               - fromFieldPath: status.conditions
@@ -471,6 +554,23 @@ spec:
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.backup.retention
                 toFieldPath: spec.forProvider.manifest.spec.configurations.backups[0].retention
+                type: FromCompositeFieldPath
+              - fromFieldPath: spec.parameters.restore.backupName
+                toFieldPath: spec.forProvider.manifest.spec.initialData.restore.fromBackup.name
+                type: FromCompositeFieldPath
+              - fromFieldPath: spec.parameters.restore.recoveryTimeStamp
+                toFieldPath: spec.forProvider.manifest.spec.initialData.restore.fromBackup.pointInTimeRecovery.restoreToTimestamp
+                type: FromCompositeFieldPath
+              - fromFieldPath: metadata.name
+                toFieldPath: spec.references[0].dependsOn.namespace
+                transforms:
+                  - string:
+                      fmt: vshn-postgresql-%s
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
+              - fromFieldPath: spec.parameters.restore.backupName
+                toFieldPath: spec.references[0].dependsOn.name
                 type: FromCompositeFieldPath
           - base:
               apiVersion: appcat.vshn.io/v1
@@ -642,12 +742,10 @@ spec:
                 type: FromCompositeFieldPath
       step: patch-and-transform
     - functionRef:
->>>>>>> bc71d3b0 (Update provider kubernetes api objects)
         name: function-appcat
       input:
         apiVersion: v1
         data:
-          bucketEndpoint: http://minio-server.minio:9000
           bucketRegion: us-east-1
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
@@ -658,43 +756,13 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-          imageTag: v4.77.0
-          initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
-            "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
-            {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
-            "memory": "100Mi"}}, "relocateBinaries": {"limits": {"cpu": "300m", "memory":
-            "500Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "setDbopsRunning":
-            {"limits": {"cpu": "250m", "memory": "256Mi"}, "requests": {"cpu": "250m",
-            "memory": "256Mi"}}, "setupArbitraryUser": {"limits": {"cpu": "300m",
-            "memory": "500Mi"}, "requests": {"cpu": "100m", "memory": "500Mi"}}, "setupScripts":
-            {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
-            "memory": "500Mi"}}}'
+          imageTag: v4.76.0
           isOpenshift: 'false'
-          keepMetrics: '["pg_locks_count", "pg_postmaster_start_time_seconds", "pg_replication_lag",
-            "pg_settings_effective_cache_size_bytes", "pg_settings_maintenance_work_mem_bytes",
-            "pg_settings_max_connections", "pg_settings_max_parallel_workers", "pg_settings_max_wal_size_bytes",
-            "pg_settings_max_worker_processes", "pg_settings_shared_buffers_bytes",
-            "pg_settings_work_mem_bytes", "pg_stat_activity_count", "pg_stat_bgwriter_buffers_alloc_total",
-            "pg_stat_bgwriter_buffers_backend_fsync_total", "pg_stat_bgwriter_buffers_backend_total",
-            "pg_stat_bgwriter_buffers_checkpoint_total", "pg_stat_bgwriter_buffers_clean_total",
-            "pg_stat_database_blks_hit", "pg_stat_database_blks_read", "pg_stat_database_conflicts",
-            "pg_stat_database_deadlocks", "pg_stat_database_temp_bytes", "pg_stat_database_xact_commit",
-            "pg_stat_database_xact_rollback", "pg_static", "pg_up", "pgbouncer_show_stats_total_xact_count",
-            "pgbouncer_show_stats_totals_bytes_received", "pgbouncer_show_stats_totals_bytes_sent"]'
           loadbalancerAnnotations: |
             foo: bar
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
           ownerVersion: v1
-          plans: '{"plus-2": {"note": "Will be scheduled on APPUiO Cloud plus nodes",
-            "scheduling": {"nodeSelector": {"appuio.io/node-class": "plus"}}, "size":
-            {"cpu": "400m", "disk": "20Gi", "enabled": true, "memory": "1936Mi"}},
-            "plus-4": {"note": "Will be scheduled on APPUiO Cloud plus nodes", "scheduling":
-            {"nodeSelector": {"appuio.io/node-class": "plus"}}, "size": {"cpu": "900m",
-            "disk": "40Gi", "enabled": true, "memory": "3984Mi"}}, "standard-2": {"size":
-            {"cpu": "400m", "disk": "20Gi", "enabled": true, "memory": "1936Mi"}},
-            "standard-4": {"size": {"cpu": "900m", "disk": "40Gi", "enabled": true,
-            "memory": "3984Mi"}}}'
           quotasEnabled: 'false'
           serviceName: postgresql
           sgNamespace: stackgres

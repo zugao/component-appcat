@@ -46,7 +46,7 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
   name: 'prometheusrule',
   base: {
 
-    apiVersion: 'kubernetes.crossplane.io/v1alpha1',
+    apiVersion: 'kubernetes.crossplane.io/v1alpha2',
     kind: 'Object',
     metadata: {
       name: 'prometheusrule',
