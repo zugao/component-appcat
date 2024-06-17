@@ -41,7 +41,7 @@ local clusterRoleView = kube.ClusterRole('appcat:api:view') {
   rules+: [
     {
       apiGroups: [ 'api.appcat.vshn.io' ],
-      resources: [ 'vshnpostgresbackups', 'vshnredisbackups' ],
+      resources: [ 'vshnpostgresbackups', 'vshnredisbackups', 'vshnmariadbbackups' ],
       verbs: [ 'get', 'list', 'watch' ],
     },
   ],
