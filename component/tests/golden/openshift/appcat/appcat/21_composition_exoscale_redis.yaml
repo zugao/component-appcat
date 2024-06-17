@@ -86,4 +86,13 @@ spec:
         - fromFieldPath: spec.parameters.service.zone
           toFieldPath: metadata.annotations[appcat.vshn.io/cloudzone]
           type: FromCompositeFieldPath
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
   writeConnectionSecretsToNamespace: syn-crossplane

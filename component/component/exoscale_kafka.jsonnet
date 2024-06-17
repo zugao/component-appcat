@@ -93,7 +93,7 @@ local composition =
             comp.ToCompositeFieldPath('status.atProvider.version', 'status.version'),
             comp.FromCompositeFieldPath('spec.parameters.service.zone', 'metadata.annotations[appcat.vshn.io/cloudzone]'),
           ],
-        },
+        } + common.DefaultReadinessCheck(),
       ],
     },
   };
