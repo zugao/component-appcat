@@ -164,7 +164,13 @@ local defaultReadinessCheck() = {
         status: 'True',
         type: 'Ready',
       },
-
+      type: 'MatchCondition',
+    },
+    {
+      matchCondition: {
+        status: 'True',
+        type: 'Ready',
+      },
       type: 'MatchCondition',
     },
   ],
