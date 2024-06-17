@@ -28,6 +28,7 @@ rules:
     verbs:
       - get
       - create
+      - patch
 ---
 apiVersion: v1
 kind: ServiceAccount
