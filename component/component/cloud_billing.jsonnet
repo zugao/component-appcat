@@ -161,40 +161,6 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
   },
 } + extraConfig;
 
-
-local alertOdoo = {
-  alert: 'HighOdooHTTPFailureRate',
-  expr: |||
-    increase(billing_cloud_collector_http_requests_odoo_failed_total[1m]) > 0
-  |||,
-  'for': '1m',
-  labels: {
-    severity: 'critical',
-    syn_team: 'schedar',
-  },
-  annotations: {
-    summary: 'High rate of Odoo HTTP failures detected',
-    description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_odoo_failed_total`) has increased significantly in the last minute.',
-  },
-};
-
-
-local alertProvider = {
-  alert: 'HighOdooHTTPFailureRate',
-  expr: |||
-    increase(billing_cloud_collector_http_requests_provider_failed_total[1m]) > 0
-  |||,
-  'for': '1m',
-  labels: {
-    severity: 'critical',
-    syn_team: 'schedar',
-  },
-  annotations: {
-    summary: 'High rate of Odoo HTTP failures detected',
-    description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_provider_failed_total`) has increased significantly in the last minute.',
-  },
-};
-
 local alertRule = {
   apiVersion: 'monitoring.coreos.com/v1',
   kind: 'PrometheusRule',
@@ -208,11 +174,73 @@ local alertRule = {
       {
         name: 'odoo_http_failures',
         rules: [
-          alertOdoo,
-          alertProvider,
+          {
+            alert: 'HighOdooHTTPFailureRate',
+            expr: |||
+              increase(billing_cloud_collector_http_requests_odoo_failed_total[1m]) > 0
+            |||,
+            'for': '1m',
+            labels: {
+              severity: 'critical',
+              syn_team: 'schedar',
+            },
+            annotations: {
+              summary: 'High rate of Odoo HTTP failures detected',
+              description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_odoo_failed_total`) has increased significantly in the last minute.',
+            },
+          },
+          {
+            alert: 'HighOdooHTTPFailureRate',
+            expr: |||
+              increase(billing_cloud_collector_http_requests_provider_failed_total[1m]) > 0
+            |||,
+            'for': '1m',
+            labels: {
+              severity: 'critical',
+              syn_team: 'schedar',
+            },
+            annotations: {
+              summary: 'High rate of Odoo HTTP failures detected',
+              description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_provider_failed_total`) has increased significantly in the last minute.',
+            },
+          },
         ],
       },
     ],
+  },
+};
+
+local podMonitor = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PodMonitor',
+  metadata: {
+    labels: null,
+    name: 'postgresql-podmonitor',
+    namespace: params.namespace,
+  },
+  spec: {
+    namespaceSelector: {
+      matchNames: [
+        params.namespace,
+      ],
+    },
+    podMetricsEndpoints: [
+      {
+        metricRelabelings: [
+          {
+            action: 'keep',
+            regex: '(billing_cloud_collector_http_requests_odoo_failed_total|billing_cloud_collector_http_requests_odoo_succeeded_total|billing_cloud_collector_http_requests_provider_failed_total|billing_cloud_collector_http_requests_provider_succeeded_total)',
+            sourceLabels: [
+              '__name__',
+            ],
+          },
+        ],
+        port: 2112,
+      },
+    ],
+    selector: {
+      matchLabels+: labels,
+    },
   },
 };
 
@@ -248,6 +276,7 @@ local alertRule = {
    '10_exoscale_dbaas_configmap': cm,
    '10_exoscale_dbaas_exporter': deployment(name, [ 'exoscale', 'dbaas' ], name + '-env'),
    '20_exoscale_dbaas_alerts': alertRule,
+   '30_exoscale_dbaas_podmonitor': podMonitor,
  } else {})
 +
 (if paramsCloud.exoscale.enabled && paramsCloud.exoscale.objectStorage.enabled then {
@@ -275,6 +304,7 @@ local alertRule = {
    '10_exoscale_object_storage_configmap': cm,
    '20_exoscale_object_storage_exporter': deployment(name, [ 'exoscale', 'objectstorage' ], name + '-env'),
    '30_exoscale_object_storage_alerts': alertRule,
+   '40_exoscale_object_storage_podmonitor': podMonitor,
 
  } else {})
 +
@@ -303,4 +333,5 @@ local alertRule = {
    '10_cloudscale_configmap': cm,
    '20_cloudscale_exporter': deployment(name, [ 'cloudscale', 'objectstorage' ], name + '-env'),
    '30_cloudscale_alerts': alertRule,
+   '40_cloudscale_podmonitor': podMonitor,
  } else {})
