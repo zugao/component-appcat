@@ -161,6 +161,62 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
   },
 } + extraConfig;
 
+
+local alertOdoo = {
+  alert: 'HighOdooHTTPFailureRate',
+  expr: |||
+    increase(billing_cloud_collector_http_requests_odoo_failed_total[1m]) > 0
+  |||,
+  'for': '1m',
+  labels: {
+    severity: 'critical',
+    syn_team: 'schedar',
+  },
+  annotations: {
+    summary: 'High rate of Odoo HTTP failures detected',
+    description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_odoo_failed_total`) has increased significantly in the last minute.',
+  },
+};
+
+
+local alertProvider = {
+  alert: 'HighOdooHTTPFailureRate',
+  expr: |||
+    increase(billing_cloud_collector_http_requests_provider_failed_total[1m]) > 0
+  |||,
+  'for': '1m',
+  labels: {
+    severity: 'critical',
+    syn_team: 'schedar',
+  },
+  annotations: {
+    summary: 'High rate of Odoo HTTP failures detected',
+    description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_provider_failed_total`) has increased significantly in the last minute.',
+  },
+};
+
+local alertRule = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: {
+    labels: {},
+    name: 'cloudservices-billing',
+    namespace: params.namespace,
+  },
+  spec: {
+    groups+: [
+      {
+        name: 'odoo_http_failures',
+        rules: [
+          alertOdoo,
+          alertProvider,
+        ],
+      },
+    ],
+  },
+};
+
+
 ({
    local odoo = params.odoo,
    assert odoo.oauth != null : 'odoo.oauth must be set.',
@@ -191,6 +247,7 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_exoscale_dbaas_role_binding': sa.rb,
    '10_exoscale_dbaas_configmap': cm,
    '10_exoscale_dbaas_exporter': deployment(name, [ 'exoscale', 'dbaas' ], name + '-env'),
+   '20_exoscale_dbaas_alerts': alertRule,
  } else {})
 +
 (if paramsCloud.exoscale.enabled && paramsCloud.exoscale.objectStorage.enabled then {
@@ -217,6 +274,7 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_exoscale_object_storage_rolebinding': sa.rb,
    '10_exoscale_object_storage_configmap': cm,
    '20_exoscale_object_storage_exporter': deployment(name, [ 'exoscale', 'objectstorage' ], name + '-env'),
+   '30_exoscale_object_storage_alerts': alertRule,
 
  } else {})
 +
@@ -244,4 +302,5 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_cloudscale_rolebinding': sa.rb,
    '10_cloudscale_configmap': cm,
    '20_cloudscale_exporter': deployment(name, [ 'cloudscale', 'objectstorage' ], name + '-env'),
+   '30_cloudscale_alerts': alertRule,
  } else {})
