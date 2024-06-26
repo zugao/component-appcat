@@ -12,6 +12,7 @@ rules:
     resources:
       - vshnpostgresbackups
       - vshnredisbackups
+      - vshnmariadbbackups
     verbs:
       - get
       - list

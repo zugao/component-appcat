@@ -71,6 +71,7 @@ rules:
   - apiGroups:
       - vshn.appcat.vshn.io
     resources:
+      - vshnmariadbs
       - vshnredis
       - xvshnpostgresqls
     verbs:
