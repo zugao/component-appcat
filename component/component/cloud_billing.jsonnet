@@ -115,7 +115,7 @@ local serviceAccount(name, clusterRole) = {
 local deployment(name, args, config) =
   kube.Deployment(name) {
     metadata+: {
-      labels+: labels,
+      labels+: labels { 'automated-billing': 'true' },
       namespace: params.namespace,
     },
     spec+: {
@@ -127,6 +127,18 @@ local deployment(name, args, config) =
               imagePullPolicy: 'IfNotPresent',
               image: collectorImage,
               args: args,
+              // add resource limits
+              // during my local tests it consumes arround 50% of requests{} values
+              resources: {
+                limits: {
+                  cpu: '250m',
+                  memory: '256Mi',
+                },
+                requests: {
+                  cpu: '100m',
+                  memory: '128Mi',
+                },
+              },
               envFrom: [
                 {
                   configMapRef: {
@@ -139,12 +151,42 @@ local deployment(name, args, config) =
                   },
                 },
               ],
+              ports: [
+                {
+                  containerPort: 2112,
+                  protocol: 'TCP',
+                },
+              ],
             },
           },
         },
       },
     },
   };
+
+
+local service = {
+  apiVersion: 'v1',
+  kind: 'Service',
+  metadata: {
+    labels: labels { 'automated-billing': 'true' },
+    name: 'automated-billing',
+    namespace: params.namespace,
+  },
+  spec: {
+    ports: [
+      {
+        name: 'metrics',
+        port: 2112,
+        protocol: 'TCP',
+        targetPort: 2112,
+      },
+    ],
+    selector: {
+      'automated-billing': 'true',
+    },
+  },
+};
 
 local config(name, extraConfig) = kube.ConfigMap(name) {
   metadata: {
@@ -165,7 +207,7 @@ local alertRule = {
   apiVersion: 'monitoring.coreos.com/v1',
   kind: 'PrometheusRule',
   metadata: {
-    labels: {},
+    labels: labels { 'automated-billing': 'true' },
     name: 'cloudservices-billing',
     namespace: params.namespace,
   },
@@ -177,7 +219,7 @@ local alertRule = {
           {
             alert: 'HighOdooHTTPFailureRate',
             expr: |||
-              increase(billing_cloud_collector_http_requests_odoo_failed_total[1m]) > 0
+              billing_cloud_collector_http_requests_odoo_failed_total != 0
             |||,
             'for': '1m',
             labels: {
@@ -190,9 +232,9 @@ local alertRule = {
             },
           },
           {
-            alert: 'HighOdooHTTPFailureRate',
+            alert: 'HighProviderHTTPFailureRate',
             expr: |||
-              increase(billing_cloud_collector_http_requests_provider_failed_total[1m]) > 0
+              billing_cloud_collector_http_requests_provider_failed_total != 0
             |||,
             'for': '1m',
             labels: {
@@ -200,7 +242,7 @@ local alertRule = {
               syn_team: 'schedar',
             },
             annotations: {
-              summary: 'High rate of Odoo HTTP failures detected',
+              summary: "High rate of Automated-billing collector's providers HTTP failures detected",
               description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_provider_failed_total`) has increased significantly in the last minute.',
             },
           },
@@ -210,36 +252,23 @@ local alertRule = {
   },
 };
 
-local podMonitor = {
+
+local serviceMonitor = {
   apiVersion: 'monitoring.coreos.com/v1',
-  kind: 'PodMonitor',
+  kind: 'ServiceMonitor',
   metadata: {
-    labels: null,
-    name: 'postgresql-podmonitor',
+    labels: labels { 'automated-billing': 'true' },
+    name: 'cloudservices-servicemonitor',
     namespace: params.namespace,
   },
   spec: {
-    namespaceSelector: {
-      matchNames: [
-        params.namespace,
-      ],
-    },
-    podMetricsEndpoints: [
+    endpoints: [
       {
-        metricRelabelings: [
-          {
-            action: 'keep',
-            regex: '(billing_cloud_collector_http_requests_odoo_failed_total|billing_cloud_collector_http_requests_odoo_succeeded_total|billing_cloud_collector_http_requests_provider_failed_total|billing_cloud_collector_http_requests_provider_succeeded_total)',
-            sourceLabels: [
-              '__name__',
-            ],
-          },
-        ],
-        port: 2112,
+        port: 'metrics',
       },
     ],
     selector: {
-      matchLabels+: labels,
+      matchLabels+: { 'automated-billing': 'true' },
     },
   },
 };
@@ -276,7 +305,7 @@ local podMonitor = {
    '10_exoscale_dbaas_configmap': cm,
    '10_exoscale_dbaas_exporter': deployment(name, [ 'exoscale', 'dbaas' ], name + '-env'),
    '20_exoscale_dbaas_alerts': alertRule,
-   '30_exoscale_dbaas_podmonitor': podMonitor,
+   '30_exoscale_dbaas_servicemonitor': serviceMonitor,
  } else {})
 +
 (if paramsCloud.exoscale.enabled && paramsCloud.exoscale.objectStorage.enabled then {
@@ -304,7 +333,7 @@ local podMonitor = {
    '10_exoscale_object_storage_configmap': cm,
    '20_exoscale_object_storage_exporter': deployment(name, [ 'exoscale', 'objectstorage' ], name + '-env'),
    '30_exoscale_object_storage_alerts': alertRule,
-   '40_exoscale_object_storage_podmonitor': podMonitor,
+   '40_exoscale_object_storage_servicemonitor': serviceMonitor,
 
  } else {})
 +
@@ -333,5 +362,5 @@ local podMonitor = {
    '10_cloudscale_configmap': cm,
    '20_cloudscale_exporter': deployment(name, [ 'cloudscale', 'objectstorage' ], name + '-env'),
    '30_cloudscale_alerts': alertRule,
-   '40_cloudscale_podmonitor': podMonitor,
+   '40_cloudscale_servicemonitor': serviceMonitor,
  } else {})

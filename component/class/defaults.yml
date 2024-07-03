@@ -69,7 +69,7 @@ parameters:
       collector:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
-        tag: addMetrics
+        tag: v3.4.0
 
     =_crd_version: ${appcat:images:appcat:tag}
 
