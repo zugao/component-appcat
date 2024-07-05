@@ -211,6 +211,12 @@ local keysAndValues(obj) = std.map(function(x) { name: x, value: obj[x] }, std.o
 
 local filterServiceByBoolean(fieldName) = std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, fieldName) && r.value[fieldName], keysAndValues(params.services.vshn));
 
+
+local keysAndStringValues(obj, field) = if std.objectHas(obj, field) then {
+  [k]: std.toString(obj[field][k])
+  for k in std.objectFieldsAll(obj[field])
+} else {};
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -251,4 +257,6 @@ local filterServiceByBoolean(fieldName) = std.filter(function(r) std.type(r.valu
     keysAndValues(obj),
   FilterServiceByBoolean(fieldName):
     filterServiceByBoolean(fieldName),
+  KeysAndStringValues(object, fieldName):
+    keysAndStringValues(object, fieldName),
 }

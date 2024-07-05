@@ -32,19 +32,22 @@ local vshn_appcat_service(name, serviceParams) =
   local plans = common.FilterDisabledParams(serviceParams.plans);
   local serviceNamePlural = getServiceNamePlural(serviceParams.serviceName);
 
+  local restoreSA = if std.objectHas(serviceParams, 'restoreSA') then {
+    restoreSA: serviceParams.restoreSA,
+  } else {};
 
-  local restoreServiceAccount = kube.ServiceAccount(serviceParams.restoreSA) + {
+  local restoreServiceAccount = if std.objectHas(serviceParams, 'restoreSA') then kube.ServiceAccount(serviceParams.restoreSA) + {
     metadata+: {
       namespace: params.services.controlNamespace,
     },
   };
 
-  local restoreRoleName = 'crossplane:appcat:job:' + name + ':restorejob';
-  local restoreRole = kube.ClusterRole(restoreRoleName) {
+  local restoreRoleName = if std.objectHas(serviceParams, 'restoreSA') then 'crossplane:appcat:job:' + name + ':restorejob';
+  local restoreRole = if std.objectHas(serviceParams, 'restoreSA') then kube.ClusterRole(restoreRoleName) {
     rules: serviceParams.restoreRoleRules,
   };
 
-  local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:' + name + ':restorejob') + {
+  local restoreClusterRoleBinding = if std.objectHas(serviceParams, 'restoreSA') then kube.ClusterRoleBinding('appcat:job:' + name + ':restorejob') + {
     roleRef_: restoreRole,
     subjects_: [ restoreServiceAccount ],
   };
@@ -56,10 +59,22 @@ local vshn_appcat_service(name, serviceParams) =
     connectionSecretKeys=connectionSecretKeys,
   ) + xrds.WithPlanDefaults(plans, serviceParams.defaultPlan);
 
+  local keysAndValues(obj) = std.map(function(x) { name: x, value: obj[x] }, std.objectFields(obj));
+  local filterServiceByField(fieldName) = std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, fieldName) && r.value[fieldName], keysAndValues(params.services.vshn));
+
+  local additonalInputs = if std.objectHas(serviceParams, 'additionalInputs') then {
+    [k]: std.toString(serviceParams.additionalInputs[k])
+    for k in std.objectFieldsAll(serviceParams.additionalInputs)
+  } else {};
+
+  local proxyFunction = if serviceParams.proxyFunction then {
+    proxyEndpoint: serviceParams.grpcEndpoint,
+  } else {};
+
   local composition =
     kube._Object('apiextensions.crossplane.io/v1', 'Composition', std.asciiLower(serviceParams.serviceName) + '.vshn.appcat.vshn.io') +
     common.SyncOptions +
-    common.vshnMetaVshnDBaas(name, serviceParams.mode, std.toString(serviceParams.offered), plans) +
+    common.vshnMetaVshnDBaas(common.Capitalize(name), serviceParams.mode, std.toString(serviceParams.offered), plans) +
     {
       spec: {
         compositeTypeRef: comp.CompositeRef(xrd),
@@ -88,7 +103,7 @@ local vshn_appcat_service(name, serviceParams) =
                         maintenanceSA: 'helm-based-service-maintenance',
                         controlNamespace: params.services.controlNamespace,
                         plans: std.toString(plans),
-                        restoreSA: serviceParams.restoreSA,
+                        defaultPlan: serviceParams.defaultPlan,
                         quotasEnabled: std.toString(params.services.vshn.quotasEnabled),
                         isOpenshift: std.toString(isOpenshift),
                         sliNamespace: params.slos.namespace,
@@ -96,10 +111,9 @@ local vshn_appcat_service(name, serviceParams) =
                         ownerGroup: xrd.spec.group,
                         ownerVersion: xrd.spec.versions[0].name,
                       } + common.EmailAlerting(params.services.vshn.emailAlerting)
-                      + std.get(serviceParams, 'additionalInputs', default={}, inc_hidden=true)
-                      + if serviceParams.proxyFunction then {
-                        proxyEndpoint: serviceParams.grpcEndpoint,
-                      } else {},
+                      + restoreSA
+                      + additonalInputs
+                      + proxyFunction,
               },
             },
           ],
@@ -167,7 +181,7 @@ local vshn_appcat_service(name, serviceParams) =
     ['20_xrd_vshn_%s' % name]: xrd,
     ['20_rbac_vshn_%s' % name]: xrds.CompositeClusterRoles(xrd),
     ['21_composition_vshn_%s' % name]: composition,
-    ['20_role_vshn_%s_restore' % name]: [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
+    [if std.objectHas(serviceParams, 'restoreSA') then '20_role_vshn_%s_restore' % name]: [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
     ['20_plans_vshn_%s' % name]: plansCM,
     ['22_prom_rule_sla_%s' % name]: promRuleSLA,
     [if isOpenshift then '21_openshift_template_%s_vshn' % name]: osTemplate,

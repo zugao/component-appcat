@@ -4,8 +4,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
-    metadata.appcat.vshn.io/description: nextcloud instances by VSHN
-    metadata.appcat.vshn.io/displayname: nextcloud by VSHN
+    metadata.appcat.vshn.io/description: Nextcloud instances by VSHN
+    metadata.appcat.vshn.io/displayname: Nextcloud by VSHN
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-nextcloud
     metadata.appcat.vshn.io/flavor: standalone
     metadata.appcat.vshn.io/plans: '{"standard-2":{"size":{"cpu":"500m","disk":"16Gi","enabled":true,"memory":"2Gi"}},"standard-4":{"size":{"cpu":"1","disk":"16Gi","enabled":true,"memory":"4Gi"}},"standard-8":{"size":{"cpu":"2","disk":"16Gi","enabled":true,"memory":"8Gi"}}}'
@@ -31,13 +31,14 @@ spec:
           chartRepository: https://nextcloud.github.io/helm/
           chartVersion: 5.0.0
           controlNamespace: syn-appcat-control
+          defaultPlan: standard-2
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.79.3
+          imageTag: v4.80.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"
