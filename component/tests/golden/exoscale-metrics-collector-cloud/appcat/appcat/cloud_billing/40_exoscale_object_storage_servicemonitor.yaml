@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/component: billing-collector-cloudservices
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: billing-collector-cloudservices
+    automated-billing: 'true'
+  name: cloudservices-servicemonitor
+  namespace: syn-appcat
+spec:
+  endpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      automated-billing: 'true'

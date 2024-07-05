@@ -115,7 +115,7 @@ local serviceAccount(name, clusterRole) = {
 local deployment(name, args, config) =
   kube.Deployment(name) {
     metadata+: {
-      labels+: labels,
+      labels+: labels { 'automated-billing': 'true' },
       namespace: params.namespace,
     },
     spec+: {
@@ -127,6 +127,18 @@ local deployment(name, args, config) =
               imagePullPolicy: 'IfNotPresent',
               image: collectorImage,
               args: args,
+              // add resource limits
+              // during my local tests it consumes arround 50% of requests{} values
+              resources: {
+                limits: {
+                  cpu: '250m',
+                  memory: '256Mi',
+                },
+                requests: {
+                  cpu: '100m',
+                  memory: '128Mi',
+                },
+              },
               envFrom: [
                 {
                   configMapRef: {
@@ -139,12 +151,42 @@ local deployment(name, args, config) =
                   },
                 },
               ],
+              ports: [
+                {
+                  containerPort: 2112,
+                  protocol: 'TCP',
+                },
+              ],
             },
           },
         },
       },
     },
   };
+
+
+local service = {
+  apiVersion: 'v1',
+  kind: 'Service',
+  metadata: {
+    labels: labels { 'automated-billing': 'true' },
+    name: 'automated-billing',
+    namespace: params.namespace,
+  },
+  spec: {
+    ports: [
+      {
+        name: 'metrics',
+        port: 2112,
+        protocol: 'TCP',
+        targetPort: 2112,
+      },
+    ],
+    selector: {
+      'automated-billing': 'true',
+    },
+  },
+};
 
 local config(name, extraConfig) = kube.ConfigMap(name) {
   metadata: {
@@ -160,6 +202,77 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
     UOM: std.toString(paramsCloud.uom),
   },
 } + extraConfig;
+
+local alertRule = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: {
+    labels: labels { 'automated-billing': 'true' },
+    name: 'cloudservices-billing',
+    namespace: params.namespace,
+  },
+  spec: {
+    groups+: [
+      {
+        name: 'odoo_http_failures',
+        rules: [
+          {
+            alert: 'HighOdooHTTPFailureRate',
+            expr: |||
+              billing_cloud_collector_http_requests_odoo_failed_total != 0
+            |||,
+            'for': '1m',
+            labels: {
+              severity: 'critical',
+              syn_team: 'schedar',
+            },
+            annotations: {
+              summary: 'High rate of Odoo HTTP failures detected',
+              description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_odoo_failed_total`) has increased significantly in the last minute.',
+            },
+          },
+          {
+            alert: 'HighProviderHTTPFailureRate',
+            expr: |||
+              billing_cloud_collector_http_requests_provider_failed_total != 0
+            |||,
+            'for': '1m',
+            labels: {
+              severity: 'critical',
+              syn_team: 'schedar',
+            },
+            annotations: {
+              summary: "High rate of Automated-billing collector's providers HTTP failures detected",
+              description: 'The rate of failed Odoo HTTP requests (`billing_cloud_collector_http_requests_provider_failed_total`) has increased significantly in the last minute.',
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+
+
+local serviceMonitor = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'ServiceMonitor',
+  metadata: {
+    labels: labels { 'automated-billing': 'true' },
+    name: 'cloudservices-servicemonitor',
+    namespace: params.namespace,
+  },
+  spec: {
+    endpoints: [
+      {
+        port: 'metrics',
+      },
+    ],
+    selector: {
+      matchLabels+: { 'automated-billing': 'true' },
+    },
+  },
+};
+
 
 ({
    local odoo = params.odoo,
@@ -191,6 +304,8 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_exoscale_dbaas_role_binding': sa.rb,
    '10_exoscale_dbaas_configmap': cm,
    '10_exoscale_dbaas_exporter': deployment(name, [ 'exoscale', 'dbaas' ], name + '-env'),
+   '20_exoscale_dbaas_alerts': alertRule,
+   '30_exoscale_dbaas_servicemonitor': serviceMonitor,
  } else {})
 +
 (if paramsCloud.exoscale.enabled && paramsCloud.exoscale.objectStorage.enabled then {
@@ -217,6 +332,8 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_exoscale_object_storage_rolebinding': sa.rb,
    '10_exoscale_object_storage_configmap': cm,
    '20_exoscale_object_storage_exporter': deployment(name, [ 'exoscale', 'objectstorage' ], name + '-env'),
+   '30_exoscale_object_storage_alerts': alertRule,
+   '40_exoscale_object_storage_servicemonitor': serviceMonitor,
 
  } else {})
 +
@@ -244,4 +361,6 @@ local config(name, extraConfig) = kube.ConfigMap(name) {
    '10_cloudscale_rolebinding': sa.rb,
    '10_cloudscale_configmap': cm,
    '20_cloudscale_exporter': deployment(name, [ 'cloudscale', 'objectstorage' ], name + '-env'),
+   '30_cloudscale_alerts': alertRule,
+   '40_cloudscale_servicemonitor': serviceMonitor,
  } else {})
