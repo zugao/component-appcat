@@ -52,7 +52,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.79.3
+        tag: v4.80.0
       apiserver:
         registry: ghcr.io
         repository: vshn/appcat-apiserver
@@ -622,10 +622,19 @@ parameters:
                 disk: 16Gi
         minio:
           billing: true
+          serviceName: VSHNMinio
+          compFunctionsOnly: true
+          connectionSecretKeys:
+            - MINIO_URL
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_ACCESS_KEY_ID
+          mode: distributed
+          offered: false
           enabled: false
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:minio:version}
+          bucket_region: ""
           grpcEndpoint: ${appcat:grpcEndpoint}
           proxyFunction: ${appcat:proxyFunction}
           defaultPlan: standard-1
@@ -637,6 +646,10 @@ parameters:
                 cpu: "1"
                 memory: "1Gi"
                 disk: 50Gi
+          additionalInputs:
+            providerEnabled: ${appcat:providers:minio:enabled}
+            minioChartRepository: ${appcat:charts:minio:source} # for backwards compatibility for now
+            minioChartVersion: ${appcat:charts:minio:version}  # for backwards compatibility for now
           instances: []
         mariadb:
           billing: true
