@@ -5,7 +5,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 
 
-local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'vshn-' + std.asciiLower(service) + '-sla') {
+local promRuleSLA(value, service) = std.prune(kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'vshn-' + std.asciiLower(service) + '-sla') {
   metadata+: {
     labels: {
       name: 'vshn-' + std.asciiLower(service) + '-sla',
@@ -28,7 +28,7 @@ local promRuleSLA(value, service) = kube._Object('monitoring.coreos.com/v1', 'Pr
       },
     ],
   },
-};
+});
 
 local bottomPod(query) = 'label_replace( bottomk(1, %(query)s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-replacemeplease-(.+)-.+")' % query;
 local topPod(query) = 'label_replace( topk(1, %(query)s) * on(namespace) group_left(label_appcat_vshn_io_claim_namespace) kube_namespace_labels, "name", "$1", "namespace", "vshn-replacemeplease-(.+)-.+")' % query;

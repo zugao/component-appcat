@@ -3,7 +3,7 @@ local compositionHelpers = import 'lib/appcat-compositions.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
-
+local inv = kap.inventory();
 
 local common = import 'common.libsonnet';
 
@@ -52,8 +52,7 @@ local compositeClusterRoles(composite) =
       },
     ];
 
-
-local loadCRD(crd, tag) = std.parseJson(kap.yaml_load('appcat/manifests/' + tag + '/crds/' + crd));
+local loadCRD(crd, tag) = std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat/manifests/' + tag + '/crds/' + crd));
 
 local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
   kube._Object('apiextensions.crossplane.io/v1', 'CompositeResourceDefinition', name) + common.SyncOptions + {

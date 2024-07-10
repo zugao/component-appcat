@@ -80,6 +80,15 @@ spec:
         - fromFieldPath: spec.parameters.bucketName
           toFieldPath: spec.forProvider.services.sos.buckets[0]
           type: FromCompositeFieldPath
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
     - base:
         apiVersion: exoscale.crossplane.io/v1
         kind: Bucket
@@ -131,4 +140,13 @@ spec:
               - fromFieldPath: metadata.labels[crossplane.io/claim-name]
           toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
           type: CombineFromComposite
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
   writeConnectionSecretsToNamespace: syn-crossplane

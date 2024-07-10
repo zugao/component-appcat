@@ -117,7 +117,7 @@ local meteringQueryCloud = importstr 'promql/metering_cloud.promql';
 local meteringQueryManagedRaw = importstr 'promql/metering_managed.promql';
 local meteringQueryManaged = std.strReplace(meteringQueryManagedRaw, '{{salesOrder}}', params.salesOrder);
 
-local legacyBillingRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
+local legacyBillingRule = std.prune(kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -134,9 +134,9 @@ local legacyBillingRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRu
       },
     ],
   },
-};
+});
 
-local meteringRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-metering') {
+local meteringRule = std.prune(kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-metering') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -153,7 +153,7 @@ local meteringRule = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 
       },
     ],
   },
-};
+});
 
 local mockOrgInfo = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'mock-org-info') {
   metadata+: {

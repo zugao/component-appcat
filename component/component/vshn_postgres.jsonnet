@@ -293,7 +293,7 @@ if params.services.vshn.enabled && pgParams.enabled then
     '22_prom_rule_sla_postgres': promRulePostgresSLA,
     [if isOpenshift then '21_openshift_template_postgresql_vshn']: osTemplate,
     [if isOpenshift then '10_stackgres_openshift_operator_ns']: stackgresOperatorNs,
-    [if isOpenshift then '11_stackgres_openshift_operator']: stackgresOperator,
+    [if isOpenshift then '11_stackgres_openshift_operator']: std.prune(stackgresOperator),
     [if isOpenshift then '12_stackgres_openshift_operator_netpol']: stackgresNetworkPolicy,
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),

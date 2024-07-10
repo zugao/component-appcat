@@ -231,7 +231,7 @@ local compositionExoscale =
             comp.FromCompositeFieldPath('spec.parameters.region', 'spec.forProvider.zone'),
             comp.FromCompositeFieldPath('spec.parameters.bucketName', 'spec.forProvider.services.sos.buckets[0]'),
           ],
-        },
+        } + common.DefaultReadinessCheck(),
         {
           base: bucketBase,
           connectionDetails: [
@@ -248,7 +248,7 @@ local compositionExoscale =
             comp.FromCompositeFieldPath('spec.parameters.bucketDeletionPolicy', 'spec.forProvider.bucketDeletionPolicy'),
             comp.CombineCompositeFromTwoFieldPaths('metadata.labels[crossplane.io/claim-namespace]', 'metadata.labels[crossplane.io/claim-name]', 'spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]', 'exoscale.crossplane.io/v1/Bucket/%s/%s'),
           ],
-        },
+        } + common.DefaultReadinessCheck(),
       ],
     },
   };

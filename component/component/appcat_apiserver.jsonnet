@@ -6,16 +6,8 @@ local com = import 'lib/commodore.libjsonnet';
 local params = inv.parameters.appcat;
 local apiserverParams = params.apiserver;
 
-local image = params.images.apiserver;
-local loadManifest(manifest) =
-  std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat-apiserver/manifests/' + image.tag + '/config/apiserver/' + manifest));
-
-local envs = loadManifest('apiserver-envs.yaml') {
-  data+: apiserverParams.env,
-  metadata+: {
-    namespace: apiserverParams.namespace,
-  },
-};
+local image = params.images.appcat;
+local loadManifest(manifest) = std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat/manifests/' + image.tag + '/config/apiserver/' + manifest));
 
 local clusterRoleUsers = kube.ClusterRole('system:' + inv.parameters.facts.distribution + ':aggregate-appcat-to-basic-user') {
   metadata+: {
@@ -83,14 +75,14 @@ local apiserver = loadManifest('aggregated-apiserver.yaml') {
     namespace: apiserverParams.namespace,
   },
   spec+: {
+    replicas: 2,
     template+: {
       spec+: {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: common.GetApiserverImageString(),
+              image: common.GetAppCatImageString(),
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), apiserverParams.extraArgs),
-              env+: com.envList(apiserverParams.extraEnv),
               resources: apiserverParams.resources,
               livenessProbe: {
                 httpGet: {
@@ -217,7 +209,6 @@ if apiserverParams.enabled == true then {
   'apiserver/10_cluster_role_view': clusterRoleView,
   'apiserver/10_cluster_role_binding': clusterRoleBinding,
   'apiserver/20_service_account': serviceAccount,
-  'apiserver/10_apiserver_envs': envs,
   'apiserver/30_deployment': apiserver,
   'apiserver/30_service': service,
   'apiserver/30_api_service': apiService,

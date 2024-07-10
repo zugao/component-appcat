@@ -7,7 +7,7 @@ local params = inv.parameters.appcat;
 local controllersParams = params.controller;
 
 local image = params.images.appcat;
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('appcat/manifests/' + image.tag + '/config/controller/' + manifest));
+local loadManifest(manifest) = std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat/manifests/' + image.tag + '/config/controller/' + manifest));
 
 local serviceAccount = loadManifest('service-account.yaml') {
   metadata+: {
