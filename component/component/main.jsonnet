@@ -195,12 +195,48 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   },
 };
 
+local filterName(name) = '|' + if name == 'postgres' then 'postgresql' else if name == 'emailAlerting' then '' else name;
+local backupJobRegex = std.foldl(function(prev, current) prev + filterName(current.name), common.FilterServiceByBoolean('enabled'), '');
+
+local backupPrometheusRule = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: {
+    name: 'appcat-backup',
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-backup',
+        rules: [
+          {
+            alert: 'AppCatBackupJobError',
+            annotations: {
+              description: 'The backup job {{ $labels.job_name }} in namespace {{ $labels.namespace }} has failed.',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/AppCatBackupJobError.html',
+              summary: 'AppCat service backup failed.',
+            },
+            expr: 'kube_job_failed{job_name=~".*backup.*", namespace=~"vshn-(' + backupJobRegex + ')-.*"} > 0',
+            'for': '1m',
+            labels: {
+              severity: 'warning',
+              syn_team: 'schedar',
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+
 {
   '10_clusterrole_view': xrdBrowseRole,
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
   '10_appcat_legacy_billing_recording_rule': legacyBillingRule,
+  '10_appcat_backup_monitoring': backupPrometheusRule,
   [if params.billing.vshn.meteringRules then '10_appcat_metering_recording_rule']: meteringRule,
   [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
   [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
