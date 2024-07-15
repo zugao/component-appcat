@@ -2,17 +2,13 @@ parameters:
   kapitan:
     dependencies:
       - type: git
-        output_path: dependencies/appcat/manifests/${appcat:images:appcat:tag}
+        output_path: ${_base_directory}/dependencies/appcat/manifests/${appcat:images:appcat:tag}
         source: https://github.com/vshn/appcat.git
-        ref: ${appcat:_crd_version}
+        ref: ${appcat:images:appcat:tag}
       - type: git
         source: https://github.com/vshn/statefulset-resize-controller
         output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulSetResizer:tag}
         ref: ${appcat:images:statefulSetResizer:tag}
-      - type: git
-        output_path: ${_base_directory}/dependencies/appcat-apiserver/manifests/${appcat:images:apiserver:tag}
-        source: https://github.com/vshn/appcat-apiserver.git
-        ref: ${appcat:images:apiserver:tag}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet

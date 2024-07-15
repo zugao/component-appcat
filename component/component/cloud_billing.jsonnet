@@ -304,8 +304,6 @@ local serviceMonitor = {
    '10_exoscale_dbaas_role_binding': sa.rb,
    '10_exoscale_dbaas_configmap': cm,
    '10_exoscale_dbaas_exporter': deployment(name, [ 'exoscale', 'dbaas' ], name + '-env'),
-   '20_exoscale_dbaas_alerts': alertRule,
-   '30_exoscale_dbaas_servicemonitor': serviceMonitor,
  } else {})
 +
 (if paramsCloud.exoscale.enabled && paramsCloud.exoscale.objectStorage.enabled then {
@@ -332,8 +330,6 @@ local serviceMonitor = {
    '10_exoscale_object_storage_rolebinding': sa.rb,
    '10_exoscale_object_storage_configmap': cm,
    '20_exoscale_object_storage_exporter': deployment(name, [ 'exoscale', 'objectstorage' ], name + '-env'),
-   '30_exoscale_object_storage_alerts': alertRule,
-   '40_exoscale_object_storage_servicemonitor': serviceMonitor,
 
  } else {})
 +
@@ -361,6 +357,10 @@ local serviceMonitor = {
    '10_cloudscale_rolebinding': sa.rb,
    '10_cloudscale_configmap': cm,
    '20_cloudscale_exporter': deployment(name, [ 'cloudscale', 'objectstorage' ], name + '-env'),
-   '30_cloudscale_alerts': alertRule,
-   '40_cloudscale_servicemonitor': serviceMonitor,
+ } else {})
++
+// We only need the alert rule once
+(if paramsCloud.cloudscale.enabled || paramsCloud.exoscale.enabled then {
+   '30_billing_alerts': alertRule,
+   '40_billing_servicemonitor': serviceMonitor,
  } else {})

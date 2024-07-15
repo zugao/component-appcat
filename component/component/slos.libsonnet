@@ -112,5 +112,7 @@ local generateSlothInput(name, uptime) =
   };
 {
   slothInput: std.foldl(function(objOut, name) objOut + generateSlothInput(name, params.slos.vshn[name].uptime), std.objectFields(params.slos.vshn), {}),
-  Get(name): prometheusRule(name),
+  // When using the `server-side-apply` on argo, the empty `annotations` object will cause a diff.
+  // This removes all empty fields recursively.
+  Get(name): std.prune(prometheusRule(name)),
 }

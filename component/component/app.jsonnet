@@ -6,6 +6,15 @@ local argocd = import 'lib/argocd.libjsonnet';
 local app = argocd.App('appcat', '') + (
   if params.services.vshn.e2eTests then {
     spec+: {
+      syncPolicy: {
+        automated: {
+          prune: true,
+          selfHeal: true,
+        },
+        syncOptions: [
+          'ServerSideApply=true',
+        ],
+      },
       ignoreDifferences+: [
         {
           group: '',
