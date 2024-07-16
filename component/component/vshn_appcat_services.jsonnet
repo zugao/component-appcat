@@ -96,6 +96,7 @@ local vshn_appcat_service(name, serviceParams) =
                 },
                 data: {
                         serviceName: name,
+                        mode: serviceParams.mode,
                         imageTag: common.GetAppCatImageTag(),
                         chartRepository: params.charts[name].source,
                         chartVersion: params.charts[name].version,
