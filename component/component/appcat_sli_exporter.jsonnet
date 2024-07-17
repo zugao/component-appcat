@@ -47,6 +47,10 @@ local deployment_patch = kube._Object('apps/v1', 'Deployment', 'controller-manag
               },
             ],
           },
+          {
+            name: 'kube-rbac-proxy',
+            resources: {},
+          },
         ],
       },
     },

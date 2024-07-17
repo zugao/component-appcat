@@ -16,12 +16,28 @@ local app = argocd.App('appcat', '') + (
           name: 'github-ci-secret',
           namespace: 'appcat-e2e',
         },
+        {
+          group: '',
+          jsonPointers: [
+            '/metadata/annotations',
+          ],
+          kind: 'Namespace',
+        },
       ],
     },
   } else {}
 ) + (
   {
     spec+: {
+      ignoreDifferences+: [
+        {
+          group: 'admissionregistration.k8s.io',
+          kind: 'ValidatingWebhookConfiguration',
+          jqPathExpressions: [
+            '.webhooks[]?.clientConfig.caBundle',
+          ],
+        },
+      ],
       syncPolicy: {
         automated: {
           prune: true,
