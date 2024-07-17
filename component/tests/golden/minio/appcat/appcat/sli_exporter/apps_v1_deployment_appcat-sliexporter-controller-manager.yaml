@@ -70,6 +70,7 @@ spec:
         - containerPort: 8443
           name: https
           protocol: TCP
+        resources: {}
       securityContext:
         runAsNonRoot: true
       serviceAccountName: appcat-sliexporter-controller-manager
