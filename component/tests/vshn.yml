@@ -76,12 +76,12 @@ parameters:
         VSHN_REDIS_BACKUP_HANDLER_ENABLED: "true"
 
     services:
+      emailAlerting:
+        enabled: true
+        smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
       vshn:
         enabled: true
         externalDatabaseConnectionsEnabled: true
-        emailAlerting:
-          enabled: true
-          smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
         mariadb:
           enabled: true
         keycloak:

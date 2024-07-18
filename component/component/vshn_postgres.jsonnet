@@ -210,7 +210,7 @@ local composition =
                       isOpenshift: std.toString(isOpenshift),
                       sliNamespace: params.slos.namespace,
                     } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
-                    + common.EmailAlerting(params.services.vshn.emailAlerting)
+                    + common.EmailAlerting(params.services.emailAlerting)
                     + if pgParams.proxyFunction then {
                       proxyEndpoint: pgParams.grpcEndpoint,
                     } else {},

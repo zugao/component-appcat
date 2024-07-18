@@ -486,7 +486,7 @@ local composition =
                       ownerVersion: xrd.spec.versions[0].name,
                       isOpenshift: std.toString(isOpenshift),
                       sliNamespace: params.slos.namespace,
-                    } + common.EmailAlerting(params.services.vshn.emailAlerting)
+                    } + common.EmailAlerting(params.services.emailAlerting)
                     + if redisParams.proxyFunction then {
                       proxyEndpoint: redisParams.grpcEndpoint,
                     } else {},
