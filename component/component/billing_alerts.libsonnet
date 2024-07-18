@@ -38,5 +38,5 @@ local alerts =
   };
 
 {
-  Alerts: alerts,
+  Alerts: std.prune(alerts),
 }
