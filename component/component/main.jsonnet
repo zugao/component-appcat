@@ -246,7 +246,7 @@ local haPrometheusRule = {
             alert: 'AppCatHighAvailableDeploymentWarning',
             annotations: {
               description: 'The deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has less replicas than expected.',
-              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/AppCatHAWarning.html',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/vshn/AppCatHighAvailableDeploymentWarning.html',
               summary: 'AppCat service instance has unavailable pods.',
             },
             expr: 'kube_deployment_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} > 1 AND kube_deployment_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} - kube_deployment_status_replicas_ready{namespace=~"vshn-(' + jobRegex + ')-.*"} > 0',
@@ -260,7 +260,7 @@ local haPrometheusRule = {
             alert: 'AppCatHighAvailableStatefulsetWarning',
             annotations: {
               description: 'The statefulset {{ $labels.statefulset }} in namespace {{ $labels.namespace }} has less replicas than expected.',
-              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/AppCatHAWarning.html',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/vshn/AppCatHighAvailableStatefulsetWarning.html',
               summary: 'AppCat service instance has unavailable pods.',
             },
             expr: 'kube_statefulset_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} > 1 AND kube_statefulset_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} - kube_statefulset_status_replicas_ready{namespace=~"vshn-(' + jobRegex + ')-.*"} > 0',
