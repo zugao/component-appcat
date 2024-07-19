@@ -186,12 +186,93 @@ local mockOrgInfo = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', '
   },
 };
 
-local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
+local emailSecret = kube.Secret(params.services.emailAlerting.secretName) {
   metadata+: {
-    namespace: params.services.vshn.emailAlerting.secretNamespace,
+    namespace: params.services.emailAlerting.secretNamespace,
   },
   stringData: {
-    password: params.services.vshn.emailAlerting.smtpPassword,
+    password: params.services.emailAlerting.smtpPassword,
+  },
+};
+
+local filterName(name) = if name == 'postgres' then 'postgresql' else name;
+local jobRegex = std.foldl(function(prev, current) (if prev == '' then filterName(current.name) else prev + '|' + filterName(current.name)), common.FilterServiceByBoolean('enabled'), '');
+
+local backupPrometheusRule = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: {
+    name: 'appcat-backup',
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-backup',
+        rules: [
+          {
+            alert: 'AppCatBackupJobError',
+            annotations: {
+              description: 'The backup job {{ $labels.job_name }} in namespace {{ $labels.namespace }} has failed.',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/AppCatBackupJobError.html',
+              summary: 'AppCat service backup failed.',
+            },
+            expr: 'kube_job_failed{job_name=~".*backup.*", namespace=~"vshn-(' + jobRegex + ')-.*"} > 0',
+            'for': '1m',
+            labels: {
+              severity: 'warning',
+              syn_team: 'schedar',
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local haPrometheusRule = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: {
+    name: 'appcat-ha',
+    namespace: params.namespace,
+  },
+  spec: {
+    groups: [
+      {
+        name: 'appcat-ha',
+        rules: [
+          {
+            alert: 'AppCatHighAvailableDeploymentWarning',
+            annotations: {
+              description: 'The deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has less replicas than expected.',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/vshn/AppCatHighAvailableDeploymentWarning.html',
+              summary: 'AppCat service instance has unavailable pods.',
+            },
+            expr: 'kube_deployment_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} > 1 AND kube_deployment_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} - kube_deployment_status_replicas_ready{namespace=~"vshn-(' + jobRegex + ')-.*"} > 0',
+            'for': '1m',
+            labels: {
+              severity: 'warning',
+              syn_team: 'schedar',
+            },
+          },
+          {
+            alert: 'AppCatHighAvailableStatefulsetWarning',
+            annotations: {
+              description: 'The statefulset {{ $labels.statefulset }} in namespace {{ $labels.namespace }} has less replicas than expected.',
+              runbook_url: 'https://kb.vshn.ch/app-catalog/how-tos/appcat/vshn/AppCatHighAvailableStatefulsetWarning.html',
+              summary: 'AppCat service instance has unavailable pods.',
+            },
+            expr: 'kube_statefulset_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} > 1 AND kube_statefulset_status_replicas{namespace=~"vshn-(' + jobRegex + ')-.*"} - kube_statefulset_status_replicas_ready{namespace=~"vshn-(' + jobRegex + ')-.*"} > 0',
+            'for': '1m',
+            labels: {
+              severity: 'warning',
+              syn_team: 'schedar',
+            },
+          },
+        ],
+      },
+    ],
   },
 };
 
@@ -201,7 +282,9 @@ local emailSecret = kube.Secret(params.services.vshn.emailAlerting.secretName) {
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
   '10_appcat_legacy_billing_recording_rule': legacyBillingRule,
+  '10_appcat_backup_monitoring': backupPrometheusRule,
+  '10_appcat_ha_monitoring': haPrometheusRule,
   [if params.billing.vshn.meteringRules then '10_appcat_metering_recording_rule']: meteringRule,
-  [if params.services.vshn.enabled && params.services.vshn.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
+  [if params.services.vshn.enabled && params.services.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
   [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
 }
