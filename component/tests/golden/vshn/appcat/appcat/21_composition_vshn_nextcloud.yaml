@@ -38,13 +38,14 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.83.1
+          imageTag: v4.83.2
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"
             nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
+          mode: standalone
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNNextcloud
           ownerVersion: v1

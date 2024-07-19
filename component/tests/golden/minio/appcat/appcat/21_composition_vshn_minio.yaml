@@ -38,11 +38,12 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.83.1
+          imageTag: v4.83.2
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
           minioChartVersion: 5.0.13
+          mode: distributed
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNMinio
           ownerVersion: v1
