@@ -20,7 +20,6 @@ spec:
         instances: 1
       relativePath: /
       serviceLevel: besteffort
-      version: "29"
     size:
       plan: standard-2
   writeConnectionSecretToRef:
