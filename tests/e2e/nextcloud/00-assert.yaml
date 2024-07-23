@@ -20,13 +20,8 @@ spec:
         instances: 1
       relativePath: /
       serviceLevel: besteffort
-      version: "23"
-      #version: 23.0.5-202402021353-44-af6cea11
     size:
       plan: standard-2
-    tls:
-      authClients: true
-      enabled: true
   writeConnectionSecretToRef:
     name: nextcloud-e2e
 status:

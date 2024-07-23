@@ -5,7 +5,7 @@ timeout: 600
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: connect-keycloak-e2e
+  name: connect-nextcloud-e2e
 status:
   conditions:
     - type: Complete
