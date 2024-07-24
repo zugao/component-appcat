@@ -4,10 +4,12 @@ metadata:
   name: postgresql-e2e-test
 spec:
   parameters:
-    backup:
-      deletionRetention: 7
-      retention: 6
     size:
       plan: standard-2
+    security:
+      deletionProtection: false
+    service:
+      vacuumEnabled: true
+      repackEnabled: false
   writeConnectionSecretToRef:
     name: postgresql-e2e-test-creds

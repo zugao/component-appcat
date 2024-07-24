@@ -6,8 +6,7 @@ spec:
   parameters:
     service:
       fqdn: nextcloud-e2e.example.com
-      postgreSQLParameters:
-        backup:
-          deletionProtection: false
+    security:
+      deletionProtection: false
   writeConnectionSecretToRef:
     name: nextcloud-e2e

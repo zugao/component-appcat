@@ -3,20 +3,20 @@ kind: TestAssert
 timeout: 600
 ---
 apiVersion: vshn.appcat.vshn.io/v1
-kind: VSHNKeycloak
+kind: VSHNNextcloud
 metadata:
-  name: keycloak-e2e
+  name: nextcloud-e2e
   finalizers:
   - finalizer.apiextensions.crossplane.io
 spec:
   compositeDeletePolicy: Background
   compositionRef:
-    name: vshnkeycloak.vshn.appcat.vshn.io
+    name: vshnnextcloud.vshn.appcat.vshn.io
   compositionUpdatePolicy: Automatic
   parameters:
     backup: {}
     security:
-      deletionProtection: true
+      deletionProtection: false
     service:
       postgreSQLParameters:
         instances: 1
@@ -24,11 +24,8 @@ spec:
       serviceLevel: besteffort
     size:
       plan: standard-2
-    tls:
-      authClients: true
-      enabled: true
   writeConnectionSecretToRef:
-    name: keycloak-e2e
+    name: nextcloud-e2e
 status:
   conditions:
     - status: "True"
