@@ -856,10 +856,14 @@ parameters:
               enabled: true
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:exoscale:connectionSecretNamespace}
+              grpcEndpoint: ${appcat:grpcEndpoint}
+              proxyFunction: ${appcat:proxyFunction}
             cloudscale:
               enabled: true
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
               providerSecretNamespace: ${appcat:providers:cloudscale:connectionSecretNamespace}
+              grpcEndpoint: ${appcat:grpcEndpoint}
+              proxyFunction: ${appcat:proxyFunction}
             minio:
               enabled: false
               secretNamespace: ${appcat:services:generic:objectstorage:secretNamespace}
