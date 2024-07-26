@@ -3,6 +3,10 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.87.3-func
+=======
+  package: ghcr.io/vshn/appcat:add_nextcloud_backups-func
+>>>>>>> 5a55b04e (f)
   runtimeConfigRef:
     name: function-appcat

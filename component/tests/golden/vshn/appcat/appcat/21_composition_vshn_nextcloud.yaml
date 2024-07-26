@@ -38,7 +38,11 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
+<<<<<<< HEAD
           imageTag: v4.87.3
+=======
+          imageTag: add_nextcloud_backups
+>>>>>>> 5a55b04e (f)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"

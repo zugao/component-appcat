@@ -29,7 +29,11 @@ spec:
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.87.3
+=======
+          image: ghcr.io/vshn/appcat:add_nextcloud_backups
+>>>>>>> 5a55b04e (f)
           livenessProbe:
             failureThreshold: 3
             httpGet:
