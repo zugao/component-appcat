@@ -226,6 +226,11 @@ local runtimeConfigRef(name) = {
           resources: [ 'usages' ],
           verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
         },
+        {
+          apiGroups: [ 'policy' ],
+          resources: [ 'poddisruptionbudgets' ],
+          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+        },
       ],
     };
     local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
