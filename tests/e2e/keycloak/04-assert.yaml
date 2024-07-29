@@ -16,7 +16,7 @@ spec:
   parameters:
     backup: {}
     security:
-      deletionProtection: true
+      deletionProtection: false
     service:
       postgreSQLParameters:
         instances: 1

@@ -15,10 +15,11 @@ spec:
   compositionUpdatePolicy: Automatic
   parameters:
     backup:
-        deletionProtection: false
         deletionRetention: 7
         retention: 6
     instances: 1
+    security:
+      deletionProtection: true
     service:
       vacuumEnabled: false
       repackEnabled: true

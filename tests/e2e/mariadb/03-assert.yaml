@@ -3,33 +3,44 @@ kind: TestAssert
 timeout: 600
 ---
 apiVersion: vshn.appcat.vshn.io/v1
-kind: VSHNKeycloak
+kind: VSHNMariaDB
 metadata:
-  name: keycloak-e2e
   finalizers:
   - finalizer.apiextensions.crossplane.io
+  name: mariadb
 spec:
   compositeDeletePolicy: Background
   compositionRef:
-    name: vshnkeycloak.vshn.appcat.vshn.io
+    name: vshnmariadb.vshn.appcat.vshn.io
   compositionUpdatePolicy: Automatic
   parameters:
     backup: {}
     security:
-      deletionProtection: true
+      deletionProtection: false
     service:
-      postgreSQLParameters:
-        instances: 1
-      relativePath: /
       serviceLevel: besteffort
+      version: "11.2"
     size:
       plan: standard-2
     tls:
       authClients: true
       enabled: true
+  resourceRef:
+    apiVersion: vshn.appcat.vshn.io/v1
+    kind: XVSHNMariaDB
   writeConnectionSecretToRef:
-    name: keycloak-e2e
+    name: mariadb-creds
 status:
   conditions:
     - status: "True"
     - status: "True"
+---
+apiVersion: v1
+kind: Secret
+type: connection.crossplane.io/v1alpha1
+metadata:
+  name: mariadb-creds
+  ownerReferences:
+    - apiVersion: vshn.appcat.vshn.io/v1
+      kind: VSHNMariaDB
+      name: mariadb

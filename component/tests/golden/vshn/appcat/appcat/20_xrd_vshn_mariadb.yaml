@@ -5569,6 +5569,7 @@ spec:
                           type: object
                       type: object
                     security:
+                      default: {}
                       description: Security defines the security of a service
                       properties:
                         allowAllNamespaces:
@@ -5583,6 +5584,11 @@ spec:
                           items:
                             type: string
                           type: array
+                        deletionProtection:
+                          default: true
+                          description: DeletionProtection blocks the deletion of the
+                            instance if it is enabled (enabled by default)
+                          type: boolean
                       type: object
                     service:
                       default: {}
