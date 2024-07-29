@@ -84,6 +84,7 @@ local compositionCloudscale =
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
       resources: [
         {
+          name: 'cloudscale-user',
           base: baseUser,
           connectionDetails: [
             comp.conn.FromSecretKey('AWS_ACCESS_KEY_ID'),
@@ -115,6 +116,7 @@ local compositionCloudscale =
           ],
         } + common.DefaultReadinessCheck(),
         {
+          name: 'cloudscale-bucket',
           base: baseBucket,
           connectionDetails: [
             comp.conn.FromFieldPath('ENDPOINT', 'status.endpoint'),
@@ -200,6 +202,7 @@ local compositionExoscale =
       writeConnectionSecretsToNamespace: compParams.secretNamespace,
       resources: [
         {
+          name: 'exoscale-iam',
           base: IAMKeyBase,
           connectionDetails: [
             comp.conn.FromSecretKey('AWS_ACCESS_KEY_ID'),
@@ -233,6 +236,7 @@ local compositionExoscale =
           ],
         } + common.DefaultReadinessCheck(),
         {
+          name: 'exoscale-bucket',
           base: bucketBase,
           connectionDetails: [
             comp.conn.FromFieldPath('ENDPOINT', 'status.endpoint'),
