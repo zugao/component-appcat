@@ -29,7 +29,7 @@ spec:
         data:
           bucketRegion: lpg
           chartRepository: https://codecentric.github.io/helm-charts
-          chartVersion: 2.3.0
+          chartVersion: 2.4.3
           controlNamespace: syn-appcat-control
           defaultPlan: standard-2
           emailAlertingEnabled: 'true'
@@ -38,7 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.86.0
+          imageTag: v4.87.0
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
