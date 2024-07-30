@@ -84,7 +84,6 @@ local ns = kube.Namespace(params.namespace) {
   metadata+: {
     labels+: {
       'openshift.io/cluster-monitoring': 'true',
-      'appuio.io/organization': 'vshn',
     } + params.namespaceLabels,
     annotations+: params.namespaceAnnotations,
   },
