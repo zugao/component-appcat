@@ -4,7 +4,6 @@ metadata:
   annotations:
     openshift.io/node-selector: node-role.kubernetes.io/infra=
   labels:
-    appuio.io/organization: vshn
     foo: bar
     name: syn-appcat
     openshift.io/cluster-monitoring: 'true'
