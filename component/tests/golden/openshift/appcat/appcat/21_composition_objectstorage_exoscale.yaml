@@ -46,6 +46,7 @@ spec:
         - fromConnectionSecretKey: AWS_SECRET_ACCESS_KEY
           name: AWS_SECRET_ACCESS_KEY
           type: FromConnectionSecretKey
+      name: exoscale-iam
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name
@@ -115,6 +116,7 @@ spec:
         - fromFieldPath: status.atProvider.bucketName
           name: BUCKET_NAME
           type: FromFieldPath
+      name: exoscale-bucket
       patches:
         - fromFieldPath: metadata.labels[crossplane.io/composite]
           toFieldPath: metadata.name

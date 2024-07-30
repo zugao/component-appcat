@@ -54,6 +54,10 @@ parameters:
       postgres:
         enabled: true
     providers:
+      cloudscale:
+        enabled: false
+      exoscale:
+        enabled: false
       kubernetes:
         enabled: true
       helm:
