@@ -23,11 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.87.2
-=======
-          image: ghcr.io/vshn/appcat:fix_bucket_name_clashes
->>>>>>> db15a4b2 (Exoscale)
+          image: ghcr.io/vshn/appcat:v4.87.3
           livenessProbe:
             httpGet:
               path: /healthz

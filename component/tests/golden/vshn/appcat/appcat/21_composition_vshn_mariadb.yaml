@@ -38,11 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-<<<<<<< HEAD
-          imageTag: v4.87.2
-=======
-          imageTag: fix_bucket_name_clashes
->>>>>>> db15a4b2 (Exoscale)
+          imageTag: v4.87.3
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
@@ -56,7 +52,6 @@ spec:
             {"size": {"cpu": "125m", "disk": "16Gi", "enabled": true, "memory": "512Mi"}},
             "standard-8": {"size": {"cpu": "2", "disk": "16Gi", "enabled": true, "memory":
             "8Gi"}}}'
-          proxyEndpoint: host.docker.internal:9443
           quotasEnabled: 'false'
           restoreSA: mariadbrestoreserviceaccount
           serviceName: mariadb

@@ -22,7 +22,7 @@ parameters:
   appcat:
 
     grpcEndpoint: host.docker.internal:9443
-    proxyFunction: true
+    proxyFunction: false
 
     quotasEnabled: false
     appuioManaged: false
@@ -173,11 +173,11 @@ parameters:
         objectstorage:
           enabled: true
 
-          defaultComposition: exoscale
+          defaultComposition: minio
           compositions:
             exoscale:
-              enabled: true
+              enabled: false
             cloudscale:
-              enabled: true
+              enabled: false
             minio:
               enabled: true

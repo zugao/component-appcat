@@ -3,10 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.87.2-func
-=======
-  package: ghcr.io/vshn/appcat:fix_bucket_name_clashes-func
->>>>>>> db15a4b2 (Exoscale)
+  package: ghcr.io/vshn/appcat:v4.87.3-func
   runtimeConfigRef:
     name: function-appcat
