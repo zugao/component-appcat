@@ -107,7 +107,7 @@ parameters:
 
         postgres:
           sgNamespace: stackgres
-          bucket_region: 'us-east-1'
+          bucket_region: 'ch-gva-2'
           bucket_endpoint: 'http://minio-server.minio:9000'
           additionalInputs:
             loadbalancerAnnotations: |
@@ -173,11 +173,11 @@ parameters:
         objectstorage:
           enabled: true
 
-          defaultComposition: minio
+          defaultComposition: exoscale
           compositions:
             exoscale:
-              enabled: false
+              enabled: true
             cloudscale:
-              enabled: false
+              enabled: true
             minio:
               enabled: true

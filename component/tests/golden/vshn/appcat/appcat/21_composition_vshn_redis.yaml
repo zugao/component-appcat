@@ -595,7 +595,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.87.1
+          imageTag: fix_bucket_name_clashes
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
