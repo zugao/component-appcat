@@ -29,7 +29,11 @@ spec:
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.87.2
+=======
+          image: ghcr.io/vshn/appcat:fix_bucket_name_clashes
+>>>>>>> db15a4b2 (Exoscale)
           livenessProbe:
             failureThreshold: 3
             httpGet:

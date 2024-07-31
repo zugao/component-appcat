@@ -30,7 +30,11 @@ spec:
               envFrom:
                 - secretRef:
                     name: appcat-sla-reports-creds
+<<<<<<< HEAD
               image: ghcr.io/vshn/appcat:v4.87.2
+=======
+              image: ghcr.io/vshn/appcat:fix_bucket_name_clashes
+>>>>>>> db15a4b2 (Exoscale)
               name: sla-reporter
               resources:
                 limits:

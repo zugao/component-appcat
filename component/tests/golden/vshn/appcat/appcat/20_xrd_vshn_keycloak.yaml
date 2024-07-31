@@ -11881,12 +11881,13 @@ spec:
                             - guaranteed
                           type: string
                         version:
-                          default: '25'
+                          default: '23'
                           description: |-
                             Version contains supported version of keycloak.
                             Multiple versions are supported. The latest version 23 is the default version.
                           enum:
-                            - '25'
+                            - '23'
+                            - '24'
                           type: string
                       type: object
                     size:

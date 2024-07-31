@@ -30,7 +30,7 @@ spec:
         apiVersion: v1
         data:
           bucketEndpoint: http://minio-server.minio:9000
-          bucketRegion: us-east-1
+          bucketRegion: ch-gva-2
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
           emailAlertingEnabled: 'true'
@@ -40,7 +40,11 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
+<<<<<<< HEAD
           imageTag: v4.87.2
+=======
+          imageTag: fix_bucket_name_clashes
+>>>>>>> db15a4b2 (Exoscale)
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
