@@ -54,9 +54,9 @@ parameters:
       postgres:
         enabled: true
     providers:
-      cloudscale:
-        enabled: false
       exoscale:
+        enabled: false
+      cloudscale:
         enabled: false
       kubernetes:
         enabled: true
@@ -107,7 +107,7 @@ parameters:
 
         postgres:
           sgNamespace: stackgres
-          bucket_region: 'us-east-1'
+          bucket_region: 'ch-gva-2'
           bucket_endpoint: 'http://minio-server.minio:9000'
           additionalInputs:
             loadbalancerAnnotations: |

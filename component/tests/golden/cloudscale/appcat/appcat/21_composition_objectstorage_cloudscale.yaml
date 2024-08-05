@@ -18,138 +18,20 @@ spec:
   compositeTypeRef:
     apiVersion: appcat.vshn.io/v1
     kind: XObjectBucket
-  resources:
-    - base:
-        apiVersion: cloudscale.crossplane.io/v1
-        kind: ObjectsUser
+  mode: Pipeline
+  pipeline:
+    - functionRef:
+        name: function-appcat
+      input:
+        apiVersion: v1
+        data:
+          providerConfig: cloudscale
+          providerSecretNamespace: syn-provider-cloudscale-secrets
+          serviceName: cloudscalebucket
+        kind: ConfigMap
         metadata:
-          annotations:
-            appcat.vshn.io/forward-events-to: ''
-        spec:
-          forProvider:
-            displayName: ''
-            tags:
-              namespace: null
-              tenant: null
-          providerConfigRef:
-            name: cloudscale
-          writeConnectionSecretToRef:
-            name: ''
-            namespace: syn-provider-cloudscale-secrets
-      connectionDetails:
-        - fromConnectionSecretKey: AWS_ACCESS_KEY_ID
-          name: AWS_ACCESS_KEY_ID
-          type: FromConnectionSecretKey
-        - fromConnectionSecretKey: AWS_SECRET_ACCESS_KEY
-          name: AWS_SECRET_ACCESS_KEY
-          type: FromConnectionSecretKey
-      name: cloudscale-user
-      patches:
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: status.conditions
-          toFieldPath: status.accessUserConditions
-          type: ToCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.writeConnectionSecretToRef.name
-          type: FromCompositeFieldPath
-        - combine:
-            strategy: string
-            string:
-              fmt: cloudscale.crossplane.io/v1/ObjectsUser/%s/%s
-            variables:
-              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
-          toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
-          type: CombineFromComposite
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s.%s'
-            variables:
-              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
-          toFieldPath: spec.forProvider.displayName
-          type: CombineFromComposite
-      readinessChecks:
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
-    - base:
-        apiVersion: cloudscale.crossplane.io/v1
-        kind: Bucket
-        metadata:
-          annotations:
-            appcat.vshn.io/forward-events-to: ''
-        spec:
-          forProvider:
-            bucketDeletionPolicy: ''
-            bucketName: ''
-            credentialsSecretRef:
-              name: ''
-              namespace: syn-provider-cloudscale-secrets
-            endpointURL: ''
-            region: ''
-      connectionDetails:
-        - fromFieldPath: status.endpoint
-          name: ENDPOINT
-          type: FromFieldPath
-        - fromFieldPath: status.endpointURL
-          name: ENDPOINT_URL
-          type: FromFieldPath
-        - fromFieldPath: spec.forProvider.region
-          name: AWS_REGION
-          type: FromFieldPath
-        - fromFieldPath: status.atProvider.bucketName
-          name: BUCKET_NAME
-          type: FromFieldPath
-      name: cloudscale-bucket
-      patches:
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: metadata.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: status.conditions
-          toFieldPath: status.bucketConditions
-          type: ToCompositeFieldPath
-        - fromFieldPath: spec.parameters.bucketName
-          toFieldPath: spec.forProvider.bucketName
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.labels[crossplane.io/composite]
-          toFieldPath: spec.forProvider.credentialsSecretRef.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.parameters.bucketDeletionPolicy
-          toFieldPath: spec.forProvider.bucketDeletionPolicy
-          type: FromCompositeFieldPath
-        - combine:
-            strategy: string
-            string:
-              fmt: cloudscale.crossplane.io/v1/Bucket/%s/%s
-            variables:
-              - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
-              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
-          toFieldPath: spec.forProvider.values.commonAnnotations[appcat.vshn.io/forward-events-to]
-          type: CombineFromComposite
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.forProvider.region
-          transforms:
-            - map:
-                lpg: lpg
-                rma: rma
-              type: map
-          type: FromCompositeFieldPath
-      readinessChecks:
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
+          labels:
+            name: xfn-config
+          name: xfn-config
+      step: cloudscalebucket-func
   writeConnectionSecretsToNamespace: syn-crossplane
