@@ -15,8 +15,8 @@ spec:
   compositionUpdatePolicy: Automatic
   parameters:
     backup:
-        deletionRetention: 7
-        retention: 6
+      deletionRetention: 7
+      retention: 6
     instances: 1
     security:
       deletionProtection: false
