@@ -105,12 +105,12 @@ parameters:
         prometheus_rule_labels:
           prometheus: platform
         instance: null
-      providers: { }
-      serviceAccounts: { }
-      clusterRoles: { }
-      clusterRoleBindings: { }
-      controllerConfigs: { }
-      providerConfigs: { }
+      providers: {}
+      serviceAccounts: {}
+      clusterRoles: {}
+      clusterRoleBindings: {}
+      controllerConfigs: {}
+      providerConfigs: {}
       helmValues:
         xfn:
           enabled: true

@@ -117,68 +117,68 @@ local labels = {
   'app.kubernetes.io/managed-by': 'commodore',
 };
 local monitoring =
-[
-  kube.Service(name + '-metrics') {
-    metadata+: {
-      namespace: params.namespace,
-      labels+: labels,
-    },
-    spec+: {
-      selector: {
-        release: 'crossplane',
+  [
+    kube.Service(name + '-metrics') {
+      metadata+: {
+        namespace: params.namespace,
+        labels+: labels,
       },
-      ports: [ {
-        name: 'metrics',
-        port: 8080,
-      } ],
-    },
-  },
-  kube._Object('monitoring.coreos.com/v1', 'ServiceMonitor', name) {
-    metadata+: {
-      namespace: params.namespace,
-      labels+: labels,
-    },
-    spec: {
-      endpoints: [ {
-        port: 'metrics',
-        path: '/metrics',
-      } ],
-      selector: {
-        matchLabels: labels,
-      },
-    },
-  },
-  kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', name) {
-    metadata+: {
-      namespace: params.namespace,
-      labels+: labels {
-        role: 'alert-rules',
-      } + params.monitoring.prometheus_rule_labels,
-    },
-    spec: {
-      groups: [
-        {
-          name: 'crossplane.rules',
-          rules: [
-            {
-              alert: 'CrossplaneDown',
-              expr: 'up{namespace="' + params.namespace + '", job=~"^crossplane-.+$"} != 1',
-              'for': '10m',
-              labels: {
-                severity: 'critical',
-                syn: 'true',
-              },
-              annotations: {
-                summary: 'Crossplane controller is down',
-                description: 'Crossplane pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is down',
-              },
-            },
-          ],
+      spec+: {
+        selector: {
+          release: 'crossplane',
         },
-      ],
+        ports: [ {
+          name: 'metrics',
+          port: 8080,
+        } ],
+      },
     },
-  },
-];
+    kube._Object('monitoring.coreos.com/v1', 'ServiceMonitor', name) {
+      metadata+: {
+        namespace: params.namespace,
+        labels+: labels,
+      },
+      spec: {
+        endpoints: [ {
+          port: 'metrics',
+          path: '/metrics',
+        } ],
+        selector: {
+          matchLabels: labels,
+        },
+      },
+    },
+    kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', name) {
+      metadata+: {
+        namespace: params.namespace,
+        labels+: labels {
+          role: 'alert-rules',
+        } + params.monitoring.prometheus_rule_labels,
+      },
+      spec: {
+        groups: [
+          {
+            name: 'crossplane.rules',
+            rules: [
+              {
+                alert: 'CrossplaneDown',
+                expr: 'up{namespace="' + params.namespace + '", job=~"^crossplane-.+$"} != 1',
+                'for': '10m',
+                labels: {
+                  severity: 'critical',
+                  syn: 'true',
+                },
+                annotations: {
+                  summary: 'Crossplane controller is down',
+                  description: 'Crossplane pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is down',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ];
 
 {
   '00_namespace': namespace {
