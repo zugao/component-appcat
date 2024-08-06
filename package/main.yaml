@@ -19,19 +19,6 @@ parameters:
     openshift4-operators:
       url: https://github.com/appuio/component-openshift4-operators
       version: v1.5.0
-  appcat:
-    images:
-      appcat:
-        registry: ${pkg.appcat:image:registry}
-        repository: ${pkg.appcat:image:repository}
-        tag: ${pkg.appcat:image:tag}
-    namespaceAnnotations:
-      openshift.io/node-selector: node-role.kubernetes.io/infra=
-    apiserver:
-      enabled: true
-      namespace: syn-appcat
-      env:
-        APPCAT_HANDLER_ENABLED: "true"
   crossplane:
     argocd:
       application:

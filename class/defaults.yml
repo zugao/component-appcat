@@ -1,6 +1,9 @@
 parameters:
   appcat:
     charts:
+      crossplane:
+        source: https://charts.crossplane.io/stable
+        version: 1.16.0
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
@@ -69,18 +72,74 @@ parameters:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
         tag: v3.4.0
+      crossplane:
+        registry: docker.io
+        image: crossplane/crossplane
+        tag: v1.16.0
+        pullPolicy: IfNotPresent
+      kubectl:
+        registry: docker.io
+        image: bitnami/kubectl
+        tag: '1.25.15'
 
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
     namespaceLabels: {}
-    namespaceAnnotations: {}
+    namespaceAnnotations:
+      openshift.io/node-selector: node-role.kubernetes.io/infra=
     crossplaneNamespace: ${crossplane:namespace}
 
     appuioManaged: true
     quotasEnabled: false
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
+
+    crossplane:
+      namespace: syn-crossplane
+      namespaceLabels: {}
+      namespaceAnnotations:
+        openshift.io/node-selector: node-role.kubernetes.io/infra=
+      monitoring:
+        enabled: false
+        prometheus_rule_labels:
+          prometheus: platform
+        instance: null
+      providers: { }
+      serviceAccounts: { }
+      clusterRoles: { }
+      clusterRoleBindings: { }
+      controllerConfigs: { }
+      providerConfigs: { }
+      helmValues:
+        xfn:
+          enabled: true
+        args:
+          - --enable-environment-configs
+          - --enable-usages
+        image:
+          repository: ${appcat:images:crossplane:registry}/${appcat:images:crossplane:image}
+          tag: ${appcat:images:crossplane:tag}
+          pullPolicy: ${appcat:images:crossplane:pullPolicy}
+        alpha:
+          oam:
+            enabled: false
+        resourcesCrossplane:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 10m
+        resourcesRBACManager:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 10m
+        metrics:
+          enabled: ${appcat:crossplane:monitoring:enabled}
+        webhooks:
+          enabled: true
+        rbacManager:
+          managementPolicy: Basic
 
     billing:
       namespace: ${appcat:namespace}
@@ -259,7 +318,7 @@ parameters:
           memory: 200Mi
 
     apiserver:
-      enabled: false
+      enabled: true
       namespace: ${appcat:namespace}
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}
