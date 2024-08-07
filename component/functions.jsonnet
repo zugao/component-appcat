@@ -3,7 +3,7 @@ local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 
-local crossplane = import 'lib/crossplane.libsonnet';
+local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -62,13 +62,13 @@ local appcat = getFunction('function-appcat', appcatFunctionImage, 'function-app
 
 local saAppCat = kube.ServiceAccount('function-appcat') {
   metadata+: {
-    namespace: params.crossplaneNamespace,
+    namespace: params.crossplane.namespace,
   },
 };
 
 local saPnT = kube.ServiceAccount('function-patch-and-transform') {
   metadata+: {
-    namespace: params.crossplaneNamespace,
+    namespace: params.crossplane.namespace,
   },
 };
 

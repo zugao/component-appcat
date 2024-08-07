@@ -3,7 +3,6 @@ local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 
 local comp = import 'lib/appcat-compositions.libsonnet';
-local crossplane = import 'lib/crossplane.libsonnet';
 
 local rbac = import 'rbac.libsonnet';
 

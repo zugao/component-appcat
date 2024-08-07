@@ -95,4 +95,4 @@ spec:
             status: 'True'
             type: Ready
           type: MatchCondition
-  writeConnectionSecretsToNamespace: crossplane-system
+  writeConnectionSecretsToNamespace: syn-crossplane

@@ -25,7 +25,7 @@ spec:
   credentials:
     apiSecretRef:
       name: exoscale-api-access
-      namespace: crossplane-system
+      namespace: syn-crossplane
     source: InjectedIdentity
 ---
 apiVersion: pkg.crossplane.io/v1beta1
@@ -51,7 +51,7 @@ metadata:
   labels:
     name: provider-exoscale
   name: provider-exoscale
-  namespace: crossplane-system
+  namespace: syn-crossplane
 ---
 apiVersion: v1
 data: {}
@@ -61,7 +61,7 @@ metadata:
   labels:
     name: exoscale-api-access
   name: exoscale-api-access
-  namespace: crossplane-system
+  namespace: syn-crossplane
 stringData:
   EXOSCALE_API_KEY: t-silent-test-1234/c-green-test-1234/appcat/provider-exoscale/access-key
   EXOSCALE_API_SECRET: t-silent-test-1234/c-green-test-1234/appcat/provider-exoscale/secret-key

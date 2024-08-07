@@ -35,4 +35,4 @@ spec:
             name: xfn-config
           name: xfn-config
       step: exoscalebucket-func
-  writeConnectionSecretsToNamespace: crossplane-system
+  writeConnectionSecretsToNamespace: syn-crossplane

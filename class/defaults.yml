@@ -88,7 +88,6 @@ parameters:
     namespaceLabels: {}
     namespaceAnnotations:
       openshift.io/node-selector: node-role.kubernetes.io/infra=
-    crossplaneNamespace: ${crossplane:namespace}
 
     appuioManaged: true
     quotasEnabled: false
@@ -405,10 +404,10 @@ parameters:
       cloudscale:
         enabled: false
         connectionSecretNamespace: syn-provider-cloudscale-secrets
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         credentials:
           name: cloudscale-api-token
-          namespace: ${crossplane:namespace}
+          namespace: ${appcat:crossplane:namespace}
           data:
             CLOUDSCALE_API_TOKEN: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/objectstorage/provider-cloudscale/token}"
         spec:
@@ -420,10 +419,10 @@ parameters:
       exoscale:
         enabled: false
         connectionSecretNamespace: syn-provider-exoscale-secrets
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         credentials:
           name: exoscale-api-access
-          namespace: ${crossplane:namespace}
+          namespace: ${appcat:crossplane:namespace}
           data:
             EXOSCALE_API_KEY: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/access-key}"
             EXOSCALE_API_SECRET: "?{vaultkv:${cluster:tenant}/${cluster:name}/appcat/provider-exoscale/secret-key}"
@@ -435,7 +434,7 @@ parameters:
 
       kubernetes:
         enabled: false
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         spec:
           package: ${appcat:images:provider-kubernetes:registry}/${appcat:images:provider-kubernetes:repository}:${appcat:images:provider-kubernetes:tag}
         runtimeConfig:
@@ -444,7 +443,7 @@ parameters:
 
       helm:
         enabled: false
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         spec:
           package: ${appcat:images:provider-helm:registry}/${appcat:images:provider-helm:repository}:${appcat:images:provider-helm:tag}
         runtimeConfig:
@@ -453,7 +452,7 @@ parameters:
 
       minio:
         enabled: false
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         spec:
           package: ${appcat:images:provider-minio:registry}/${appcat:images:provider-minio:repository}:${appcat:images:provider-minio:tag}
         runtimeConfig:
@@ -463,7 +462,7 @@ parameters:
 
       sql:
         # enabled: false it will be automagically enabled for each service that needs it
-        namespace: ${crossplane:namespace}
+        namespace: ${appcat:crossplane:namespace}
         spec:
           package: ${appcat:images:provider-sql:registry}/${appcat:images:provider-sql:repository}:${appcat:images:provider-sql:tag}
         runtimeConfig:
@@ -488,7 +487,7 @@ parameters:
         externalDatabaseConnectionsEnabled: "false"
         e2eTests: false
         quotasEnabled: ${appcat:quotasEnabled}
-        secretNamespace: ${crossplane:namespace}
+        secretNamespace: ${appcat:crossplane:namespace}
         postgres:
           billing: true
           # bucket_region: 'lpg' || 'ch-gva-2'
@@ -499,7 +498,7 @@ parameters:
           additionalInputs:
             # Depending on the cluster, this needs to be set
             loadbalancerAnnotations: ""
-            crossplaneNamespace: ${appcat:crossplaneNamespace}
+            crossplaneNamespace: ${appcat:crossplane:namespace}
           grpcEndpoint: ${appcat:grpcEndpoint}
           proxyFunction: ${appcat:proxyFunction}
           enableNetworkPolicy: true
@@ -880,7 +879,7 @@ parameters:
       # Config for exoscale composites
       exoscale:
         enabled: false
-        secretNamespace: ${crossplane:namespace}
+        secretNamespace: ${appcat:crossplane:namespace}
         providerSecretNamespace: ${appcat:providers:exoscale:connectionSecretNamespace}
         mysql:
           enabled: true
@@ -932,4 +931,4 @@ parameters:
               providerConfig: minio
 
           # Generic config for objecstorage composite
-          secretNamespace: ${crossplane:namespace}
+          secretNamespace: ${appcat:crossplane:namespace}

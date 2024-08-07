@@ -42,11 +42,11 @@ local app = argocd.App('appcat', '') + (
       ignoreDifferences+: [
         ignore_diff_s,
         ignore_diff_n,
-        [ ignore_diff_cr ] +
+        ignore_diff_cr,
         if on_openshift4 then
-          [ ignore_diff_sa ]
+          ignore_diff_sa
         else
-          [],
+          {},
       ],
     },
   } else {}

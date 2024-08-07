@@ -1,5 +1,5 @@
+local crossplane = import 'lib/appcat-crossplane.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
-local crossplane = import 'lib/crossplane.libsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local prometheus = import 'lib/prometheus.libsonnet';
