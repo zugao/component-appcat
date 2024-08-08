@@ -72,4 +72,4 @@ jobs:
         with:
           path: ${{ env.COMPONENT_NAME }}
       - name: Golden diff
-        run: make -C component golden-diff -e instance=${{ matrix.instance }}
+        run: make golden-diff -e instance=${{ matrix.instance }}

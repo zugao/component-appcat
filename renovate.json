@@ -9,8 +9,7 @@
   ],
   "postUpgradeTasks": {
     "commands": [
-      "make -C component gen-golden-all",
-      "make -C package gen-golden-all"
+      "make gen-golden-all",
     ],
     "fileFilters": [
       "component/tests/golden/**",
