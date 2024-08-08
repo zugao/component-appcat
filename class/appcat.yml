@@ -1,0 +1,126 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: git
+        output_path: ${_base_directory}/dependencies/appcat/manifests/${appcat:images:appcat:tag}
+        source: https://github.com/vshn/appcat.git
+        ref: ${appcat:images:appcat:tag}
+      - type: git
+        source: https://github.com/vshn/statefulset-resize-controller
+        output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulSetResizer:tag}
+        ref: ${appcat:images:statefulSetResizer:tag}
+      - type: helm
+        source: ${appcat:charts:crossplane:source}
+        chart_name: crossplane
+        version: ${appcat:charts:crossplane:version}
+        output_path: ${_base_directory}/dependencies/crossplane/helmchart/crossplane-${appcat:charts:crossplane:version}
+    compile:
+      - input_paths:
+          - ${_base_directory}/component/app.jsonnet
+        input_type: jsonnet
+        output_path: apps/
+
+      - input_paths:
+          - ${_base_directory}/component/sloth-input.jsonnet
+        input_type: jsonnet
+        output_path: ${_base_directory}/sloth-input
+        output_type: yaml
+
+      - input_type: external
+        input_paths:
+          - /bin/mkdir
+        args:
+          - -p
+          - ${_base_directory}/sloth-output
+        output_path: .
+
+      - input_type: external
+        input_paths:
+          - ${_base_directory}/run-sloth
+        output_path: .
+        env_vars:
+          SLOTH_VERSION: ${appcat:images:sloth:tag}
+        args:
+          - generate
+          - -i
+          - ${_base_directory}/sloth-input
+          - -o
+          - ${_base_directory}/sloth-output
+
+      - input_paths:
+          - ${_base_directory}/component/main.jsonnet
+        input_type: jsonnet
+        output_path: appcat/
+      - input_paths:
+          - ${_base_directory}/component/provider.jsonnet
+          - ${_base_directory}/component/appcat_apiserver.jsonnet
+          - ${_base_directory}/component/appcat_controller.jsonnet
+          - ${_base_directory}/component/objectstorage.jsonnet
+          - ${_base_directory}/component/exoscale_kafka.jsonnet
+          - ${_base_directory}/component/exoscale_redis.jsonnet
+          - ${_base_directory}/component/exoscale_mysql.jsonnet
+          - ${_base_directory}/component/exoscale_postgres.jsonnet
+          - ${_base_directory}/component/exoscale_opensearch.jsonnet
+          - ${_base_directory}/component/vshn_postgres.jsonnet
+          - ${_base_directory}/component/vshn_postgres.jsonnet
+          - ${_base_directory}/component/vshn_redis.jsonnet
+          - ${_base_directory}/component/vshn_minio.jsonnet
+          - ${_base_directory}/component/vshn_services.jsonnet
+          - ${_base_directory}/component/statefuleset-resize-controller.jsonnet
+          - ${_base_directory}/component/functions.jsonnet
+          - ${_base_directory}/component/vshn_appcat_services.jsonnet
+          - ${_base_directory}/component/billing.jsonnet
+          - ${_base_directory}/component/rbac_e2e.jsonnet
+        input_type: jsonnet
+        output_path: appcat/
+
+      - input_paths:
+          - ${_base_directory}/component/cloud_billing.jsonnet
+        input_type: jsonnet
+        output_path: appcat/cloud_billing
+
+      - input_paths:
+          - ${_base_directory}/component/appcat_sli_exporter.jsonnet
+        input_type: jsonnet
+        output_path: ${_base_directory}/.work/appcat_sli_exporter
+        output_type: yaml
+
+      - input_type: external
+        output_path: .
+        input_paths:
+          - ${_kustomize_wrapper}
+        env_vars:
+          INPUT_DIR: ${_base_directory}/.work/appcat_sli_exporter
+        args:
+          - \${compiled_target_dir}/appcat/sli_exporter
+
+      - input_paths:
+          - ${_base_directory}/component/appcat_sla_reporter.jsonnet
+        input_type: jsonnet
+        output_path: appcat/sla_reporter
+
+      - input_paths:
+          - ${_base_directory}/sloth-input
+          - ${_base_directory}/sloth-output
+        input_type: remove
+        output_path: .
+
+      - input_type: helm
+        input_paths:
+          - ${_base_directory}/dependencies/crossplane/helmchart/crossplane-${appcat:charts:crossplane:version}
+        helm_values: ${appcat:crossplane:helmValues}
+        helm_params:
+          name: ${_instance}
+          namespace: ${appcat:crossplane:namespace}
+        output_path: appcat/crossplane/helmchart
+
+      - input_paths:
+          - ${_base_directory}/component/crossplane.jsonnet
+        input_type: jsonnet
+        output_path: appcat/crossplane/
+  commodore:
+    postprocess:
+      filters:
+        - type: jsonnet
+          filter: postprocess/patch_operator_deployment.jsonnet
+          path: ${_instance}/crossplane/helmchart/crossplane/templates

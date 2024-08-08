@@ -15,28 +15,14 @@ sloth-input/
 sloth-output/
 
 # Commodore
-/component/.cache
-/component/dependencies
-/component/helmcharts
-/component/manifests
-/component/vendor
-/component/jsonnetfile.lock.json
-/component/crds
-/component/compiled
-
-/package/.cache
-/packages/compiled
-/package/dependencies
-/package/helmcharts
-/package/manifests
-/package/vendor
-/package/jsonnetfile.lock.json
-/package/crds
-/package/compiled
-
-/compiled
+/.cache
 /dependencies
+/helmcharts
+/manifests
 /vendor
+/jsonnetfile.lock.json
+/crds
+/compiled
 
 # Additional entries
 kubeconfig
