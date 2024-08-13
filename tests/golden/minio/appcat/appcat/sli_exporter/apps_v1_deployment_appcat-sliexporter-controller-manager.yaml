@@ -36,11 +36,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNMARIADB
           value: "false"
-<<<<<<< HEAD
-        image: ghcr.io/vshn/appcat:v4.91.0
-=======
-        image: ghcr.io/vshn/appcat:add_nextcloud_api
->>>>>>> c10c0bc7 (Add Nextcloud backup API)
+        image: ghcr.io/vshn/appcat:v4.92.0
         livenessProbe:
           httpGet:
             path: /healthz

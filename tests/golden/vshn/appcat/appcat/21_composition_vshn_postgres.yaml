@@ -40,11 +40,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-<<<<<<< HEAD
-          imageTag: v4.91.0
-=======
-          imageTag: add_nextcloud_api
->>>>>>> c10c0bc7 (Add Nextcloud backup API)
+          imageTag: v4.92.0
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",

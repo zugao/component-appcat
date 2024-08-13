@@ -46,7 +46,11 @@ local serviceAccount = loadManifest('service-account.yaml') {
   },
 };
 
-local clusterRoleAPIServer = loadManifest('role.yaml');
+local clusterRoleAPIServer = loadManifest('role.yaml') {
+  metadata+: {
+    name: 'appcat-apiserver',
+  },
+};
 
 local clusterRoleBinding = kube.ClusterRoleBinding(clusterRoleAPIServer.metadata.name) {
   roleRef: {
