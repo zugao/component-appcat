@@ -595,7 +595,11 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
+<<<<<<< HEAD
           imageTag: v4.91.0
+=======
+          imageTag: add_nextcloud_api
+>>>>>>> c10c0bc7 (Add Nextcloud backup API)
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io

@@ -29,7 +29,11 @@ spec:
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.91.0
+=======
+          image: ghcr.io/vshn/appcat:add_nextcloud_api
+>>>>>>> c10c0bc7 (Add Nextcloud backup API)
           livenessProbe:
             failureThreshold: 3
             httpGet:
