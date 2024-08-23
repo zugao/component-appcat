@@ -75,7 +75,17 @@ local stackgresOperator = [
     params.stackgres.operator.channel,
     'redhat-marketplace',
     installPlanApproval=params.stackgres.operator.installPlanApproval,
-  ),
+  )
+  +
+  if std.length(params.stackgres.operator.resources) > 0 then
+    {
+      spec+: {
+        config+: {
+          resources: params.stackgres.operator.resources,
+        },
+      },
+    }
+  else {},
 ];
 
 // Filter out disabled plans

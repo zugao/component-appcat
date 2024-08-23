@@ -307,6 +307,8 @@ parameters:
       operator:
         channel: stable
         installPlanApproval: Manual
+        resources: {}
+
     stsResizer:
       resources:
         requests:
