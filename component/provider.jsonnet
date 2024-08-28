@@ -26,6 +26,13 @@ local runtimeConfigRef(name) = {
   },
 };
 
+local escapePackage(spec) =
+  local img = std.split(spec.package, ':');
+
+  {
+    package: img[0] + ':' + std.strReplace(img[1], '/', '_'),
+  };
+
 {
   [if params.providers.cloudscale.enabled then '10_provider_cloudscale']:
     local provider = params.providers.cloudscale;
@@ -39,7 +46,7 @@ local runtimeConfigRef(name) = {
     local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
     [
       crossplane.Provider('provider-cloudscale') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
       crossplane.ProviderConfig('cloudscale') {
         apiVersion: 'cloudscale.crossplane.io/v1',
@@ -75,7 +82,7 @@ local runtimeConfigRef(name) = {
     local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
     [
       crossplane.Provider('provider-exoscale') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
       crossplane.ProviderConfig('exoscale') {
         apiVersion: 'exoscale.crossplane.io/v1',
@@ -243,7 +250,7 @@ local runtimeConfigRef(name) = {
       // Very important: DON'T NAME THIS JUST `kubernetes` YOU WILL BREAK ALL PROVIDERS!
       // https://crossplane.slack.com/archives/CEG3T90A1/p1699871771723179
       crossplane.Provider('provider-kubernetes') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
@@ -321,7 +328,7 @@ local runtimeConfigRef(name) = {
 
     [
       crossplane.Provider('provider-helm') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
@@ -374,7 +381,7 @@ local runtimeConfigRef(name) = {
 
     [
       crossplane.Provider('provider-minio') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
@@ -429,7 +436,7 @@ local runtimeConfigRef(name) = {
 
     [
       crossplane.Provider('provider-sql') {
-        spec+: provider.spec + runtimeConfigRef(sa.metadata.name),
+        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
       },
     ]
     +
