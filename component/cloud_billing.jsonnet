@@ -7,7 +7,7 @@ local kube = import 'lib/kube.libjsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local collectorImage = '%(registry)s/%(repository)s:%(tag)s' % inv.parameters.appcat.images.collector;
 local component_name = 'billing-collector-cloudservices';
-local appuioManaged = if params.salesOrder == '' then false else true;
+local appuioManaged = inv.parameters.appcat.appuioManaged;
 
 local labels = {
   'app.kubernetes.io/name': component_name,

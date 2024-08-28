@@ -115,7 +115,7 @@ local promQuery = std.strReplace(promQueryWithLabel, '{{TENANT_REPLACE}}', tenan
 
 local meteringQueryCloud = importstr 'promql/metering_cloud.promql';
 local meteringQueryManagedRaw = importstr 'promql/metering_managed.promql';
-local meteringQueryManaged = std.strReplace(meteringQueryManagedRaw, '{{salesOrder}}', params.salesOrder);
+local meteringQueryManaged = std.strReplace(meteringQueryManagedRaw, '{{salesOrderID}}', params.billing.salesOrder);
 
 local legacyBillingRule = std.prune(kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
   metadata+: {

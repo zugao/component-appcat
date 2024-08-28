@@ -11,6 +11,7 @@ parameters:
   facts:
     cloud: exoscale
     distribution: openshift4
+    sales_order: "10431"
 
   global:
     appuio_metered_billing_zone_label_map:
