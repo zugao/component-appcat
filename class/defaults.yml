@@ -147,13 +147,12 @@ parameters:
       cloudZone: ""
       instanceUOM: uom_uom_45_1e112771
       enableMockOrgInfo: false
-      salesOrder: "" # TODO: Update once the fact is available in Leutenant
+      salesOrder: ${facts:sales_order}
       vshn:
-        # The reporting for VSHN service should only run on APPUiO Cloud LPG2
         enableCronjobs: false
         schedule: 30 * * * *
         # Deploy metering prometheus rules
-        meteringRules: false
+        meteringRules: true
       cloud:
         secrets:
           exoscale:

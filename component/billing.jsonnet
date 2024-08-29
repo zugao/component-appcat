@@ -169,17 +169,16 @@ local generateCloudAndManaged = function(name)
       sla: 'guaranteed',
       type: 'cloud',
     },
-    // Currently appcat on appuio managed isn't billed, so we don't need the permutations
-    // {
-    //   query: managedQuery % 'besteffort',
-    //   sla: 'besteffort',
-    //   type: 'managed',
-    // },
-    // {
-    //   query: managedQuery % 'guaranteed',
-    //   sla: 'guaranteed',
-    //   type: 'managed',
-    // },
+    {
+      query: managedQuery % 'besteffort',
+      sla: 'besteffort',
+      type: 'managed',
+    },
+    {
+      query: managedQuery % 'guaranteed',
+      sla: 'guaranteed',
+      type: 'managed',
+    },
   ];
 
   std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type) ], permutations);

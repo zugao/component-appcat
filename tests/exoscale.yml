@@ -7,6 +7,7 @@ parameters:
 
   facts:
     cloud: exoscale
+    sales_order: ""
 
   global:
     appuio_metered_billing_zone_label_map:
@@ -16,6 +17,7 @@ parameters:
     namespace: crossplane-system
 
   appcat:
+    appuioManaged: false
     providers:
       exoscale:
         enabled: true

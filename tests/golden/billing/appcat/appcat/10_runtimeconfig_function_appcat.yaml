@@ -1,0 +1,19 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: function-appcat
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - args:
+                - functions
+              command:
+                - appcat
+              name: package-runtime
+              securityContext: {}
+          securityContext: {}
+          serviceAccountName: function-appcat
