@@ -61,8 +61,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-keycloak-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -148,8 +149,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-keycloak-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -235,7 +237,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-keycloak-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -320,7 +323,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-keycloak-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-keycloak",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -405,8 +409,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-mariadb-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -492,8 +497,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-mariadb-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -579,7 +585,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-mariadb-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -664,7 +671,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-mariadb-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-mariadb",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -749,8 +757,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-minio-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -836,8 +845,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-minio-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -923,7 +933,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-minio-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1008,7 +1019,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-minio-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-minio",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1093,8 +1105,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-nextcloud-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1180,8 +1193,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-nextcloud-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1267,7 +1281,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-nextcloud-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1352,7 +1367,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-nextcloud-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-nextcloud",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1437,8 +1453,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-postgres-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1524,8 +1541,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-postgres-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1611,7 +1629,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-postgres-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1696,7 +1715,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-postgres-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-postgresql",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -1781,8 +1801,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-redis-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="besteffort"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1868,8 +1889,9 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-redis-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="guaranteed"}
-                    * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name="APPUiO"} * on(label_appuio_io_organization) group_left(sales_order)
+                    label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
@@ -1955,7 +1977,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-redis-besteffort
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="besteffort"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="besteffort",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
@@ -2040,7 +2063,8 @@ spec:
                 - name: AR_PRODUCT_ID
                   value: appcat-vshn-redis-guaranteed
                 - name: AR_QUERY
-                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="guaranteed"}
+                  value: appcat:metering{label_appuio_io_billing_name="appcat-redis",label_appcat_vshn_io_sla="guaranteed",
+                    tenant_name!="APPUiO"}
                 - name: AR_INSTANCE_JSONNET
                   value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
                     % labels
