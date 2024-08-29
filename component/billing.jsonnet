@@ -69,13 +69,11 @@ local commonEnv = std.prune([
     name: 'AR_PROM_URL',
     value: paramsBilling.prometheus.url,
   },
-  if paramsBilling.prometheus.org_id != null then {
-    name: 'AR_ORG_ID',
-    value: paramsBilling.prometheus.org_id,
-  },
 ]);
 
 local backfillCJ = function(name, query, sla, type)
+
+  local orgId = if type == 'cloud' then paramsBilling.prometheus.cloud_org_id else paramsBilling.prometheus.managed_org_id;
 
   local typeDesc = if type == 'cloud' then 'APPUiO Cloud - Zone: ' else 'APPUiO Managed - Cluster: ';
 
@@ -94,6 +92,10 @@ local backfillCJ = function(name, query, sla, type)
   local productID = 'appcat-vshn-%(name)s-%(sla)s' % { name: name, sla: sla };
 
   local jobEnv = std.prune([
+    {
+      name: 'AR_ORG_ID',
+      value: orgId,
+    },
     {
       name: 'AR_PRODUCT_ID',
       value: productID,
