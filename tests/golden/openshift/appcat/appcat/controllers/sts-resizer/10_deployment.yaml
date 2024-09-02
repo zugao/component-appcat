@@ -18,7 +18,7 @@ spec:
       containers:
         - args:
             - --inplace
-          image: quay.io/vshn/statefulset-resize-controller:v0.3.0
+          image: ghcr.io/vshn/statefulset-resize-controller:add_ci_improvements
           livenessProbe:
             httpGet:
               path: /healthz
