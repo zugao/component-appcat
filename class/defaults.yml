@@ -39,7 +39,7 @@ parameters:
       provider-minio:
         registry: ghcr.io
         repository: vshn/provider-minio/provider
-        tag: add/ci_improvements
+        tag: v0.4.1
       provider-sql:
         registry: xpkg.upbound.io
         repository: crossplane-contrib/provider-sql
