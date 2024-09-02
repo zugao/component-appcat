@@ -7,8 +7,8 @@ parameters:
         ref: ${appcat:images:appcat:tag}
       - type: git
         source: https://github.com/vshn/statefulset-resize-controller
-        output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulSetResizer:tag}
-        ref: ${appcat:images:statefulSetResizer:tag}
+        output_path: ${_base_directory}/dependencies/appcat/manifests/statefulset-resize-controller/${appcat:images:statefulset-resize-controller:tag}
+        ref: ${appcat:images:statefulset-resize-controller:tag}
       - type: helm
         source: ${appcat:charts:crossplane:source}
         chart_name: crossplane

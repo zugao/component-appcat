@@ -34,11 +34,11 @@ parameters:
         tag: v0.11.4
       provider-cloudscale:
         registry: ghcr.io
-        repository: vshn/provider-cloudscale/provider
+        repository: vshn/provider-cloudscale
         tag: v0.5.2
       provider-minio:
         registry: ghcr.io
-        repository: vshn/provider-minio/provider
+        repository: vshn/provider-minio
         tag: v0.4.1
       provider-sql:
         registry: xpkg.upbound.io
@@ -48,10 +48,10 @@ parameters:
         registry: ghcr.io
         image: slok/sloth
         tag: v0.11.0
-      statefulSetResizer:
-        registry: quay.io
+      statefulset-resize-controller:
+        registry: ghcr.io
         repository: vshn/statefulset-resize-controller
-        tag: v0.3.0
+        tag: v0.3.1
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
@@ -81,7 +81,6 @@ parameters:
         registry: docker.io
         image: bitnami/kubectl
         tag: '1.25.15'
-
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
