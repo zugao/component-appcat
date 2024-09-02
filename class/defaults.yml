@@ -31,7 +31,7 @@ parameters:
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale/provider
-        tag: cruft/update
+        tag: v0.11.4
       provider-cloudscale:
         registry: ghcr.io
         repository: vshn/provider-cloudscale/provider
