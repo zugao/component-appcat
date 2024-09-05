@@ -55,7 +55,11 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
+<<<<<<< HEAD
         tag: v4.92.8
+=======
+        tag: fix/legacy_make_targets
+>>>>>>> 3a6454c3 ([create-pull-request] automated change)
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
