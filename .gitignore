@@ -23,6 +23,9 @@ sloth-output/
 /jsonnetfile.lock.json
 /crds
 /compiled
+component/compiled/
+component/dependencies/
+component/vendor/
 
 # Additional entries
 kubeconfig
