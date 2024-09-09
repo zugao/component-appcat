@@ -56,11 +56,11 @@ docs-serve: ## Preview the documentation
 	mkdir -p dependencies
 	$(COMPILE_CMD)
 
-.PHONY: test
+.PHONY: test pre-commit-hook
 test: commodore_args += -f tests/$(instance).yml
 test: .compile ## Compile the component
 .PHONY: gen-golden
-gen-golden: commodore_args += -f tests/$(instance).yml
+gen-golden: commodore_args += -f tests/$(instance).yml 
 gen-golden: clean .compile ## Update the reference version for target `golden-diff`.
 	@rm -rf tests/golden/$(instance)
 	@mkdir -p tests/golden/$(instance)
@@ -72,7 +72,7 @@ golden-diff: clean .compile ## Diff compile output against the reference version
 	@git diff --exit-code --minimal --no-index -- tests/golden/$(instance) compiled/
 
 .PHONY: golden-diff-all
-golden-diff-all: recursive_target=golden-diff
+golden-diff-all: recursive_target=golden-diff pre-commit-hook
 golden-diff-all: $(test_instances) ## Run golden-diff for all instances. Note: this doesn't work when running make with multiple parallel jobs (-j != 1).
 
 .PHONY: gen-golden-all
@@ -90,3 +90,8 @@ $(test_instances):
 .PHONY: clean
 clean: ## Clean the project
 	rm -rf .cache compiled dependencies vendor helmcharts jsonnetfile*.json || true
+
+
+.PHONY: pre-commit-hook
+pre-commit-hook: ## Install pre-commit hook in .git/hooks
+	/usr/bin/cp -fa .githooks/pre-commit .git/hooks/pre-commit
