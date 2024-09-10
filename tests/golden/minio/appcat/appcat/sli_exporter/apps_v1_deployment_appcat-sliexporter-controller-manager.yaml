@@ -36,11 +36,7 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNMARIADB
           value: "false"
-<<<<<<< HEAD
-        image: ghcr.io/vshn/appcat:v4.92.8
-=======
-        image: ghcr.io/vshn/appcat:fix_legacy_make_targets
->>>>>>> 3a6454c3 ([create-pull-request] automated change)
+        image: ghcr.io/vshn/appcat:v4.92.9
         livenessProbe:
           httpGet:
             path: /healthz

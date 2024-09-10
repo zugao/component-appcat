@@ -38,11 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-<<<<<<< HEAD
-          imageTag: v4.92.8
-=======
-          imageTag: fix_legacy_make_targets
->>>>>>> 3a6454c3 ([create-pull-request] automated change)
+          imageTag: v4.92.9
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"

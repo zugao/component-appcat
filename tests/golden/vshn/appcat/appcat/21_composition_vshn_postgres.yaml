@@ -40,11 +40,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
           externalDatabaseConnectionsEnabled: 'true'
-<<<<<<< HEAD
-          imageTag: v4.92.8
-=======
-          imageTag: fix_legacy_make_targets
->>>>>>> 3a6454c3 ([create-pull-request] automated change)
+          imageTag: v4.92.9
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
