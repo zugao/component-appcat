@@ -30,7 +30,7 @@ spec:
               envFrom:
                 - secretRef:
                     name: appcat-sla-reports-creds
-              image: ghcr.io/vshn/appcat:forbidden_fields_validate
+              image: ghcr.io/vshn/appcat:v4.93.1
               name: sla-reporter
               resources:
                 limits:
