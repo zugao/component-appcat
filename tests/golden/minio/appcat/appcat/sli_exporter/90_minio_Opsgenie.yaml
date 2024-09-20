@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vshn-minio-opsgenie
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-minio-sla-target
+      rules:
+        - alert: vshn-minio-opsgenie
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="minio",
+            ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="minio", ha="false", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: minio
+            severity: warning
+        - alert: vshn-minio-opsgenie-ha
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="minio",
+            ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="minio", ha="true", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: minio
+            severity: warning

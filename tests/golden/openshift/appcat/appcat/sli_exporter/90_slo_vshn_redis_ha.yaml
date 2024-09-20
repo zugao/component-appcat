@@ -166,8 +166,7 @@ spec:
             )
           for: 6m
           labels:
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
-              }}'
+            OnCall: 'false'
             service: VSHNRedis
             severity: critical
             slo: 'true'
@@ -194,8 +193,7 @@ spec:
                 max(slo:sli_error:ratio_rate3d{sloth_id="appcat-vshn-redis-ha-uptime", sloth_service="appcat-vshn-redis-ha", sloth_slo="uptime"} > (1 * 0.0009999999999999432)) without (sloth_window)
             )
           labels:
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
-              }}'
+            OnCall: 'false'
             service: VSHNRedis
             severity: warning
             slo: 'true'

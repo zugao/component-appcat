@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vshn-vshnredis-opsgenie
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-vshnredis-sla-target
+      rules:
+        - alert: vshn-vshnredis-opsgenie
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis",
+            ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="VSHNRedis", ha="false", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: VSHNRedis
+            severity: warning
+        - alert: vshn-vshnredis-opsgenie-ha
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNRedis",
+            ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="VSHNRedis", ha="true", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: VSHNRedis
+            severity: warning

@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vshn-nextcloud-opsgenie
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-nextcloud-sla-target
+      rules:
+        - alert: vshn-nextcloud-opsgenie
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="nextcloud",
+            ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="nextcloud", ha="false", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: nextcloud
+            severity: warning
+        - alert: vshn-nextcloud-opsgenie-ha
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="nextcloud",
+            ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="nextcloud", ha="true", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: nextcloud
+            severity: warning

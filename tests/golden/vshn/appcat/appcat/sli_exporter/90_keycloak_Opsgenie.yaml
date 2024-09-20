@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vshn-keycloak-opsgenie
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-keycloak-sla-target
+      rules:
+        - alert: vshn-keycloak-opsgenie
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
+            ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="keycloak", ha="false", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: keycloak
+            severity: warning
+        - alert: vshn-keycloak-opsgenie-ha
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
+            ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="keycloak", ha="true", maintenance="false"}[1m]) > 0.2
+          labels:
+            OnCall: 'true'
+            service: keycloak
+            severity: warning

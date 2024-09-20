@@ -10,6 +10,8 @@ local prom = import 'prometheus.libsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local slos = import 'slos.libsonnet';
+local opsgenieRules = import 'vshn_alerting.jsonnet';
+
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -188,6 +190,8 @@ local vshn_appcat_service(name, serviceParams) =
     [if isOpenshift && std.objectHas(serviceParams, 'openshiftTemplate') then '21_openshift_template_%s_vshn' % name]: osTemplate,
     [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/90_slo_vshn_%s' % name]: slos.Get('vshn-' + name),
     [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/90_slo_vshn_%s_ha' % name]: slos.Get('vshn-' + name + '-ha'),
+    ['sli_exporter/90_%s_Opsgenie' % name]: opsgenieRules.GenGenericAlertingRule(name),
+
   } else {}
 ;
 

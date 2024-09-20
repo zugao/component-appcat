@@ -86,7 +86,7 @@ local generateSlothInput(name, uptime) =
           },
           labels+: {
             service: 'VSHN' + name,
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+            OnCall: false,
           },
         },
       },
@@ -104,7 +104,7 @@ local generateSlothInput(name, uptime) =
           },
           labels+: {
             service: 'VSHN' + name,
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
+            OnCall: false,
           },
         },
       },
