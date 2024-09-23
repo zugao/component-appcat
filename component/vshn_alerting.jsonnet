@@ -24,7 +24,7 @@ local genGenericAlertingRule(serviceName) = {
             labels: {
               service: serviceName,
               severity: 'warning',
-              OnCall: 'true',
+              OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end }}',
             },
           },
           {
