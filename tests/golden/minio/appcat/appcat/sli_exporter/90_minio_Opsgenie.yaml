@@ -12,7 +12,8 @@ spec:
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="minio", ha="false", maintenance="false"}[1m]) > 0.2
           labels:
-            OnCall: 'true'
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
+              }}'
             service: minio
             severity: warning
         - alert: vshn-minio-opsgenie-ha
@@ -20,6 +21,7 @@ spec:
             ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="minio", ha="true", maintenance="false"}[1m]) > 0.2
           labels:
-            OnCall: 'true'
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
+              }}'
             service: minio
             severity: warning
