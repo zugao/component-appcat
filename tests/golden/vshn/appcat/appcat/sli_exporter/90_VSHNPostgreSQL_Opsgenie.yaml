@@ -10,7 +10,7 @@ spec:
         - alert: vshn-vshnpostgresql-opsgenie
           expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL",
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
-            service="VSHNPostgreSQL", ha="false", maintenance="false"}[1m]) > 0.2
+            service="VSHNPostgreSQL", ha="false", maintenance="false"}[1m]) > 0.75
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
@@ -18,8 +18,8 @@ spec:
             severity: warning
         - alert: vshn-vshnpostgresql-opsgenie-ha
           expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNPostgreSQL",
-            ha="true", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
-            service="VSHNPostgreSQL", ha="true", maintenance="false"}[1m]) > 0.2
+            ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="VSHNPostgreSQL", ha="true"}[1m]) > 0.75
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'

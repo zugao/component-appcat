@@ -86,7 +86,6 @@ local generateSlothInput(name, uptime) =
           },
           labels+: {
             service: 'VSHN' + name,
-            OnCall: false,
           },
         },
       },
@@ -104,7 +103,6 @@ local generateSlothInput(name, uptime) =
           },
           labels+: {
             service: 'VSHN' + name,
-            OnCall: false,
           },
         },
       },

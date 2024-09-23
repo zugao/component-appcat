@@ -166,7 +166,6 @@ spec:
             )
           for: 6m
           labels:
-            OnCall: 'false'
             service: VSHNMinio
             severity: critical
             slo: 'true'
@@ -193,7 +192,6 @@ spec:
                 max(slo:sli_error:ratio_rate3d{sloth_id="appcat-vshn-minio-ha-uptime", sloth_service="appcat-vshn-minio-ha", sloth_slo="uptime"} > (1 * 0.0009999999999999432)) without (sloth_window)
             )
           labels:
-            OnCall: 'false'
             service: VSHNMinio
             severity: warning
             slo: 'true'
