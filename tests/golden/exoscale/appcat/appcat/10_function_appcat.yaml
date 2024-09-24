@@ -3,6 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-  package: ghcr.io/vshn/appcat:v4.93.2-func
+  package: ghcr.io/vshn/appcat:dummy_add_a_diff-func
   runtimeConfigRef:
     name: function-appcat
