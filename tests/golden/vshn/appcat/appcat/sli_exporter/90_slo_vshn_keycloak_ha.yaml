@@ -168,11 +168,7 @@ spec:
           labels:
             service: VSHNKeycloak
             severity: critical
-            slo: 'true'
             sloth_severity: page
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar
         - alert: SLO_AppCat_HAVSHNKeycloakUptime
           annotations:
             runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-keycloak.html#uptime
@@ -194,8 +190,4 @@ spec:
           labels:
             service: VSHNKeycloak
             severity: warning
-            slo: 'true'
             sloth_severity: ticket
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar

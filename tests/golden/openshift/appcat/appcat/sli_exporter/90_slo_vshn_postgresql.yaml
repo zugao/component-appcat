@@ -168,11 +168,7 @@ spec:
           labels:
             service: VSHNPostgreSQL
             severity: critical
-            slo: 'true'
             sloth_severity: page
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar
         - alert: SLO_AppCat_VSHNPostgreSQLUptime
           annotations:
             runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-postgresql.html#uptime
@@ -194,8 +190,4 @@ spec:
           labels:
             service: VSHNPostgreSQL
             severity: warning
-            slo: 'true'
             sloth_severity: ticket
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar

@@ -1,6 +1,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
+  labels:
+    syn_component: appcat
+    syn_team: schedar
   name: vshn-keycloak-opsgenie
   namespace: appcat-slos
 spec:

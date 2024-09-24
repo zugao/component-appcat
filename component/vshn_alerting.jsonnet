@@ -10,6 +10,10 @@ local genGenericAlertingRule(serviceName) = {
   metadata: {
     name: 'vshn-' + std.asciiLower(serviceName) + '-opsgenie',
     namespace: params.slos.namespace,
+    labels: {
+      syn_team: 'schedar',
+      syn_component: 'appcat',
+    },
   },
   spec: {
     groups: [

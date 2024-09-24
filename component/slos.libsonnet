@@ -17,7 +17,6 @@ local newSLO(name, group, sloParams) =
     name: name,
     objective: sloParams.objective,
     alerting: {
-      labels: params.slos.alerting.labels,
       page_alert: {
         labels: params.slos.alerting.page_labels,
         annotations: {
