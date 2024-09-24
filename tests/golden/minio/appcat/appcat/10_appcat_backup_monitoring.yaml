@@ -18,4 +18,6 @@ spec:
           for: 1m
           labels:
             severity: warning
+            syn: 'true'
+            syn_component: appcat
             syn_team: schedar
