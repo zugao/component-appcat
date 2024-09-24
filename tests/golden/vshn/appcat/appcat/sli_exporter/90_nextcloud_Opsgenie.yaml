@@ -2,15 +2,16 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   labels:
+    syn: 'true'
     syn_component: appcat
     syn_team: schedar
-  name: vshn-nextcloud-opsgenie
+  name: vshn-nextcloud-sla
   namespace: appcat-slos
 spec:
   groups:
     - name: appcat-nextcloud-sla-target
       rules:
-        - alert: vshn-nextcloud-opsgenie
+        - alert: vshn-nextcloud-sla
           expr: rate(appcat_probes_seconds_count{reason!="success", service="nextcloud",
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="nextcloud", ha="false", maintenance="false"}[1m]) > 0.75
@@ -18,8 +19,11 @@ spec:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
             service: nextcloud
-            severity: warning
-        - alert: vshn-nextcloud-opsgenie-ha
+            severity: critical
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar
+        - alert: vshn-nextcloud-sla-ha
           expr: rate(appcat_probes_seconds_count{reason!="success", service="nextcloud",
             ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="nextcloud", ha="true"}[1m]) > 0.75
@@ -27,4 +31,7 @@ spec:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
             service: nextcloud
-            severity: warning
+            severity: critical
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar
