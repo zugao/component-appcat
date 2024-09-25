@@ -59,9 +59,6 @@ local vshn_appcat_service(name, serviceParams) =
     connectionSecretKeys=connectionSecretKeys,
   ) + xrds.WithPlanDefaults(plans, serviceParams.defaultPlan);
 
-  local keysAndValues(obj) = std.map(function(x) { name: x, value: obj[x] }, std.objectFields(obj));
-  local filterServiceByField(fieldName) = std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, fieldName) && r.value[fieldName], keysAndValues(params.services.vshn));
-
   local additonalInputs = if std.objectHas(serviceParams, 'additionalInputs') then {
     [k]: std.toString(serviceParams.additionalInputs[k])
     for k in std.objectFieldsAll(serviceParams.additionalInputs)
