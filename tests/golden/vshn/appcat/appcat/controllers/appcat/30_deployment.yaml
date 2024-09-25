@@ -24,6 +24,7 @@ spec:
             - name: PLANS_NAMESPACE
               value: syn-appcat
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.95.1
 =======
 <<<<<<< HEAD
@@ -32,6 +33,9 @@ spec:
           image: ghcr.io/vshn/appcat:add_providerconfig_management
 >>>>>>> 23583d0c ([create-pull-request] automated change)
 >>>>>>> f4b26e10 ([create-pull-request] automated change)
+=======
+          image: ghcr.io/vshn/appcat:add_providerconfig_management
+>>>>>>> f0e901c1 (Generalized providerConfig generation)
           livenessProbe:
             httpGet:
               path: /healthz

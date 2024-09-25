@@ -33,418 +33,252 @@ local escapePackage(spec) =
     package: img[0] + ':' + std.strReplace(img[1], '/', '_'),
   };
 
-{
-  [if params.providers.cloudscale.enabled then '10_provider_cloudscale']:
-    local provider = params.providers.cloudscale;
-
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
+// We define the rbacs here, so we don't have these ginormous yamls in the class
+local providerRBAC = {
+  kubernetes: {
+    rules: [
+      {
+        apiGroups: [ 'kubernetes.crossplane.io' ],
+        resources: [ '*' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-    };
-
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
-    [
-      crossplane.Provider('provider-cloudscale') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
+      {
+        apiGroups: [ 'helm.crossplane.io' ],
+        resources: [ 'releases' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-      crossplane.ProviderConfig('cloudscale') {
-        apiVersion: 'cloudscale.crossplane.io/v1',
-        spec+: addCredentials(
-          provider.providerConfig,
-          {
-            source: 'InjectedIdentity',
-            apiTokenSecretRef: {
-              name: provider.credentials.name,
-              namespace: provider.credentials.namespace,
-            },
-          }
-        ),
+      {
+        apiGroups: [ '', 'coordination.k8s.io' ],
+        resources: [ 'secrets', 'configmaps', 'events', 'leases' ],
+        verbs: [ '*' ],
       },
-    ]
-    +
-    runtimeConf
-    +
-    [
-      sa,
-      providerSecret(provider.credentials),
-      kube.Namespace(provider.connectionSecretNamespace),
+      {
+        apiGroups: [ '' ],
+        resources: [ 'namespaces', 'serviceaccounts', 'secrets', 'pods', 'pods/log', 'pods/portforward', 'pods/status', 'services' ],
+        verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
+      },
+      {
+        apiGroups: [ 'apps' ],
+        resources: [ 'statefulsets/scale' ],
+        verbs: [ 'update', 'patch' ],
+      },
+      {
+        apiGroups: [ 'apps' ],
+        resources: [ 'statefulsets', 'deployments' ],
+        verbs: [ 'get', 'delete', 'watch', 'list', 'patch' ],
+      },
+      {
+        apiGroups: [ 'rbac.authorization.k8s.io' ],
+        resources: [ 'clusterroles' ],
+        resourceNames: [ 'appcat:services:read' ],
+        verbs: [ 'bind' ],
+      },
+      {
+        apiGroups: [ 'stackgres.io' ],
+        resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops', 'sgpoolconfigs' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'networking.k8s.io' ],
+        resources: [ 'networkpolicies' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'appcat.vshn.io' ],
+        resources: [ 'xobjectbuckets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'cert-manager.io' ],
+        resources: [ 'issuers', 'certificates' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'batch' ],
+        resources: [ 'jobs', 'cronjobs' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'rbac.authorization.k8s.io' ],
+        resources: [ 'clusterrolebindings', 'roles', 'rolebindings' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'vshn.appcat.vshn.io' ],
+        resources: [ 'vshnpostgresqls' ],
+        verbs: [ 'get', 'update' ],
+      },
+      {
+        apiGroups: [ 'appcat.vshn.io' ],
+        resources: [ 'objectbuckets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'vshn.appcat.vshn.io' ],
+        resources: [ 'vshnredis' ],
+        verbs: [ 'get', 'update' ],
+      },
+      {
+        apiGroups: [ 'monitoring.coreos.com' ],
+        resources: [ 'prometheusrules', 'podmonitors', 'alertmanagerconfigs', 'servicemonitors' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'k8up.io' ],
+        resources: [ 'schedules' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'k8up.io' ],
+        resources: [ 'snapshots' ],
+        verbs: [ 'get' ],
+      },
+      {
+        apiGroups: [ 'minio.crossplane.io' ],
+        resources: [ 'providerconfigs' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'appcat.vshn.io' ],
+        resources: [ 'objectbuckets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'postgresql.sql.crossplane.io' ],
+        resources: [ 'providerconfigs' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'apiextensions.crossplane.io' ],
+        resources: [ 'usages' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'policy' ],
+        resources: [ 'poddisruptionbudgets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
     ],
-  [if params.providers.exoscale.enabled then '10_provider_exoscale']:
-    local provider = params.providers.exoscale;
-
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
+  },
+  helm: {
+    rules: [
+      {
+        apiGroups: [ 'helm.crossplane.io' ],
+        resources: [ '*' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-    };
-
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
-    [
-      crossplane.Provider('provider-exoscale') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
+      {
+        apiGroups: [ '' ],
+        resources: [ 'namespaces', 'serviceaccounts', 'services', 'persistentvolumeclaims' ],
+        verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
       },
-      crossplane.ProviderConfig('exoscale') {
-        apiVersion: 'exoscale.crossplane.io/v1',
-        spec+: addCredentials(
-          provider.providerConfig,
-          {
-            source: 'InjectedIdentity',
-            apiSecretRef: {
-              name: provider.credentials.name,
-              namespace: provider.credentials.namespace,
-            },
-          }
-        ),
+      {
+        apiGroups: [ 'apps' ],
+        resources: [ 'statefulsets', 'deployments' ],
+        verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
       },
-    ]
-    +
-    runtimeConf
-    +
-    [
-      sa,
-      providerSecret(provider.credentials),
-      kube.Namespace(provider.connectionSecretNamespace),
+      {
+        apiGroups: [ 'networking.k8s.io' ],
+        resources: [ 'networkpolicies' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'batch' ],
+        resources: [ 'jobs' ],
+        verbs: [ 'get', 'list', 'watch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'monitoring.coreos.com' ],
+        resources: [ 'servicemonitors' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'networking.k8s.io' ],
+        resources: [ 'ingresses' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
     ],
-  [if params.providers.kubernetes.enabled then '10_provider_kubernetes']:
-    local provider = params.providers.kubernetes;
-
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
+  },
+  minio: {
+    rules: [
+      {
+        apiGroups: [ 'minio.crossplane.io' ],
+        resources: [ '*' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-    };
-    local role = kube.ClusterRole('crossplane:provider:provider-kubernetes:system:custom') {
-      rules: [
-        {
-          apiGroups: [ 'kubernetes.crossplane.io' ],
-          resources: [ '*' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'helm.crossplane.io' ],
-          resources: [ 'releases' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ '', 'coordination.k8s.io' ],
-          resources: [ 'secrets', 'configmaps', 'events', 'leases' ],
-          verbs: [ '*' ],
-        },
-        {
-          apiGroups: [ '' ],
-          resources: [ 'namespaces', 'serviceaccounts', 'secrets', 'pods', 'pods/log', 'pods/portforward', 'pods/status', 'services' ],
-          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
-        },
-        {
-          apiGroups: [ 'apps' ],
-          resources: [ 'statefulsets/scale' ],
-          verbs: [ 'update', 'patch' ],
-        },
-        {
-          apiGroups: [ 'apps' ],
-          resources: [ 'statefulsets', 'deployments' ],
-          verbs: [ 'get', 'delete', 'watch', 'list', 'patch' ],
-        },
-        {
-          apiGroups: [ 'rbac.authorization.k8s.io' ],
-          resources: [ 'clusterroles' ],
-          resourceNames: [ 'appcat:services:read' ],
-          verbs: [ 'bind' ],
-        },
-        {
-          apiGroups: [ 'stackgres.io' ],
-          resources: [ 'sginstanceprofiles', 'sgclusters', 'sgpgconfigs', 'sgobjectstorages', 'sgbackups', 'sgdbops', 'sgpoolconfigs' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'networking.k8s.io' ],
-          resources: [ 'networkpolicies' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'appcat.vshn.io' ],
-          resources: [ 'xobjectbuckets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'cert-manager.io' ],
-          resources: [ 'issuers', 'certificates' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'batch' ],
-          resources: [ 'jobs', 'cronjobs' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'rbac.authorization.k8s.io' ],
-          resources: [ 'clusterrolebindings', 'roles', 'rolebindings' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'vshn.appcat.vshn.io' ],
-          resources: [ 'vshnpostgresqls' ],
-          verbs: [ 'get', 'update' ],
-        },
-        {
-          apiGroups: [ 'appcat.vshn.io' ],
-          resources: [ 'objectbuckets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'vshn.appcat.vshn.io' ],
-          resources: [ 'vshnredis' ],
-          verbs: [ 'get', 'update' ],
-        },
-        {
-          apiGroups: [ 'monitoring.coreos.com' ],
-          resources: [ 'prometheusrules', 'podmonitors', 'alertmanagerconfigs', 'servicemonitors' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'k8up.io' ],
-          resources: [ 'schedules' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'k8up.io' ],
-          resources: [ 'snapshots' ],
-          verbs: [ 'get' ],
-        },
-        {
-          apiGroups: [ 'minio.crossplane.io' ],
-          resources: [ 'providerconfigs' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'appcat.vshn.io' ],
-          resources: [ 'objectbuckets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'postgresql.sql.crossplane.io' ],
-          resources: [ 'providerconfigs' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'apiextensions.crossplane.io' ],
-          resources: [ 'usages' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'policy' ],
-          resources: [ 'poddisruptionbudgets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-      ],
-    };
-    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-kubernetes:system:custom') {
-      roleRef_: role,
-      subjects_: [ sa ],
-    };
-
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
-
-    [
-      // Very important: DON'T NAME THIS JUST `kubernetes` YOU WILL BREAK ALL PROVIDERS!
-      // https://crossplane.slack.com/archives/CEG3T90A1/p1699871771723179
-      crossplane.Provider('provider-kubernetes') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
+      {
+        apiGroups: [ '' ],
+        resources: [ 'secrets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-    ]
-    +
-    runtimeConf
-    +
-    [
-
-      crossplane.ProviderConfig('kubernetes') {
-        apiVersion: 'kubernetes.crossplane.io/v1alpha1',
-        spec+: addCredentials(
-          provider.providerConfig,
-          {
-            source: 'InjectedIdentity',
-          }
-        ),
-      },
-      sa,
-      role,
-      rolebinding,
     ],
-  [if params.providers.helm.enabled then '10_provider_helm']:
-    local provider = params.providers.helm;
-
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
+  },
+  sql: {
+    rules: [
+      {
+        apiGroups: [ '' ],
+        resources: [ 'secrets' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
-    };
-    local role = kube.ClusterRole('crossplane:provider:provider-helm:system:custom') {
-      rules: [
-        {
-          apiGroups: [ 'helm.crossplane.io' ],
-          resources: [ '*' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ '' ],
-          resources: [ 'namespaces', 'serviceaccounts', 'services', 'persistentvolumeclaims' ],
-          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
-        },
-        {
-          apiGroups: [ 'apps' ],
-          resources: [ 'statefulsets', 'deployments' ],
-          verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
-        },
-        {
-          apiGroups: [ 'networking.k8s.io' ],
-          resources: [ 'networkpolicies' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'batch' ],
-          resources: [ 'jobs' ],
-          verbs: [ 'get', 'list', 'watch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'monitoring.coreos.com' ],
-          resources: [ 'servicemonitors' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ 'networking.k8s.io' ],
-          resources: [ 'ingresses' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-      ],
-    };
-    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-helm:system:custom') {
-      roleRef_: role,
-      subjects_: [ sa ],
-    };
-
-
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
-
-    [
-      crossplane.Provider('provider-helm') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
-      },
-    ]
-    +
-    runtimeConf
-    +
-    [
-
-      crossplane.ProviderConfig('helm') {
-        apiVersion: 'helm.crossplane.io/v1beta1',
-        spec+: addCredentials(
-          provider.providerConfig,
-          {
-            source: 'InjectedIdentity',
-          }
-        ),
-      },
-      sa,
-      role,
-      rolebinding,
     ],
-  [if params.providers.minio.enabled then '10_provider_minio']:
-    local provider = params.providers.minio;
+  },
+};
 
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
+local additionalProviderConfigs(provider) =
+  [
+    crossplane.ProviderConfig(config.name) {
+      apiVersion: provider.apiVersion,
+      spec+: config.spec,
+    }
+    for config in provider.additionalProviderConfigs
+  ];
+
+local provider(name, provider) =
+  local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
+    metadata+: {
+      namespace: provider.namespace,
+    },
+  };
+
+  local runtimeConf = common.DefaultRuntimeConfigWithSaName(sa.metadata.name);
+
+  local providerManifest = crossplane.Provider('provider-' + name) {
+    spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
+  };
+
+  local defaultConfig = crossplane.ProviderConfig(name) {
+    apiVersion: provider.apiVersion,
+    spec+: {
+      credentials+: {
+        source: 'InjectedIdentity',
       },
-    };
-    local role = kube.ClusterRole('crossplane:provider:provider-minio:system:custom') {
-      rules: [
-        {
-          apiGroups: [ 'minio.crossplane.io' ],
-          resources: [ '*' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ '' ],
-          resources: [ 'secrets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-      ],
-    };
-    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-minio:system:custom') {
-      roleRef_: role,
-      subjects_: [ sa ],
-    };
+    } + provider.defaultProviderConfig,
+  };
 
+  local role = if std.objectHas(providerRBAC, name) then kube.ClusterRole('crossplane:provider:provider-' + name + ':system:custom') +
+                                                         std.get(providerRBAC, name);
 
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
+  local rolebinding = if std.objectHas(providerRBAC, name) then kube.ClusterRoleBinding('crossplane:provider:provider-' + name + ':system:custom') {
+    roleRef_: role,
+    subjects_: [ sa ],
+  };
 
-    [
-      crossplane.Provider('provider-minio') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
-      },
-    ]
-    +
-    runtimeConf
-    +
-    [
-      crossplane.ProviderConfig(config.name) {
-        apiVersion: 'minio.crossplane.io/v1',
-        spec+: addCredentials(
-          common.RemoveField(config, 'name'),
-          {
-            source: 'InjectedIdentity',
-          }
-        ),
-      }
-      for config in provider.additionalProviderConfigs
-    ] +
-    [
-      sa,
-      role,
-      rolebinding,
-    ],
-  [if params.services.vshn.postgres.enabled then '10_provider_sql']:
-    local provider = params.providers.sql;
+  {
+    ['10_provider_%s' % name]:
+      std.filter(
+        function(elem) elem != null,
+        [
+          providerManifest,
+          runtimeConf,
+          if std.objectHas(provider, 'defaultProviderConfig') then defaultConfig,
+          sa,
+          role,
+          rolebinding,
+          if std.objectHas(provider, 'credentials') then providerSecret(provider.credentials),
+          if std.objectHas(provider, 'connectionSecretNamespace') then kube.Namespace(provider.connectionSecretNamespace),
+          if std.objectHas(provider, 'additionalProviderConfigs') && std.length(provider.additionalProviderConfigs) > 0 then additionalProviderConfigs(provider),
+        ]
+      ),
+  };
 
-    local sa = kube.ServiceAccount(provider.runtimeConfig.serviceAccountName) {
-      metadata+: {
-        namespace: provider.namespace,
-      },
-    };
-    local role = kube.ClusterRole('crossplane:provider:provider-sql:system:custom') {
-      rules: [
-        {
-          apiGroups: [ 'postgresql.sql.crossplane.io/v1alpha1' ],
-          resources: [ '*' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-        {
-          apiGroups: [ '' ],
-          resources: [ 'secrets' ],
-          verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
-        },
-      ],
-    };
-    local rolebinding = kube.ClusterRoleBinding('crossplane:provider:provider-sql:system:custom') {
-      roleRef_: role,
-      subjects_: [ sa ],
-    };
-
-
-    local runtimeConf = [ common.DefaultRuntimeConfigWithSaName(sa.metadata.name) ];
-
-    [
-      crossplane.Provider('provider-sql') {
-        spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
-      },
-    ]
-    +
-    runtimeConf
-    +
-    [
-      sa,
-      role,
-      rolebinding,
-    ],
-}
+std.foldl(function(objOut, newObj) objOut + provider(newObj.name, newObj.value), std.filter(function(r) std.type(r.value) == 'object' && std.objectHas(r.value, 'enabled') && r.value.enabled, common.KeysAndValues(params.providers)), {})
