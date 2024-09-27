@@ -36,7 +36,15 @@ spec:
           value: "false"
         - name: APPCAT_SLI_VSHNMARIADB
           value: "false"
+<<<<<<< HEAD
         image: ghcr.io/vshn/appcat:v4.95.1
+=======
+<<<<<<< HEAD
+        image: ghcr.io/vshn/appcat:v4.95.0
+=======
+        image: ghcr.io/vshn/appcat:add_providerconfig_management
+>>>>>>> 23583d0c ([create-pull-request] automated change)
+>>>>>>> f4b26e10 ([create-pull-request] automated change)
         livenessProbe:
           httpGet:
             path: /healthz
