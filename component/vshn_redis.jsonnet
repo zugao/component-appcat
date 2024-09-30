@@ -13,6 +13,7 @@ local xrds = import 'xrds.libsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local redisParams = params.services.vshn.redis;
+local opsgenieRules = import 'vshn_alerting.jsonnet';
 
 local defaultUser = 'default';
 local defaultPort = '6379';
@@ -566,4 +567,5 @@ if params.services.vshn.enabled && redisParams.enabled then {
   [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
   [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis']: slos.Get('vshn-redis'),
   [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
+  [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/90_VSHNRedis_Opsgenie']: opsgenieRules.GenGenericAlertingRule('VSHNRedis'),
 } else {}

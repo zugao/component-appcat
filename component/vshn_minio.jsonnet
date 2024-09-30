@@ -7,7 +7,7 @@ local common = import 'common.libsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local minioParams = params.services.vshn.minio;
-
+local opsgenieRules = import 'vshn_alerting.jsonnet';
 
 local instances = [
   kube._Object('vshn.appcat.vshn.io/v1', 'VSHNMinio', instance.name) +
@@ -29,4 +29,6 @@ local instances = [
 
 if params.services.vshn.enabled && minioParams.enabled && std.length(instances) != 0 then {
   '22_minio_instances': instances,
+  'sli_exporter/90_VSHNMinio_Opsgenie': opsgenieRules.GenGenericAlertingRule('VSHNMinio'),
+
 } else {}

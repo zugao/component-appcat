@@ -166,15 +166,9 @@ spec:
             )
           for: 6m
           labels:
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
-              }}'
             service: VSHNMariaDB
             severity: critical
-            slo: 'true'
             sloth_severity: page
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar
         - alert: SLO_AppCat_VSHNMariaDBUptime
           annotations:
             runbook_url: https://hub.syn.tools/appcat/runbooks/vshn-mariadb.html#uptime
@@ -194,12 +188,6 @@ spec:
                 max(slo:sli_error:ratio_rate3d{sloth_id="appcat-vshn-mariadb-uptime", sloth_service="appcat-vshn-mariadb", sloth_slo="uptime"} > (1 * 0.0009999999999999432)) without (sloth_window)
             )
           labels:
-            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
-              }}'
             service: VSHNMariaDB
             severity: warning
-            slo: 'true'
             sloth_severity: ticket
-            syn: 'true'
-            syn_component: appcat
-            syn_team: schedar

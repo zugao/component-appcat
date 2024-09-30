@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    syn: 'true'
+    syn_component: appcat
+    syn_team: schedar
+  name: vshn-mariadb-sla
+  namespace: appcat-slos
+spec:
+  groups:
+    - name: appcat-mariadb-sla-target
+      rules:
+        - alert: vshn-mariadb-sla
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="mariadb",
+            ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="mariadb", ha="false", maintenance="false"}[1m]) > 0.75
+          labels:
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
+              }}'
+            runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
+            service: mariadb
+            severity: critical
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar
+        - alert: vshn-mariadb-sla-ha
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="mariadb",
+            ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
+            service="mariadb", ha="true"}[1m]) > 0.75
+          labels:
+            OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
+              }}'
+            runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
+            service: mariadb
+            severity: critical
+            syn: 'true'
+            syn_component: appcat
+            syn_team: schedar

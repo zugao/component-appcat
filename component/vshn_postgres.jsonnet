@@ -12,6 +12,7 @@ local xrds = import 'xrds.libsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
+local opsgenieRules = import 'vshn_alerting.jsonnet';
 
 local defaultDB = 'postgres';
 local defaultUser = 'postgres';
@@ -307,4 +308,6 @@ if params.services.vshn.enabled && pgParams.enabled then
     [if isOpenshift then '12_stackgres_openshift_operator_netpol']: stackgresNetworkPolicy,
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
     [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
+    [if params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/90_VSHNPostgreSQL_Opsgenie']: opsgenieRules.GenGenericAlertingRule('VSHNPostgreSQL'),
+
   } else {}
