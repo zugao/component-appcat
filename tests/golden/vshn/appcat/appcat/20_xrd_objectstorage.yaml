@@ -65,6 +65,7 @@ spec:
                         The region must be available in the S3 endpoint.
                       type: string
                     security:
+                      default: {}
                       description: Security defines the security of a service
                       properties:
                         allowAllNamespaces:
