@@ -18,6 +18,7 @@ spec:
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
+            runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
             service: nextcloud
             severity: critical
             syn: 'true'
@@ -30,6 +31,7 @@ spec:
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
+            runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
             service: nextcloud
             severity: critical
             syn: 'true'
