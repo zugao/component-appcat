@@ -5,13 +5,13 @@ metadata:
     syn: 'true'
     syn_component: appcat
     syn_team: schedar
-  name: vshn-minio-sla
+  name: vshn-minio-new-sla
   namespace: appcat-slos
 spec:
   groups:
     - name: appcat-minio-sla-target
       rules:
-        - alert: vshn-minio-sla
+        - alert: vshn-minio-new-sla
           expr: rate(appcat_probes_seconds_count{reason!="success", service="minio",
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="minio", ha="false", maintenance="false"}[1m]) > 0.75
@@ -24,7 +24,7 @@ spec:
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: vshn-minio-sla-ha
+        - alert: vshn-minio-new-sla-ha
           expr: rate(appcat_probes_seconds_count{reason!="success", service="minio",
             ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="minio", ha="true"}[1m]) > 0.75
