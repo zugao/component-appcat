@@ -5,13 +5,13 @@ metadata:
     syn: 'true'
     syn_component: appcat
     syn_team: schedar
-  name: vshn-keycloak-sla
+  name: vshn-keycloak-new-sla
   namespace: appcat-slos
 spec:
   groups:
     - name: appcat-keycloak-sla-target
       rules:
-        - alert: vshn-keycloak-sla
+        - alert: vshn-keycloak-new-sla
           expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="keycloak", ha="false", maintenance="false"}[1m]) > 0.75
@@ -24,7 +24,7 @@ spec:
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: vshn-keycloak-sla-ha
+        - alert: vshn-keycloak-new-sla-ha
           expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
             ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
             service="keycloak", ha="true"}[1m]) > 0.75
