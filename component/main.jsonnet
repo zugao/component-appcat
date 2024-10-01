@@ -222,6 +222,8 @@ local backupPrometheusRule = {
             labels: {
               severity: 'warning',
               syn_team: 'schedar',
+              syn: 'true',
+              syn_component: 'appcat',
             },
           },
         ],
