@@ -5,6 +5,7 @@ metadata:
 spec:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.95.1-func
 =======
 <<<<<<< HEAD
@@ -16,5 +17,8 @@ spec:
 =======
   package: ghcr.io/vshn/appcat:add_providerconfig_management-func
 >>>>>>> f0e901c1 (Generalized providerConfig generation)
+=======
+  package: ghcr.io/vshn/appcat:v4.96.0-func
+>>>>>>> 4b01c9e7 (Update tag)
   runtimeConfigRef:
     name: function-appcat

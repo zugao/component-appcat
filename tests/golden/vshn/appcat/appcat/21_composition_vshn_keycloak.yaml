@@ -40,6 +40,7 @@ spec:
           emailAlertingSmtpUsername: myuser@example.com
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           imageTag: v4.95.1
 =======
 <<<<<<< HEAD
@@ -51,6 +52,9 @@ spec:
 =======
           imageTag: add_providerconfig_management
 >>>>>>> f0e901c1 (Generalized providerConfig generation)
+=======
+          imageTag: v4.96.0
+>>>>>>> 4b01c9e7 (Update tag)
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
