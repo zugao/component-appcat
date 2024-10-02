@@ -569,23 +569,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-          imageTag: v4.95.1
-=======
-<<<<<<< HEAD
-          imageTag: v4.95.0
-=======
-          imageTag: add_providerconfig_management
->>>>>>> 23583d0c ([create-pull-request] automated change)
->>>>>>> f4b26e10 ([create-pull-request] automated change)
-=======
-          imageTag: add_providerconfig_management
->>>>>>> f0e901c1 (Generalized providerConfig generation)
-=======
           imageTag: v4.96.0
->>>>>>> 4b01c9e7 (Update tag)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
