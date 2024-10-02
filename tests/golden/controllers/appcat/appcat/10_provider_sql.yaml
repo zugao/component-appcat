@@ -46,18 +46,6 @@ metadata:
   name: crossplane:provider:provider-sql:system:custom
 rules:
   - apiGroups:
-      - postgresql.sql.crossplane.io/v1alpha1
-    resources:
-      - '*'
-    verbs:
-      - get
-      - list
-      - watch
-      - update
-      - patch
-      - create
-      - delete
-  - apiGroups:
       - ''
     resources:
       - secrets

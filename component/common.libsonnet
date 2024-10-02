@@ -216,6 +216,11 @@ local keysAndStringValues(obj, field) = if std.objectHas(obj, field) then {
   for k in std.objectFieldsAll(obj[field])
 } else {};
 
+local removeFields(obj, names) = [
+  removeField(obj, name)
+  for name in names
+];
+
 {
   SyncOptions: syncOptions,
   VshnMetaDBaaSExoscale(dbname):
@@ -258,4 +263,6 @@ local keysAndStringValues(obj, field) = if std.objectHas(obj, field) then {
     filterServiceByBoolean(fieldName),
   KeysAndStringValues(object, fieldName):
     keysAndStringValues(object, fieldName),
+  RemoveFields(obj, names):
+    removeFields(obj, names),
 }
