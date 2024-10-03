@@ -42,7 +42,7 @@ spec:
     apiSecretRef:
       name: exoscale-api-access
       namespace: syn-crossplane
-    source: InjectedIdentitygit
+    source: InjectedIdentity
 ---
 apiVersion: v1
 kind: ServiceAccount
