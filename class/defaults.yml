@@ -441,7 +441,7 @@ parameters:
           serviceAccountName: provider-exoscale
         defaultProviderConfig:
           credentials:
-            source: InjectedIdentitygit
+            source: InjectedIdentity
             apiSecretRef:
               name: ${appcat:providers:exoscale:credentials:name}
               namespace: ${appcat:crossplane:namespace}
