@@ -596,12 +596,13 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
-          imageTag: v4.102.1
+          imageTag: nextcloud_collabora
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNRedis
           ownerVersion: v1
+          proxyEndpoint: 172.17.0.1:9443
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
           salesOrder: ''

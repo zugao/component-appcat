@@ -54,7 +54,7 @@ local providerRBAC = {
       },
       {
         apiGroups: [ '' ],
-        resources: [ 'namespaces', 'serviceaccounts', 'secrets', 'pods', 'pods/log', 'pods/portforward', 'pods/status', 'services' ],
+        resources: [ 'namespaces', 'serviceaccounts', 'secrets', 'pods', 'pods/log', 'pods/portforward', 'pods/status', 'pods/attach', 'pods/exec', 'services' ],
         verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
       },
       {
@@ -65,7 +65,7 @@ local providerRBAC = {
       {
         apiGroups: [ 'apps' ],
         resources: [ 'statefulsets', 'deployments' ],
-        verbs: [ 'get', 'delete', 'watch', 'list', 'patch' ],
+        verbs: [ 'get', 'delete', 'watch', 'list', 'patch', 'update', 'create' ],
       },
       {
         apiGroups: [ 'rbac.authorization.k8s.io' ],
@@ -164,10 +164,20 @@ local providerRBAC = {
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
       {
-        apiGroups: [ 'apps' ],
-        resources: [ 'statefulsets' ],
+        apiGroups: [ 'networking.k8s.io' ],
+        resources: [ 'ingresses' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ '' ],
+        resources: [ 'persistentvolumeclaims' ],
         verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
       },
+      {
+        apiGroups: [ 'security.openshift.io' ],
+        resources: [ 'securitycontextconstraints' ],
+        verbs: [ 'use' ],
+      }
     ],
   },
   helm: {

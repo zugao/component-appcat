@@ -42,8 +42,8 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           imageTag: nextcloud_collabora
           ingress_annotations: |
-            cert-manager.io/cluster-issuer: letsencrypt-staging
-          isOpenshift: 'false'
+            cert-manager.io/cluster-issuer: letsencrypt-production
+          isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
           ownerGroup: vshn.appcat.vshn.io
@@ -53,10 +53,9 @@ spec:
             true, "memory": "2Gi"}}, "standard-4": {"size": {"cpu": "1", "disk": "16Gi",
             "enabled": true, "memory": "4Gi"}}, "standard-8": {"size": {"cpu": "2",
             "disk": "16Gi", "enabled": true, "memory": "8Gi"}}}'
-          proxyEndpoint: 172.17.0.1:9443
           quotasEnabled: 'false'
           restoreSA: nextcloudserviceaccount
-          salesOrder: ''
+          salesOrder: '10431'
           serviceName: nextcloud
           sliNamespace: appcat-slos
         kind: ConfigMap

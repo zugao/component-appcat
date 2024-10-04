@@ -102,6 +102,8 @@ rules:
       - pods/log
       - pods/portforward
       - pods/status
+      - pods/attach
+      - pods/exec
       - services
     verbs:
       - get
@@ -130,6 +132,8 @@ rules:
       - watch
       - list
       - patch
+      - update
+      - create
   - apiGroups:
       - rbac.authorization.k8s.io
     resourceNames:
@@ -352,9 +356,21 @@ rules:
       - create
       - delete
   - apiGroups:
-      - apps
+      - networking.k8s.io
     resources:
-      - statefulsets
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+      - delete
+  - apiGroups:
+      - ''
+    resources:
+      - persistentvolumeclaims
     verbs:
       - get
       - list
@@ -364,6 +380,12 @@ rules:
       - patch
       - update
       - delete
+  - apiGroups:
+      - security.openshift.io
+    resources:
+      - securitycontextconstraints
+    verbs:
+      - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

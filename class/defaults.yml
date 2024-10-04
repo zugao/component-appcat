@@ -55,7 +55,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.102.1
+        tag: nextcloud_collabora
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -85,6 +85,10 @@ parameters:
         registry: docker.io
         image: proxysql/proxysql
         version: '2.7.1'
+      collabora:
+        registry: docker.io
+        image: collabora/code
+        tag: "24.04.9.2.1"
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
@@ -866,10 +870,9 @@ parameters:
           restoreSA: nextcloudserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
+            collabora_image: ${appcat:images:collabora:registry}/${appcat:images:collabora:image}:${appcat:images:collabora:tag}
             ingress_annotations: |
               cert-manager.io/cluster-issuer: letsencrypt-production
-              haproxy.router.openshift.io/timeout: 120s
-              haproxy.router.openshift.io/hsts_header: max-age=31536000;preload
           openshiftTemplate:
             serviceName: nextcloudbyvshn
             description: "Nextcloud is an open source suite of client-server software for creating and using file hosting services."
