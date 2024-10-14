@@ -38,7 +38,11 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
+<<<<<<< HEAD
           imageTag: v4.97.2
+=======
+          imageTag: add_mariadb_user_mgmt
+>>>>>>> dc5ecceb ([create-pull-request] automated change)
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
