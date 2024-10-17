@@ -7,7 +7,7 @@ kind: VSHNMariaDB
 metadata:
   finalizers:
   - finalizer.apiextensions.crossplane.io
-  name: mariadb
+  name: mariadb-e2e
 spec:
   compositeDeletePolicy: Background
   compositionRef:
@@ -18,6 +18,8 @@ spec:
     security:
       deletionProtection: true
     service:
+      access:
+        - user: e2e-test
       serviceLevel: besteffort
       version: "11.2"
     size:
@@ -43,4 +45,4 @@ metadata:
   ownerReferences:
     - apiVersion: vshn.appcat.vshn.io/v1
       kind: VSHNMariaDB
-      name: mariadb
+      name: mariadb-e2e

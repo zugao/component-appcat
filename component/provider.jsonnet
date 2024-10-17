@@ -149,6 +149,11 @@ local providerRBAC = {
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
       {
+        apiGroups: [ 'mysql.sql.crossplane.io' ],
+        resources: [ 'providerconfigs' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
         apiGroups: [ 'apiextensions.crossplane.io' ],
         resources: [ 'usages' ],
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],

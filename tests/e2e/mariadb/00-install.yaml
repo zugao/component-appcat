@@ -1,9 +1,12 @@
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNMariaDB
 metadata:
-  name: mariadb
+  name: mariadb-e2e
 spec:
   parameters:
+    service:
+      access:
+        - user: e2e-test
     size:
       plan: standard-2
   writeConnectionSecretToRef:
