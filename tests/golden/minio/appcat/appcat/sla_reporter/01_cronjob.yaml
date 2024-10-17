@@ -30,11 +30,7 @@ spec:
               envFrom:
                 - secretRef:
                     name: appcat-sla-reports-creds
-<<<<<<< HEAD
-              image: ghcr.io/vshn/appcat:v4.97.2
-=======
-              image: ghcr.io/vshn/appcat:add_mariadb_user_mgmt
->>>>>>> dc5ecceb ([create-pull-request] automated change)
+              image: ghcr.io/vshn/appcat:v4.98.0
               name: sla-reporter
               resources:
                 limits:

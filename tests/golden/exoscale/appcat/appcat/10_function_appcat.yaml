@@ -3,10 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.97.2-func
-=======
-  package: ghcr.io/vshn/appcat:add_mariadb_user_mgmt-func
->>>>>>> dc5ecceb ([create-pull-request] automated change)
+  package: ghcr.io/vshn/appcat:v4.98.0-func
   runtimeConfigRef:
     name: function-appcat

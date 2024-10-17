@@ -1,7 +1,7 @@
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNMariaDB
 metadata:
-  name: mariadb
+  name: mariadb-e2e
 spec:
   parameters:
     security:

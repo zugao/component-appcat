@@ -1,4 +1,4 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-  - script: scripts/check-protection.sh vshnmariadb mariadb
+  - script: scripts/check-protection.sh vshnmariadb mariadb-e2e
