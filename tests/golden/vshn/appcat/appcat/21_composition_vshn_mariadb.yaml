@@ -54,6 +54,7 @@ spec:
             "8Gi"}}}'
           quotasEnabled: 'false'
           restoreSA: mariadbrestoreserviceaccount
+          salesOrder: ''
           serviceName: mariadb
           sliNamespace: appcat-slos
         kind: ConfigMap

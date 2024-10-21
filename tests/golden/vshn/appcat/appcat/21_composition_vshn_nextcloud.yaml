@@ -55,6 +55,7 @@ spec:
             "disk": "16Gi", "enabled": true, "memory": "8Gi"}}}'
           quotasEnabled: 'false'
           restoreSA: nextcloudserviceaccount
+          salesOrder: ''
           serviceName: nextcloud
           sliNamespace: appcat-slos
         kind: ConfigMap
