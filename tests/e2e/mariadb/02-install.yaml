@@ -5,6 +5,8 @@ metadata:
 spec:
   parameters:
     service:
+      access:
+        - user: e2e-test
     size:
       plan: standard-2
   writeConnectionSecretToRef:
