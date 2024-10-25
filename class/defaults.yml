@@ -9,7 +9,7 @@ parameters:
         version: 17.7.1
       mariadb:
         source: https://charts.bitnami.com/bitnami
-        version: 11.6.2
+        version: 14.0.10
       minio:
         source: https://charts.min.io
         version: 5.0.13
@@ -55,7 +55,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.100.2
+        tag: add/mariadb_scaling
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -81,6 +81,10 @@ parameters:
         registry: docker.io
         image: bitnami/kubectl
         tag: '1.25.15'
+      proxysql:
+        registry: docker.io
+        image: proxysql/proxysql
+        version: '2.7.1'
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
@@ -737,6 +741,12 @@ parameters:
           enabled: false
           restoreSA: mariadbrestoreserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
+          additionalInputs:
+            proxysqlImage: ${appcat:images:proxysql:registry}/${appcat:images:proxysql:image}:${appcat:images:proxysql:version}
+            proxysqlCPULimit: 500m
+            proxysqlCPURequests: 50m
+            proxysqlMemoryLimit: 256Mi
+            proxysqlMemoryRequests: 64Mi
           openshiftTemplate:
             serviceName: mariadbbyvshn
             description: "The open source relational database management system (DBMS) that is a compatible drop-in replacement for the widely used MySQL database technology"
@@ -744,7 +754,7 @@ parameters:
             url: https://vs.hn/vshn-mariadb
             tags: "database,sql,mariadb"
             icon: "icon-mariadb"
-            defaultVersion: "11.2"
+            defaultVersion: "11.5"
           enableNetworkPolicy: false
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:mariadb:version}

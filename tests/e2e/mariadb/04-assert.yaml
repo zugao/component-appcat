@@ -9,27 +9,8 @@ metadata:
   - finalizer.apiextensions.crossplane.io
   name: mariadb-e2e
 spec:
-  compositeDeletePolicy: Background
-  compositionRef:
-    name: vshnmariadb.vshn.appcat.vshn.io
-  compositionUpdatePolicy: Automatic
   parameters:
-    backup: {}
-    security:
-      deletionProtection: false
-    service:
-      serviceLevel: besteffort
-      version: "11.5"
-    size:
-      plan: standard-2
-    tls:
-      authClients: true
-      enabled: true
-  resourceRef:
-    apiVersion: vshn.appcat.vshn.io/v1
-    kind: XVSHNMariaDB
-  writeConnectionSecretToRef:
-    name: mariadb-creds
+    instances: 3
 status:
   conditions:
     - status: "True"
@@ -44,3 +25,18 @@ metadata:
     - apiVersion: vshn.appcat.vshn.io/v1
       kind: VSHNMariaDB
       name: mariadb-e2e
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+timeout: 600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: connect-mariadb-scaled
+status:
+  conditions:
+    - type: Complete
+      status: 'True'
+  succeeded: 1
+  ready: 0

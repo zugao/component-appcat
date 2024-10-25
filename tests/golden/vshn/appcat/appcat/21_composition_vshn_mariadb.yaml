@@ -29,7 +29,7 @@ spec:
         data:
           bucketRegion: lpg
           chartRepository: https://charts.bitnami.com/bitnami
-          chartVersion: 11.6.2
+          chartVersion: 14.0.10
           controlNamespace: syn-appcat-control
           defaultPlan: standard-1
           emailAlertingEnabled: 'true'
@@ -38,7 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.100.2
+          imageTag: add_mariadb_scaling
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
@@ -52,6 +52,11 @@ spec:
             {"size": {"cpu": "125m", "disk": "16Gi", "enabled": true, "memory": "512Mi"}},
             "standard-8": {"size": {"cpu": "2", "disk": "16Gi", "enabled": true, "memory":
             "8Gi"}}}'
+          proxysqlCPULimit: 500m
+          proxysqlCPURequests: 50m
+          proxysqlImage: docker.io/proxysql/proxysql:2.7.1
+          proxysqlMemoryLimit: 256Mi
+          proxysqlMemoryRequests: 64Mi
           quotasEnabled: 'false'
           restoreSA: mariadbrestoreserviceaccount
           salesOrder: ''

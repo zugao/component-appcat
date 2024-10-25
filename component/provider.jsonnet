@@ -163,6 +163,11 @@ local providerRBAC = {
         resources: [ 'poddisruptionbudgets' ],
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
+      {
+        apiGroups: [ 'apps' ],
+        resources: [ 'statefulsets' ],
+        verbs: [ 'get', 'list', 'watch', 'create', 'watch', 'patch', 'update', 'delete' ],
+      },
     ],
   },
   helm: {
@@ -200,6 +205,11 @@ local providerRBAC = {
       {
         apiGroups: [ 'networking.k8s.io' ],
         resources: [ 'ingresses' ],
+        verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
+      },
+      {
+        apiGroups: [ 'policy' ],
+        resources: [ 'poddisruptionbudgets' ],
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
     ],
