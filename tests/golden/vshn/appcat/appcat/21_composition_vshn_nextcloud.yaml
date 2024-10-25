@@ -38,7 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.98.1
+          imageTag: v4.99.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -55,6 +55,7 @@ spec:
             "disk": "16Gi", "enabled": true, "memory": "8Gi"}}}'
           quotasEnabled: 'false'
           restoreSA: nextcloudserviceaccount
+          salesOrder: ''
           serviceName: nextcloud
           sliNamespace: appcat-slos
         kind: ConfigMap
