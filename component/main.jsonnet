@@ -109,29 +109,6 @@ local tenant = {
   [if !params.appuioManaged then 'label']: 'label_appuio_io_organization=~".+",',
 };
 
-local promQueryTemplate = importstr 'promql/appcat.promql';
-local promQueryWithLabel = std.strReplace(promQueryTemplate, '{{ORGLABEL}}', tenant.label);
-local promQuery = std.strReplace(promQueryWithLabel, '{{TENANT_REPLACE}}', tenant.replace);
-
-local legacyBillingRule = std.prune(kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'appcat-billing') {
-  metadata+: {
-    namespace: params.namespace,
-  },
-  spec: {
-    groups: [
-      {
-        name: 'appcat-billing-rules',
-        rules: [
-          {
-            expr: promQuery,
-            record: 'appcat:billing',
-          },
-        ],
-      },
-    ],
-  },
-});
-
 local mockOrgInfo = kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'mock-org-info') {
   metadata+: {
     namespace: params.namespace,
@@ -260,7 +237,6 @@ local haPrometheusRule = {
   [if isOpenshift then '10_clusterrole_finalizer']: finalizerRole,
   '10_clusterrole_services_read': readServices,
   '10_appcat_namespace': ns,
-  '10_appcat_legacy_billing_recording_rule': legacyBillingRule,
   '10_appcat_backup_monitoring': backupPrometheusRule,
   '10_appcat_ha_monitoring': haPrometheusRule,
   [if params.services.vshn.enabled && params.services.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
