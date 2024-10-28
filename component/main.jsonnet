@@ -8,6 +8,7 @@ local slos = import 'slos.libsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
+local appuioManaged = inv.parameters.appcat.appuioManaged;
 
 local xrdBrowseRole = kube.ClusterRole('appcat:browse') + {
   metadata+: {
@@ -85,7 +86,11 @@ local ns = kube.Namespace(params.namespace) {
     labels+: {
       'openshift.io/cluster-monitoring': 'true',
     } + params.namespaceLabels,
-    annotations+: params.namespaceAnnotations,
+    annotations+:
+      if !appuioManaged then {
+        'resourcequota.appuio.io/organization-objects.jobs': '300',
+      } + params.namespaceAnnotations
+      else params.namespaceAnnotations,
   },
 };
 
