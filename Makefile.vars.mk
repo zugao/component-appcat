@@ -46,7 +46,7 @@ KUBENT_IMAGE    ?= ghcr.io/doitintl/kube-no-trouble:latest
 KUBENT_DOCKER   ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) --entrypoint=/app/kubent $(KUBENT_IMAGE)
 
 instance ?= defaults
-test_instances = test_instances = tests/defaults.yml tests/exoscale.yml tests/cloudscale.yml tests/openshift.yml tests/vshn.yml tests/apiserver.yml tests/controllers.yml tests/minio.yml tests/cloudscale-metrics-collector-cloud.yml tests/cloudscale-metrics-collector-managed.yml tests/exoscale-metrics-collector-cloud.yml tests/exoscale-metrics-collector-managed.yml tests/control-plane.yml
++test_instances = tests/defaults.yml tests/exoscale.yml tests/cloudscale.yml tests/openshift.yml tests/vshn.yml tests/apiserver.yml tests/controllers.yml tests/minio.yml tests/cloudscale-metrics-collector-cloud.yml tests/cloudscale-metrics-collector-managed.yml tests/exoscale-metrics-collector-cloud.yml tests/exoscale-metrics-collector-managed.yml tests/control-plane.yml tests/service-cluster.yml
 
 YAMLLINT_ARGS   ?= --no-warnings
 YAMLLINT_CONFIG ?= .yamllint.yml

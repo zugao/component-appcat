@@ -74,6 +74,7 @@ local saPnT = kube.ServiceAccount('function-patch-and-transform') {
 
 local pntFunctionImage = pntImage.registry + '/' + pntImage.repository + ':' + pntImage.tag;
 
+if params.functions.enabled then
 {
   '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage, 'function-patch-and-transform'),
   '10_function_appcat': appcat,
@@ -81,4 +82,4 @@ local pntFunctionImage = pntImage.registry + '/' + pntImage.repository + ':' + p
   '10_runtimeconfig_function_pnt': common.DefaultRuntimeConfigWithSaName('function-patch-and-transform'),
   '20_serviceaccount_appcat': saAppCat,
   '20_serviceaccount_pnt': saPnT,
-}
+} else {}

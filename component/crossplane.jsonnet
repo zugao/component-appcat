@@ -179,7 +179,7 @@ local monitoring =
       },
     },
   ];
-
+if params.enabled then
 {
   '00_namespace': namespace {
     metadata+: {
@@ -196,4 +196,4 @@ local monitoring =
   [if std.length(cluster_roles) > 0 then '50_cluster_roles']: cluster_roles,
   [if std.length(cluster_role_bindings) > 0 then '60_cluster_role_bindings']: cluster_role_bindings,
   [if std.length(provider_configs) > 0 then '70_provider_configs']: provider_configs,
-}
+} else {}

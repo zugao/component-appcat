@@ -1,0 +1,67 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '10'
+    metadata.appcat.vshn.io/description: Mariadb instances by VSHN
+    metadata.appcat.vshn.io/displayname: Mariadb by VSHN
+    metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-mariadb
+    metadata.appcat.vshn.io/flavor: standalone
+    metadata.appcat.vshn.io/plans: '{"standard-1":{"size":{"cpu":"250m","disk":"16Gi","enabled":true,"memory":"1Gi"}},"standard-2":{"size":{"cpu":"500m","disk":"16Gi","enabled":true,"memory":"2Gi"}},"standard-4":{"size":{"cpu":"1","disk":"16Gi","enabled":true,"memory":"4Gi"}},"standard-512m":{"size":{"cpu":"125m","disk":"16Gi","enabled":true,"memory":"512Mi"}},"standard-8":{"size":{"cpu":"2","disk":"16Gi","enabled":true,"memory":"8Gi"}}}'
+    metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/mariadb.html
+    metadata.appcat.vshn.io/zone: rma1
+  labels:
+    metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/serviceID: vshn-mariadb
+    name: vshnmariadb.vshn.appcat.vshn.io
+  name: vshnmariadb.vshn.appcat.vshn.io
+spec:
+  compositeTypeRef:
+    apiVersion: vshn.appcat.vshn.io/v1
+    kind: XVSHNMariaDB
+  mode: Pipeline
+  pipeline:
+    - functionRef:
+        name: function-appcat
+      input:
+        apiVersion: v1
+        data:
+          bucketRegion: lpg
+          chartRepository: https://charts.bitnami.com/bitnami
+          chartVersion: 11.6.2
+          controlNamespace: syn-appcat-control
+          defaultPlan: standard-1
+          emailAlertingEnabled: 'false'
+          emailAlertingSecretName: mailgun-smtp-credentials
+          emailAlertingSecretNamespace: syn-appcat
+          emailAlertingSmtpFromAddress: myuser@example.com
+          emailAlertingSmtpHost: smtp.eu.mailgun.org:465
+          emailAlertingSmtpUsername: myuser@example.com
+          imageTag: split_webhook
+          isOpenshift: 'false'
+          maintenanceSA: helm-based-service-maintenance
+          mode: standalone
+          ownerGroup: vshn.appcat.vshn.io
+          ownerKind: XVSHNMariaDB
+          ownerVersion: v1
+          plans: '{"standard-1": {"size": {"cpu": "250m", "disk": "16Gi", "enabled":
+            true, "memory": "1Gi"}}, "standard-2": {"size": {"cpu": "500m", "disk":
+            "16Gi", "enabled": true, "memory": "2Gi"}}, "standard-4": {"size": {"cpu":
+            "1", "disk": "16Gi", "enabled": true, "memory": "4Gi"}}, "standard-512m":
+            {"size": {"cpu": "125m", "disk": "16Gi", "enabled": true, "memory": "512Mi"}},
+            "standard-8": {"size": {"cpu": "2", "disk": "16Gi", "enabled": true, "memory":
+            "8Gi"}}}'
+          proxyEndpoint: 172.18.0.1:9443
+          quotasEnabled: 'false'
+          restoreSA: mariadbrestoreserviceaccount
+          salesOrder: ''
+          serviceName: mariadb
+          sliNamespace: appcat-slos
+        kind: ConfigMap
+        metadata:
+          labels:
+            name: xfn-config
+          name: xfn-config
+      step: mariadb-func
+  writeConnectionSecretsToNamespace: syn-crossplane

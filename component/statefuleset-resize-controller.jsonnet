@@ -103,7 +103,7 @@ local resizeClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:resizejob')
 };
 
 // Curently we only need this for redis.
-if params.services.vshn.enabled && (params.services.vshn.redis.enabled || params.services.vshn.mariadb.enabled) then {
+if params.services.vshn.enabled && (params.services.vshn.redis.enabled || params.services.vshn.mariadb.enabled) || params.stsResizer.enabled then {
   'controllers/sts-resizer/10_role': role,
   'controllers/sts-resizer/10_sa': sa,
   'controllers/sts-resizer/10_binding': binding,

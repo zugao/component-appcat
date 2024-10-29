@@ -25,18 +25,18 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         env:
         - name: APPCAT_SLI_VSHNPOSTGRESQL
-          value: "false"
+          value: "true"
         - name: APPCAT_SLI_VSHNREDIS
-          value: "false"
+          value: "true"
         - name: APPCAT_SLI_TRACK_OC_MAINTENANCE_STATUS
           value: "false"
         - name: APPCAT_SLI_VSHNMINIO
           value: "false"
         - name: APPCAT_SLI_VSHNKEYCLOAK
-          value: "false"
+          value: "true"
         - name: APPCAT_SLI_VSHNMARIADB
-          value: "false"
-        image: ghcr.io/vshn/appcat:v4.100.0
+          value: "true"
+        image: ghcr.io/vshn/appcat:split_webhook
         livenessProbe:
           httpGet:
             path: /healthz

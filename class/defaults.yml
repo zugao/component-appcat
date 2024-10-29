@@ -55,7 +55,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.100.0
+        tag: split/webhook
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -94,6 +94,7 @@ parameters:
     proxyFunction: false
 
     crossplane:
+      enabled: true
       namespace: syn-crossplane
       namespaceLabels: {}
       namespaceAnnotations:
@@ -309,6 +310,7 @@ parameters:
         resources: {}
 
     stsResizer:
+      enabled: false
       resources:
         requests:
           cpu: 100m
@@ -316,6 +318,9 @@ parameters:
         limits:
           cpu: 250m
           memory: 200Mi
+
+    functions:
+      enabled: true
 
     apiserver:
       enabled: true

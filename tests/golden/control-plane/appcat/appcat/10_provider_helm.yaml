@@ -170,12 +170,12 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '10'
   labels:
-    name: vcluster
-  name: vcluster
+    name: kind
+  name: kind
 spec:
   credentials:
     secretRef:
       key: kubeconfig
-      name: vcluster
+      name: kind
       namespace: syn-crossplane
     source: Secret

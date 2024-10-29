@@ -23,7 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.100.0
+          image: ghcr.io/vshn/appcat:split_webhook
           livenessProbe:
             httpGet:
               path: /healthz
