@@ -7,7 +7,7 @@
       "name": "AppCat",
       "slug": "appcat",
       "parameter_key": "appcat",
-      "test_cases": "defaults exoscale cloudscale openshift vshn apiserver controllers minio cloudscale-metrics-collector-cloud cloudscale-metrics-collector-managed exoscale-metrics-collector-cloud exoscale-metrics-collector-managed control-plane",
+      "test_cases": "defaults exoscale cloudscale openshift vshn apiserver controllers minio cloudscale-metrics-collector-cloud cloudscale-metrics-collector-managed exoscale-metrics-collector-cloud exoscale-metrics-collector-managed control-plane service-cluster",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",
