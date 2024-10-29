@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  annotations: {}
+  labels:
+    name: allow-from-appcat-slos
+  name: allow-from-appcat-slos
+  namespace: prometheus-system
+spec:
+  egress: []
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: appcat-slos
+  podSelector: {}
+  policyTypes:
+    - Ingress

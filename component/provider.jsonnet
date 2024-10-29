@@ -281,8 +281,7 @@ local provider(name, provider) =
           rolebinding,
           if std.objectHas(provider, 'credentials') then providerSecret(provider.credentials),
           if std.objectHas(provider, 'connectionSecretNamespace') then kube.Namespace(provider.connectionSecretNamespace),
-          if std.objectHas(provider, 'additionalProviderConfigs') && std.length(provider.additionalProviderConfigs) > 0 then additionalProviderConfigs(provider),
-        ]
+        ] + (if std.objectHas(provider, 'additionalProviderConfigs') && std.length(provider.additionalProviderConfigs) > 0 then additionalProviderConfigs(provider) else [])
       ),
   };
 
