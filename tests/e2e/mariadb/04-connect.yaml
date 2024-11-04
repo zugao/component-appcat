@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: connect-mariadb
+  name: connect-mariadb-scaled
 spec:
   backoffLimit: 1
   template:
