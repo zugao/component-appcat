@@ -38,7 +38,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: add_mariadb_scaling
+          imageTag: v4.102.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
