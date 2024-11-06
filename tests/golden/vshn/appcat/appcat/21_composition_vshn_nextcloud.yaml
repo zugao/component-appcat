@@ -31,6 +31,7 @@ spec:
           chartRepository: https://nextcloud.github.io/helm/
           chartVersion: 5.0.0
           controlNamespace: syn-appcat-control
+          crossplaneNamespace: syn-crossplane
           defaultPlan: standard-2
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
@@ -38,7 +39,7 @@ spec:
           emailAlertingSmtpFromAddress: myuser@example.com
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: myuser@example.com
-          imageTag: v4.102.0
+          imageTag: v4.102.1
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"

@@ -112,6 +112,7 @@ local vshn_appcat_service(name, serviceParams) =
                         ownerGroup: xrd.spec.group,
                         ownerVersion: xrd.spec.versions[0].name,
                         salesOrder: if appuioManaged then std.toString(params.billing.salesOrder) else '',
+                        crossplaneNamespace: params.crossplane.namespace,
                       } + common.EmailAlerting(params.services.emailAlerting)
                       + restoreSA
                       + additonalInputs
