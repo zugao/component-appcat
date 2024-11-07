@@ -222,6 +222,7 @@ local composition =
                       isOpenshift: std.toString(isOpenshift),
                       sliNamespace: params.slos.namespace,
                       salesOrder: if appuioManaged then std.toString(params.billing.salesOrder) else '',
+                      crossplaneNamespace: params.crossplane.namespace,
                     } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
                     + common.EmailAlerting(params.services.emailAlerting)
                     + if pgParams.proxyFunction then {
