@@ -177,7 +177,7 @@ local providerRBAC = {
         apiGroups: [ 'security.openshift.io' ],
         resources: [ 'securitycontextconstraints' ],
         verbs: [ 'use' ],
-      }
+      },
     ],
   },
   helm: {
