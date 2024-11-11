@@ -30,6 +30,10 @@ spec:
           bucketRegion: lpg
           chartRepository: https://nextcloud.github.io/helm/
           chartVersion: 5.0.0
+          collaboraCPULimit: '1'
+          collaboraCPURequests: 250m
+          collaboraMemoryLimit: 1Gi
+          collaboraMemoryRequests: 256Mi
           collabora_image: docker.io/collabora/code:24.04.9.2.1
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
