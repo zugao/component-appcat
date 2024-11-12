@@ -3,7 +3,7 @@ parameters:
     charts:
       crossplane:
         source: https://charts.crossplane.io/stable
-        version: 1.16.0
+        version: 1.17.2
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
