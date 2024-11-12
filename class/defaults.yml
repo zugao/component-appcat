@@ -585,14 +585,14 @@ parameters:
                 memory: "64Mi"
               limits:
                 cpu: "500m"
-                memory: "64Mi"
+                memory: "512Mi"
             pgbouncer:
               requests:
                 cpu: "16m"
                 memory: "4Mi"
               limits:
                 cpu: "500m"
-                memory: "20Mi"
+                memory: "128Mi"
             postgresUtil:
               requests:
                 cpu: "10m"

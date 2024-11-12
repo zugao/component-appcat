@@ -84,9 +84,9 @@ spec:
           sideCars: '{"clusterController": {"limits": {"cpu": "32m", "memory": "256Mi"},
             "requests": {"cpu": "32m", "memory": "128Mi"}}, "createBackup": {"limits":
             {"cpu": "400m", "memory": "500Mi"}, "requests": {"cpu": "100m", "memory":
-            "64Mi"}}, "envoy": {"limits": {"cpu": "500m", "memory": "64Mi"}, "requests":
+            "64Mi"}}, "envoy": {"limits": {"cpu": "500m", "memory": "512Mi"}, "requests":
             {"cpu": "32m", "memory": "64Mi"}}, "pgbouncer": {"limits": {"cpu": "500m",
-            "memory": "20Mi"}, "requests": {"cpu": "16m", "memory": "4Mi"}}, "postgresUtil":
+            "memory": "128Mi"}, "requests": {"cpu": "16m", "memory": "4Mi"}}, "postgresUtil":
             {"limits": {"cpu": "20m", "memory": "20Mi"}, "requests": {"cpu": "10m",
             "memory": "4Mi"}}, "prometheusPostgresExporter": {"limits": {"cpu": "150m",
             "memory": "256Mi"}, "requests": {"cpu": "10m", "memory": "16Mi"}}, "runDbops":
