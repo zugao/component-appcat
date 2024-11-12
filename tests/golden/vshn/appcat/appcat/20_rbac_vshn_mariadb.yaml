@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: 'true'
   name: appcat:composite:xvshnmariadbs.vshn.appcat.vshn.io:claim-view
@@ -20,7 +21,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: 'true'
     rbac.authorization.k8s.io/aggregate-to-edit: 'true'

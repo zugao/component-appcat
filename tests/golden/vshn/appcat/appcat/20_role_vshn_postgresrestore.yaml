@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: crossplane-appcat-job-postgres-copybackups
   name: crossplane:appcat:job:postgres:copybackups
@@ -33,7 +34,8 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: copyserviceaccount
   name: copyserviceaccount
@@ -42,7 +44,8 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: appcat-job-postgres-copybackup
   name: appcat:job:postgres:copybackup

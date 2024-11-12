@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: appcat
+  namespace: argocd
+operation:
+  initiatedBy:
+    automated: true
+  retry:
+    limit: 5
+  sync:
+    prune: true
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: .
+    repoURL: http://forgejo-http.forgejo.svc:3000/gitea_admin/appcat
+    targetRevision: HEAD
+    directory:
+      recurse: true

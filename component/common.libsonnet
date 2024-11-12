@@ -20,7 +20,6 @@ local syncOptions = {
   metadata+: {
     annotations+: {
       'argocd.argoproj.io/sync-options': 'SkipDryRunOnMissingResource=true',
-      'argocd.argoproj.io/sync-wave': '10',
     },
   },
 };

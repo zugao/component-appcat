@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: '-100'
     openshift.io/node-selector: node-role.kubernetes.io/infra=
     resourcequota.appuio.io/organization-objects.jobs: '300'
   labels:

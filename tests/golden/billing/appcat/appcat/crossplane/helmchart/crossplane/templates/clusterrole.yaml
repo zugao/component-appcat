@@ -5,6 +5,8 @@ aggregationRule:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     app: crossplane
     app.kubernetes.io/component: cloud-infrastructure-controller
@@ -19,6 +21,8 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     app: crossplane
     app.kubernetes.io/component: cloud-infrastructure-controller
