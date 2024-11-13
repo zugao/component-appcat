@@ -501,11 +501,11 @@ parameters:
       controlNamespace: "syn-appcat-control"
       # Works only for VSHN services for now
       emailAlerting:
-        enabled: false
+        enabled: true
         smtpHost: "smtp.eu.mailgun.org:465"
-        smtpUsername: myuser@example.com
+        smtpUsername: appcat@appuio.cloud
         smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
-        smtpFromAddress: myuser@example.com
+        smtpFromAddress: appcat@appuio.cloud
         secretNamespace: syn-appcat
         secretName: mailgun-smtp-credentials
       vshn:

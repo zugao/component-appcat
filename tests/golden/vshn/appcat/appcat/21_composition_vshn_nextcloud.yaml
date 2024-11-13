@@ -36,9 +36,9 @@ spec:
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
-          emailAlertingSmtpFromAddress: myuser@example.com
+          emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
-          emailAlertingSmtpUsername: myuser@example.com
+          emailAlertingSmtpUsername: appcat@appuio.cloud
           imageTag: v4.102.1
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging

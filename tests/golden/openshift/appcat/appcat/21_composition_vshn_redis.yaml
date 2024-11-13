@@ -564,12 +564,12 @@ spec:
           bucketRegion: lpg
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
-          emailAlertingEnabled: 'false'
+          emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
-          emailAlertingSmtpFromAddress: myuser@example.com
+          emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
-          emailAlertingSmtpUsername: myuser@example.com
+          emailAlertingSmtpUsername: appcat@appuio.cloud
           imageTag: v4.102.1
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
