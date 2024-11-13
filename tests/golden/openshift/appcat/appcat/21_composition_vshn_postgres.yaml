@@ -33,12 +33,12 @@ spec:
           bucketRegion: ch-gva-2
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
-          emailAlertingEnabled: 'false'
+          emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
-          emailAlertingSmtpFromAddress: myuser@example.com
+          emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
-          emailAlertingSmtpUsername: myuser@example.com
+          emailAlertingSmtpUsername: appcat@appuio.cloud
           externalDatabaseConnectionsEnabled: 'false'
           imageTag: v4.102.1
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
