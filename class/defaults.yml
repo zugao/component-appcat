@@ -873,7 +873,7 @@ parameters:
             collabora_image: ${appcat:images:collabora:registry}/${appcat:images:collabora:image}:${appcat:images:collabora:tag}
             collaboraCPULimit: "1"
             collaboraCPURequests: 250m
-            collaboraMemoryLimit: 1Gi # during my tests I was able to force collabora to use ~800Mi
+            collaboraMemoryLimit: 1Gi
             collaboraMemoryRequests: 256Mi
             ingress_annotations: |
               cert-manager.io/cluster-issuer: letsencrypt-production
