@@ -39,7 +39,7 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
-          imageTag: nextcloud_collabora
+          imageTag: v4.104.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
