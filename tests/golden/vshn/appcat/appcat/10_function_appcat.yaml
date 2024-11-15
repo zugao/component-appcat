@@ -3,10 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.105.1-func
-=======
-  package: ghcr.io/vshn/appcat:fix_invalid_backup_refs-func
->>>>>>> 4de876b4 ([create-pull-request] automated change)
+  package: ghcr.io/vshn/appcat:v4.105.2-func
   runtimeConfigRef:
     name: function-appcat
