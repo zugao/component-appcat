@@ -6,6 +6,7 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
@@ -144,7 +145,7 @@ local osTemplate =
     ],
   };
 
-if params.services.exoscale.enabled && redisParams.enabled then {
+if params.services.exoscale.enabled && redisParams.enabled && vars.isSingleOrControlPlaneCluster then {
   '20_xrd_exoscale_redis': xrd,
   '20_rbac_exoscale_redis': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_redis': composition,

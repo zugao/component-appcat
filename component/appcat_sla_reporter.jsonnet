@@ -1,4 +1,5 @@
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -93,7 +94,7 @@ local netPol = kube.NetworkPolicy('allow-from-%s' % slos_params.namespace) {
   },
 };
 
-if sla_reporter_params.enabled == true then {
+if sla_reporter_params.enabled && vars.isSingleOrControlPlaneCluster then {
   '01_cronjob': CronJob,
   '02_object_bucket': ObjectStorage,
   '03_network_policy': netPol,

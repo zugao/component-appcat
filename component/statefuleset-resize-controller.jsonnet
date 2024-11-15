@@ -3,6 +3,8 @@ local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local com = import 'lib/commodore.libjsonnet';
+local vars = import 'config/vars.jsonnet';
+
 local params = inv.parameters.appcat;
 local srcImage = std.get(params.images, 'statefulset-resize-controller');
 local imageTag = std.strReplace(srcImage.tag, '/', '_');
@@ -102,8 +104,8 @@ local resizeClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:resizejob')
   subjects_: [ resizeServiceAccount ],
 };
 
-// Curently we only need this for redis.
-if params.services.vshn.enabled && (params.services.vshn.redis.enabled || params.services.vshn.mariadb.enabled) then {
+// Curently we only need this for redis or mariadb.
+if (params.services.vshn.enabled && (params.services.vshn.redis.enabled || params.services.vshn.mariadb.enabled)) && vars.isSingleOrServiceCluster then {
   'controllers/sts-resizer/10_role': role,
   'controllers/sts-resizer/10_sa': sa,
   'controllers/sts-resizer/10_binding': binding,

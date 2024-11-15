@@ -9,9 +9,9 @@ local common = import 'common.libsonnet';
 local prom = import 'prometheus.libsonnet';
 local xrds = import 'xrds.libsonnet';
 
+local vars = import 'config/vars.jsonnet';
 local slos = import 'slos.libsonnet';
 local opsgenieRules = import 'vshn_alerting.jsonnet';
-
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
@@ -180,7 +180,7 @@ local vshn_appcat_service(name, serviceParams) =
     },
   };
 
-  if params.services.vshn.enabled && serviceParams.enabled then {
+  if params.services.vshn.enabled && serviceParams.enabled && vars.isSingleOrControlPlaneCluster then {
     ['20_xrd_vshn_%s' % name]: xrd,
     ['20_rbac_vshn_%s' % name]: xrds.CompositeClusterRoles(xrd),
     ['21_composition_vshn_%s' % name]: composition,

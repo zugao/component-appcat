@@ -38,6 +38,8 @@ jobs:
           - cloudscale-metrics-collector-managed
           - exoscale-metrics-collector-cloud
           - exoscale-metrics-collector-managed
+          - control-plane
+          - service-cluster
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}
@@ -64,6 +66,8 @@ jobs:
           - cloudscale-metrics-collector-managed
           - exoscale-metrics-collector-cloud
           - exoscale-metrics-collector-managed
+          - control-plane
+          - service-cluster
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}

@@ -5,15 +5,17 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local prom = import 'prometheus.libsonnet';
 local slos = import 'slos.libsonnet';
+local opsgenieRules = import 'vshn_alerting.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
-local opsgenieRules = import 'vshn_alerting.jsonnet';
 local appuioManaged = inv.parameters.appcat.appuioManaged;
+
 
 local defaultDB = 'postgres';
 local defaultUser = 'postgres';
@@ -295,7 +297,7 @@ local plansCM = kube.ConfigMap('vshnpostgresqlplans') + {
   },
 };
 
-if params.services.vshn.enabled && pgParams.enabled then
+if params.services.vshn.enabled && pgParams.enabled && vars.isSingleOrControlPlaneCluster then
   assert std.length(pgParams.bucket_region) != 0 : 'appcat.services.vshn.postgres.bucket_region is empty';
   assert std.length(pgParams.bucket_endpoint) != 0 : 'appcat.services.vshn.postgres.bucket_endpoint is empty';
   {

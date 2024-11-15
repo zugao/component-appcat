@@ -6,6 +6,7 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
@@ -155,7 +156,7 @@ local compositionMinio =
   ];
 
 
-if objStoParams.enabled then {
+if objStoParams.enabled && vars.isSingleOrControlPlaneCluster then {
   '20_xrd_objectstorage': xrd,
   '20_rbac_objectstorage': xrds.CompositeClusterRoles(xrd),
   [if objStoParams.compositions.cloudscale.enabled then '21_composition_objectstorage_cloudscale']: compositionCloudscale,

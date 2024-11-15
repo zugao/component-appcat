@@ -123,6 +123,9 @@ parameters:
     postprocess:
       filters:
         - type: jsonnet
+          filter: postprocess/crossplane.jsonnet
+          path: ${_instance}/crossplane/helmchart/crossplane/templates
+        - type: jsonnet
           filter: postprocess/patch_operator_deployment.jsonnet
           path: ${_instance}/crossplane/helmchart/crossplane/templates
         - type: jsonnet

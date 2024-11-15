@@ -1,14 +1,16 @@
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local slos = import 'slos.libsonnet';
 
-
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
 local appuioManaged = inv.parameters.appcat.appuioManaged;
+
+assert vars.isCMSValid : 'controlPlaneCluster and serviceCluster in clusterManagementSystem cannot be both false';
 
 local xrdBrowseRole = kube.ClusterRole('appcat:browse') + {
   metadata+: {

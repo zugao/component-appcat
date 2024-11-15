@@ -1,4 +1,5 @@
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -66,9 +67,8 @@ local namespace_patch = kube.Namespace('system') {
   },
 };
 
-
 local kustomization =
-  if params.slos.enabled then
+  if params.slos.enabled && vars.isSingleOrControlPlaneCluster then
     local image = params.images.appcat;
     com.Kustomization(
       'https://github.com/vshn/appcat/config/sliexporter/default',

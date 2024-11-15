@@ -1,3 +1,4 @@
+local vars = import 'config/vars.jsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
@@ -179,21 +180,21 @@ local monitoring =
       },
     },
   ];
-
-{
-  '00_namespace': namespace {
-    metadata+: {
-      labels+: params.namespaceLabels,
-      annotations+: params.namespaceAnnotations,
+if vars.isSingleOrControlPlaneCluster then
+  {
+    '00_namespace': namespace {
+      metadata+: {
+        labels+: params.namespaceLabels,
+        annotations+: params.namespaceAnnotations,
+      },
     },
-  },
-  '01_rbac_finalizer_clusterrole': rbacFinalizerRole,
-  '01_rbac_finalizer_clusterrolebinding': rbacFinalizerRoleBinding,
-  [if std.length(providers) > 0 then '10_providers']: providers,
-  [if params.monitoring.enabled then '20_monitoring']: monitoring,
-  [if std.length(controller_configs) > 0 then '30_controller_configs']: controller_configs,
-  [if std.length(service_accounts) > 0 then '40_service_accounts']: service_accounts,
-  [if std.length(cluster_roles) > 0 then '50_cluster_roles']: cluster_roles,
-  [if std.length(cluster_role_bindings) > 0 then '60_cluster_role_bindings']: cluster_role_bindings,
-  [if std.length(provider_configs) > 0 then '70_provider_configs']: provider_configs,
-}
+    '01_rbac_finalizer_clusterrole': rbacFinalizerRole,
+    '01_rbac_finalizer_clusterrolebinding': rbacFinalizerRoleBinding,
+    [if std.length(providers) > 0 then '10_providers']: providers,
+    [if params.monitoring.enabled then '20_monitoring']: monitoring,
+    [if std.length(controller_configs) > 0 then '30_controller_configs']: controller_configs,
+    [if std.length(service_accounts) > 0 then '40_service_accounts']: service_accounts,
+    [if std.length(cluster_roles) > 0 then '50_cluster_roles']: cluster_roles,
+    [if std.length(cluster_role_bindings) > 0 then '60_cluster_role_bindings']: cluster_role_bindings,
+    [if std.length(provider_configs) > 0 then '70_provider_configs']: provider_configs,
+  } else {}
