@@ -36,7 +36,11 @@ spec:
           value: "true"
         - name: APPCAT_SLI_VSHNMARIADB
           value: "true"
+<<<<<<< HEAD
         image: ghcr.io/vshn/appcat:v4.105.1
+=======
+        image: ghcr.io/vshn/appcat:fix_invalid_backup_refs
+>>>>>>> 4de876b4 ([create-pull-request] automated change)
         livenessProbe:
           httpGet:
             path: /healthz

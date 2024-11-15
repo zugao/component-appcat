@@ -44,7 +44,11 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
+<<<<<<< HEAD
           imageTag: v4.105.1
+=======
+          imageTag: fix_invalid_backup_refs
+>>>>>>> 4de876b4 ([create-pull-request] automated change)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-production
           isOpenshift: 'true'
