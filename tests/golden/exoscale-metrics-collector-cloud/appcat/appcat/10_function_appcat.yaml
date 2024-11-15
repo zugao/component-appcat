@@ -3,10 +3,6 @@ kind: Function
 metadata:
   name: function-appcat
 spec:
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.104.1-func
-=======
-  package: ghcr.io/vshn/appcat:fix_restart_protection-func
->>>>>>> 043d3163 ([create-pull-request] automated change)
+  package: ghcr.io/vshn/appcat:v4.105.1-func
   runtimeConfigRef:
     name: function-appcat
