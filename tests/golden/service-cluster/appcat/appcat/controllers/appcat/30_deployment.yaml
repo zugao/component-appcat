@@ -31,7 +31,7 @@ spec:
                   name: vcluster-kubeconfig
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.105.3
+          image: ghcr.io/vshn/appcat:v4.106.0
           livenessProbe:
             httpGet:
               path: /healthz
