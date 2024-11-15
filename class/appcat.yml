@@ -71,6 +71,7 @@ parameters:
           - ${_base_directory}/component/vshn_appcat_services.jsonnet
           - ${_base_directory}/component/billing.jsonnet
           - ${_base_directory}/component/rbac_testing.jsonnet
+          - ${_base_directory}/component/vshn_nextcloud.jsonnet
         input_type: jsonnet
         output_path: appcat/
 

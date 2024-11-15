@@ -47,6 +47,8 @@ parameters:
     services:
       vshn:
         enabled: true
+        nextcloud:
+          enabled: true
         postgres:
           sgNamespace: stackgres
           bucket_region: 'ch-gva-2'
