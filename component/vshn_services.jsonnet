@@ -6,6 +6,7 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
@@ -37,7 +38,7 @@ local maintenanceClusterRoleBinding = kube.ClusterRoleBinding('crossplane:appcat
 };
 
 
-if params.services.vshn.enabled then {
+if params.services.vshn.enabled && vars.isSingleOrControlPlaneCluster then {
   '10_namespace_vshn_control': controlNamespace,
   '10_rbac_helm_service_maintenance_sa': maintenanceServiceAccount,
   '10_rbac_helm_service_maintenance_cluster_role': maintenanceRole,

@@ -6,14 +6,15 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local prom = import 'prometheus.libsonnet';
 local slos = import 'slos.libsonnet';
+local opsgenieRules = import 'vshn_alerting.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local redisParams = params.services.vshn.redis;
-local opsgenieRules = import 'vshn_alerting.jsonnet';
 local appuioManaged = inv.parameters.appcat.appuioManaged;
 
 local defaultUser = 'default';
@@ -560,7 +561,7 @@ local plansCM = kube.ConfigMap('vshnredisplans') + {
   },
 };
 
-if params.services.vshn.enabled && redisParams.enabled then {
+if params.services.vshn.enabled && redisParams.enabled && vars.isSingleOrControlPlaneCluster then {
   '20_xrd_vshn_redis': xrd,
   '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],

@@ -1,11 +1,11 @@
+local comp = import 'lib/appcat-compositions.libsonnet';
+local crossplane = import 'lib/appcat-crossplane.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 
-local comp = import 'lib/appcat-compositions.libsonnet';
-local crossplane = import 'lib/appcat-crossplane.libsonnet';
-
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
@@ -149,7 +149,7 @@ local osTemplate =
     ],
   };
 
-if params.services.exoscale.enabled && kafkaParams.enabled then {
+if params.services.exoscale.enabled && kafkaParams.enabled && vars.isSingleOrControlPlaneCluster then {
   '20_xrd_exoscale_kafka': xrd,
   '20_rbac_exoscale_kafka': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_kafka': composition,

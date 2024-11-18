@@ -3,6 +3,7 @@ local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 
+local vars = import 'config/vars.jsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local inv = kap.inventory();
@@ -74,11 +75,12 @@ local saPnT = kube.ServiceAccount('function-patch-and-transform') {
 
 local pntFunctionImage = pntImage.registry + '/' + pntImage.repository + ':' + pntImage.tag;
 
-{
-  '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage, 'function-patch-and-transform'),
-  '10_function_appcat': appcat,
-  '10_runtimeconfig_function_appcat': appcatRuntimeConfig,
-  '10_runtimeconfig_function_pnt': common.DefaultRuntimeConfigWithSaName('function-patch-and-transform'),
-  '20_serviceaccount_appcat': saAppCat,
-  '20_serviceaccount_pnt': saPnT,
-}
+if vars.isSingleOrControlPlaneCluster then
+  {
+    '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage, 'function-patch-and-transform'),
+    '10_function_appcat': appcat,
+    '10_runtimeconfig_function_appcat': appcatRuntimeConfig,
+    '10_runtimeconfig_function_pnt': common.DefaultRuntimeConfigWithSaName('function-patch-and-transform'),
+    '20_serviceaccount_appcat': saAppCat,
+    '20_serviceaccount_pnt': saPnT,
+  } else {}

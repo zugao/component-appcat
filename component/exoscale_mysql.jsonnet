@@ -6,6 +6,7 @@ local comp = import 'lib/appcat-compositions.libsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local xrds = import 'xrds.libsonnet';
 
 local inv = kap.inventory();
@@ -157,7 +158,7 @@ local osTemplate =
     ],
   };
 
-if params.services.exoscale.enabled && mysqlParams.enabled then {
+if params.services.exoscale.enabled && mysqlParams.enabled && vars.isSingleOrControlPlaneCluster then {
   '20_xrd_exoscale_mysql': xrd,
   '20_rbac_exoscale_mysql': xrds.CompositeClusterRoles(xrd),
   '21_composition_exoscale_mysql': composition,

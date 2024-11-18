@@ -1,0 +1,189 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-crossplane/v2.3.0/lib/crossplane.libsonnet
+        output_path: vendor/lib/crossplane.libsonnet
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/component-openshift4-operators/v1.4.0/lib/openshift4-operators.libsonnet
+        output_path: vendor/lib/openshift4-operators.libsonnet
+
+  facts:
+    cloud: cloudscale
+    sales_order: "10431"
+
+  global:
+    appuio_metered_billing_zone_label_map:
+      c-green-test-1234: 'Kind - Local Test 0'
+
+  crossplane:
+    namespace: syn-crossplane
+
+  appcat:
+
+    clusterManagementSystem:
+      controlPlaneCluster: true
+      serviceCluster: false
+      commonProviderConfigs:
+        - name: kind
+          spec:
+            credentials:
+              source: Secret
+              secretRef:
+                key: kubeconfig
+                name: kind
+                namespace: syn-crossplane
+
+    grpcEndpoint: 172.18.0.1:9443
+    proxyFunction: true
+
+    quotasEnabled: false
+    appuioManaged: false
+    billing:
+      salesOrder: ST10120
+      vshn:
+        enableCronjobs: false
+        meteringRules: true
+      enableMockOrgInfo: true
+      instanceUOM: uom_uom_45_1e112771
+      network_policies:
+        target_namespaces:
+          vshn-appuio-mimir: false
+      prometheus:
+        url: http://prometheus-operated.prometheus-system:9090/prometheus
+      cloudZone: ${global:appuio_metered_billing_zone_label_map:${cluster:name}}
+
+    slos:
+      enabled: true
+      alertsEnabled: true
+      sli_exporter:
+        enableMaintenceObserver: true
+      sla_reporter:
+        enabled: true
+        slo_mimir_svc: kube-prometheus-kube-prome-prometheus
+        slo_mimir_namespace: prometheus-system
+    controller:
+      enabled: true
+      postgres:
+        enabled: true
+    providers:
+      exoscale:
+        enabled: false
+      cloudscale:
+        enabled: true
+      kubernetes:
+        enabled: true
+      helm:
+        enabled: true
+      minio:
+        enabled: false
+
+    apiserver:
+      enabled: true
+      env:
+        APPCAT_HANDLER_ENABLED: "true"
+        VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "true"
+        VSHN_REDIS_BACKUP_HANDLER_ENABLED: "true"
+
+    services:
+      emailAlerting:
+        enabled: false
+      vshn:
+        enabled: true
+        externalDatabaseConnectionsEnabled: true
+        mariadb:
+          enabled: true
+        keycloak:
+          enabled: true
+          additionalInputs:
+            # https://vault-prod.syn.vshn.net/ui/vault/secrets/clusters%2Fkv/kv/__shared__%2F__shared__%2Fappcat/details?version=1
+            registry_username: ""
+            registry_password: ""
+            ingress_annotations: |
+              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+              cert-manager.io/cluster-issuer: letsencrypt-staging
+        nextcloud:
+          enabled: true
+          additionalInputs:
+            ingress_annotations: |
+              cert-manager.io/cluster-issuer: letsencrypt-staging
+              nginx.ingress.kubernetes.io/enable-cors: "true"
+              nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"
+
+        postgres:
+          sgNamespace: stackgres
+          bucket_region: 'ch-gva-2'
+          bucket_endpoint: 'http://minio-server.minio:9000'
+          additionalInputs:
+            loadbalancerAnnotations: |
+                foo: bar
+          plans:
+            standard-8:
+              enabled: false
+            plus-2:
+              size: ${appcat:services:vshn:postgres:plans:standard-2:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-4:
+              size: ${appcat:services:vshn:postgres:plans:standard-4:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+        redis:
+          plans:
+            standard-8:
+              enabled: false
+            plus-512m:
+              size: ${appcat:services:vshn:redis:plans:standard-512m:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-1:
+              size: ${appcat:services:vshn:redis:plans:standard-1:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-4:
+              size: ${appcat:services:vshn:redis:plans:standard-4:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+            plus-2:
+              size: ${appcat:services:vshn:redis:plans:standard-2:size}
+              scheduling:
+                nodeSelector:
+                  appuio.io/node-class: "plus"
+              note: "Will be scheduled on APPUiO Cloud plus nodes"
+          enabled: true
+        minio:
+          enabled: false
+          instances:
+            - name: minio
+              namespace: syn-appcat
+              spec:
+                parameters:
+                  service:
+                    mode: standalone
+                  size:
+                    disk: 20Gi
+                writeConnectionSecretToRef:
+                  name: minio-cluster-credentials
+
+      generic:
+        objectstorage:
+          enabled: true
+
+          defaultComposition: minio
+          compositions:
+            exoscale:
+              enabled: false
+            cloudscale:
+              enabled: false
+            minio:
+              enabled: true

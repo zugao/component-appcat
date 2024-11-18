@@ -101,6 +101,11 @@ parameters:
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
+    # Single or multiple cluster setup
+    clusterManagementSystem:
+      controlPlaneCluster: true
+      serviceCluster: true
+
     crossplane:
       namespace: syn-crossplane
       namespaceLabels: {}
