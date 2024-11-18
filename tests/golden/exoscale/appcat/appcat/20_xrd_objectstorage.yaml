@@ -3,7 +3,7 @@ kind: CompositeResourceDefinition
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
+    argocd.argoproj.io/sync-wave: '-70'
   labels:
     name: xobjectbuckets.appcat.vshn.io
   name: xobjectbuckets.appcat.vshn.io

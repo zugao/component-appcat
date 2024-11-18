@@ -3,7 +3,7 @@ kind: Provider
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
+    argocd.argoproj.io/sync-wave: '-80'
   labels:
     name: provider-cloudscale
   name: provider-cloudscale
@@ -15,6 +15,9 @@ spec:
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '-90'
   name: provider-cloudscale
 spec:
   deploymentTemplate:
@@ -33,7 +36,7 @@ kind: ProviderConfig
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
+    argocd.argoproj.io/sync-wave: '-50'
   labels:
     name: cloudscale
   name: cloudscale
@@ -47,7 +50,8 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: provider-cloudscale
   name: provider-cloudscale
@@ -69,7 +73,8 @@ type: Opaque
 apiVersion: v1
 kind: Namespace
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: syn-provider-cloudscale-secrets
   name: syn-provider-cloudscale-secrets

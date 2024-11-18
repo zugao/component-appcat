@@ -246,4 +246,8 @@ local haPrometheusRule = {
   '10_appcat_ha_monitoring': haPrometheusRule,
   [if params.services.vshn.enabled && params.services.emailAlerting.enabled then '10_mailgun_secret']: emailSecret,
   [if params.billing.enableMockOrgInfo then '10_mock_org_info']: mockOrgInfo,
+  // This is ugly, but otherwise the post-processing will fail for
+  // golden tests where things get dynamically enabeld or disabled, so we
+  // can't use an enabled filter in the post processing...
+  'controllers/sts-resizer/.keep': '',
 }

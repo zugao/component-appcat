@@ -7,7 +7,7 @@ local run_as_user = {
 };
 
 local fixup(obj) =
-  if obj.kind == 'Deployment' then
+  if std.type(obj) == 'object' && obj.kind == 'Deployment' then
     obj {
       spec+: {
         template+: {

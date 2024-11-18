@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: crossplane-appcat-job-redis-restorejob
   name: crossplane:appcat:job:redis:restorejob
@@ -57,7 +58,8 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: redisrestoreserviceaccount
   name: redisrestoreserviceaccount
@@ -66,7 +68,8 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     name: appcat-job-redis-restorejob
   name: appcat:job:redis:restorejob

@@ -60,7 +60,7 @@ docs-serve: ## Preview the documentation
 test: commodore_args += -f tests/$(instance).yml
 test: .compile ## Compile the component
 .PHONY: gen-golden
-gen-golden: commodore_args += -f tests/$(instance).yml 
+gen-golden: commodore_args += -f tests/$(instance).yml
 gen-golden: clean .compile ## Update the reference version for target `golden-diff`.
 	@rm -rf tests/golden/$(instance)
 	@mkdir -p tests/golden/$(instance)
@@ -95,3 +95,14 @@ clean: ## Clean the project
 .PHONY: pre-commit-hook
 pre-commit-hook: ## Install pre-commit hook in .git/hooks
 	/usr/bin/cp -fa .githooks/pre-commit .git/hooks/pre-commit
+
+.PHONY: push-golden
+push-golden: commodore_args += -f tests/$(instance).yml
+push-golden: clean .compile ## Update the reference version for target `golden-diff`.
+	yq eval-all '. as $$item ireduce ({}; . * $$item )' hack/base_app.yaml tests/golden/vshn/appcat/apps/appcat.yaml | kubectl apply -f -
+	cd compiled/appcat/appcat && \
+	git init && \
+	git add . && \
+	git commit -m "update" && \
+	git remote add origin http://gitea_admin:admin@forgejo.127.0.0.1.nip.io:8088/gitea_admin/appcat.git && \
+	git push -u origin master --force

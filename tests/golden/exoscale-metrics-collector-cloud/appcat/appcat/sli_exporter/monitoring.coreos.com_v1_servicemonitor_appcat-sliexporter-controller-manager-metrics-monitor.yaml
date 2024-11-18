@@ -7,13 +7,13 @@ metadata:
   namespace: appcat-slos
 spec:
   endpoints:
-  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    honorLabels: true
-    path: /metrics
-    port: https
-    scheme: https
-    tlsConfig:
-      insecureSkipVerify: true
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      path: /metrics
+      port: https
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
   selector:
     matchLabels:
       control-plane: controller-manager

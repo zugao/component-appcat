@@ -3,7 +3,7 @@ kind: Composition
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '10'
+    argocd.argoproj.io/sync-wave: '-60'
     metadata.appcat.vshn.io/description: Redis instances by VSHN
     metadata.appcat.vshn.io/displayname: Redis by VSHN
     metadata.appcat.vshn.io/end-user-docs-url: https://vs.hn/vshn-redis

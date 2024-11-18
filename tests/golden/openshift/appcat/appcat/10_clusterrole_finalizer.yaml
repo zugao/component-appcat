@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     rbac.crossplane.io/aggregate-to-crossplane: 'true'
   name: crossplane:appcat:finalizer

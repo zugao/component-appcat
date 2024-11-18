@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations: {}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-100'
   labels:
     authorization.openshift.io/aggregate-to-basic-user: 'true'
     name: system-test-distribution-aggregate-appcat-to-basic-user

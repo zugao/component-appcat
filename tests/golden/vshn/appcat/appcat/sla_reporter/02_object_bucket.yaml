@@ -3,7 +3,7 @@ kind: ObjectBucket
 metadata:
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
-    argocd.argoproj.io/sync-options: Prune=false
+    argocd.argoproj.io/sync-options: Prune=false,SkipDryRunOnMissingResource=true
   name: appcat-sla-reports
   namespace: appcat-slos
 spec:
