@@ -20,7 +20,6 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
-
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
