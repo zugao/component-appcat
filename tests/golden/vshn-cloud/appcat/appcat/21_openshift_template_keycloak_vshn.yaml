@@ -1,0 +1,41 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+message: Your Keycloak by VSHN instance is being provisioned, please see ${SECRET_NAME}
+  for access.
+metadata:
+  annotations:
+    description: Keycloak is an open source identity and access management solution.
+    iconClass: icon-keycloak
+    openshift.io/display-name: VSHNKeycloak
+    openshift.io/documentation-url: https://vs.hn/vshn-keycloak
+    openshift.io/provider-display-name: VSHN
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
+    tags: idp,keycloak
+  labels:
+    name: keycloakbyvshn
+  name: keycloakbyvshn
+  namespace: openshift
+objects:
+  - apiVersion: vshn.appcat.vshn.io/v1
+    kind: VSHNKeycloak
+    metadata:
+      annotations: {}
+      labels:
+        name: ${INSTANCE_NAME}
+      name: ${INSTANCE_NAME}
+    spec:
+      parameters:
+        service:
+          version: ${VERSION}
+        size:
+          plan: ${PLAN}
+      writeConnectionSecretToRef:
+        name: ${SECRET_NAME}
+parameters:
+  - name: PLAN
+    value: standard-4
+  - name: SECRET_NAME
+    value: keycloak-credentials
+  - name: INSTANCE_NAME
+  - name: VERSION
+    value: '22'

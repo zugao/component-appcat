@@ -15,7 +15,8 @@ def yaml_path_recursion(yaml_dict, path):
         return yaml_path_recursion(yaml_dict.get(path[0], {}), path[1:])
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-tests_vshn_file = os.path.join(current_dir, '../../tests/vshn.yml')
+tests_vshn_cloud_file = os.path.join(current_dir, '../../tests/vshn-cloud.yml')
+tests_vshn_managed_file = os.path.join(current_dir, '../../tests/vshn-managed.yml')
 defaults_file = os.path.join(current_dir, '../../class/defaults.yml')
 
 
@@ -25,12 +26,20 @@ keys_to_check_yaml = [
     'parameters.appcat.services.emailAlerting.smtpPassword',
     ]
 
-with open(tests_vshn_file, 'r') as f:
+with open(tests_vshn_cloud_file, 'r') as f:
     defaults = yaml.safe_load(f)
     for key in keys_to_check_yaml:
         splitted = key.split(".")
         if yaml_path_recursion(defaults, splitted):
-            print(f'password is not empty in or broken vault declaration in {tests_vshn_file} for key {key}')
+            print(f'password is not empty in or broken vault declaration in {tests_vshn_cloud_file} for key {key}')
+            sys.exit(1)
+
+with open(tests_vshn_managed_file, 'r') as f:
+    defaults = yaml.safe_load(f)
+    for key in keys_to_check_yaml:
+        splitted = key.split(".")
+        if yaml_path_recursion(defaults, splitted):
+            print(f'password is not empty in or broken vault declaration in {tests_vshn_managed_file} for key {key}')
             sys.exit(1)
 
 with open(defaults_file, 'r') as f:
