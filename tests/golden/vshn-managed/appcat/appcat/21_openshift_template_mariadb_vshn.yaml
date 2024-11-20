@@ -1,0 +1,42 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+message: Your MariaDB by VSHN instance is being provisioned, please see ${SECRET_NAME}
+  for access.
+metadata:
+  annotations:
+    description: The open source relational database management system (DBMS) that
+      is a compatible drop-in replacement for the widely used MySQL database technology
+    iconClass: icon-mariadb
+    openshift.io/display-name: VSHNMariaDB
+    openshift.io/documentation-url: https://vs.hn/vshn-mariadb
+    openshift.io/provider-display-name: VSHN
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
+    tags: database,sql,mariadb
+  labels:
+    name: mariadbbyvshn
+  name: mariadbbyvshn
+  namespace: openshift
+objects:
+  - apiVersion: vshn.appcat.vshn.io/v1
+    kind: VSHNMariaDB
+    metadata:
+      annotations: {}
+      labels:
+        name: ${INSTANCE_NAME}
+      name: ${INSTANCE_NAME}
+    spec:
+      parameters:
+        service:
+          version: ${VERSION}
+        size:
+          plan: ${PLAN}
+      writeConnectionSecretToRef:
+        name: ${SECRET_NAME}
+parameters:
+  - name: PLAN
+    value: standard-4
+  - name: SECRET_NAME
+    value: mariadb-credentials
+  - name: INSTANCE_NAME
+  - name: VERSION
+    value: '11.5'

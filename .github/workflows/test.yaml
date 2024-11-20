@@ -21,53 +21,17 @@ jobs:
       - name: Run ${{ matrix.command }}
         run: make ${{ matrix.command }}
 
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        instance:
-          - defaults
-          - exoscale
-          - cloudscale
-          - openshift
-          - vshn
-          - apiserver
-          - controllers
-          - minio
-          - cloudscale-metrics-collector-cloud
-          - cloudscale-metrics-collector-managed
-          - exoscale-metrics-collector-cloud
-          - exoscale-metrics-collector-managed
-          - control-plane
-          - service-cluster
-    defaults:
-      run:
-        working-directory: ${{ env.COMPONENT_NAME }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ env.COMPONENT_NAME }}
-      - name: Compile component
-        run: make test -e instance=${{ matrix.instance }}
   golden:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         instance:
-          - defaults
-          - exoscale
-          - cloudscale
-          - openshift
-          - vshn
-          - apiserver
-          - controllers
-          - minio
-          - cloudscale-metrics-collector-cloud
-          - cloudscale-metrics-collector-managed
-          - exoscale-metrics-collector-cloud
-          - exoscale-metrics-collector-managed
-          - control-plane
+          - vshn-cloud
+          - vshn-managed
           - service-cluster
+          - control-plane
+          - defaults
+          - dev
     defaults:
       run:
         working-directory: ${{ env.COMPONENT_NAME }}

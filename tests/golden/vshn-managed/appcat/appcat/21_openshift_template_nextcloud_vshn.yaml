@@ -1,0 +1,42 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+message: Your Nextcloud by VSHN instance is being provisioned, please see ${SECRET_NAME}
+  for access.
+metadata:
+  annotations:
+    description: Nextcloud is an open source suite of client-server software for creating
+      and using file hosting services.
+    iconClass: icon-nextcloud
+    openshift.io/display-name: VSHNNextcloud
+    openshift.io/documentation-url: https://vs.hn/vshn-nextcloud
+    openshift.io/provider-display-name: VSHN
+    openshift.io/support-url: https://www.vshn.ch/en/contact/
+    tags: idp,nextcloud
+  labels:
+    name: nextcloudbyvshn
+  name: nextcloudbyvshn
+  namespace: openshift
+objects:
+  - apiVersion: vshn.appcat.vshn.io/v1
+    kind: VSHNNextcloud
+    metadata:
+      annotations: {}
+      labels:
+        name: ${INSTANCE_NAME}
+      name: ${INSTANCE_NAME}
+    spec:
+      parameters:
+        service:
+          version: ${VERSION}
+        size:
+          plan: ${PLAN}
+      writeConnectionSecretToRef:
+        name: ${SECRET_NAME}
+parameters:
+  - name: PLAN
+    value: standard-4
+  - name: SECRET_NAME
+    value: nextcloud-credentials
+  - name: INSTANCE_NAME
+  - name: VERSION
+    value: '22'
