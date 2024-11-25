@@ -18,7 +18,7 @@ parameters:
         version: 2.4.3
       nextcloud:
         source: https://nextcloud.github.io/helm/
-        version: 5.0.0
+        version: 6.2.4
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
