@@ -470,6 +470,17 @@ parameters:
           serviceAccountName: provider-kubernetes
         defaultProviderConfig: {}
         additionalProviderConfigs: []
+        additionalRuntimeConfig:
+          spec:
+            deploymentTemplate:
+              spec:
+                template:
+                  spec:
+                    containers:
+                    - name: package-runtime
+                      securityContext: {}
+                      args:
+                        - --max-reconcile-rate=10
 
       helm:
         enabled: false
