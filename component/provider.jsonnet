@@ -265,7 +265,9 @@ local provider(name, provider) =
     },
   };
 
-  local runtimeConf = common.DefaultRuntimeConfigWithSaName(sa.metadata.name);
+  local runtimeConf = std.mergePatch(common.DefaultRuntimeConfigWithSaName(sa.metadata.name),
+                                     if std.objectHas(provider, 'additionalRuntimeConfig') && provider.additionalRuntimeConfig != null then
+                                       provider.additionalRuntimeConfig else {});
 
   local providerManifest = crossplane.Provider('provider-' + name) {
     spec+: escapePackage(provider.spec) + runtimeConfigRef(sa.metadata.name),
