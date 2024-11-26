@@ -31,7 +31,7 @@ spec:
                   name: vcluster-kubeconfig
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:nextcloud_multi_fqdn
+          image: ghcr.io/vshn/appcat:v4.107.0
           livenessProbe:
             httpGet:
               path: /healthz

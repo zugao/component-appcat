@@ -55,7 +55,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: nextcloud/multi_fqdn
+        tag: v4.107.0
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -477,11 +477,10 @@ parameters:
                 template:
                   spec:
                     containers:
-                    - name: package-runtime
-                      securityContext: {}
-                      args:
-                        - --max-reconcile-rate=10
-
+                      - name: package-runtime
+                        securityContext: {}
+                        args:
+                          - --max-reconcile-rate=10
       helm:
         enabled: false
         apiVersion: helm.crossplane.io/v1beta1
