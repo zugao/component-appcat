@@ -11,6 +11,7 @@ parameters:
   facts:
     cloud: cloudscale
     sales_order: "10431"
+    appcat_dev: true
 
   global:
     appuio_metered_billing_zone_label_map:
@@ -35,7 +36,7 @@ parameters:
                 namespace: syn-crossplane
 
     grpcEndpoint: 172.18.0.1:9443
-    proxyFunction: true
+    proxyFunction: false
 
     quotasEnabled: false
     appuioManaged: false

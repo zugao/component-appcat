@@ -44,6 +44,28 @@ On the very first sync after setting up kindev, ArgoCD doesn't recognize the `se
 There's a postprocess function that will add ArgoCD syn annotations to each object of the given kind.
 If any new types are introduced that need specific ordering, the `add_argo_annotations.jsonnet` is the right place.
 
+## Debugging comp-functions locally
+
+The golden targets `dev` and `control-plane` are pre-configured to support proxying the comp functions from Kind to the local endpoint.
+
+To enable it, change these two parameters:
+```yaml
+  appcat:
+    grpcEndpoint: host.docker.internal:9443
+    proxyFunction: false
+```
+
+The `grpcEndpoint` depends on your docker implementation and should point to an address that's reachable from the containers.
+
+```bash
+HOSTIP=$(docker inspect kindev-control-plane | jq '.[0].NetworkSettings.Networks.kind.Gateway') # On kind MacOS/Windows
+HOSTIP=host.docker.internal # On Docker Desktop distributions
+HOSTIP=host.lima.internal # On Lima backed Docker distributions
+Linux oneliner: echo `ip -4 addr show dev docker0 | grep inet | awk -F' ' '{print $2}' | awk -F'/' '{print $1}'`:9443
+```
+
+Also make sure that `facts.appcat_dev` is set on the target you want to proxy. This is a safeguard so we don't accidentally enable it on prod clusters.
+
 ## Documentation
 
 The rendered documentation for this component is available on the [Commodore Components Hub](https://hub.syn.tools/appcat).
