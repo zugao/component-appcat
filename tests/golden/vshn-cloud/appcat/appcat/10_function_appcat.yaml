@@ -6,6 +6,10 @@ metadata:
     argocd.argoproj.io/sync-wave: '-40'
   name: function-appcat
 spec:
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.107.0-func
+=======
+  package: ghcr.io/vshn/appcat:add_ignore-vshn-test-billing-func
+>>>>>>> a5a481ac ([create-pull-request] automated change)
   runtimeConfigRef:
     name: function-appcat

@@ -39,7 +39,11 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
+<<<<<<< HEAD
           imageTag: v4.107.0
+=======
+          imageTag: add_ignore-vshn-test-billing
+>>>>>>> a5a481ac ([create-pull-request] automated change)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone

@@ -31,7 +31,11 @@ spec:
                   name: vcluster-kubeconfig
             - name: PLANS_NAMESPACE
               value: syn-appcat
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.107.0
+=======
+          image: ghcr.io/vshn/appcat:add_ignore-vshn-test-billing
+>>>>>>> a5a481ac ([create-pull-request] automated change)
           livenessProbe:
             httpGet:
               path: /healthz
