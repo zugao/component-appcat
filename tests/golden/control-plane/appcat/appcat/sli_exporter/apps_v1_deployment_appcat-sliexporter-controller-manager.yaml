@@ -36,11 +36,7 @@ spec:
               value: 'true'
             - name: APPCAT_SLI_VSHNMARIADB
               value: 'true'
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.107.0
-=======
-          image: ghcr.io/vshn/appcat:add_ignore-vshn-test-billing
->>>>>>> a5a481ac ([create-pull-request] automated change)
+          image: ghcr.io/vshn/appcat:v4.108.0
           livenessProbe:
             httpGet:
               path: /healthz

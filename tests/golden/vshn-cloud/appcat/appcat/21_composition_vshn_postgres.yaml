@@ -40,15 +40,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           externalDatabaseConnectionsEnabled: 'true'
-<<<<<<< HEAD
-<<<<<<< HEAD
-          imageTag: v4.107.0
-=======
-=======
           ignoreNamespaceForBilling: vshn-test
->>>>>>> b4fed8f1 (Add parameter to ignore testing namespace)
-          imageTag: add_ignore-vshn-test-billing
->>>>>>> a5a481ac ([create-pull-request] automated change)
+          imageTag: v4.108.0
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
