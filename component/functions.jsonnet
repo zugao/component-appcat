@@ -7,6 +7,7 @@ local vars = import 'config/vars.jsonnet';
 local crossplane = import 'lib/appcat-crossplane.libsonnet';
 
 local inv = kap.inventory();
+local facts = inv.parameters.facts;
 local params = inv.parameters.appcat;
 local appcatImage = params.images.functionAppcat;
 local pntImage = params.images.functionpnt;
@@ -55,11 +56,41 @@ local appcatRuntimeConfig = {
   },
 };
 
+local appcatProxyRuntimeConfig = {
+  apiVersion: 'pkg.crossplane.io/v1beta1',
+  kind: 'DeploymentRuntimeConfig',
+  metadata: {
+    name: 'enable-proxy',
+  },
+  spec: {
+    deploymentTemplate: {
+      spec: {
+        selector: {},
+        template: {
+          spec:
+            {
+              containers: [
+                {
+                  name: 'package-runtime',
+                  command: [ 'appcat' ],
+                  args: [ 'functions', '--proxymode' ],
+                  securityContext: {},
+                },
+              ],
+              securityContext: {},
+              serviceAccountName: 'function-appcat',
+            },
+        },
+      },
+    },
+  },
+};
+
 local appcatImageTag = std.strReplace(appcatImage.tag, '/', '_');
 
 local appcatFunctionImage = appcatImage.registry + '/' + appcatImage.repository + ':' + appcatImageTag;
 
-local appcat = getFunction('function-appcat', appcatFunctionImage, 'function-appcat');
+local appcat = getFunction('function-appcat', appcatFunctionImage, if !params.proxyFunction then 'function-appcat' else 'enable-proxy');
 
 local saAppCat = kube.ServiceAccount('function-appcat') {
   metadata+: {
@@ -75,11 +106,14 @@ local saPnT = kube.ServiceAccount('function-patch-and-transform') {
 
 local pntFunctionImage = pntImage.registry + '/' + pntImage.repository + ':' + pntImage.tag;
 
+assert !params.proxyFunction || params.proxyFunction && std.objectHas(facts, 'appcat_dev') && facts.appcat_dev : 'Proxy config only allowed for Dev environments!';
+
 if vars.isSingleOrControlPlaneCluster then
   {
     '10_function_patch_and_transform': getFunction('function-patch-and-transform', pntFunctionImage, 'function-patch-and-transform'),
     '10_function_appcat': appcat,
     '10_runtimeconfig_function_appcat': appcatRuntimeConfig,
+    [if params.proxyFunction then '10_runtimeconfig_proxy_appcat']: appcatProxyRuntimeConfig,
     '10_runtimeconfig_function_pnt': common.DefaultRuntimeConfigWithSaName('function-patch-and-transform'),
     '20_serviceaccount_appcat': saAppCat,
     '20_serviceaccount_pnt': saPnT,
