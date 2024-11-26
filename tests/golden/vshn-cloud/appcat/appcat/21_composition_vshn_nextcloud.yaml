@@ -29,7 +29,7 @@ spec:
         data:
           bucketRegion: lpg
           chartRepository: https://nextcloud.github.io/helm/
-          chartVersion: 5.0.0
+          chartVersion: 6.2.4
           collaboraCPULimit: '1'
           collaboraCPURequests: 250m
           collaboraMemoryLimit: 1Gi
@@ -44,7 +44,7 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
-          imageTag: v4.106.4
+          imageTag: v4.107.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'true'
