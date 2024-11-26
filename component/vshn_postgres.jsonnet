@@ -225,6 +225,7 @@ local composition =
                       sliNamespace: params.slos.namespace,
                       salesOrder: if appuioManaged then std.toString(params.billing.salesOrder) else '',
                       crossplaneNamespace: params.crossplane.namespace,
+                      ignoreNamespaceForBilling: params.billing.ignoreNamespace,
                     } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
                     + common.EmailAlerting(params.services.emailAlerting)
                     + if pgParams.proxyFunction then {

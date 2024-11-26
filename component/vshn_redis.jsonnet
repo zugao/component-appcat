@@ -491,6 +491,7 @@ local composition =
                       sliNamespace: params.slos.namespace,
                       salesOrder: if appuioManaged then std.toString(params.billing.salesOrder) else '',
                       crossplaneNamespace: params.crossplane.namespace,
+                      ignoreNamespaceForBilling: params.billing.ignoreNamespace,
                     } + common.EmailAlerting(params.services.emailAlerting)
                     + if redisParams.proxyFunction then {
                       proxyEndpoint: redisParams.grpcEndpoint,
