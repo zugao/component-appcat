@@ -36,7 +36,11 @@ spec:
               value: 'true'
             - name: APPCAT_SLI_VSHNMARIADB
               value: 'true'
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.116.1
+=======
+          image: ghcr.io/vshn/appcat:add_sli-exporter-control-plane-support
+>>>>>>> 537a305e ([create-pull-request] automated change)
           livenessProbe:
             httpGet:
               path: /healthz
