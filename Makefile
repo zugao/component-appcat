@@ -97,6 +97,7 @@ pre-commit-hook: ## Install pre-commit hook in .git/hooks
 	/usr/bin/cp -fa .githooks/pre-commit .git/hooks/pre-commit
 
 .PHONY: push-golden
+instance=dev
 push-golden: commodore_args += -f tests/$(instance).yml
 push-golden: clean .compile ## Push the target instance to the local forgejo instance, so it can be applied by argocd
 	yq eval-all '. as $$item ireduce ({}; . * $$item )' hack/base_app.yaml tests/golden/$(instance)/appcat/apps/appcat.yaml | kubectl apply -f -
