@@ -5833,7 +5833,8 @@ spec:
                         vacuumEnabled:
                           default: false
                           type: boolean
-                      tls: {}
+                      tls:
+                        default: {}
                       type: object
                     size:
                       default: {}
