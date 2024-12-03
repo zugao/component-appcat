@@ -40,7 +40,7 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
-          imageTag: collabora-billing
+          imageTag: v4.116.0
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
