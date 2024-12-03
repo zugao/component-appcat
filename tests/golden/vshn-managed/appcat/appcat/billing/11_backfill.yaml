@@ -83,7 +83,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -170,7 +170,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -256,7 +256,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -342,7 +342,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -429,7 +429,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -516,7 +516,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -602,7 +602,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -688,7 +688,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -775,7 +775,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -862,7 +862,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -948,7 +948,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1034,7 +1034,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1121,7 +1121,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1208,7 +1208,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1294,7 +1294,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1380,7 +1380,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1467,7 +1467,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1554,7 +1554,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1640,7 +1640,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1726,7 +1726,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1813,7 +1813,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1900,7 +1900,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -1986,7 +1986,7 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -2072,4 +2072,4 @@ spec:
           restartPolicy: OnFailure
   schedule: 30 * * * *
   startingDeadlineSeconds: 180
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
