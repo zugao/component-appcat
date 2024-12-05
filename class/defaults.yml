@@ -481,7 +481,7 @@ parameters:
                       - name: package-runtime
                         securityContext: {}
                         args:
-                          - --max-reconcile-rate=10
+                          - --max-reconcile-rate=20
       helm:
         enabled: false
         apiVersion: helm.crossplane.io/v1beta1
