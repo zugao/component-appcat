@@ -12,6 +12,8 @@ local paramsBilling = params.billing;
 
 local formatImage = function(ref) '%(registry)s/%(repository)s:%(tag)s' % ref;
 
+local addOns = [ 'nextcloud-office' ];
+
 // escape any non-valid characters and replace them with -
 local escape = function(str)
   std.join('',
@@ -71,7 +73,7 @@ local commonEnv = std.prune([
   },
 ]);
 
-local backfillCJ = function(name, query, sla, type)
+local backfillCJ = function(name, query, sla, type, isAddOn)
 
   local orgId = if type == 'cloud' then paramsBilling.prometheus.cloud_org_id else paramsBilling.prometheus.managed_org_id;
 
@@ -89,9 +91,11 @@ local backfillCJ = function(name, query, sla, type)
 
   local instanceJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s';
 
+  local instanceAddOnJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_addon)s';
+
   local productID = 'appcat-vshn-%(name)s-%(sla)s' % { name: name, sla: sla };
 
-  local jobEnv = std.prune([
+  local jobEnv = function(isAddOn) std.prune([
     {
       name: 'AR_ORG_ID',
       value: orgId,
@@ -106,7 +110,7 @@ local backfillCJ = function(name, query, sla, type)
     },
     {
       name: 'AR_INSTANCE_JSONNET',
-      value: instanceJsonnet,
+      value: if isAddOn then instanceAddOnJsonnet else instanceJsonnet,
     },
     if itemGroupDescJsonnet != null then {
       name: 'AR_ITEM_GROUP_DESCRIPTION_JSONNET',
@@ -121,12 +125,13 @@ local backfillCJ = function(name, query, sla, type)
       value: paramsBilling.instanceUOM,
     },
   ]);
+
   cronjob.CronJob('%(product)s-%(type)s' % { product: escape(productID), type: type }, 'backfill', {
     containers: [
       {
         name: 'backfill',
         image: formatImage(params.images.reporting),
-        env+: commonEnv + jobEnv,
+        env+: commonEnv + jobEnv(isAddOn),
         command: [ 'sh', '-c' ],
         args: [
           'appuio-reporting report --timerange 1h --begin=$(date -d "now -3 hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u +"%Y-%m-%dT%H:00:00Z")',
@@ -153,7 +158,37 @@ local backfillCJ = function(name, query, sla, type)
     },
   };
 
-local generateCloudAndManaged = function(name)
+local getManagedQuery = function(queryName)
+  'sum_over_time(appcat:metering{label_appuio_io_billing_name="appcat-' + queryName + '",label_appcat_vshn_io_sla="%s", tenant_name!="APPUiO"}[59m:1m])/60';
+
+local getCloudQuery = function(queryName)
+  'sum_over_time(appcat:metering{label_appuio_io_billing_name="appcat-' + queryName + '",label_appcat_vshn_io_sla="%s", tenant_name="APPUiO"}[59m:1m])/60 * on(label_appuio_io_organization) group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"}, "label_appuio_io_organization", "$1", "organization", "(.*)")';
+
+local getPermutations = function(cloudQuery, managedQuery)
+  [
+    {
+      query: cloudQuery % 'besteffort',
+      sla: 'besteffort',
+      type: 'cloud',
+    },
+    {
+      query: cloudQuery % 'guaranteed',
+      sla: 'guaranteed',
+      type: 'cloud',
+    },
+    {
+      query: managedQuery % 'besteffort',
+      sla: 'besteffort',
+      type: 'managed',
+    },
+    {
+      query: managedQuery % 'guaranteed',
+      sla: 'guaranteed',
+      type: 'managed',
+    },
+  ];
+
+local generateCloudAndManaged = function(name, isAddOn)
 
   // For postgresql we have a missmatch between the label and the name in our definition.
   local queryName = if name == 'postgres' then name + 'ql' else name;
@@ -184,15 +219,17 @@ local generateCloudAndManaged = function(name)
     },
   ];
 
-  std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type) ], permutations);
+  std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type, isAddOn) ], permutations);
 
 local vshnServices = common.FilterServiceByBoolean('billing');
-local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name) ], vshnServices));
+local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name, false) ], vshnServices));
+local billingAddOnsCronjobs = std.flattenArrays(std.flatMap(function(addOn) [ generateCloudAndManaged(addOn, true) ], addOns));
 
 if paramsBilling.vshn.enableCronjobs then
   {
     [if std.length(std.filter(function(name) paramsBilling.network_policies.target_namespaces[name] == true, std.objectFields(paramsBilling.network_policies.target_namespaces))) > 0 then 'billing/01_netpol']: netPol.Policies,
     'billing/10_odoo_secret': odooSecret,
     'billing/11_backfill': billingCronjobs,
+    'billing/12_backfill_addons': billingAddOnsCronjobs,
     [if paramsBilling.monitoring.enabled then 'billing/50_alerts']: alerts.Alerts,
   } else {}
