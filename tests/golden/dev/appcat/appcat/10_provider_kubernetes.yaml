@@ -27,7 +27,7 @@ spec:
         spec:
           containers:
             - args:
-                - --max-reconcile-rate=10
+                - --max-reconcile-rate=20
               name: package-runtime
               securityContext: {}
           securityContext: {}
