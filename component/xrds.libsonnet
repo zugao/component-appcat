@@ -150,7 +150,7 @@ local setServiceLevel(bestEffortCluster) = {
     if bestEffortCluster then
       "ServiceLevel defines the service level of this service. For this cluster only 'besteffort' is allowed."
     else
-      'ServiceLevel defines the service level of this service. Either Best Effort or Guaranteed Availability.',
+      'ServiceLevel defines the service level of this service. Either Best Effort or Guaranteed Availability is allowed.',
   enum:
     if bestEffortCluster then
       [ 'besteffort' ]

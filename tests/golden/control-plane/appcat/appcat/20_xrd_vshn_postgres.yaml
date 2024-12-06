@@ -5814,7 +5814,8 @@ spec:
                         serviceLevel:
                           default: besteffort
                           description: ServiceLevel defines the service level of this
-                            service. Either Best Effort or Guaranteed Availability.
+                            service. Either Best Effort or Guaranteed Availability
+                            is allowed.
                           enum:
                             - besteffort
                             - guaranteed
