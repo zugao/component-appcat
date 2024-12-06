@@ -66,7 +66,7 @@ spec:
                     group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_vshn_io_addon_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:  /
@@ -153,7 +153,7 @@ spec:
                     group_left(sales_order) label_replace(appuio_control_organization_info{namespace="appuio-control-api-production"},
                     "label_appuio_io_organization", "$1", "organization", "(.*)")
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_vshn_io_addon_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Cloud - Zone:  /
@@ -238,7 +238,7 @@ spec:
                   value: sum_over_time(appcat:metering{label_appuio_io_billing_name="appcat-nextcloud-office",label_appcat_vshn_io_sla="besteffort",
                     tenant_name!="APPUiO"}[59m:1m])/60
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_vshn_io_addon_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Managed - Cluster:
@@ -324,7 +324,7 @@ spec:
                   value: sum_over_time(appcat:metering{label_appuio_io_billing_name="appcat-nextcloud-office",label_appcat_vshn_io_sla="guaranteed",
                     tenant_name!="APPUiO"}[59m:1m])/60
                 - name: AR_INSTANCE_JSONNET
-                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s"
+                  value: local labels = std.extVar("labels"); "%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_vshn_io_addon_name)s"
                     % labels
                 - name: AR_ITEM_GROUP_DESCRIPTION_JSONNET
                   value: 'local labels = std.extVar("labels"); "APPUiO Managed - Cluster:

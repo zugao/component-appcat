@@ -73,7 +73,7 @@ local commonEnv = std.prune([
   },
 ]);
 
-local backfillCJ = function(name, query, sla, type)
+local backfillCJ = function(name, query, sla, type, isAddOn)
 
   local orgId = if type == 'cloud' then paramsBilling.prometheus.cloud_org_id else paramsBilling.prometheus.managed_org_id;
 
@@ -91,9 +91,11 @@ local backfillCJ = function(name, query, sla, type)
 
   local instanceJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s';
 
+  local instanceAddOnJsonnet = 'local labels = std.extVar("labels"); "%s" %% labels' % '%(cluster_id)s/%(label_appcat_vshn_io_claim_namespace)s/%(label_appcat_vshn_io_claim_name)s/%(label_appcat_vshn_io_addon_name)s';
+
   local productID = 'appcat-vshn-%(name)s-%(sla)s' % { name: name, sla: sla };
 
-  local jobEnv = std.prune([
+  local jobEnv = function(isAddOn) std.prune([
     {
       name: 'AR_ORG_ID',
       value: orgId,
@@ -108,7 +110,7 @@ local backfillCJ = function(name, query, sla, type)
     },
     {
       name: 'AR_INSTANCE_JSONNET',
-      value: instanceJsonnet,
+      value: if isAddOn then instanceAddOnJsonnet else instanceJsonnet,
     },
     if itemGroupDescJsonnet != null then {
       name: 'AR_ITEM_GROUP_DESCRIPTION_JSONNET',
@@ -123,12 +125,13 @@ local backfillCJ = function(name, query, sla, type)
       value: paramsBilling.instanceUOM,
     },
   ]);
+
   cronjob.CronJob('%(product)s-%(type)s' % { product: escape(productID), type: type }, 'backfill', {
     containers: [
       {
         name: 'backfill',
         image: formatImage(params.images.reporting),
-        env+: commonEnv + jobEnv,
+        env+: commonEnv + jobEnv(isAddOn),
         command: [ 'sh', '-c' ],
         args: [
           'appuio-reporting report --timerange 1h --begin=$(date -d "now -3 hours" -u +"%Y-%m-%dT%H:00:00Z") --repeat-until=$(date -u +"%Y-%m-%dT%H:00:00Z")',
@@ -185,14 +188,7 @@ local getPermutations = function(cloudQuery, managedQuery)
     },
   ];
 
-local generateAddOnsCloudAndManaged = function(name)
-  local queryName = if name == 'postgres' then name + 'ql' else name;
-  local managedQuery = getManagedQuery(queryName);
-  local cloudQuery = getCloudQuery(queryName);
-  local permutations = getPermutations(cloudQuery, managedQuery);
-  std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type) ], permutations);
-
-local generateCloudAndManaged = function(name)
+local generateCloudAndManaged = function(name, isAddOn)
 
   // For postgresql we have a missmatch between the label and the name in our definition.
   local queryName = if name == 'postgres' then name + 'ql' else name;
@@ -223,11 +219,11 @@ local generateCloudAndManaged = function(name)
     },
   ];
 
-  std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type) ], permutations);
+  std.flatMap(function(r) [ backfillCJ(name, r.query, r.sla, r.type, isAddOn) ], permutations);
 
 local vshnServices = common.FilterServiceByBoolean('billing');
-local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name) ], vshnServices));
-local billingAddOnsCronjobs = std.flattenArrays(std.flatMap(function(addOn) [ generateAddOnsCloudAndManaged(addOn) ], addOns));
+local billingCronjobs = std.flattenArrays(std.flatMap(function(r) [ generateCloudAndManaged(r.name, false) ], vshnServices));
+local billingAddOnsCronjobs = std.flattenArrays(std.flatMap(function(addOn) [ generateCloudAndManaged(addOn, true) ], addOns));
 
 if paramsBilling.vshn.enableCronjobs then
   {
