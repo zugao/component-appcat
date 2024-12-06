@@ -36,7 +36,7 @@ spec:
               value: 'true'
             - name: APPCAT_SLI_VSHNMARIADB
               value: 'true'
-          image: ghcr.io/vshn/appcat:pg_tls_hotfix
+          image: ghcr.io/vshn/appcat:v4.116.0
           livenessProbe:
             httpGet:
               path: /healthz
