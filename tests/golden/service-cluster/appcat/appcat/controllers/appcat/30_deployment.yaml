@@ -24,14 +24,13 @@ spec:
             - --event-forwarding=false
             - --quotas=false
           env:
-            - name: CONTROL_PLANE_KUBECONFIG
-              valueFrom:
-                secretKeyRef:
-                  key: kubeconfig
-                  name: vcluster-kubeconfig
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.116.1
+            - name: CONTROL_PLANE_KUBECONFIG
+              secretKeyRef:
+                key: kubeconfig
+                name: controlclustercredentials
+          image: ghcr.io/vshn/appcat:v4.117.0
           livenessProbe:
             httpGet:
               path: /healthz

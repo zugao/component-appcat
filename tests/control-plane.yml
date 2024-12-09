@@ -58,9 +58,9 @@ parameters:
 
     slos:
       enabled: true
-      alertsEnabled: true
+      alertsEnabled: false
       sli_exporter:
-        enableMaintenceObserver: true
+        enableMaintenceObserver: false
       sla_reporter:
         enabled: true
         slo_mimir_svc: kube-prometheus-kube-prome-prometheus
@@ -79,7 +79,7 @@ parameters:
       helm:
         enabled: true
       minio:
-        enabled: false
+        enabled: true
 
     apiserver:
       enabled: true
