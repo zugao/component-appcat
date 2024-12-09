@@ -30,7 +30,7 @@ spec:
               secretKeyRef:
                 key: kubeconfig
                 name: controlclustercredentials
-          image: ghcr.io/vshn/appcat:add_sli-exporter-control-plane-support
+          image: ghcr.io/vshn/appcat:v4.117.0
           livenessProbe:
             httpGet:
               path: /healthz
