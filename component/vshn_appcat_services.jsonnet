@@ -183,12 +183,6 @@ local vshn_appcat_service(name, serviceParams) =
     },
   };
 
-  local capitalizeFirstLetter(str) =
-  if std.length(str) == 0 then str
-  else std.asciiUpper(str[0]) + std.substr(str, 1, std.length(str) - 1);
-
-  local makeVSHNServiceName(str) = "VSHN" + capitalizeFirstLetter(std.asciiLower(str));
-
   (if params.services.vshn.enabled && serviceParams.enabled && vars.isSingleOrControlPlaneCluster then {
      ['20_xrd_vshn_%s' % name]: xrd,
      ['20_rbac_vshn_%s' % name]: xrds.CompositeClusterRoles(xrd),
