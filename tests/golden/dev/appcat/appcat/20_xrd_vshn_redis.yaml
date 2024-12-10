@@ -5614,9 +5614,11 @@ spec:
                         serviceLevel:
                           default: besteffort
                           description: ServiceLevel defines the service level of this
-                            service. For this cluster only 'besteffort' is allowed.
+                            service. Either Best Effort or Guaranteed Availability
+                            is allowed.
                           enum:
                             - besteffort
+                            - guaranteed
                           type: string
                         version:
                           default: '7.0'
