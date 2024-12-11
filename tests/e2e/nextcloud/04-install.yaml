@@ -5,7 +5,8 @@ metadata:
 spec:
   parameters:
     service:
-      fqdn: nextcloud-e2e.example.com
+      fqdn:
+        - nextcloud-e2e.example.com
     security:
       deletionProtection: false
   writeConnectionSecretToRef:
