@@ -7,6 +7,10 @@
   "ignorePaths": [
     ".github/**"
   ],
+  "labels": [
+    "dependency"
+  ],
+  "separateMinorPatch": true,
   "postUpgradeTasks": {
     "commands": [
       "make gen-golden-all"
@@ -19,7 +23,20 @@
   "suppressNotifications": [
     "artifactErrors"
   ],
-  "labels": [
-    "dependency"
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
+      "matchCurrentVersion": "!/^v?0\\./",
+      "automerge": true,
+      "platformAutomerge": false,
+      "labels": [
+        "dependency",
+        "automerge",
+        "bump:patch"
+      ]
+    }
   ]
 }
