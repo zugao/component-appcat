@@ -5,40 +5,40 @@ metadata:
     syn: 'true'
     syn_component: appcat
     syn_team: schedar
-  name: vshn-keycloak-new-sla
+  name: vshn-vshnnextcloud-new-sla
   namespace: appcat-slos
 spec:
   groups:
-    - name: appcat-keycloak-sla-target
+    - name: appcat-vshnnextcloud-sla-target
       rules:
-        - alert: vshn-keycloak-new-sla
+        - alert: vshn-vshnnextcloud-new-sla
           annotations:
             summary: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
             title: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
-          expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNNextcloud",
             ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
-            service="keycloak", ha="false", maintenance="false"}[1m]) > 0.75
+            service="VSHNNextcloud", ha="false", maintenance="false"}[1m]) > 0.75
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
             runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
-            service: keycloak
+            service: VSHNNextcloud
             severity: critical
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: vshn-keycloak-new-sla-ha
+        - alert: vshn-vshnnextcloud-new-sla-ha
           annotations:
             summary: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
             title: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
-          expr: rate(appcat_probes_seconds_count{reason!="success", service="keycloak",
+          expr: rate(appcat_probes_seconds_count{reason!="success", service="VSHNNextcloud",
             ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success",
-            service="keycloak", ha="true"}[1m]) > 0.75
+            service="VSHNNextcloud", ha="true"}[1m]) > 0.75
           labels:
             OnCall: '{{ if eq $labels.sla "guaranteed" }}true{{ else }}false{{ end
               }}'
             runbook: https://kb.vshn.ch/app-catalog/how-tos/appcat/GuaranteedUptimeTarget.html
-            service: keycloak
+            service: VSHNNextcloud
             severity: critical
             syn: 'true'
             syn_component: appcat

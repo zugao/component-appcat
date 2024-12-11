@@ -196,7 +196,7 @@ local vshn_appcat_service(name, serviceParams) =
     ['22_prom_rule_sla_%s' % name]: promRuleSLA,
     [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/70_slo_vshn_%s' % name]: slos.Get('vshn-' + name),
     [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/80_slo_vshn_%s_ha' % name]: slos.Get('vshn-' + name + '-ha'),
-    [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % name]: opsgenieRules.GenGenericAlertingRule(name),
+    [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % xrd.spec.claimNames.kind]: opsgenieRules.GenGenericAlertingRule(xrd.spec.claimNames.kind),
   } else {}
 ;
 
