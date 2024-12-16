@@ -26,7 +26,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:fix_collabora_-deployment-name
+          image: ghcr.io/vshn/appcat:v4.118.0
           livenessProbe:
             httpGet:
               path: /healthz
