@@ -15,6 +15,7 @@ local isServiceCluster = !cms.controlPlaneCluster && cms.serviceCluster;
   isCMSValid: cms.controlPlaneCluster || cms.serviceCluster,
   isSingleOrControlPlaneCluster: isSingleCluster || isControlPlane,
   isSingleOrServiceCluster: isSingleCluster || isServiceCluster,
+  isExoscale: inv.parameters.facts.cloud == 'exoscale',
   assert (cms.controlPlaneKubeconfig == '' && isSingleCluster) || !isSingleCluster : 'clusterManagementSystem.controlPlaneKubeconfig should be empty for converged clusters',
   assert (cms.controlPlaneKubeconfig != '' && isServiceCluster) || (isSingleCluster || isControlPlane) : 'clusterManagementSystem.controlPlaneKubeconfig should not be empty for service clusters',
 }
