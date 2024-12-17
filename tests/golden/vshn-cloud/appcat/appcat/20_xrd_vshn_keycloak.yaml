@@ -11901,7 +11901,7 @@ spec:
                                 the instance spec will be applied.
                               properties:
                                 type:
-                                  default: Immediate
+                                  default: OnRestart
                                   description: |-
                                     Type indicates the type of the UpdateStrategy. Default is OnRestart.
                                     Possible enum values:
