@@ -9,7 +9,7 @@ parameters:
         output_path: vendor/lib/openshift4-operators.libsonnet
 
   facts:
-    cloud: exoscale
+    cloud: cloudscale
     distribution: openshift4
     sales_order: ""
     service_level: "premium"

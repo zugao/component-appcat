@@ -32,7 +32,7 @@ parameters:
       salesOrder: ST10120
       vshn:
         enableCronjobs: false
-        meteringRules: true
+        meteringRules: false
       enableMockOrgInfo: true
       instanceUOM: uom_uom_45_1e112771
       network_policies:
@@ -43,8 +43,8 @@ parameters:
       cloudZone: ${global:appuio_metered_billing_zone_label_map:${cluster:name}}
 
     slos:
-      enabled: true
-      alertsEnabled: true
+      enabled: false
+      alertsEnabled: false
       sli_exporter:
         enableMaintenceObserver: false
       sla_reporter:
@@ -54,7 +54,7 @@ parameters:
     controller:
       enabled: true
       postgres:
-        enabled: true
+        enabled: false
     providers:
       exoscale:
         enabled: true
@@ -65,123 +65,38 @@ parameters:
       helm:
         enabled: true
       minio:
-        enabled: true
-        defaultProviderConfig:
-          minioURL: http://minio-server.minio.svc:9000/
-          credentials:
-            apiSecretRef:
-              name: minio-secret
-              namespace: syn-crossplane
+        enabled: false
 
     apiserver:
       enabled: true
-      env:
-        APPCAT_HANDLER_ENABLED: "true"
-        VSHN_POSTGRES_BACKUP_HANDLER_ENABLED: "true"
-        VSHN_REDIS_BACKUP_HANDLER_ENABLED: "true"
 
     services:
       emailAlerting:
-        enabled: true
-        smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
+        enabled: false
       vshn:
         enabled: false
-        externalDatabaseConnectionsEnabled: true
         mariadb:
-          enabled: true
+          enabled: false
         keycloak:
-          enabled: true
-          additionalInputs:
-            # https://vault-prod.syn.vshn.net/ui/vault/secrets/clusters%2Fkv/kv/__shared__%2F__shared__%2Fappcat/details?version=1
-            registry_username: ""
-            registry_password: ""
-            ingress_annotations: |
-              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-              cert-manager.io/cluster-issuer: letsencrypt-staging
+          enabled: false
         nextcloud:
-          enabled: true
-          additionalInputs:
-            collaboraCPULimit: "1"
-            collaboraCPURequests: 250m
-            collaboraMemoryLimit: 1Gi # during my tests I was able to force collabora to use ~800Mi
-            collaboraMemoryRequests: 256Mi
-            ingress_annotations: |
-              cert-manager.io/cluster-issuer: letsencrypt-staging
-
+          enabled: false
         postgres:
-          sgNamespace: stackgres
-          bucket_region: 'ch-gva-2'
-          bucket_endpoint: 'http://minio-server.minio:9000'
-          additionalInputs:
-            loadbalancerAnnotations: |
-                foo: bar
-          plans:
-            standard-8:
-              enabled: false
-            plus-2:
-              size: ${appcat:services:vshn:postgres:plans:standard-2:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
-            plus-4:
-              size: ${appcat:services:vshn:postgres:plans:standard-4:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
+          enabled: false
         redis:
-          enabled: true
-          plans:
-            standard-8:
-              enabled: false
-            plus-512m:
-              size: ${appcat:services:vshn:redis:plans:standard-512m:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
-            plus-1:
-              size: ${appcat:services:vshn:redis:plans:standard-1:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
-            plus-4:
-              size: ${appcat:services:vshn:redis:plans:standard-4:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
-            plus-2:
-              size: ${appcat:services:vshn:redis:plans:standard-2:size}
-              scheduling:
-                nodeSelector:
-                  appuio.io/node-class: "plus"
-              note: "Will be scheduled on APPUiO Cloud plus nodes"
+          enabled: false
         minio:
           enabled: false
-          instances:
-            - name: minio
-              namespace: syn-appcat
-              spec:
-                parameters:
-                  service:
-                    mode: standalone
-                  size:
-                    disk: 20Gi
-                writeConnectionSecretToRef:
-                  name: minio-cluster-credentials
 
       generic:
         objectstorage:
           enabled: true
 
-          defaultComposition: minio
+          defaultComposition: exoscale
           compositions:
             exoscale:
-              enabled: false
+              enabled: true
             cloudscale:
               enabled: false
             minio:
-              enabled: true
+              enabled: false
