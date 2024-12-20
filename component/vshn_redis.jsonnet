@@ -572,7 +572,7 @@ local plansCM = kube.ConfigMap('vshnredisplans') + {
    '21_composition_vshn_redis': composition,
    [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,
  } else {})
-+ if vars.isSingleOrServiceCluster then {
++ if vars.isSingleOrServiceCluster && !vars.isExoscale then {
   '22_prom_rule_sla_redis': promRuleRedisSLA,
   [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/70_slo_vshn_redis']: slos.Get('vshn-redis'),
   [if params.services.vshn.enabled && params.services.vshn.redis.enabled then 'sli_exporter/80_slo_vshn_redis_ha']: slos.Get('vshn-redis-ha'),
