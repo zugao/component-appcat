@@ -28,6 +28,7 @@ spec:
         apiVersion: v1
         data:
           bucketRegion: lpg
+          busybox_image: dockerhub.vshn.net/busybox
           chartRepository: https://nextcloud.github.io/helm/
           chartVersion: 6.2.4
           collaboraCPULimit: '1'
@@ -51,6 +52,8 @@ spec:
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
+          nextcloud_image: dockerhub.vshn.net/nextcloud
+          oc_image: quay.io/oc:v4.13
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNNextcloud
           ownerVersion: v1

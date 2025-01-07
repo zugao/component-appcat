@@ -23,6 +23,11 @@ parameters:
     namespace: syn-crossplane
 
   appcat:
+    images:
+      nextcloud:
+        registry: dockerhub.vshn.net
+      busybox:
+        registry: dockerhub.vshn.net
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
