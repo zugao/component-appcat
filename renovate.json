@@ -23,20 +23,5 @@
   "suppressNotifications": [
     "artifactErrors"
   ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": [
-        "patch",
-        "digest"
-      ],
-      "matchCurrentVersion": "!/^v?0\\./",
-      "automerge": true,
-      "platformAutomerge": false,
-      "labels": [
-        "dependency",
-        "automerge",
-        "bump:patch"
-      ]
-    }
-  ]
+  "packageRules": []
 }
