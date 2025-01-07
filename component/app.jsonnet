@@ -75,6 +75,10 @@ local app = argocd.App('appcat', '') + (
   }
 );
 
+local appPath =
+  local project = std.get(std.get(app, 'spec', {}), 'project', 'syn');
+  if project == 'syn' then 'apps' else 'apps-%s' % project;
+
 {
-  appcat: app,
+  ['%s/appcat' % appPath]: app,
 }

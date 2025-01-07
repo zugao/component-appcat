@@ -1,5 +1,8 @@
 parameters:
   appcat:
+    =_metadata:
+      multi_tenant: true
+
     charts:
       crossplane:
         source: https://charts.crossplane.io/stable
