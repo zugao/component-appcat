@@ -54,9 +54,10 @@ local compositeClusterRoles(composite) =
 
 local loadCRD(crd, tag) = std.parseJson(kap.yaml_load(inv.parameters._base_directory + '/dependencies/appcat/manifests/' + tag + '/crds/' + crd));
 
-local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
+local xrdFromCRD(name, crd, disableManualRevision, defaultComposition='', connectionSecretKeys=[]) =
   kube._Object('apiextensions.crossplane.io/v1', 'CompositeResourceDefinition', name) + common.SyncOptions + {
     spec: {
+      [if !disableManualRevision then 'defaultCompositionUpdatePolicy']: 'Manual',
       claimNames: {
         kind: crd.spec.names.kind,
         plural: crd.spec.names.plural,
@@ -207,8 +208,8 @@ local filterOutGuaraanteed(bestEffortCluster) = {
     compositeClusterRoles(composite),
   LoadCRD(crd, tag):
     loadCRD(crd, tag),
-  XRDFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]):
-    xrdFromCRD(name, crd, defaultComposition=defaultComposition, connectionSecretKeys=connectionSecretKeys),
+  XRDFromCRD(name, crd, disableManualRevision, defaultComposition='', connectionSecretKeys=[]):
+    xrdFromCRD(name, crd, disableManualRevision, defaultComposition=defaultComposition, connectionSecretKeys=connectionSecretKeys),
   WithPlanDefaults(plans, defaultPlan):
     withPlanDefaults(plans, defaultPlan),
   FilterOutGuaraanteed(bestEffortCluster):
