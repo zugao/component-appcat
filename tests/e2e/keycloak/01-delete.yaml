@@ -1,0 +1,14 @@
+# Remove any leftover objects
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+delete:
+  - apiVersion: vshn.appcat.vshn.io/v1
+    kind: VSHNKeycloak
+    name: keycloak-e2e
+  - apiVersion: batch/v1
+    kind: Job
+    name: connect-keycloak-e2e
+  - apiVersion: v1
+    kind: Pod
+    labels:
+      e2e-test: keycloak-e2e

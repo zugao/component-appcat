@@ -57,16 +57,16 @@ kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/test
 # I have to wait for job/jobs completion otherwise stackgres will recreate that even if I delete it...
 if [ "$to_be_found" == "r" ]; then
   kubectl -n "$ns" get job
-  kubectl -n "$ns" get job databasesrepack
+  kubectl -n "$ns" wait --for=create job/databasesrepack
   kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/databasesrepack
 elif [ "$to_be_found" == "v" ]; then
   kubectl -n "$ns" get job
-  kubectl -n "$ns" get job vacuum
+  kubectl -n "$ns" wait --for=create job/vacuum
   kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/vacuum
 elif [ "$to_be_found" == "b" ]; then
   kubectl -n "$ns" get job
-  kubectl -n "$ns" get job databasesrepack
-  kubectl -n "$ns" get job vacuum
+  kubectl -n "$ns" wait --for=create job/databasesrepack
+  kubectl -n "$ns" wait --for=create job/vacuum
   kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/databasesrepack
   kubectl -n "$ns" wait --for=condition=complete --timeout=1000s job/vacuum
 else

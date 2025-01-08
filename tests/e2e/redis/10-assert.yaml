@@ -18,7 +18,7 @@ spec:
       retention:
         keepDaily: 6
     security:
-      deletionProtection: false
+      deletionProtection: true
     service:
       serviceLevel: besteffort
       version: "7.0"
@@ -33,22 +33,7 @@ spec:
   writeConnectionSecretToRef:
     name: redis-e2e-test-creds
 status:
-  caCertificateConditions:
-  - status: "True"
-  - status: "True"
-  clientCertificateConditions:
-  - status: "True"
-  - status: "True"
   conditions:
-  - status: "True"
-  - status: "True"
-  localCAConditions:
-  - status: "True"
-  - status: "True"
-  selfSignedIssuerConditions:
-  - status: "True"
-  - status: "True"
-  serverCertificateConditions:
   - status: "True"
   - status: "True"
 

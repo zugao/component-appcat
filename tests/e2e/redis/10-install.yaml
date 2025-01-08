@@ -1,13 +1,10 @@
 apiVersion: vshn.appcat.vshn.io/v1
-kind: VSHNMariaDB
+kind: VSHNRedis
 metadata:
-  name: mariadb-e2e
+  name: redis-e2e-test
 spec:
   parameters:
-    instances: 3
-    security:
-      deletionProtection: false
     size:
       plan: standard-2
   writeConnectionSecretToRef:
-    name: mariadb-creds
+    name: redis-e2e-test-creds
