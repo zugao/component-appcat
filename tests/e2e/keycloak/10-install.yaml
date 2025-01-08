@@ -1,4 +1,3 @@
-# Install with disabled protection
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNKeycloak
 metadata:
@@ -7,7 +6,5 @@ spec:
   parameters:
     service:
       fqdn: keycloak-e2e.example.com
-    security:
-      deletionProtection: false
   writeConnectionSecretToRef:
     name: keycloak-e2e

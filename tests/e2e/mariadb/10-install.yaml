@@ -4,9 +4,7 @@ metadata:
   name: mariadb-e2e
 spec:
   parameters:
-    instances: 3
-    security:
-      deletionProtection: false
+    service:
     size:
       plan: standard-2
   writeConnectionSecretToRef:
