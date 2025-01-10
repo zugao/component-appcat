@@ -110,7 +110,7 @@ push-golden: clean gen-golden ## Push the target instance to the local forgejo i
 	git push -u origin master --force && \
 	rm -rf .git
 	yq eval-all '. as $$item ireduce ({}; . * $$item )' hack/base_app.yaml tests/golden/$(instance)/appcat/apps/appcat.yaml \
-	| yq '.metadata.name = "$(repo)"' | yq '.spec.source.repoURL = "http://forgejo-http.forgejo.svc:3000/gitea_admin/$(repo)"' \
+	| yq '.metadata.name = "$(instance)"' | yq '.spec.source.repoURL = "http://forgejo-http.forgejo.svc:3000/gitea_admin/$(repo)"' \
 	| yq '.spec.destination.server = "$(cluster)"' | kubectl apply -f -
 
 .PHONY: push-non-converged
