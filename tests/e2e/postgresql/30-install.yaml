@@ -6,8 +6,7 @@ spec:
   parameters:
     size:
       plan: standard-2
-    service:
-      vacuumEnabled: true
-      repackEnabled: false
+    security:
+      deletionProtection: false
   writeConnectionSecretToRef:
     name: postgresql-e2e-test-creds
