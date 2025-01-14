@@ -12,7 +12,8 @@ parameters:
     cloud: cloudscale
     distribution: openshift4
     sales_order: "ST10120"
-    service_level: "premium"
+    service_level: guaranteed_availability
+
 
 
   global:
