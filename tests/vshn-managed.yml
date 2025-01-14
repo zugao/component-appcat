@@ -14,8 +14,6 @@ parameters:
     sales_order: "ST10120"
     service_level: guaranteed_availability
 
-
-
   global:
     appuio_metered_billing_zone_label_map:
       c-green-test-1234: 'Kind - Local Test 0'
