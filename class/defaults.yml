@@ -58,7 +58,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.120.0
+        tag: v4.120.2
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -92,6 +92,16 @@ parameters:
         registry: docker.io
         image: collabora/code
         tag: "24.04.9.2.1"
+      nextcloud:
+        registry: docker.io
+        image: nextcloud
+      busybox:
+        registry: docker.io
+        image: busybox
+      oc:
+        registry: quay.io
+        image: oc
+        tag: v4.13
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
@@ -899,6 +909,9 @@ parameters:
             collaboraMemoryRequests: 256Mi
             ingress_annotations: |
               cert-manager.io/cluster-issuer: letsencrypt-production
+            nextcloud_image: ${appcat:images:nextcloud:registry}/${appcat:images:nextcloud:image}
+            busybox_image: ${appcat:images:busybox:registry}/${appcat:images:busybox:image}
+            oc_image: ${appcat:images:oc:registry}/${appcat:images:oc:image}:${appcat:images:oc:tag}
           openshiftTemplate:
             serviceName: nextcloudbyvshn
             description: "Nextcloud is an open source suite of client-server software for creating and using file hosting services."
