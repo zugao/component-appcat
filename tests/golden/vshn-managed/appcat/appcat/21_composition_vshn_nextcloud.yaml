@@ -46,8 +46,20 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
+<<<<<<< HEAD
           imageRegistry: ''
+<<<<<<< HEAD
           imageTag: v4.121.3
+=======
+          imageTag: v4.121.2
+=======
+<<<<<<< HEAD
+          imageTag: v4.120.4
+=======
+          imageTag: change_fix_connection_details
+>>>>>>> 06ce6a57 ([create-pull-request] automated change)
+>>>>>>> 2d5de3f5 ([create-pull-request] automated change)
+>>>>>>> d81e421c ([create-pull-request] automated change)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'true'
