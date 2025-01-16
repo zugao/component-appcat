@@ -100,7 +100,7 @@ parameters:
         image: busybox
       oc:
         registry: quay.io
-        image: oc
+        image: appuio/oc
         tag: v4.13
     =_crd_version: ${appcat:images:appcat:tag}
 
