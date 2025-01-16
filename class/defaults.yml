@@ -119,6 +119,7 @@ parameters:
       controlPlaneCluster: true
       serviceCluster: true
       controlPlaneKubeconfig: ""
+      serviceClusterKubeconfigs: []
 
     crossplane:
       namespace: syn-crossplane
@@ -772,6 +773,7 @@ parameters:
             - MARIADB_USERNAME
             - MARIADB_PASSWORD
             - MARIADB_URL
+            - LOADBALANCER_IP
           mode: standalone
           offered: true
           enabled: false

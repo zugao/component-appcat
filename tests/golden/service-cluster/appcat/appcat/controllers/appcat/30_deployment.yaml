@@ -27,6 +27,7 @@ spec:
             - name: PLANS_NAMESPACE
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
+<<<<<<< HEAD
               secretKeyRef:
                 key: kubeconfig
                 name: controlclustercredentials
@@ -43,6 +44,10 @@ spec:
 >>>>>>> 06ce6a57 ([create-pull-request] automated change)
 >>>>>>> 2d5de3f5 ([create-pull-request] automated change)
 >>>>>>> d81e421c ([create-pull-request] automated change)
+=======
+              value: /config/config
+          image: ghcr.io/vshn/appcat:change_fix_connection_details
+>>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
           livenessProbe:
             httpGet:
               path: /healthz
@@ -66,6 +71,8 @@ spec:
           volumeMounts:
             - mountPath: /etc/webhook/certs
               name: webhook-certs
+            - mountPath: /config
+              name: kubeconfig
       securityContext:
         runAsNonRoot: true
       serviceAccountName: appcat-controller
@@ -74,3 +81,6 @@ spec:
         - name: webhook-certs
           secret:
             secretName: webhook-cert
+        - name: kubeconfig
+          secret:
+            secretName: controlclustercredentials

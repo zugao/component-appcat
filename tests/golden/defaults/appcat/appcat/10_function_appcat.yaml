@@ -7,6 +7,7 @@ metadata:
   name: function-appcat
 spec:
 <<<<<<< HEAD
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.121.3-func
 =======
 <<<<<<< HEAD
@@ -19,5 +20,8 @@ spec:
 >>>>>>> 06ce6a57 ([create-pull-request] automated change)
 >>>>>>> 2d5de3f5 ([create-pull-request] automated change)
 >>>>>>> d81e421c ([create-pull-request] automated change)
+=======
+  package: ghcr.io/vshn/appcat:change_fix_connection_details-func
+>>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
   runtimeConfigRef:
     name: function-appcat

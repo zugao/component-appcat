@@ -40,8 +40,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
-<<<<<<< HEAD
           imageRegistry: dockerhub.vshn.net
+<<<<<<< HEAD
 <<<<<<< HEAD
           imageTag: v4.121.3
 =======
@@ -54,6 +54,9 @@ spec:
 >>>>>>> 06ce6a57 ([create-pull-request] automated change)
 >>>>>>> 2d5de3f5 ([create-pull-request] automated change)
 >>>>>>> d81e421c ([create-pull-request] automated change)
+=======
+          imageTag: change_fix_connection_details
+>>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
