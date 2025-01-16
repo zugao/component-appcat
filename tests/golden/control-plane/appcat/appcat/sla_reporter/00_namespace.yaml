@@ -5,5 +5,5 @@ metadata:
     argocd.argoproj.io/sync-wave: '-100'
     openshift.io/node-selector: node-role.kubernetes.io/infra=
   labels:
-    name: appcat-slos
-  name: appcat-slos
+    name: syn-appcat-slos
+  name: syn-appcat-slos

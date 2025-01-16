@@ -377,7 +377,7 @@ parameters:
             # If the alert is pending for more than 5m this indicates a real problem.
             for: 6m
           ticket_alert: {}
-      namespace: appcat-slos
+      namespace: syn-appcat-slos
       namespaceLabels: ${appcat:namespaceLabels}
       namespaceAnnotations: ${appcat:namespaceAnnotations}
       sla_reporter:

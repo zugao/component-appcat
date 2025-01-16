@@ -4,7 +4,7 @@ metadata:
   labels:
     control-plane: controller-manager
   name: appcat-sliexporter-controller-manager-metrics-monitor
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   endpoints:
     - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

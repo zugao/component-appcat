@@ -55,7 +55,7 @@ spec:
           quotasEnabled: 'false'
           salesOrder: ''
           serviceName: minio
-          sliNamespace: appcat-slos
+          sliNamespace: syn-appcat-slos
         kind: ConfigMap
         metadata:
           labels:

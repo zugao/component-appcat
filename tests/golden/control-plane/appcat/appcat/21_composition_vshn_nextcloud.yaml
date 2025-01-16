@@ -67,7 +67,7 @@ spec:
           restoreSA: nextcloudserviceaccount
           salesOrder: ''
           serviceName: nextcloud
-          sliNamespace: appcat-slos
+          sliNamespace: syn-appcat-slos
         kind: ConfigMap
         metadata:
           labels:

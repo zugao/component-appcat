@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-redis
   name: vshn-redis
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: sloth-slo-sli-recordings-appcat-vshn-redis-uptime

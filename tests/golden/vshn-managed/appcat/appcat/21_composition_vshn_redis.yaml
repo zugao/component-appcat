@@ -607,7 +607,7 @@ spec:
           restoreSA: redisrestoreserviceaccount
           salesOrder: ST10120
           serviceName: redis
-          sliNamespace: appcat-slos
+          sliNamespace: syn-appcat-slos
         kind: ConfigMap
         metadata:
           labels:

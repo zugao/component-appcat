@@ -6,4 +6,4 @@ metadata:
     openshift.io/node-selector: node-role.kubernetes.io/infra=
   labels:
     control-plane: controller-manager
-  name: appcat-slos
+  name: syn-appcat-slos

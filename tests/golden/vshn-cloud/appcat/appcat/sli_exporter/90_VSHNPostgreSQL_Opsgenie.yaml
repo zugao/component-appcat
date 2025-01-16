@@ -6,7 +6,7 @@ metadata:
     syn_component: appcat
     syn_team: schedar
   name: vshn-vshnpostgresql-new-sla
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: appcat-vshnpostgresql-sla-target

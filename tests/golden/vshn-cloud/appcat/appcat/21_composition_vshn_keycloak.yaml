@@ -60,7 +60,7 @@ spec:
           restoreSA: keycloakserviceaccount
           salesOrder: ''
           serviceName: keycloak
-          sliNamespace: appcat-slos
+          sliNamespace: syn-appcat-slos
         kind: ConfigMap
         metadata:
           labels:

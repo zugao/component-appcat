@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-minio-ha
   name: vshn-minio-ha
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: sloth-slo-sli-recordings-appcat-vshn-minio-ha-uptime

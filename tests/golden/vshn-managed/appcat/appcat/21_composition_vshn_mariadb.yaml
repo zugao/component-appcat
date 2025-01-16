@@ -63,7 +63,7 @@ spec:
           restoreSA: mariadbrestoreserviceaccount
           salesOrder: ST10120
           serviceName: mariadb
-          sliNamespace: appcat-slos
+          sliNamespace: syn-appcat-slos
         kind: ConfigMap
         metadata:
           labels:
