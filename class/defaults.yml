@@ -25,8 +25,8 @@ parameters:
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
-        repository: crossplane-contrib/provider-kubernetes
-        tag: v0.14.1
+        repository: upbound/provider-kubernetes
+        tag: v0.16.2
       provider-helm:
         registry: xpkg.upbound.io
         repository: crossplane-contrib/provider-helm
