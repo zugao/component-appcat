@@ -315,10 +315,11 @@ local plansCM = kube.ConfigMap('vshnpostgresqlplans') + {
      [if isOpenshift then '11_stackgres_openshift_operator']: std.prune(stackgresOperator),
      [if isOpenshift then '12_stackgres_openshift_operator_netpol']: stackgresNetworkPolicy,
    } else {})
-+ if vars.isSingleOrServiceCluster then {
-  '22_prom_rule_sla_postgres': promRulePostgresSLA,
-  [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/70_slo_vshn_postgresql']: slos.Get('vshn-postgresql'),
-  [if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then 'sli_exporter/80_slo_vshn_postgresql_ha']: slos.Get('vshn-postgresql-ha'),
-  [if params.services.vshn.enabled && params.services.vshn.postgres.enabled && params.slos.alertsEnabled then 'sli_exporter/90_VSHNPostgreSQL_Opsgenie']: opsgenieRules.GenGenericAlertingRule('VSHNPostgreSQL'),
-
-} else {}
++ if vars.isSingleOrServiceCluster then
+  if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then {
+    '22_prom_rule_sla_postgres': promRulePostgresSLA,
+    'sli_exporter/70_slo_vshn_postgresql': slos.Get('vshn-postgresql'),
+    'sli_exporter/80_slo_vshn_postgresql_ha': slos.Get('vshn-postgresql-ha'),
+    [if params.slos.alertsEnabled then 'sli_exporter/90_VSHNPostgreSQL_Opsgenie']: opsgenieRules.GenGenericAlertingRule('VSHNPostgreSQL'),
+  } else {}
+else {}
