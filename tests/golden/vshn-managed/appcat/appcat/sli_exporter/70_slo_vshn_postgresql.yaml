@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-postgresql
   name: vshn-postgresql
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: sloth-slo-sli-recordings-appcat-vshn-postgresql-uptime

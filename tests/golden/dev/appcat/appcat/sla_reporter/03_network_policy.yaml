@@ -3,8 +3,8 @@ kind: NetworkPolicy
 metadata:
   annotations: {}
   labels:
-    name: allow-from-appcat-slos
-  name: allow-from-appcat-slos
+    name: allow-from-syn-appcat-slos
+  name: allow-from-syn-appcat-slos
   namespace: prometheus-system
 spec:
   egress: []
@@ -12,7 +12,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: appcat-slos
+              name: syn-appcat-slos
   podSelector: {}
   policyTypes:
     - Ingress

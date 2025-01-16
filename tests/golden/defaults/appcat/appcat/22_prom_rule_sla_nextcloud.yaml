@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-vshnnextcloud-sla
   name: vshn-vshnnextcloud-sla
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: appcat-vshnnextcloud-sla-target

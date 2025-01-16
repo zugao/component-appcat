@@ -6,7 +6,7 @@ metadata:
     syn_component: appcat
     syn_team: schedar
   name: vshn-vshnredis-new-sla
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: appcat-vshnredis-sla-target

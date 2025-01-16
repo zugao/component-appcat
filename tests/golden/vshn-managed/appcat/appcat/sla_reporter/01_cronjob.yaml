@@ -5,7 +5,7 @@ metadata:
   labels:
     name: appcat-sla-reporter
   name: appcat-sla-reporter
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 3

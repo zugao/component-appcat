@@ -5,7 +5,7 @@ metadata:
     control-plane: controller-manager
     name: controller-manager
   name: appcat-sliexporter-controller-manager
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   replicas: 1
   selector:

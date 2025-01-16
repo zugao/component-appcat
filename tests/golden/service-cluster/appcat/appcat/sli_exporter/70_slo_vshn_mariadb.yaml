@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-mariadb
   name: vshn-mariadb
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: sloth-slo-sli-recordings-appcat-vshn-mariadb-uptime

@@ -4,7 +4,7 @@ metadata:
   labels:
     name: vshn-keycloak
   name: vshn-keycloak
-  namespace: appcat-slos
+  namespace: syn-appcat-slos
 spec:
   groups:
     - name: sloth-slo-sli-recordings-appcat-vshn-keycloak-uptime
