@@ -192,12 +192,13 @@ local vshn_appcat_service(name, serviceParams) =
      [if isOpenshift && std.objectHas(serviceParams, 'openshiftTemplate') then '21_openshift_template_%s_vshn' % name]: osTemplate,
 
    } else {})
-  + if vars.isSingleOrServiceCluster then {
-    ['22_prom_rule_sla_%s' % name]: promRuleSLA,
-    [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/70_slo_vshn_%s' % name]: slos.Get('vshn-' + name),
-    [if params.services.vshn.enabled && serviceParams.enabled then 'sli_exporter/80_slo_vshn_%s_ha' % name]: slos.Get('vshn-' + name + '-ha'),
-    [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % xrd.spec.claimNames.kind]: opsgenieRules.GenGenericAlertingRule(xrd.spec.claimNames.kind),
-  } else {}
-;
+  + if vars.isSingleOrServiceCluster then
+    if params.services.vshn.enabled && serviceParams.enabled then {
+      ['22_prom_rule_sla_%s' % name]: promRuleSLA,
+      ['sli_exporter/70_slo_vshn_%s' % name]: slos.Get('vshn-' + name),
+      ['sli_exporter/80_slo_vshn_%s_ha' % name]: slos.Get('vshn-' + name + '-ha'),
+      [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % xrd.spec.claimNames.kind]: opsgenieRules.GenGenericAlertingRule(xrd.spec.claimNames.kind),
+    } else {}
+  else {};
 
 std.foldl(function(objOut, newObj) objOut + vshn_appcat_service(newObj.name, newObj.value), common.FilterServiceByBoolean('compFunctionsOnly'), {})
