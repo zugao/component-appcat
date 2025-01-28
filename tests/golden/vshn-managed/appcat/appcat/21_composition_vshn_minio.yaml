@@ -40,12 +40,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
-<<<<<<< HEAD
-          imageTag: v4.120.4
-=======
           imageRegistry: ''
-          imageTag: update-appuio-registry
->>>>>>> d53cade4 (Pass registry to comp functions)
+          imageTag: v4.120.4
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
