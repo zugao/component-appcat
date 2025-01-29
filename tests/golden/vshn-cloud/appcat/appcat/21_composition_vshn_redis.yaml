@@ -395,9 +395,9 @@ spec:
                     commonConfiguration: ''
                     fullnameOverride: redis
                     global:
-                      imageRegistry: ''
+                      imageRegistry: dockerhub.vshn.net
                     image:
-                      registry: ''
+                      registry: dockerhub.vshn.net
                       repository: bitnami/redis
                     master:
                       containerSecurityContext:
@@ -598,8 +598,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
-          imageRegistry: ''
-          imageTag: v4.121.0
+          imageRegistry: dockerhub.vshn.net
+          imageTag: v4.121.1
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io

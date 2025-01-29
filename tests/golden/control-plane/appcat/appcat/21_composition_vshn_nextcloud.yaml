@@ -28,7 +28,7 @@ spec:
         apiVersion: v1
         data:
           bucketRegion: lpg
-          busybox_image: docker.io/busybox
+          busybox_image: docker.io/library/busybox
           chartRepository: https://nextcloud.github.io/helm/
           chartVersion: 6.2.4
           collaboraCPULimit: '1'
@@ -47,7 +47,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.121.0
+          imageTag: v4.121.1
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -55,7 +55,7 @@ spec:
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
-          nextcloud_image: docker.io/nextcloud
+          nextcloud_image: docker.io/library/nextcloud
           oc_image: quay.io/appuio/oc:v4.13
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNNextcloud

@@ -40,8 +40,8 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
-          imageRegistry: ''
-          imageTag: v4.121.0
+          imageRegistry: dockerhub.vshn.net
+          imageTag: v4.121.1
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
