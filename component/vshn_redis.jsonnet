@@ -304,10 +304,10 @@ local composition =
             global: {
               imageRegistry: redisParams.imageRegistry,
             },
-            image: {
-              registry: redisParams.imageRegistry,
-              repository: 'bitnami/redis',
-            },
+            image: std.mergePatch(
+              if redisParams.imageRegistry != '' then { registry: redisParams.imageRegistry } else {},
+              { repository: 'bitnami/redis' }
+            ),
             commonConfiguration: '',
             master: {
               persistence: {
