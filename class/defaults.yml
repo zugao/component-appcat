@@ -94,10 +94,10 @@ parameters:
         tag: "24.04.9.2.1"
       nextcloud:
         registry: docker.io
-        image: nextcloud
+        image: library/nextcloud
       busybox:
         registry: docker.io
-        image: busybox
+        image: library/busybox
       oc:
         registry: quay.io
         image: appuio/oc
@@ -566,7 +566,6 @@ parameters:
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           sgNamespace: syn-stackgres-operator
           defaultPlan: standard-2
-          imageRegistry: ""
           sla: 99.25
           plans:
             standard-2:

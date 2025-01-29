@@ -397,7 +397,6 @@ spec:
                     global:
                       imageRegistry: ''
                     image:
-                      registry: ''
                       repository: bitnami/redis
                     master:
                       containerSecurityContext:
