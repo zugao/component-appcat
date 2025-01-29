@@ -30,7 +30,7 @@ spec:
               secretKeyRef:
                 key: kubeconfig
                 name: controlclustercredentials
-          image: ghcr.io/vshn/appcat:fix-image-repo
+          image: ghcr.io/vshn/appcat:v4.121.1
           livenessProbe:
             httpGet:
               path: /healthz
