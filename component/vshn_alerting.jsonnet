@@ -9,7 +9,7 @@ local genGenericAlertingRule(serviceName) = {
   apiVersion: 'monitoring.coreos.com/v1',
   kind: 'PrometheusRule',
   metadata: {
-    name: 'vshn-' + std.asciiLower(serviceName) + '-new-sla',
+    name: 'vshn-' + std.asciiLower(serviceName) + '-sla',
     namespace: params.slos.namespace,
     labels: {
       syn_team: 'schedar',
@@ -23,7 +23,7 @@ local genGenericAlertingRule(serviceName) = {
         name: 'appcat-' + std.asciiLower(serviceName) + '-sla-target',
         rules: [
           {
-            alert: 'vshn-' + std.asciiLower(serviceName) + '-new-sla',
+            alert: serviceName + 'Sla',
             // this query can be read as: if the rate of probes that are not successful is higher than 0.2 in the last 5 minutes and in the last minute, then alert
             // rate works on per second basis, so 0.2 means 20% of the probes are failing, which for 5 minutes is 1 minute and for 1 minute is 45 seconds
             expr: 'rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="false", maintenance="false"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="false", maintenance="false"}[1m]) > 0.75',
@@ -42,7 +42,7 @@ local genGenericAlertingRule(serviceName) = {
             },
           },
           {
-            alert: 'vshn-' + std.asciiLower(serviceName) + '-new-sla-ha',
+            alert: serviceName + 'SlaHA',
             // this query can be read as: if the rate of probes that are not successful is higher than 0.2 in the last 5 minutes and in the last minute, then alert
             // rate works on per second basis, so 0.2 means 20% of the probes are failing, which for 5 minutes is 1 minute and for 1 minute is 45 seconds
             expr: 'rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="true"}[5m]) > 0.2 and rate(appcat_probes_seconds_count{reason!="success", service="' + serviceName + '", ha="true"}[1m]) > 0.75',
