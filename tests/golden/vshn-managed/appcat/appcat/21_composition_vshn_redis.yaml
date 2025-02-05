@@ -600,6 +600,7 @@ spec:
           imageRegistry: ''
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           imageTag: v4.121.3
 =======
           imageTag: v4.121.2
@@ -614,6 +615,9 @@ spec:
 =======
           imageTag: change_fix_connection_details
 >>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
+=======
+          imageTag: v4.122.0
+>>>>>>> 309795a9 (Update tag)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io

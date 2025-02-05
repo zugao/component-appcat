@@ -43,6 +43,7 @@ spec:
           ignoreNamespaceForBilling: vshn-test
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           imageTag: v4.121.3
 =======
 <<<<<<< HEAD
@@ -58,6 +59,9 @@ spec:
 =======
           imageTag: change_fix_connection_details
 >>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
+=======
+          imageTag: v4.122.0
+>>>>>>> 309795a9 (Update tag)
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",

@@ -46,8 +46,12 @@ spec:
 >>>>>>> d81e421c ([create-pull-request] automated change)
 =======
               value: /config/config
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:change_fix_connection_details
 >>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
+=======
+          image: ghcr.io/vshn/appcat:v4.122.0
+>>>>>>> 309795a9 (Update tag)
           livenessProbe:
             httpGet:
               path: /healthz

@@ -31,6 +31,7 @@ spec:
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.121.3
 =======
 <<<<<<< HEAD
@@ -46,6 +47,9 @@ spec:
 =======
           image: ghcr.io/vshn/appcat:change_fix_connection_details
 >>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
+=======
+          image: ghcr.io/vshn/appcat:v4.122.0
+>>>>>>> 309795a9 (Update tag)
           livenessProbe:
             failureThreshold: 3
             httpGet:
