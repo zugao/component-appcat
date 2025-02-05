@@ -600,7 +600,7 @@ parameters:
                 cpu: "32m"
                 memory: "128Mi"
               limits:
-                cpu: "32m"
+                cpu: "250m"
                 memory: "256Mi"
             runDbops:
               requests:
