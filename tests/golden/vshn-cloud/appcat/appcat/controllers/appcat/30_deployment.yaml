@@ -23,27 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.121.3
-=======
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.121.2
-=======
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.120.4
-=======
-          image: ghcr.io/vshn/appcat:change_fix_connection_details
->>>>>>> 06ce6a57 ([create-pull-request] automated change)
->>>>>>> 2d5de3f5 ([create-pull-request] automated change)
->>>>>>> d81e421c ([create-pull-request] automated change)
-=======
-          image: ghcr.io/vshn/appcat:change_fix_connection_details
->>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
-=======
           image: ghcr.io/vshn/appcat:v4.122.0
->>>>>>> 309795a9 (Update tag)
           livenessProbe:
             httpGet:
               path: /healthz

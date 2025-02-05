@@ -598,26 +598,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-          imageTag: v4.121.3
-=======
-          imageTag: v4.121.2
-=======
-<<<<<<< HEAD
-          imageTag: v4.120.4
-=======
-          imageTag: change_fix_connection_details
->>>>>>> 06ce6a57 ([create-pull-request] automated change)
->>>>>>> 2d5de3f5 ([create-pull-request] automated change)
->>>>>>> d81e421c ([create-pull-request] automated change)
-=======
-          imageTag: change_fix_connection_details
->>>>>>> 329fb1e6 (Various fixes for splitting the control-plane)
-=======
           imageTag: v4.122.0
->>>>>>> 309795a9 (Update tag)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
