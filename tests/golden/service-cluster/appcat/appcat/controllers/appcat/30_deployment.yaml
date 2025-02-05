@@ -27,9 +27,10 @@ spec:
             - name: PLANS_NAMESPACE
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
-              value: /config/config
-          image: ghcr.io/vshn/appcat:v4.126.0
-          imagePullPolicy: IfNotPresent
+              secretKeyRef:
+                key: kubeconfig
+                name: controlclustercredentials
+          image: ghcr.io/vshn/appcat:change_ingress-tls
           livenessProbe:
             httpGet:
               path: /healthz
@@ -46,15 +47,13 @@ spec:
           resources:
             limits:
               cpu: 200m
-              memory: 300Mi
+              memory: 200Mi
             requests:
               cpu: 100m
               memory: 50Mi
           volumeMounts:
             - mountPath: /etc/webhook/certs
               name: webhook-certs
-            - mountPath: /config
-              name: kubeconfig
       securityContext:
         runAsNonRoot: true
       serviceAccountName: appcat-controller
@@ -63,6 +62,3 @@ spec:
         - name: webhook-certs
           secret:
             secretName: webhook-cert
-        - name: kubeconfig
-          secret:
-            secretName: controlclustercredentials

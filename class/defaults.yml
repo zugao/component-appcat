@@ -6,7 +6,7 @@ parameters:
     charts:
       crossplane:
         source: https://charts.crossplane.io/stable
-        version: 1.18.3
+        version: 1.16.0
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
@@ -22,14 +22,11 @@ parameters:
       nextcloud:
         source: https://nextcloud.github.io/helm/
         version: 6.2.4
-      forgejo:
-        source: oci://code.forgejo.org/forgejo-helm/forgejo
-        version: 11.0.1
     images:
       provider-kubernetes:
         registry: xpkg.upbound.io
         repository: upbound/provider-kubernetes
-        tag: v0.17.0
+        tag: v0.16.2
       provider-helm:
         registry: xpkg.upbound.io
         repository: crossplane-contrib/provider-helm
@@ -37,7 +34,7 @@ parameters:
       provider-exoscale:
         registry: ghcr.io
         repository: vshn/provider-exoscale
-        tag: v1.0.0
+        tag: v0.11.5
       provider-cloudscale:
         registry: ghcr.io
         repository: vshn/provider-cloudscale
@@ -61,7 +58,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.126.0
+        tag: change/ingress-tls
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -77,11 +74,11 @@ parameters:
       collector:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
-        tag: v3.6.0
+        tag: v3.5.0
       crossplane:
         registry: docker.io
         image: crossplane/crossplane
-        tag: v1.18.3
+        tag: v1.16.0
         pullPolicy: IfNotPresent
       kubectl:
         registry: docker.io
@@ -122,7 +119,6 @@ parameters:
       controlPlaneCluster: true
       serviceCluster: true
       controlPlaneKubeconfig: ""
-      serviceClusterKubeconfigs: []
 
     crossplane:
       namespace: syn-crossplane
@@ -134,10 +130,17 @@ parameters:
         prometheus_rule_labels:
           prometheus: platform
         instance: null
+      providers: {}
+      serviceAccounts: {}
+      clusterRoles: {}
+      clusterRoleBindings: {}
+      controllerConfigs: {}
+      providerConfigs: {}
       helmValues:
         xfn:
           enabled: true
         args:
+          - --enable-environment-configs
           - --enable-usages
         image:
           repository: ${appcat:images:crossplane:registry}/${appcat:images:crossplane:image}
@@ -325,7 +328,7 @@ parameters:
           memory: 50Mi
         limits:
           cpu: 200m
-          memory: 300Mi
+          memory: 200Mi
 
     stackgres:
       namespace: syn-stackgres-operator
@@ -426,8 +429,6 @@ parameters:
         Keycloak:
           uptime: ${appcat:slos:uptimeDefaults}
         Nextcloud:
-          uptime: ${appcat:slos:uptimeDefaults}
-        Forgejo:
           uptime: ${appcat:slos:uptimeDefaults}
 
     providers:
@@ -549,68 +550,6 @@ parameters:
         e2eTests: false
         quotasEnabled: ${appcat:quotasEnabled}
         secretNamespace: ${appcat:crossplane:namespace}
-        forgejo:
-          billing: true
-          serviceName: VSHNForgejo
-          compFunctionsOnly: true
-          connectionSecretKeys:
-            - FORGEJO_HOST
-            - FORGEJO_PASSWORD
-            - FORGEJO_URL
-            - FORGEJO_USERNAME
-            - ca.crt
-          mode: standalone
-          offered: true
-          enabled: true
-          restoreSA: forgejoserviceaccount
-          restoreRoleRules: ${appcat:defaultRestoreRoleRules}
-          additionalInputs:
-            busybox_image: ${appcat:images:busybox:registry}/${appcat:images:busybox:image}
-            oc_image: ${appcat:images:oc:registry}/${appcat:images:oc:image}:${appcat:images:oc:tag}
-            ingress_annotations: |
-              cert-manager.io/cluster-issuer: letsencrypt-production
-          openshiftTemplate:
-            serviceName: forgejobyvshn
-            description: "Forgejo is a self-hosted lightweight software forge."
-            message: 'Your Forgejo by VSHN instance is being provisioned, please see \${SECRET_NAME} for access.'
-            url: https://vs.hn/vshn-forgejo
-            tags: "codehosting,forgejo"
-            icon: "icon-forgejo"
-            defaultVersion: "22"
-          enableNetworkPolicy: false
-          secretNamespace: ${appcat:services:vshn:secretNamespace}
-          helmChartVersion: ${appcat:charts:forgejo:version}
-          imageRegistry: ""
-          bucket_region: "lpg"
-          grpcEndpoint: ${appcat:grpcEndpoint}
-          proxyFunction: ${appcat:proxyFunction}
-          defaultPlan: small
-          sla: 99.25
-          plans:
-            mini:
-              size:
-                enabled: true
-                cpu: "500m"
-                memory: "2Gi"
-                disk: 10Gi
-            small:
-              size:
-                enabled: true
-                cpu: "1"
-                memory: "4Gi"
-                disk: 50Gi
-            medium:
-              size:
-                enabled: true
-                cpu: "2"
-                memory: "8Gi"
-                disk: 200Gi
-            large:
-              size:
-                enabled: true
-                cpu: "4"
-                memory: "16Gi"
-                disk: 500Gi
         postgres:
           billing: true
           # bucket_region: 'lpg' || 'ch-gva-2'
@@ -660,15 +599,15 @@ parameters:
                 cpu: "32m"
                 memory: "128Mi"
               limits:
-                cpu: "250m"
+                cpu: "32m"
                 memory: "256Mi"
             runDbops:
               requests:
                 cpu: "100m"
                 memory: "64Mi"
               limits:
-                cpu: "500m"
-                memory: "1Gi"
+                cpu: "250m"
+                memory: "256Mi"
             setDbopsResult:
               requests:
                 cpu: "100m"
@@ -747,13 +686,6 @@ parameters:
               limits:
                 cpu: "250m"
                 memory: "256Mi"
-            setMajorVersionUpgrade:
-              requests:
-                cpu: "250m"
-                memory: "256Mi"
-              limits:
-                cpu: "500m"
-                memory: "512Mi"
         redis:
           billing: true
           enabled: true
@@ -840,7 +772,6 @@ parameters:
             - MARIADB_USERNAME
             - MARIADB_PASSWORD
             - MARIADB_URL
-            - LOADBALANCER_IP
           mode: standalone
           offered: true
           enabled: false
@@ -1018,47 +949,7 @@ parameters:
                 cpu: "2"
                 memory: "8Gi"
                 disk: 16Gi
-        codey:
-          billing: false
-          serviceName: Codey
-          connectionSecretKeys:
-            - CODEY_HOST
-            - CODEY_PASSWORD
-            - CODEY_URL
-            - CODEY_USERNAME
-            - ca.crt
-          mode: standalone
-          offered: true
-          enabled: true
-          restoreSA: codeyserviceaccount
-          restoreRoleRules: ${appcat:defaultRestoreRoleRules}
-          openshiftTemplate:
-            serviceName: codey
-            description: "Codey is a secure, fast and reliable code collaboration platform made and hosted in Europe, with 100% free software."
-            message: 'Your Codey instance is being provisioned, please see \${SECRET_NAME} for access.'
-            url: https://www.codey.ch/
-            tags: "codehosting,codey,fogejo"
-            icon: "icon-codey"
-            defaultVersion: "22"
-          enableNetworkPolicy: false
-          secretNamespace: ${appcat:services:vshn:secretNamespace}
-          imageRegistry: ""
-          bucket_region: "lpg"
-          defaultPlan: mini
-          sla: 99.25
-          plans:
-            mini:
-              size:
-                enabled: true
-                cpu: "500m"
-                memory: "2Gi"
-                disk: 10Gi
-            small:
-              size:
-                enabled: true
-                cpu: "1"
-                memory: "4Gi"
-                disk: 50Gi
+
       # Config for exoscale composites
       exoscale:
         enabled: false
