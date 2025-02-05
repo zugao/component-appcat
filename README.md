@@ -41,6 +41,18 @@ There's also a push target for the split setup: `make push-non-converged`, this 
 There's a known issue:
 On the very first sync after setting up kindev, ArgoCD doesn't recognize the `server-side` flag. Thus, the sync will fail. Simply click sync again in the ArgoCD GUI to trigger it again.
 
+> **_NOTE:_** Even if kindev is started in the non-converged mode `make push-golden` will still work. It will simply ignore the vcluster and then behave like a normal converged setup.
+
+## Splitted cluster configuration
+In order to make the splitted cluster configuration work properly for development, you'll need to generate kubeconfigs.
+
+There are two `make` targets in kindev that generate the correct kubeconfigs for you:
+
+- `make vcluster-host-kubeconfig` -> This will print the kubeconfig and needs to go to `serviceClusterKubeconfigs` in `control-plane.yml`. Just replace the `dummy` string with the kubeconfig.
+- `make vcluster-in-cluster-kubeconfig` -> This will print the kubeconfig that needs to go in `service-cluster.yml`. Same as above, the kubeconfig needs to be pasted in the `dummy` string in `controlPlaneKubeconfig`.
+
+To deploy a service in the split configuration, make sure the claim contains the label `appcat.vshn.io/provider-config: kind`. Also make sure you're connected to the vcluster. It won't work if you're connected to the host kind cluster.
+
 ## ArgoCD SyncWaves
 
 There's a postprocess function that will add ArgoCD syn annotations to each object of the given kind.
