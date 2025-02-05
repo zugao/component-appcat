@@ -5,13 +5,13 @@ metadata:
     syn: 'true'
     syn_component: appcat
     syn_team: schedar
-  name: vshn-vshnminio-new-sla
+  name: vshn-vshnminio-sla
   namespace: syn-appcat-slos
 spec:
   groups:
     - name: appcat-vshnminio-sla-target
       rules:
-        - alert: vshn-vshnminio-new-sla
+        - alert: VSHNMinioSla
           annotations:
             summary: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
             title: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
@@ -27,7 +27,7 @@ spec:
             syn: 'true'
             syn_component: appcat
             syn_team: schedar
-        - alert: vshn-vshnminio-new-sla-ha
+        - alert: VSHNMinioSlaHA
           annotations:
             summary: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
             title: '{{$labels.service}} {{$labels.name}} down in {{$labels.namespace}}'
