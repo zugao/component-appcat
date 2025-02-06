@@ -40,7 +40,6 @@ spec:
           emailAlertingSmtpFromAddress: appcat@appuio.cloud
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
-          forgejo_image: ghcr.io/vshn/forgejo
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
           imageTag: add_forgejo

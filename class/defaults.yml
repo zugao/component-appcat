@@ -105,10 +105,6 @@ parameters:
         registry: quay.io
         image: appuio/oc
         tag: v4.13
-      forgejo:
-        registry: ghcr.io
-        image: vshn/forgejo
-        tag: latest
     =_crd_version: ${appcat:images:appcat:tag}
 
     namespace: syn-appcat
@@ -576,7 +572,6 @@ parameters:
           restoreSA: forgejoserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
-            forgejo_image: ${appcat:images:forgejo:registry}/${appcat:images:forgejo:image}
             busybox_image: ${appcat:images:busybox:registry}/${appcat:images:busybox:image}
             oc_image: ${appcat:images:oc:registry}/${appcat:images:oc:image}:${appcat:images:oc:tag}
             ingress_annotations: |
