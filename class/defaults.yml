@@ -332,7 +332,7 @@ parameters:
           memory: 50Mi
         limits:
           cpu: 200m
-          memory: 200Mi
+          memory: 300Mi
 
     stackgres:
       namespace: syn-stackgres-operator
