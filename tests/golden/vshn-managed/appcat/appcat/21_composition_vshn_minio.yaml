@@ -41,7 +41,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.123.2
+          imageTag: v4.123.3
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
