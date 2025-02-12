@@ -53,7 +53,7 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(redisPlans, redisParams.defaultPlan) + xrds.FilterOutGuaraanteed(isBestEffort);
 
-local promRuleRedisSLA = prom.PromRuleSLA(params.services.vshn.redis.sla, 'VSHNRedis');
+local promRuleRedisSLA = prom.PromRecordingRuleSLA(params.services.vshn.redis.sla, 'VSHNRedis');
 
 local restoreServiceAccount = kube.ServiceAccount('redisrestoreserviceaccount') + {
   metadata+: {

@@ -117,7 +117,7 @@ local xrd = xrds.XRDFromCRD(
   connectionSecretKeys=connectionSecretKeys,
 ) + xrds.WithPlanDefaults(pgPlans, pgParams.defaultPlan) + xrds.FilterOutGuaraanteed(isBestEffort);
 
-local promRulePostgresSLA = prom.PromRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
+local promRulePostgresSLA = prom.PromRecordingRuleSLA(params.services.vshn.postgres.sla, 'VSHNPostgreSQL');
 
 local restoreServiceAccount = kube.ServiceAccount('copyserviceaccount') + {
   metadata+: {

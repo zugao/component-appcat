@@ -5,7 +5,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 
 
-local promRuleSLA(value, service) = {
+local promRecordingRuleSLA(value, service) = {
   expr: 'vector(' + value + ')',
   labels: {
     service: service,
@@ -110,8 +110,8 @@ local generatePrometheusNonSLORules(serviceName, memoryContainerName, additional
 {
   GeneratePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlertsRuleGroup):
     generatePrometheusNonSLORules(serviceName, memoryContainerName, additionalAlertsRuleGroup),
-  PromRuleSLA(value, service):
-    promRuleSLA(value, service),
+  PromRecordingRuleSLA(value, service):
+    promRecordingRuleSLA(value, service),
   TopPod(query):
     topPod(query),
   BottomPod(query):

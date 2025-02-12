@@ -34,7 +34,7 @@ local vshn_appcat_service(name, serviceParams) =
   local isBestEffort = !std.member([ 'guaranteed_availability', 'premium' ], inv.parameters.facts.service_level);
 
   local connectionSecretKeys = serviceParams.connectionSecretKeys;
-  local promRuleSLA = prom.PromRuleSLA(serviceParams.sla, serviceParams.serviceName);
+  local promRecordingRuleSLA = prom.PromRecordingRuleSLA(serviceParams.sla, serviceParams.serviceName);
   local plans = common.FilterDisabledParams(serviceParams.plans);
   local serviceNamePlural = getServiceNamePlural(serviceParams.serviceName);
 
@@ -198,7 +198,7 @@ local vshn_appcat_service(name, serviceParams) =
     if params.services.vshn.enabled && serviceParams.enabled then {
       ['sli_exporter/70_slo_vshn_%s' % name]: slos.Get('vshn-' + name),
       ['sli_exporter/80_slo_vshn_%s_ha' % name]: slos.Get('vshn-' + name + '-ha'),
-      [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % xrd.spec.claimNames.kind]: opsgenieRules.GenGenericAlertingRule(xrd.spec.claimNames.kind, promRuleSLA),
+      [if params.slos.alertsEnabled then 'sli_exporter/90_%s_Opsgenie' % xrd.spec.claimNames.kind]: opsgenieRules.GenGenericAlertingRule(xrd.spec.claimNames.kind, promRecordingRuleSLA),
     } else {}
   else {};
 
