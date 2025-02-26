@@ -14,7 +14,6 @@ spec:
   template:
     metadata:
       annotations:
-        kubeconfighash: d41d8cd98f00b204e9800998ecf8427e
         kubectl.kubernetes.io/default-container: manager
       labels:
         control-plane: controller-manager
@@ -25,7 +24,7 @@ spec:
             - --health-probe-bind-address=:8081
             - --metrics-bind-address=127.0.0.1:8080
           env: []
-          image: ghcr.io/vshn/appcat:v4.128.0
+          image: ghcr.io/vshn/appcat:add_forgejo-maintenance
           livenessProbe:
             httpGet:
               path: /healthz

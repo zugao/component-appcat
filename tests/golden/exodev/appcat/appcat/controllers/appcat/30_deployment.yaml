@@ -12,8 +12,6 @@ spec:
       appcat-controller: appcat-controller
   template:
     metadata:
-      annotations:
-        kubeconfighash: d41d8cd98f00b204e9800998ecf8427e
       labels:
         appcat-controller: appcat-controller
     spec:
@@ -25,7 +23,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.128.0
+          image: ghcr.io/vshn/appcat:add_forgejo-maintenance
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

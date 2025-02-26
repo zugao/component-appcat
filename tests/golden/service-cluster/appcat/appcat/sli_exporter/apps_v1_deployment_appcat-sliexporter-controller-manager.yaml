@@ -14,7 +14,6 @@ spec:
   template:
     metadata:
       annotations:
-        kubeconfighash: 275876e34cf609db118f3d84b799a790
         kubectl.kubernetes.io/default-container: manager
       labels:
         control-plane: controller-manager
@@ -27,7 +26,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:v4.128.0
+          image: ghcr.io/vshn/appcat:add_forgejo-maintenance
           livenessProbe:
             httpGet:
               path: /healthz
