@@ -10,8 +10,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: crossplane
     app.kubernetes.io/part-of: crossplane
-    app.kubernetes.io/version: 1.16.0
-    helm.sh/chart: crossplane-1.16.0
+    app.kubernetes.io/version: 1.17.0
+    helm.sh/chart: crossplane-1.17.0
     release: appcat
   name: crossplane
   namespace: syn-crossplane
@@ -32,15 +32,14 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: crossplane
         app.kubernetes.io/part-of: crossplane
-        app.kubernetes.io/version: 1.16.0
-        helm.sh/chart: crossplane-1.16.0
+        app.kubernetes.io/version: 1.17.0
+        helm.sh/chart: crossplane-1.17.0
         release: appcat
     spec:
       containers:
         - args:
             - core
             - start
-            - --enable-environment-configs
             - --enable-usages
           env:
             - name: GOMAXPROCS
@@ -73,7 +72,7 @@ spec:
               value: crossplane-tls-client
             - name: TLS_CLIENT_CERTS_DIR
               value: /tls/client
-          image: docker.io/crossplane/crossplane:v1.16.0
+          image: docker.io/crossplane/crossplane:v1.17.5
           imagePullPolicy: IfNotPresent
           name: crossplane
           ports:
@@ -145,7 +144,7 @@ spec:
               value: crossplane-tls-server
             - name: TLS_CLIENT_SECRET_NAME
               value: crossplane-tls-client
-          image: docker.io/crossplane/crossplane:v1.16.0
+          image: docker.io/crossplane/crossplane:v1.17.5
           imagePullPolicy: IfNotPresent
           name: crossplane-init
           resources:
