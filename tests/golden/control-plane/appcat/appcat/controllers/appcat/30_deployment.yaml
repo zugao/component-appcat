@@ -24,6 +24,7 @@ spec:
             - name: PLANS_NAMESPACE
               value: syn-appcat
           image: ghcr.io/vshn/appcat:change_ingress-tls
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /healthz
@@ -40,7 +41,7 @@ spec:
           resources:
             limits:
               cpu: 200m
-              memory: 200Mi
+              memory: 300Mi
             requests:
               cpu: 100m
               memory: 50Mi
