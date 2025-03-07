@@ -30,7 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-          image: ghcr.io/vshn/appcat:v4.127.2
+          image: ghcr.io/vshn/appcat:nextcloud_no_downtime_backup
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
