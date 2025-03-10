@@ -6,7 +6,7 @@ parameters:
     charts:
       crossplane:
         source: https://charts.crossplane.io/stable
-        version: 1.16.0
+        version: 1.18.3
       redis:
         source: https://charts.bitnami.com/bitnami
         version: 17.7.1
@@ -77,11 +77,11 @@ parameters:
       collector:
         registry: ghcr.io
         repository: vshn/billing-collector-cloudservices
-        tag: v3.5.0
+        tag: v3.6.0
       crossplane:
         registry: docker.io
         image: crossplane/crossplane
-        tag: v1.16.0
+        tag: v1.18.3
         pullPolicy: IfNotPresent
       kubectl:
         registry: docker.io
