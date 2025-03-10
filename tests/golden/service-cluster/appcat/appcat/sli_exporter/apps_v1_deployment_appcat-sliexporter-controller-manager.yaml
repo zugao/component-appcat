@@ -27,7 +27,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:nextcloud_no_downtime_backup
+          image: ghcr.io/vshn/appcat:v4.128.0
           livenessProbe:
             httpGet:
               path: /healthz
