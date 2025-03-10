@@ -138,7 +138,6 @@ parameters:
         xfn:
           enabled: true
         args:
-          - --enable-environment-configs
           - --enable-usages
         image:
           repository: ${appcat:images:crossplane:registry}/${appcat:images:crossplane:image}

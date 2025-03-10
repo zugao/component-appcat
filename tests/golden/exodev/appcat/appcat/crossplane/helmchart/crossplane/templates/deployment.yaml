@@ -40,7 +40,6 @@ spec:
         - args:
             - core
             - start
-            - --enable-environment-configs
             - --enable-usages
           env:
             - name: GOMAXPROCS
