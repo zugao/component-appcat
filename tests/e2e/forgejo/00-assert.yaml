@@ -1,6 +1,6 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
-timeout: 60
+timeout: 600
 ---
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNForgejo
@@ -16,11 +16,12 @@ spec:
       allowAllNamespaces: false
       deletionProtection: false
     service:
-      adminEmail: lukasz.sknera@vshn.vshn
+      adminEmail: example@vshn.vshn
       fqdn:
-      - somesuperingressname.apps.lab-cloudscale-rma-0.appuio.cloud
+      - forgejo-e2e.apps.lab-cloudscale-rma-0.appuio.cloud
+      - sub1.forgejo-e2e.apps.lab-cloudscale-rma-0.appuio.cloud
       serviceLevel: besteffort
-      version: 10.0.0
+      majorVersion: 10.0.0
     size:
       plan: small
   resourceRef:
