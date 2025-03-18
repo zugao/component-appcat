@@ -16,11 +16,11 @@ app_name=$(kubectl -n "$ns" get $inline_secret -o yaml | yq '.data."_generals_"'
 
 # ---------------------
 # Ensure mailer.PROTOCOL cannot be set to a bad value, should fail
-kubectl -n "$NAMESPACE" patch vshnforgejo forgejo-e2e --type merge -p '{"spec":{"parameters":{"service":{"forgejoSettings":{"config":{"mailer":{"PROTOCOL":"sendmail"}}}}}}}' && false|| true
+kubectl -n "$NAMESPACE" patch vshnforgejo forgejo-e2e --type merge -p '{"spec":{"parameters":{"service":{"forgejoSettings":{"config":{"mailer":{"PROTOCOL":"sendmail"}}}}}}}' && false || true
 
 # ---------------------
 # Actions test, should fail
-ing=$(kubectl -n "$ns" get ing -o name | head -n 1)
+ing=$(kubectl -n "$ns" get ing -o name | grep -v "acme" | head -n 1)
 host=$(kubectl -n "$ns" get "$ing" -o yaml | yq .spec.rules[0].host)
 
 url="https://$host"
@@ -33,13 +33,12 @@ actions_enabled=$(kubectl -n "$ns" get $inline_secret -o yaml | yq '.data.action
 # 2. Create repo using API
 kubectl -n "$ns" wait --for=condition=Available --timeout=300s deployment -l app=forgejo
 
-# Endpoint might not be immediately available, so we'll wait for a bit.
+# Endpoint might not be immediately available, so we'll wait for a bit
 payload='{"name": "my-repo"}'
 end_time=$((SECONDS + 30))
 while [ $SECONDS -lt $end_time ]; do
     status_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -u "$username:$password" -d "$payload" "$base_url/user/repos")
     if [[ "$status_code" -ge 400 && "$status_code" -lt 500 ]]; then
-        echo "Bad status code!"
         false
     elif [[ "$status_code" -ge 300 ]]; then
         sleep 1
