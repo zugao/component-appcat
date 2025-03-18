@@ -205,7 +205,7 @@ webhooks:
           - UPDATE
           - DELETE
         resources:
-          - vshnforgejos
+          - vshnforgejoes
     sideEffects: None
   - admissionReviewVersions:
       - v1
