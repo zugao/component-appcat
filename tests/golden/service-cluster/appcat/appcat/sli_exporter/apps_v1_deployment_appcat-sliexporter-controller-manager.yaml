@@ -27,7 +27,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:pimp-my-pipeline
+          image: ghcr.io/vshn/appcat:v4.131.0
           livenessProbe:
             httpGet:
               path: /healthz
