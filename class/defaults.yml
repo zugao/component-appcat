@@ -486,17 +486,7 @@ parameters:
           serviceAccountName: provider-kubernetes
         defaultProviderConfig: {}
         additionalProviderConfigs: []
-        additionalRuntimeConfig:
-          spec:
-            deploymentTemplate:
-              spec:
-                template:
-                  spec:
-                    containers:
-                      - name: package-runtime
-                        securityContext: {}
-                        args:
-                          - --max-reconcile-rate=20
+        additionalRuntimeConfig: {}
       helm:
         enabled: false
         apiVersion: helm.crossplane.io/v1beta1

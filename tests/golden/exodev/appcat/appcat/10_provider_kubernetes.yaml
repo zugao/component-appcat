@@ -26,9 +26,7 @@ spec:
       template:
         spec:
           containers:
-            - args:
-                - --max-reconcile-rate=20
-              name: package-runtime
+            - name: package-runtime
               securityContext: {}
           securityContext: {}
           serviceAccountName: provider-kubernetes
