@@ -51,7 +51,7 @@ local composition =
       parameters: {
         service: {
           adminEmail: 'lukasz.widera@vshn.ch',
-          majorVersion: '10.0.0',
+          majorVersion: '10.0.1',
           fqdn: [ 'myforgejo.127.0.0.1.nip.io' ],
         },
         size: {
