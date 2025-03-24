@@ -79,6 +79,11 @@ local readServices = kube.ClusterRole('appcat:services:read') + {
       resources: [ 'projects' ],
       verbs: [ 'get' ],
     },
+    {
+      apiGroups: [ 'networking.k8s.io' ],
+      resources: [ 'ingresses' ],
+      verbs: [ 'get', 'list' ],
+    },
   ],
 };
 
