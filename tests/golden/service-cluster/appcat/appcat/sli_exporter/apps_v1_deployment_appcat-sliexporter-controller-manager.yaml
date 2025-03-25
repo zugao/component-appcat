@@ -27,7 +27,11 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
+<<<<<<< HEAD
           image: ghcr.io/vshn/appcat:v4.134.0
+=======
+          image: ghcr.io/vshn/appcat:change_keycloak_version
+>>>>>>> f888e331 ([create-pull-request] automated change)
           livenessProbe:
             httpGet:
               path: /healthz
