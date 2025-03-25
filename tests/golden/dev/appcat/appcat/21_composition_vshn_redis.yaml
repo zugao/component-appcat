@@ -598,11 +598,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-<<<<<<< HEAD
-          imageTag: v4.134.0
-=======
-          imageTag: change_keycloak_version
->>>>>>> f888e331 ([create-pull-request] automated change)
+          imageTag: v4.135.0
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io

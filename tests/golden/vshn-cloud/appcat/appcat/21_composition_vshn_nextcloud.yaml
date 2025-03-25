@@ -47,11 +47,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: dockerhub.vshn.net/library/nextcloud
-<<<<<<< HEAD
-          imageTag: v4.134.0
-=======
-          imageTag: change_keycloak_version
->>>>>>> f888e331 ([create-pull-request] automated change)
+          imageTag: v4.135.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'true'
