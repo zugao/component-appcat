@@ -30,11 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.133.0
-=======
-          image: ghcr.io/vshn/appcat:add_redis_tls
->>>>>>> 727c0b7b ([create-pull-request] automated change)
+          image: ghcr.io/vshn/appcat:v4.134.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
