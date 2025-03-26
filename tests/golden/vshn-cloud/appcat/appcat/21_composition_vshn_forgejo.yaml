@@ -42,7 +42,11 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
+<<<<<<< HEAD
           imageTag: v4.136.2
+=======
+          imageTag: change_repositories
+>>>>>>> 2363d00e ([create-pull-request] automated change)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-production
           isOpenshift: 'true'
