@@ -13,4 +13,4 @@ spec:
 >>>>>>> 2363d00e ([create-pull-request] automated change)
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
-    name: function-appcat
+    name: enable-proxy

@@ -395,7 +395,7 @@ spec:
                     commonConfiguration: ''
                     fullnameOverride: redis
                     global:
-                      imageRegistry: ''
+                      imageRegistry: docker.io
                     image:
                       repository: bitnami/redis
                     master:
@@ -597,10 +597,14 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
+<<<<<<< HEAD
           imageRegistry: ''
 <<<<<<< HEAD
           imageTag: v4.136.2
 =======
+=======
+          imageRegistry: docker.io
+>>>>>>> 68bab986 (Make images centrally configurable)
           imageTag: change_repositories
 >>>>>>> 2363d00e ([create-pull-request] automated change)
           isOpenshift: 'true'

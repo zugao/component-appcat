@@ -41,10 +41,14 @@ spec:
           emailAlertingSmtpHost: smtp.eu.mailgun.org:465
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
+<<<<<<< HEAD
           imageRegistry: ''
 <<<<<<< HEAD
           imageTag: v4.136.2
 =======
+=======
+          imageRegistry: code.forgejo.org
+>>>>>>> 68bab986 (Make images centrally configurable)
           imageTag: change_repositories
 >>>>>>> 2363d00e ([create-pull-request] automated change)
           ingress_annotations: |
