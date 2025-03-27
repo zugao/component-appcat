@@ -25,11 +25,7 @@ spec:
             - --health-probe-bind-address=:8081
             - --metrics-bind-address=127.0.0.1:8080
           env: []
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.136.0
-=======
-          image: ghcr.io/vshn/appcat:fix_nilpointer
->>>>>>> f2c61893 ([create-pull-request] automated change)
+          image: ghcr.io/vshn/appcat:v4.136.1
           livenessProbe:
             httpGet:
               path: /healthz

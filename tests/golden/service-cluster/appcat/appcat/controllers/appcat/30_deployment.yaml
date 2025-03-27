@@ -30,11 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.136.0
-=======
-          image: ghcr.io/vshn/appcat:fix_nilpointer
->>>>>>> f2c61893 ([create-pull-request] automated change)
+          image: ghcr.io/vshn/appcat:v4.136.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
