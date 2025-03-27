@@ -15,6 +15,7 @@ local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local pgParams = params.services.vshn.postgres;
 local appuioManaged = inv.parameters.appcat.appuioManaged;
+local serviceName = 'postgresql';
 
 
 local defaultDB = 'postgres';
@@ -153,6 +154,22 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
   ],
 };
 
+local additionalMaintenanceClusterRoleName = 'crossplane:appcat:job:postgres:maintenance';
+local maintenanceClusterRole = kube.ClusterRole(additionalMaintenanceClusterRoleName) {
+  rules+: [
+    {
+      apiGroups: [ 'apiextensions.crossplane.io' ],
+      resources: [ 'compositionrevisions' ],
+      verbs: [ 'get', 'list' ],
+    },
+    {
+      apiGroups: [ 'vshn.appcat.vshn.io' ],
+      resources: [ 'xvshnpostgresqls', 'vshnpostgresqls' ],
+      verbs: [ 'get', 'update' ],
+    },
+  ],
+};
+
 local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:postgres:copybackup') + {
   roleRef_: restoreRole,
   subjects_: [ restoreServiceAccount ],
@@ -215,7 +232,8 @@ local composition =
                 name: 'xfn-config',
               },
               data: {
-                      serviceName: 'postgresql',
+                      serviceName: serviceName,
+                      serviceID: common.VSHNServiceID(serviceName),
                       imageTag: common.GetAppCatImageTag(),
                       sgNamespace: pgParams.sgNamespace,
                       externalDatabaseConnectionsEnabled: std.toString(params.services.vshn.externalDatabaseConnectionsEnabled),
@@ -235,6 +253,7 @@ local composition =
                       salesOrder: if appuioManaged then std.toString(params.billing.salesOrder) else '',
                       crossplaneNamespace: params.crossplane.namespace,
                       ignoreNamespaceForBilling: params.billing.ignoreNamespace,
+                      additionalMaintenanceClusterRole: additionalMaintenanceClusterRoleName,
                     } + std.get(pgParams, 'additionalInputs', default={}, inc_hidden=true)
                     + common.EmailAlerting(params.services.emailAlerting)
                     + if pgParams.proxyFunction then {
@@ -353,6 +372,7 @@ local appcatFuncRole = kube.Role('appcat-function:stackgres-restapi-admin') {
 + (if vars.isSingleOrServiceCluster then {
      '22_appcat_func_role': appcatFuncRole,
      '22_appcat_func_role_binding': appcatFuncRoleBinding,
+     '22_appcat_postgres_maintenance_cluster_role': maintenanceClusterRole,
    } else {})
 + if vars.isSingleOrServiceCluster then
   if params.slos.enabled && params.services.vshn.enabled && params.services.vshn.postgres.enabled then {

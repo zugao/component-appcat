@@ -203,6 +203,13 @@ rules:
       - create
       - delete
   - apiGroups:
+      - vshn.appcat.vshn.io
+    resources:
+      - xvshnpostgresqls
+    verbs:
+      - get
+      - update
+  - apiGroups:
       - cert-manager.io
     resources:
       - issuers
@@ -404,6 +411,13 @@ rules:
       - securitycontextconstraints
     verbs:
       - use
+  - apiGroups:
+      - apiextensions.crossplane.io
+    resources:
+      - compositionrevisions
+    verbs:
+      - get
+      - list
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

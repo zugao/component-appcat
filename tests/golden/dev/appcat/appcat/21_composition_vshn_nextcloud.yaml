@@ -47,7 +47,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.136.1
+          imageTag: v4.136.2
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'false'
@@ -66,6 +66,7 @@ spec:
           quotasEnabled: 'false'
           restoreSA: nextcloudserviceaccount
           salesOrder: ''
+          serviceID: vshn-nextcloud
           serviceName: nextcloud
           sliNamespace: syn-appcat-slos
         kind: ConfigMap
