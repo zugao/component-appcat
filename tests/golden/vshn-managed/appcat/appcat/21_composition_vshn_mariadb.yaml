@@ -41,7 +41,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.136.1
+          imageTag: v4.136.2
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
@@ -64,6 +64,7 @@ spec:
           quotasEnabled: 'false'
           restoreSA: mariadbrestoreserviceaccount
           salesOrder: ST10120
+          serviceID: vshn-mariadb
           serviceName: mariadb
           sliNamespace: syn-appcat-slos
         kind: ConfigMap

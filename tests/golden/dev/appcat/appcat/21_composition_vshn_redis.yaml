@@ -598,7 +598,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.136.1
+          imageTag: v4.136.2
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
@@ -607,6 +607,7 @@ spec:
           quotasEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
           salesOrder: ''
+          serviceID: vshn-redis
           serviceName: redis
           sliNamespace: syn-appcat-slos
         kind: ConfigMap

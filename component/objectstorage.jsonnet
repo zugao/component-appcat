@@ -12,6 +12,9 @@ local xrds = import 'xrds.libsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local objStoParams = params.services.generic.objectstorage;
+local cloudscaleServiceName = 'cloudscalebucket';
+local exoscaleServiceName = 'exoscalebucket';
+local minioServiceName = 'miniobucket';
 
 local xrd = xrds.XRDFromCRD(
   'xobjectbuckets.appcat.vshn.io',
@@ -28,11 +31,12 @@ local xrd = xrds.XRDFromCRD(
 );
 
 local compositionCloudscale =
+  local provider = 'cloudscale.ch';
   local compParams = objStoParams.compositions.cloudscale;
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'cloudscale.objectbuckets.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaObjectStorage('cloudscale.ch') +
+  common.VshnMetaObjectStorage(provider) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
@@ -54,7 +58,8 @@ local compositionCloudscale =
               },
               data: {
                 providerConfig: 'cloudscale',
-                serviceName: 'cloudscalebucket',
+                serviceName: cloudscaleServiceName,
+                serviceID: common.ObjectBucketServiceID(provider),
                 providerSecretNamespace: compParams.providerSecretNamespace,
                 crossplaneNamespace: params.crossplane.namespace,
               } + if compParams.proxyFunction then {
@@ -68,11 +73,12 @@ local compositionCloudscale =
 
 
 local compositionExoscale =
+  local provider = 'Exoscale';
   local compParams = objStoParams.compositions.exoscale;
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', 'exoscale.objectbuckets.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaObjectStorage('Exoscale') +
+  common.VshnMetaObjectStorage(provider) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
@@ -94,7 +100,8 @@ local compositionExoscale =
               },
               data: {
                 providerConfig: 'exoscale',
-                serviceName: 'exoscalebucket',
+                serviceName: exoscaleServiceName,
+                serviceID: common.ObjectBucketServiceID(provider),
                 providerSecretNamespace: compParams.providerSecretNamespace,
                 crossplaneNamespace: params.crossplane.namespace,
               } + if compParams.proxyFunction then {
@@ -107,11 +114,12 @@ local compositionExoscale =
   };
 
 local minioComp(name) =
+  local provider = 'Minio-' + name;
   local compParams = objStoParams.compositions.minio;
 
   kube._Object('apiextensions.crossplane.io/v1', 'Composition', name + '.objectbuckets.appcat.vshn.io') +
   common.SyncOptions +
-  common.VshnMetaObjectStorage('Minio-' + name) +
+  common.VshnMetaObjectStorage(provider) +
   {
     spec: {
       compositeTypeRef: comp.CompositeRef(xrd),
@@ -133,7 +141,8 @@ local minioComp(name) =
               },
               data: {
                 providerConfig: name,
-                serviceName: 'miniobucket',
+                serviceName: minioServiceName,
+                serviceID: common.ObjectBucketServiceID(provider),
                 crossplaneNamespace: params.crossplane.namespace,
               } + if compParams.proxyFunction then {
                 proxyEndpoint: compParams.grpcEndpoint,

@@ -28,6 +28,16 @@ local maintenanceRole = kube.ClusterRole(maintenanceRoleName) {
       resources: [ 'releases' ],
       verbs: [ 'patch', 'get', 'list', 'watch', 'update' ],
     },
+    {
+      apiGroups: [ 'apiextensions.crossplane.io' ],
+      resources: [ 'compositionrevisions' ],
+      verbs: [ 'get', 'list' ],
+    },
+    {
+      apiGroups: [ 'vshn.appcat.vshn.io' ],
+      resources: [ 'xvshnforgejoes', 'xvshnredis', 'xvshnkeycloaks', 'xvshnmariadbs', 'xvshnnextclouds', 'xvshnminios' ],
+      verbs: [ 'get', 'update' ],
+    },
   ],
 };
 

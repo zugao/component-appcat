@@ -95,6 +95,11 @@ local providerRBAC = {
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
       },
       {
+        apiGroups: [ 'vshn.appcat.vshn.io' ],
+        resources: [ 'xvshnpostgresqls' ],
+        verbs: [ 'get', 'update' ],
+      },
+      {
         apiGroups: [ 'cert-manager.io' ],
         resources: [ 'issuers', 'certificates' ],
         verbs: [ 'get', 'list', 'watch', 'update', 'patch', 'create', 'delete' ],
@@ -183,6 +188,11 @@ local providerRBAC = {
         apiGroups: [ 'security.openshift.io' ],
         resources: [ 'securitycontextconstraints' ],
         verbs: [ 'use' ],
+      },
+      {
+        apiGroups: [ 'apiextensions.crossplane.io' ],
+        resources: [ 'compositionrevisions' ],
+        verbs: [ 'get', 'list' ],
       },
     ],
   },
