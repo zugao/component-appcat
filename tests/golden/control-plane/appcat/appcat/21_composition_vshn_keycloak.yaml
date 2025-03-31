@@ -28,6 +28,7 @@ spec:
         apiVersion: v1
         data:
           bucketRegion: lpg
+          busybox_image: docker.io/library/busybox
           chartRepository: https://codecentric.github.io/helm-charts
           chartVersion: 2.4.3
           controlNamespace: syn-appcat-control
@@ -41,7 +42,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: docker-registry.inventage.com:10121/keycloak-competence-center/keycloak-managed
-          imageTag: v4.136.2
+          imageTag: v4.137.0
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
