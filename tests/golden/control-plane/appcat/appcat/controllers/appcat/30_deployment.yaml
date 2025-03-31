@@ -25,7 +25,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:adjust_forgejo-backup
+          image: ghcr.io/vshn/appcat:v4.136.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
