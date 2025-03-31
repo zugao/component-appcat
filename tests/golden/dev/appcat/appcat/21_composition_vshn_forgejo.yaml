@@ -42,7 +42,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: code.forgejo.org
-          imageTag: change_repositories
+          imageTag: v4.137.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-production
           isOpenshift: 'false'
