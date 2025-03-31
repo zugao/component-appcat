@@ -27,11 +27,8 @@ spec:
         data:
           crossplaneNamespace: syn-crossplane
           providerConfig: minio
-<<<<<<< HEAD
-          serviceID: minio-minio-objectbucket
-=======
           proxyEndpoint: 172.19.0.1:9443
->>>>>>> 68bab986 (Make images centrally configurable)
+          serviceID: minio-minio-objectbucket
           serviceName: miniobucket
         kind: ConfigMap
         metadata:

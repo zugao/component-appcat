@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubeconfighash: 5ddf025c30d2b8fe27ec6515619bea60
+        kubeconfighash: 275876e34cf609db118f3d84b799a790
       labels:
         appcat-controller: appcat-controller
     spec:
@@ -30,11 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.136.2
-=======
           image: ghcr.io/vshn/appcat:change_repositories
->>>>>>> 2363d00e ([create-pull-request] automated change)
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

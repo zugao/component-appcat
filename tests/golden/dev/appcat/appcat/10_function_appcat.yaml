@@ -6,11 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '-40'
   name: function-appcat
 spec:
-<<<<<<< HEAD
-  package: ghcr.io/vshn/appcat:v4.136.2-func
-=======
   package: ghcr.io/vshn/appcat:change_repositories-func
->>>>>>> 2363d00e ([create-pull-request] automated change)
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
