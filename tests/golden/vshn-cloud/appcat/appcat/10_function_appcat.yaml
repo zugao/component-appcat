@@ -6,7 +6,11 @@ metadata:
     argocd.argoproj.io/sync-wave: '-40'
   name: function-appcat
 spec:
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.140.0-func
+=======
+  package: ghcr.io/vshn/appcat:ingressLabels-func
+>>>>>>> 9ea3d34c ([create-pull-request] automated change)
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: function-appcat

@@ -598,7 +598,11 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: dockerhub.vshn.net
+<<<<<<< HEAD
           imageTag: v4.140.0
+=======
+          imageTag: ingressLabels
+>>>>>>> 9ea3d34c ([create-pull-request] automated change)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io
