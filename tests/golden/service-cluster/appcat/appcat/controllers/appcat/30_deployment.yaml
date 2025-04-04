@@ -30,11 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.139.0
-=======
           image: ghcr.io/vshn/appcat:change_optimizations
->>>>>>> 7734e327 ([create-pull-request] automated change)
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
