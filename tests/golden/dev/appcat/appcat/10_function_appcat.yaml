@@ -6,7 +6,11 @@ metadata:
     argocd.argoproj.io/sync-wave: '-40'
   name: function-appcat
 spec:
+<<<<<<< HEAD
   package: ghcr.io/vshn/appcat:v4.139.0-func
+=======
+  package: ghcr.io/vshn/appcat:change_optimizations-func
+>>>>>>> 7734e327 ([create-pull-request] automated change)
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy

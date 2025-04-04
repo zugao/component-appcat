@@ -47,7 +47,11 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: docker.io
+<<<<<<< HEAD
           imageTag: v4.139.0
+=======
+          imageTag: change_optimizations
+>>>>>>> 7734e327 ([create-pull-request] automated change)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
           isOpenshift: 'true'
