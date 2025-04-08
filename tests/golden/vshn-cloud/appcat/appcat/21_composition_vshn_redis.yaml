@@ -598,7 +598,11 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: dockerhub.vshn.net
+<<<<<<< HEAD
           imageTag: v4.144.0
+=======
+          imageTag: change_migrate_buckets
+>>>>>>> 39cc9106 ([create-pull-request] automated change)
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           ownerGroup: vshn.appcat.vshn.io

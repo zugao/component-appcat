@@ -47,7 +47,11 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: docker.io
+<<<<<<< HEAD
           imageTag: v4.144.0
+=======
+          imageTag: change_migrate_buckets
+>>>>>>> 39cc9106 ([create-pull-request] automated change)
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-staging
             nginx.ingress.kubernetes.io/enable-cors: "true"
