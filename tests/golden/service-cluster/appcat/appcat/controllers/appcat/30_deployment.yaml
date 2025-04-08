@@ -30,11 +30,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-<<<<<<< HEAD
-          image: ghcr.io/vshn/appcat:v4.140.0
-=======
-          image: ghcr.io/vshn/appcat:ingressLabels
->>>>>>> 9ea3d34c ([create-pull-request] automated change)
+          image: ghcr.io/vshn/appcat:v4.141.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

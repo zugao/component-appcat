@@ -42,11 +42,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: docker-registry.inventage.com:10121/keycloak-competence-center/keycloak-managed
-<<<<<<< HEAD
-          imageTag: v4.140.0
-=======
-          imageTag: ingressLabels
->>>>>>> 9ea3d34c ([create-pull-request] automated change)
+          imageTag: v4.141.0
           ingress_annotations: |
             nginx.ingress.kubernetes.io/backend-protocol: HTTPS
             cert-manager.io/cluster-issuer: letsencrypt-staging
