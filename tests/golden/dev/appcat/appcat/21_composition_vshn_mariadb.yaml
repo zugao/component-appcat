@@ -45,7 +45,7 @@ spec:
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
-          ocpDefaultAppsDomain: ''
+          ocpDefaultAppsDomain: apps.lab-cloudscale-rma-0.appuio.cloud
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNMariaDB
           ownerVersion: v1
