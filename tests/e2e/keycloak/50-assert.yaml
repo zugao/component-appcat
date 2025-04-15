@@ -12,7 +12,6 @@ spec:
   compositeDeletePolicy: Background
   compositionRef:
     name: vshnkeycloak.vshn.appcat.vshn.io
-  compositionUpdatePolicy: Automatic
   parameters:
     backup:
       retention:
