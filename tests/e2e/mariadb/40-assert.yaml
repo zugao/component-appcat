@@ -12,7 +12,6 @@ spec:
   compositeDeletePolicy: Background
   compositionRef:
     name: vshnmariadb.vshn.appcat.vshn.io
-  compositionUpdatePolicy: Automatic
   parameters:
     backup:
       retention:

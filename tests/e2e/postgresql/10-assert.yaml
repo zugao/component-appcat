@@ -12,7 +12,6 @@ spec:
   compositeDeletePolicy: Background
   compositionRef:
     name: vshnpostgres.vshn.appcat.vshn.io
-  compositionUpdatePolicy: Automatic
   parameters:
     backup:
       deletionRetention: 7

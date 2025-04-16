@@ -1,6 +1,6 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
-timeout: 600
+timeout: 120
 ---
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNNextcloud
@@ -12,7 +12,6 @@ spec:
   compositeDeletePolicy: Background
   compositionRef:
     name: vshnnextcloud.vshn.appcat.vshn.io
-  compositionUpdatePolicy: Automatic
   parameters:
     backup:
       retention:

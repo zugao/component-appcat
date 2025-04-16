@@ -9,7 +9,6 @@ metadata:
   - finalizer.apiextensions.crossplane.io
   name: forgejo-e2e
 spec:
-  compositionUpdatePolicy: Automatic
   parameters:
     backup: {}
     security:
