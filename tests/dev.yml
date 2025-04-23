@@ -95,6 +95,8 @@ parameters:
         enabled: true
         smtpPassword: "?{vaultkv:__shared__/__shared__/mailgun/smtp_password}"
       vshn:
+        ocpDefaultAppsDomain: "apps.lab-cloudscale-rma-0.appuio.cloud"
+        e2eTests: true
         enabled: true
         externalDatabaseConnectionsEnabled: true
         mariadb:
