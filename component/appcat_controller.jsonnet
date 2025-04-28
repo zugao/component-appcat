@@ -202,9 +202,8 @@ local webhook = loadManifest('webhooks.yaml') {
   webhooks: [
     if w.name == 'pvc.vshn.appcat.vshn.io' then w { namespaceSelector: selector } + clientConfig else
       if w.name == 'namespace.vshn.appcat.vshn.io' then w { objectSelector: selector } + clientConfig else
-        if w.name == 'xobjectbuckets.vshn.appcat.vshn.io' then w { objectSelector: selector } + clientConfig else
-          if w.name == 'codeyinstance.codey.io' then null
-          else w + clientConfig
+        if w.name == 'xobjectbuckets.vshn.appcat.vshn.io' then w { objectSelector: selector } + clientConfig
+        else w + clientConfig
     for w in super.webhooks
   ],
 };
@@ -214,7 +213,7 @@ if controllersParams.enabled then {
   'controllers/appcat/10_cluster_role': clusterRole,
   'controllers/appcat/10_role_binding_leader_election': roleBindingLeaderElection,
   'controllers/appcat/10_cluster_role_binding': clusterRoleBinding,
-  'controllers/appcat/10_webhooks': std.prune(webhook),
+  'controllers/appcat/10_webhooks': webhook,
   'controllers/appcat/10_webhook_service': webhookService,
   'controllers/appcat/10_webhook_issuer': webhookIssuer,
   'controllers/appcat/10_webhook_certificate': webhookCertificate,
