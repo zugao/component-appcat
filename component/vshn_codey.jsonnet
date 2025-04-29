@@ -51,7 +51,7 @@ local composition =
     spec: {
       parameters: {
         service: {
-          majorVersion: '10.0.1',
+          majorVersion: '11.0.0',
           fqdn: [ 'myforgejo.127.0.0.1.nip.io' ],
         },
         size: {
