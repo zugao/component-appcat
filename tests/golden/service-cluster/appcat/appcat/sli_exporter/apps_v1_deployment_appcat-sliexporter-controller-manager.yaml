@@ -27,7 +27,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:fix_url_webhook
+          image: ghcr.io/vshn/appcat:v4.145.2
           livenessProbe:
             httpGet:
               path: /healthz
