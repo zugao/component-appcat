@@ -9,7 +9,7 @@ parameters:
         version: 1.19.1
       redis:
         source: https://charts.bitnami.com/bitnami
-        version: 17.7.1
+        version: 19.6.4
       mariadb:
         source: https://charts.bitnami.com/bitnami
         version: 14.0.10
