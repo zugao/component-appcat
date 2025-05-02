@@ -356,7 +356,7 @@ parameters:
       namespace: syn-stackgres-operator
       operator:
         channel: stable
-        installPlanApproval: Automatic
+        installPlanApproval: Manual
         resources: {}
 
     stsResizer:

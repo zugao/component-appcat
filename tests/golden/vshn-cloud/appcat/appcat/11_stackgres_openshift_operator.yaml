@@ -23,7 +23,7 @@ spec:
             - matchExpressions:
                 - key: node-role.kubernetes.io/infra
                   operator: Exists
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: stackgres
   source: redhat-marketplace
   sourceNamespace: openshift-marketplace
