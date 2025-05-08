@@ -126,6 +126,8 @@ parameters:
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
+    hotfix: false
+
     bucketRegionOverride: ""
 
     cloudRegionMap:
