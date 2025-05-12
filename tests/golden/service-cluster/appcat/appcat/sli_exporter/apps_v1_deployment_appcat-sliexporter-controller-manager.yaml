@@ -27,7 +27,7 @@ spec:
           env:
             - name: KUBECONFIG
               value: /.kube/config
-          image: ghcr.io/vshn/appcat:fix_nextcloud_pg_settings
+          image: ghcr.io/vshn/appcat:v4.148.0
           livenessProbe:
             httpGet:
               path: /healthz
