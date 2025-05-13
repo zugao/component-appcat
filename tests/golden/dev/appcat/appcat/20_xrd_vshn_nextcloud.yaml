@@ -5389,6 +5389,11 @@ spec:
                                 server. This is used to configure the Collabora server
                                 URL in Your Nextcloud instance.
                               type: string
+                            version:
+                              default: {}
+                              description: Version defines the Collabora version to
+                                use.
+                              type: string
                           required:
                             - enabled
                             - fqdn
