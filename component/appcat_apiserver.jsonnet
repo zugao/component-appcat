@@ -78,6 +78,9 @@ local extraDeploymentArgs =
 local apiserver = loadManifest('aggregated-apiserver.yaml') {
   metadata+: {
     namespace: apiserverParams.namespace,
+    annotations+: {
+      'metadata.appcat.vshn.io/enabled-service-hash': vars.GetVSHNServicesObject(),
+    },
   },
   spec+: {
     replicas: 2,

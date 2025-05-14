@@ -1,4 +1,5 @@
 local common = import 'common.libsonnet';
+local vars = import 'config/vars.jsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
@@ -70,6 +71,9 @@ local controlKubeConfig = kube.Secret('controlclustercredentials') + {
 local controller = loadManifest('deployment.yaml') {
   metadata+: {
     namespace: controllersParams.namespace,
+    annotations+: {
+      'metadata.appcat.vshn.io/enabled-service-hash': vars.GetVSHNServicesObject(),
+    },
   },
   spec+: {
     replicas: 2,

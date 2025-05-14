@@ -566,6 +566,7 @@ parameters:
         quotasEnabled: ${appcat:quotasEnabled}
         secretNamespace: ${appcat:crossplane:namespace}
         forgejo:
+          enabled: true
           billing: true
           serviceName: VSHNForgejo
           compFunctionsOnly: true
@@ -577,7 +578,6 @@ parameters:
             - ca.crt
           mode: standalone
           offered: true
-          enabled: true
           restoreSA: forgejoserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
@@ -629,8 +629,8 @@ parameters:
                 memory: "16Gi"
                 disk: 500Gi
         postgres:
-          billing: true
           enabled: true
+          billing: true
           additionalInputs:
             # Depending on the cluster, this needs to be set
             loadbalancerAnnotations: ""
@@ -768,8 +768,8 @@ parameters:
                 cpu: "500m"
                 memory: "512Mi"
         redis:
-          billing: true
           enabled: true
+          billing: true
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:redis:version}
@@ -810,6 +810,7 @@ parameters:
                 memory: "8Gi"
                 disk: 16Gi
         minio:
+          enabled: false
           billing: true
           serviceName: VSHNMinio
           compFunctionsOnly: true
@@ -819,7 +820,6 @@ parameters:
             - AWS_ACCESS_KEY_ID
           mode: distributed
           offered: false
-          enabled: false
           enableNetworkPolicy: true
           secretNamespace: ${appcat:services:vshn:secretNamespace}
           helmChartVersion: ${appcat:charts:minio:version}
@@ -841,6 +841,7 @@ parameters:
             minioChartVersion: ${appcat:charts:minio:version} # for backwards compatibility for now
           instances: []
         mariadb:
+          enabled: false
           billing: true
           serviceName: VSHNMariaDB
           compFunctionsOnly: true
@@ -854,7 +855,6 @@ parameters:
             - LOADBALANCER_IP
           mode: standalone
           offered: true
-          enabled: false
           restoreSA: mariadbrestoreserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
@@ -911,6 +911,7 @@ parameters:
                 memory: "8Gi"
                 disk: 16Gi
         keycloak:
+          enabled: false
           billing: true
           serviceName: VSHNKeycloak
           compFunctionsOnly: true
@@ -922,7 +923,6 @@ parameters:
             - ca.crt
           mode: standalone
           offered: true
-          enabled: false
           restoreSA: keycloakserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
@@ -967,6 +967,7 @@ parameters:
                 memory: "8Gi"
                 disk: 16Gi
         nextcloud:
+          enabled: false
           billing: true
           serviceName: VSHNNextcloud
           compFunctionsOnly: true
@@ -978,7 +979,6 @@ parameters:
             - ca.crt
           mode: standalone
           offered: true
-          enabled: false
           restoreSA: nextcloudserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           additionalInputs:
@@ -1028,6 +1028,7 @@ parameters:
                 memory: "8Gi"
                 disk: 16Gi
         codey:
+          enabled: true
           billing: false
           serviceName: Codey
           connectionSecretKeys:
@@ -1038,7 +1039,6 @@ parameters:
             - ca.crt
           mode: standalone
           offered: true
-          enabled: true
           restoreSA: codeyserviceaccount
           restoreRoleRules: ${appcat:defaultRestoreRoleRules}
           openshiftTemplate:
