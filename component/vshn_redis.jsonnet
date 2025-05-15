@@ -41,7 +41,7 @@ local connectionSecretKeys = [
 ];
 
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift') || inv.parameters.facts.distribution == 'oke';
-local isBestEffort = !std.member([ 'guaranteed_availability', 'premium' ], inv.parameters.facts.service_level);
+local isBestEffort = !std.member(['guaranteed_availability', 'premium'], inv.parameters.facts.service_level);
 
 local securityContext = if isOpenshift then false else true;
 
@@ -69,46 +69,46 @@ local restoreRoleName = 'crossplane:appcat:job:redis:restorejob';
 local restoreRole = kube.ClusterRole(restoreRoleName) {
   rules: [
     {
-      apiGroups: [ 'vshn.appcat.vshn.io' ],
-      resources: [ 'vshnredis' ],
-      verbs: [ 'get' ],
+      apiGroups: ['vshn.appcat.vshn.io'],
+      resources: ['vshnredis'],
+      verbs: ['get'],
     },
     {
-      apiGroups: [ 'k8up.io' ],
-      resources: [ 'snapshots' ],
-      verbs: [ 'get' ],
+      apiGroups: ['k8up.io'],
+      resources: ['snapshots'],
+      verbs: ['get'],
     },
     {
-      apiGroups: [ '' ],
-      resources: [ 'secrets' ],
-      verbs: [ 'get', 'create', 'delete' ],
+      apiGroups: [''],
+      resources: ['secrets'],
+      verbs: ['get', 'create', 'delete'],
     },
     {
-      apiGroups: [ 'apps' ],
-      resources: [ 'statefulsets/scale' ],
-      verbs: [ 'update', 'patch' ],
+      apiGroups: ['apps'],
+      resources: ['statefulsets/scale'],
+      verbs: ['update', 'patch'],
     },
     {
-      apiGroups: [ 'apps' ],
-      resources: [ 'statefulsets' ],
-      verbs: [ 'get' ],
+      apiGroups: ['apps'],
+      resources: ['statefulsets'],
+      verbs: ['get'],
     },
     {
-      apiGroups: [ 'batch' ],
-      resources: [ 'jobs' ],
-      verbs: [ 'get' ],
+      apiGroups: ['batch'],
+      resources: ['jobs'],
+      verbs: ['get'],
     },
     {
-      apiGroups: [ '' ],
-      resources: [ 'events' ],
-      verbs: [ 'get', 'create', 'patch' ],
+      apiGroups: [''],
+      resources: ['events'],
+      verbs: ['get', 'create', 'patch'],
     },
   ],
 };
 
 local restoreClusterRoleBinding = kube.ClusterRoleBinding('appcat:job:redis:restorejob') + {
   roleRef_: restoreRole,
-  subjects_: [ restoreServiceAccount ],
+  subjects_: [restoreServiceAccount],
 };
 
 local composition =
@@ -279,6 +279,7 @@ local composition =
             name: 'redis',
             repository: params.charts.redis.source,
             version: redisParams.helmChartVersion,
+            url: std.format('%s:%s', [params.charts.redis.source, redisParams.helmChartVersion]),
           },
           values: {
             metrics: {
@@ -303,10 +304,26 @@ local composition =
                 enabled: true,
                 namespace: '',  // patched
               },
+              // When migrating to comp functions we can use `common.GetBitnamiNano()`
+              resources: {
+                requests: {
+                  cpu: '100m',
+                  memory: '128Mi',
+                },
+                limits: {
+                  cpu: '150m',
+                  memory: '196Mi',
+                },
+              },
             },
             fullnameOverride: 'redis',
             global: {
               [if redisParams.imageRegistry != '' then 'imageRegistry']: redisParams.imageRegistry,
+              // Otherwise we can't use our mirror
+              // https://github.com/bitnami/charts/issues/30850
+              security: {
+                allowInsecureImages: true,
+              },
             },
             image: {
               repository: 'bitnami/redis',
@@ -573,7 +590,7 @@ local plansCM = kube.ConfigMap('vshnredisplans') + {
 (if params.services.vshn.enabled && redisParams.enabled && vars.isSingleOrControlPlaneCluster then {
    '20_xrd_vshn_redis': xrd,
    '20_rbac_vshn_redis': xrds.CompositeClusterRoles(xrd),
-   '20_role_vshn_redisrestore': [ restoreRole, restoreServiceAccount, restoreClusterRoleBinding ],
+   '20_role_vshn_redisrestore': [restoreRole, restoreServiceAccount, restoreClusterRoleBinding],
    '20_plans_vshn_redis': plansCM,
    '21_composition_vshn_redis': composition,
    [if isOpenshift then '21_openshift_template_redis_vshn']: osTemplate,

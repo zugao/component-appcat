@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    metadata.appcat.vshn.io/enabled-service-hash: 96ddbf1851fdac376a38862dc071a3d6
+    metadata.appcat.vshn.io/enabled-service-hash: 0af7c4e93c3b5faa248618088fb79f51
   labels:
     appcat-controller: appcat-controller
   name: appcat-controller
