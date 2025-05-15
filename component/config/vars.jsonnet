@@ -7,6 +7,21 @@ local cms = params.clusterManagementSystem;
 local isSingleCluster = cms.controlPlaneCluster && cms.serviceCluster;
 local isControlPlane = cms.controlPlaneCluster && !cms.serviceCluster;
 local isServiceCluster = !cms.controlPlaneCluster && cms.serviceCluster;
+local getSubObjects(obj) = [
+  obj[key]
+  for key in std.objectFields(obj)
+  if std.type(obj[key]) == 'object'
+];
+local getVSHNServicesObject() = std.md5(
+  std.manifestJson(
+    std.foldl(
+      function(acc, s)
+        if s.enabled == true then acc + s else acc,
+      getSubObjects(params.services.vshn),
+      {}
+    )
+  )
+);
 
 {
   isServiceCluster: isServiceCluster,
@@ -16,6 +31,7 @@ local isServiceCluster = !cms.controlPlaneCluster && cms.serviceCluster;
   isSingleOrControlPlaneCluster: isSingleCluster || isControlPlane,
   isSingleOrServiceCluster: isSingleCluster || isServiceCluster,
   isExoscale: inv.parameters.facts.cloud == 'exoscale',
+  GetVSHNServicesObject(): getVSHNServicesObject(),
   assert (cms.controlPlaneKubeconfig == '' && isSingleCluster) || !isSingleCluster : 'clusterManagementSystem.controlPlaneKubeconfig should be empty for converged clusters',
   assert (cms.controlPlaneKubeconfig != '' && isServiceCluster) || (isSingleCluster || isControlPlane) : 'clusterManagementSystem.controlPlaneKubeconfig should not be empty for service clusters',
 }
