@@ -279,6 +279,7 @@ local composition =
             name: 'redis',
             repository: params.charts.redis.source,
             version: redisParams.helmChartVersion,
+            url: std.format('%s:%s', [ params.charts.redis.source, redisParams.helmChartVersion ]),
           },
           values: {
             metrics: {
@@ -303,10 +304,26 @@ local composition =
                 enabled: true,
                 namespace: '',  // patched
               },
+              // When migrating to comp functions we can use `common.GetBitnamiNano()`
+              resources: {
+                requests: {
+                  cpu: '100m',
+                  memory: '128Mi',
+                },
+                limits: {
+                  cpu: '150m',
+                  memory: '196Mi',
+                },
+              },
             },
             fullnameOverride: 'redis',
             global: {
               [if redisParams.imageRegistry != '' then 'imageRegistry']: redisParams.imageRegistry,
+              // Otherwise we can't use our mirror
+              // https://github.com/bitnami/charts/issues/30850
+              security: {
+                allowInsecureImages: true,
+              },
             },
             image: {
               repository: 'bitnami/redis',
