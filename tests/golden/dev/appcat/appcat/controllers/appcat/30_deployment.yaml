@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    metadata.appcat.vshn.io/enabled-service-hash: f1a27f82c3b5113e47030d7abaa6d596
+    metadata.appcat.vshn.io/enabled-service-hash: 8a6cfdc57f269d21c682bd01b40c649e
   labels:
     appcat-controller: appcat-controller
   name: appcat-controller
@@ -27,7 +27,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:v4.149.0
+          image: ghcr.io/vshn/appcat:v4.150.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
