@@ -3,25 +3,16 @@ local kap = import 'lib/kapitan.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.appcat;
 local cms = params.clusterManagementSystem;
+local vshnServices = params.services.vshn;
 
 local isSingleCluster = cms.controlPlaneCluster && cms.serviceCluster;
 local isControlPlane = cms.controlPlaneCluster && !cms.serviceCluster;
 local isServiceCluster = !cms.controlPlaneCluster && cms.serviceCluster;
-local getSubObjects(obj) = [
-  obj[key]
-  for key in std.objectFields(obj)
-  if std.type(obj[key]) == 'object'
+local getEnabledVSHNServiceNames() = [
+  key
+  for key in std.objectFields(vshnServices)
+  if std.type(vshnServices[key]) == 'object' && std.objectHas(vshnServices[key], 'enabled') && vshnServices[key].enabled == true
 ];
-local getVSHNServicesObject() = std.md5(
-  std.manifestJson(
-    std.foldl(
-      function(acc, s)
-        if s.enabled == true then acc + s else acc,
-      getSubObjects(params.services.vshn),
-      {}
-    )
-  )
-);
 
 {
   isServiceCluster: isServiceCluster,
@@ -31,7 +22,7 @@ local getVSHNServicesObject() = std.md5(
   isSingleOrControlPlaneCluster: isSingleCluster || isControlPlane,
   isSingleOrServiceCluster: isSingleCluster || isServiceCluster,
   isExoscale: inv.parameters.facts.cloud == 'exoscale',
-  GetVSHNServicesObject(): getVSHNServicesObject(),
+  GetEnabledVSHNServiceNames(): getEnabledVSHNServiceNames(),
   assert (cms.controlPlaneKubeconfig == '' && isSingleCluster) || !isSingleCluster : 'clusterManagementSystem.controlPlaneKubeconfig should be empty for converged clusters',
   assert (cms.controlPlaneKubeconfig != '' && isServiceCluster) || (isSingleCluster || isControlPlane) : 'clusterManagementSystem.controlPlaneKubeconfig should not be empty for service clusters',
 }

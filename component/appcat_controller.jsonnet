@@ -72,7 +72,7 @@ local controller = loadManifest('deployment.yaml') {
   metadata+: {
     namespace: controllersParams.namespace,
     annotations+: {
-      'metadata.appcat.vshn.io/enabled-service-hash': vars.GetVSHNServicesObject(),
+      'metadata.appcat.vshn.io/enabled-services-hash': std.md5(std.join('-', vars.GetEnabledVSHNServiceNames())),
     },
   },
   spec+: {
