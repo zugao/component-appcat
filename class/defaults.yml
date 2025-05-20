@@ -161,6 +161,8 @@ parameters:
           prometheus: platform
         instance: null
       helmValues:
+        customAnnotations:
+          function-revision: ${appcat:images:appcat:tag}
         xfn:
           enabled: true
         args:
