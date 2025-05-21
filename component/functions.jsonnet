@@ -16,7 +16,7 @@ local getFunction(name, package, runtimeConfigName) = {
   apiVersion: 'pkg.crossplane.io/v1beta1',
   kind: 'Function',
   metadata: {
-    name: name,
+    name: std.strReplace(name, '/', '-'),
   },
   spec: {
     package: package,
@@ -24,6 +24,7 @@ local getFunction(name, package, runtimeConfigName) = {
     runtimeConfigRef: {
       name: runtimeConfigName,
     },
+    skipDependencyResolution: true,
   },
 };
 
@@ -87,11 +88,23 @@ local appcatProxyRuntimeConfig = {
   },
 };
 
-local appcatImageTag = std.strReplace(appcatImage.tag, '/', '_');
+local appcatFunctionImage = appcatImage.registry + '/' + appcatImage.repository + ':';
 
-local appcatFunctionImage = appcatImage.registry + '/' + appcatImage.repository + ':' + appcatImageTag;
+local unescapedVersions = kap.file_read(inv.parameters._base_directory + '/hack/versionlist');
+local versions = std.split(std.strReplace(unescapedVersions, '/', '_'), '\n');
 
-local appcat = getFunction('function-appcat', appcatFunctionImage, if !params.proxyFunction then 'function-appcat' else 'enable-proxy');
+local appcat = std.foldl(
+  function(out, v)
+    out + [
+      if v != '' then
+        local splitv = std.split(v, '-');
+        getFunction('function-appcat-' + std.strReplace(v, '.', '-'), appcatFunctionImage + splitv[1] + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy'),
+    ],
+  versions,
+  std.foldl(function(out, v) out + [ getFunction('function-appcat-' + std.strReplace(v, '.', '-'), appcatFunctionImage + std.strReplace(v, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ],
+            params.deploymentManagementSystem.additionalFunctionBranches,
+            [ getFunction('function-appcat-' + std.strReplace(params.images.appcat.tag, '.', '-'), appcatFunctionImage + std.strReplace(params.images.appcat.tag, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ])
+);
 
 local saAppCat = kube.ServiceAccount('function-appcat') {
   metadata+: {

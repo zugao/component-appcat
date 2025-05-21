@@ -126,8 +126,6 @@ parameters:
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
-    hotfix: false
-
     bucketRegionOverride: ""
 
     cloudRegionMap:
@@ -149,6 +147,12 @@ parameters:
       serviceCluster: true
       controlPlaneKubeconfig: ""
       serviceClusterKubeconfigs: []
+
+    # controls how comp revisions are handled
+    deploymentManagementSystem:
+      hotfix: false
+      enabled: true
+      additionalFunctionBranches: []
 
     crossplane:
       namespace: syn-crossplane

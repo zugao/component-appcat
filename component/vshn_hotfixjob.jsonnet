@@ -13,7 +13,10 @@ local hotfixerSA = kube.ServiceAccount('appcat-hotfixer-sa') {
   },
 };
 
-local hotfixerJob = kube.Job('appcat-hotfixer') {
+local escapedComponentVersion = std.strReplace(inv.parameters.components.appcat.version, '.', '-');
+local escapedAppCatVersion = std.strReplace(common.GetAppCatImageTag(), '_', '-');
+
+local hotfixerJob = kube.Job('appcat-hotfixer-' + escapedAppCatVersion + '-' + escapedComponentVersion) {
   metadata+: {
     namespace: params.namespace,
   },
@@ -86,11 +89,11 @@ local appcatJobPrometheusRule = {
   },
 };
 
-(if vars.isSingleOrControlPlaneCluster && params.hotfix then {
+(if vars.isSingleOrControlPlaneCluster && params.deploymentManagementSystem.hotfix && params.deploymentManagementSystem.enabled then {
    'hotfixer/10_job': hotfixerJob,
    'hotfixer/10_sa': hotfixerSA,
    'hotfixer/10_clusterrolebinding': hotfixClusterRolebinding,
  } else {})
-+ {
-  'hotfixer/10_prometheusrule': appcatJobPrometheusRule,
-}
++ (if params.deploymentManagementSystem.enabled then {
+     'hotfixer/10_prometheusrule': appcatJobPrometheusRule,
+   } else {})

@@ -231,3 +231,30 @@ default:: ""
 Configures the kubeconfig to use to connect back to the control plane cluster.
 The kubeconfig is only used if the configuration is not in converged mode.
 It has to be created beforehand with the proper RBAC.
+
+== `deploymentManagementSystem`
+[horizontal]
+type:: dict
+
+Controls aspects of the deployment via comp-function revisions.
+
+=== `hotfix`
+[horizontal]
+type:: bool
+default:: false
+
+Defines if all instances should instantly be switched over to the new release or not. This will generate a job that will run the rollout.
+
+=== `enabled`
+[horizontal]
+type:: bool
+default:: true
+
+Specifies if the system should be enabled or not. If it's disabled all changes will be rolled out immediately.
+
+=== `additionalFunctionBranches`
+[horizontal]
+type:: array
+default:: []
+
+Specify additional function branches that should be deployed. Mostly used to test various versions at the same time on the lab.
