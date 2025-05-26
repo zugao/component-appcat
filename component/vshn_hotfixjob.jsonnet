@@ -37,6 +37,12 @@ local hotfixerJob = kube.Job('appcat-hotfixer-' + escapedAppCatVersion + '-' + e
                 memory: '300Mi',
               },
             },
+            env: [
+              {
+                name: 'RELEASE_MANAGEMENT_ENABLED',
+                value: std.toString(params.deploymentManagementSystem.enabled),
+              },
+            ],
             args: [
               'hotfixer',
             ],
@@ -89,11 +95,11 @@ local appcatJobPrometheusRule = {
   },
 };
 
-(if vars.isSingleOrControlPlaneCluster && params.deploymentManagementSystem.hotfix && params.deploymentManagementSystem.enabled then {
+(if vars.isSingleOrControlPlaneCluster && params.deploymentManagementSystem.hotfix then {
    'hotfixer/10_job': hotfixerJob,
    'hotfixer/10_sa': hotfixerSA,
    'hotfixer/10_clusterrolebinding': hotfixClusterRolebinding,
  } else {})
-+ (if params.deploymentManagementSystem.enabled then {
-     'hotfixer/10_prometheusrule': appcatJobPrometheusRule,
-   } else {})
++ {
+  'hotfixer/10_prometheusrule': appcatJobPrometheusRule,
+}
