@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 version_list=${1}
 base_dir=${2}
@@ -24,8 +24,10 @@ function parse_yaml {
 
 cd "${base_dir}"
 
+revs=$(git rev-list --tags)
+
 # We get the last 20 component versions
-git_list=$(git describe --abbrev=0 --tags --always $(git rev-list --tags) | grep  "v.*" | sort -uVr | head -n 20 )
+git_list="$(git describe --abbrev=0 --tags --always $revs | grep  "v.*" | sort -uVr | head -n 20 )"
 
 rm -f "$version_list"
 
