@@ -93,6 +93,17 @@ local appcatFunctionImage = appcatImage.registry + '/' + appcatImage.repository 
 local unescapedVersions = kap.file_read(inv.parameters._base_directory + '/hack/versionlist');
 local versions = std.split(std.strReplace(unescapedVersions, '/', '_'), '\n');
 
+// Generate an array with a single item that contains the current branch or tag
+local currentFunction = [ getFunction('function-appcat-' + std.strReplace(params.images.appcat.tag, '.', '-'), appcatFunctionImage + std.strReplace(params.images.appcat.tag, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ];
+
+// Generate an array with all additional function branches specified
+local branchFunctions = std.foldl(
+  function(out, v) out + [ getFunction('function-appcat-' + std.strReplace(v, '.', '-'), appcatFunctionImage + std.strReplace(v, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ],
+  params.deploymentManagementSystem.additionalFunctionBranches,
+  currentFunction
+);
+
+// Finally also generate an array of the last 5 tags
 local appcat = std.foldl(
   function(out, v)
     out + [
@@ -101,9 +112,7 @@ local appcat = std.foldl(
         getFunction('function-appcat-' + std.strReplace(v, '.', '-'), appcatFunctionImage + splitv[1] + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy'),
     ],
   versions,
-  std.foldl(function(out, v) out + [ getFunction('function-appcat-' + std.strReplace(v, '.', '-'), appcatFunctionImage + std.strReplace(v, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ],
-            params.deploymentManagementSystem.additionalFunctionBranches,
-            [ getFunction('function-appcat-' + std.strReplace(params.images.appcat.tag, '.', '-'), appcatFunctionImage + std.strReplace(params.images.appcat.tag, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ])
+  branchFunctions
 );
 
 local saAppCat = kube.ServiceAccount('function-appcat') {

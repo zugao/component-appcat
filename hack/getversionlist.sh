@@ -2,7 +2,11 @@
 
 set -e
 
+# Where the list should get saved
 version_list=${1}
+
+# The correct base directory where the component resides
+# Depending on the commodore compilation method it's not always the same.
 base_dir=${2}
 
 function parse_yaml {
