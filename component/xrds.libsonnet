@@ -57,6 +57,7 @@ local loadCRD(crd, tag) = std.parseJson(kap.yaml_load(inv.parameters._base_direc
 local xrdFromCRD(name, crd, defaultComposition='', connectionSecretKeys=[]) =
   kube._Object('apiextensions.crossplane.io/v1', 'CompositeResourceDefinition', name) + common.SyncOptions + {
     spec: {
+      // We always have the automatic policy for xobjectbuckets. For all other XRDs we set it whether or not it's enabled.
       defaultCompositionUpdatePolicy: if name == 'xobjectbuckets.appcat.vshn.io' then 'Automatic' else if params.deploymentManagementSystem.enabled then 'Manual' else 'Automatic',
       claimNames: {
         kind: crd.spec.names.kind,

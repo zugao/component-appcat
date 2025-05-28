@@ -245,12 +245,18 @@ default:: false
 
 Defines if all instances should instantly be switched over to the new release or not. This will generate a job that will run the rollout.
 
+Set to `true` to trigger the rollout hotfix. The hotfix job will only be created once for each component release.
+
+If this is set to `false`, then each instance will switch over to the latest release during its own maintenance window.
+
 === `enabled`
 [horizontal]
 type:: bool
 default:: true
 
-Specifies if the system should be enabled or not. If it's disabled all changes will be rolled out immediately.
+Specifies if the deployment managment system should be enabled or not. If it's disabled all changes will be rolled out immediately.
+
+If it's enabled then all rollouts will happen during each instance's maintenance window.
 
 === `additionalFunctionBranches`
 [horizontal]
