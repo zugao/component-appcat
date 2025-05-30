@@ -15,6 +15,7 @@ metadata:
     metadata.appcat.vshn.io/zone: lpg
   labels:
     metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/revision: v4.154.0
     metadata.appcat.vshn.io/serviceID: vshn-postgresql
     name: vshnpostgres.vshn.appcat.vshn.io
   name: vshnpostgres.vshn.appcat.vshn.io
@@ -25,7 +26,7 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat
+        name: function-appcat-v4-154-0
       input:
         apiVersion: v1
         data:
@@ -33,6 +34,7 @@ spec:
           bucketRegion: rma
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
+          defaultPlan: standard-2
           emailAlertingEnabled: 'true'
           emailAlertingSecretName: mailgun-smtp-credentials
           emailAlertingSecretNamespace: syn-appcat
@@ -41,7 +43,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           externalDatabaseConnectionsEnabled: 'true'
           ignoreNamespaceForBilling: vshn-test
-          imageTag: v4.153.1
+          imageTag: v4.154.0
           initContainers: '{"clusterReconciliationCycle": {"limits": {"cpu": "300m",
             "memory": "200Mi"}, "requests": {"cpu": "100m", "memory": "100Mi"}}, "pgbouncerAuthFile":
             {"limits": {"cpu": "300m", "memory": "500Mi"}, "requests": {"cpu": "100m",
@@ -67,6 +69,8 @@ spec:
             "pgbouncer_show_stats_totals_bytes_received", "pgbouncer_show_stats_totals_bytes_sent"]'
           loadbalancerAnnotations: |
             foo: bar
+          maintenanceSA: helm-based-service-maintenance
+          ocpDefaultAppsDomain: apps.lab-cloudscale-rma-0.appuio.cloud
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNPostgreSQL
           ownerVersion: v1
@@ -81,6 +85,7 @@ spec:
             "memory": "3984Mi"}}}'
           proxyEndpoint: 172.19.0.1:9443
           quotasEnabled: 'false'
+          releaseManagementEnabled: 'false'
           salesOrder: ''
           serviceID: vshn-postgresql
           serviceName: postgresql

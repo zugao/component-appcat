@@ -39,5 +39,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ env.COMPONENT_NAME }}
+          fetch-depth: 0
       - name: Golden diff
         run: make golden-diff -e instance=${{ matrix.instance }}

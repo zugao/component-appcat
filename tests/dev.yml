@@ -25,6 +25,10 @@ parameters:
 
   appcat:
 
+    deploymentManagementSystem:
+      hotfix: false
+      enabled: false
+
     # bucketRegionOverride: minio
 
     images:
@@ -32,8 +36,6 @@ parameters:
         registry: dockerhub.vshn.net
       busybox:
         registry: dockerhub.vshn.net
-
-    # hotfix: true
 
     grpcEndpoint: 172.19.0.1:9443
     proxyFunction: true

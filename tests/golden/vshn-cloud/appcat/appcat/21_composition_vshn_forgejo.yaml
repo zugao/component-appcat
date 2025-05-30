@@ -13,6 +13,7 @@ metadata:
     metadata.appcat.vshn.io/zone: rma1
   labels:
     metadata.appcat.vshn.io/offered: 'true'
+    metadata.appcat.vshn.io/revision: v4.154.0
     metadata.appcat.vshn.io/serviceID: vshn-forgejo
     name: vshnforgejo.vshn.appcat.vshn.io
   name: vshnforgejo.vshn.appcat.vshn.io
@@ -23,7 +24,7 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat
+        name: function-appcat-v4-154-0
       input:
         apiVersion: v1
         data:
@@ -42,7 +43,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: code.forgejo.org
-          imageTag: v4.153.1
+          imageTag: v4.154.0
           ingress_annotations: |
             cert-manager.io/cluster-issuer: letsencrypt-production
           isOpenshift: 'true'
@@ -61,6 +62,7 @@ spec:
           quotasEnabled: 'false'
           registry_password: ''
           registry_username: ''
+          releaseManagementEnabled: 'true'
           restoreSA: forgejoserviceaccount
           salesOrder: ''
           serviceID: vshn-forgejo

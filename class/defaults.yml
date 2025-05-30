@@ -61,7 +61,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: v4.153.1
+        tag: v4.154.0
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -126,8 +126,6 @@ parameters:
     grpcEndpoint: host.docker.internal:9443
     proxyFunction: false
 
-    hotfix: false
-
     bucketRegionOverride: ""
 
     cloudRegionMap:
@@ -149,6 +147,12 @@ parameters:
       serviceCluster: true
       controlPlaneKubeconfig: ""
       serviceClusterKubeconfigs: []
+
+    # controls how comp revisions are handled
+    deploymentManagementSystem:
+      hotfix: false
+      enabled: true
+      additionalFunctionBranches: []
 
     crossplane:
       namespace: syn-crossplane
