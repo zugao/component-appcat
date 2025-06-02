@@ -8,6 +8,10 @@ parameters:
         source: https://raw.githubusercontent.com/appuio/component-openshift4-operators/v1.4.0/lib/openshift4-operators.libsonnet
         output_path: vendor/lib/openshift4-operators.libsonnet
 
+  components:
+    appcat:
+      version: debug
+
   facts:
     cloud: cloudscale
     region: lpg
