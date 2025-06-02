@@ -17,7 +17,7 @@ metadata:
     metadata.appcat.vshn.io/zone: lpg
   labels:
     metadata.appcat.vshn.io/offered: 'true'
-    metadata.appcat.vshn.io/revision: v4.154.0
+    metadata.appcat.vshn.io/revision: debug-v4.154.0
     metadata.appcat.vshn.io/serviceID: vshn-redis
     name: vshnredis.vshn.appcat.vshn.io
   name: vshnredis.vshn.appcat.vshn.io
@@ -594,7 +594,7 @@ spec:
                 type: FromCompositeFieldPath
       step: patch-and-transform
     - functionRef:
-        name: function-appcat-v4-154-0
+        name: function-appcat-debug-v4-154-0
       input:
         apiVersion: v1
         data:

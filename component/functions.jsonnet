@@ -94,7 +94,7 @@ local unescapedVersions = kap.file_read(inv.parameters._base_directory + '/hack/
 local versions = std.split(std.strReplace(unescapedVersions, '/', '_'), '\n');
 
 // Generate an array with a single item that contains the current branch or tag
-local currentFunction = [ getFunction('function-appcat-' + std.strReplace(params.images.appcat.tag, '.', '-'), appcatFunctionImage + std.strReplace(params.images.appcat.tag, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ];
+local currentFunction = [ getFunction('function-appcat-' + inv.parameters.components.appcat.version + '-' + std.strReplace(params.images.appcat.tag, '.', '-'), appcatFunctionImage + std.strReplace(params.images.appcat.tag, '/', '_') + '-func', if !params.proxyFunction then 'function-appcat' else 'enable-proxy') ];
 
 // Generate an array with all additional function branches specified
 local branchFunctions = std.foldl(

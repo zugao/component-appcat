@@ -60,7 +60,7 @@ local vshnMetaVshn(servicename, flavor, offered, plans) = {
     labels+: {
       'metadata.appcat.vshn.io/offered': offered,
       'metadata.appcat.vshn.io/serviceID': vshnServiceID(servicename),
-      'metadata.appcat.vshn.io/revision': getAppCatImageTag(),
+      'metadata.appcat.vshn.io/revision': inv.parameters.components.appcat.version + '-' + getAppCatImageTag(),
     },
   },
 };
@@ -242,7 +242,7 @@ local getBucketRegion() =
 
     nonLocalRegions[0];
 
-local getCurrentFunctionName() = std.strReplace('function-appcat' + '-' + std.strReplace(getAppCatImageTag(), '_', '-'), '.', '-');
+local getCurrentFunctionName() = std.strReplace('function-appcat-' + inv.parameters.components.appcat.version + '-' + std.strReplace(getAppCatImageTag(), '_', '-'), '.', '-');
 
 local getDefaultInputs(name, serviceParams, plans, xrd, appuioManaged) = {
   serviceName: name,
