@@ -47,6 +47,18 @@ local fromCompositeFieldPathWithTransformPrefix(from, to, prefix) = fromComposit
   ],
 };
 
+local fromCompositeFieldPathWithConvert(from, to, type) = fromCompositeFieldPath(from, to) + {
+  // this is an enhanced patch type with a transform function that converts the value to the given type
+  transforms: [
+    {
+      type: 'convert',
+      convert: {
+        toType: type,
+      },
+    },
+  ],
+};
+
 local fromCompositeFieldPathWithTransformMap(from, to, map) = fromCompositeFieldPath(from, to) + {
   // this is an enhanced patch type with a transform function that maps values given the provided object
   transforms: [
@@ -238,6 +250,8 @@ local namespacePermissions(namespacePrefix) = {
     commonResources[name],
   FromCompositeFieldPath(from, to):
     fromCompositeFieldPath(from, to),
+  FromCompositeFieldPathWithConvert(from, to, type):
+    fromCompositeFieldPathWithConvert(from, to, type),
   FromCompositeFieldPathWithTransformMap(from, to, map):
     fromCompositeFieldPathWithTransformMap(from, to, map),
   FromCompositeFieldPathWithTransformMatch(from, to, pattern):

@@ -77,6 +77,10 @@ spec:
                 type: FromCompositeFieldPath
               - fromFieldPath: spec.parameters.service.disableRegistration
                 toFieldPath: spec.parameters.service.forgejoSettings.config.service."DISABLE_REGISTRATION"
+                transforms:
+                  - convert:
+                      toType: string
+                    type: convert
                 type: FromCompositeFieldPath
               - fromFieldPath: metadata.labels["crossplane.io/claim-name"]
                 toFieldPath: spec.parameters.service.fqdn[0]
