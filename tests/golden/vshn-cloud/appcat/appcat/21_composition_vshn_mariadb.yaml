@@ -41,7 +41,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: dockerhub.vshn.net
-          imageTag: remove_envoy
+          imageTag: v4.157.0
           isOpenshift: 'true'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone
