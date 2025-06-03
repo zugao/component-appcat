@@ -42,7 +42,7 @@ parameters:
         registry: dockerhub.vshn.net
 
     grpcEndpoint: 172.19.0.1:9443
-    proxyFunction: false
+    proxyFunction: true
 
     quotasEnabled: false
     appuioManaged: false

@@ -615,6 +615,7 @@ spec:
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNRedis
           ownerVersion: v1
+          proxyEndpoint: 172.19.0.1:9443
           quotasEnabled: 'false'
           releaseManagementEnabled: 'false'
           restoreSA: redisrestoreserviceaccount
