@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: config-codey-e2e
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        e2e-test: codey-e2e
+    spec:
+      restartPolicy: Never
+      activeDeadlineSeconds: 180
+      serviceAccountName: github-ci
+      containers:
+        - name: connect
+          image: alpine/k8s:1.31.7
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - |
+              #!/bin/bash
+
+              set -exf
+
+              ns="vshn-forgejo-$(kubectl -n '$NAMESPACE' get codeyinstance codey-e2e -oyaml | yq -r '.spec.resourceRef.name')"
+
+              inline_secret=$(kubectl -n "$ns" get secret -l app=codey -o name | grep inline)
+              credentials_secret=$(kubectl -n "$ns" get secret -o name | grep credentials-secret | head -n 1)
+              username=$(kubectl -n "$ns" get $credentials_secret -o yaml | yq .data.username | base64 -d)
+              password=$(kubectl -n "$ns" get $credentials_secret -o yaml | yq .data.password | base64 -d)
+              svc=$(k -n '$NAMESPACE' get svc | grep http | awk '{print $1}')
+
+              # ---------------------
+              # Check if DISABLE_REGISTRATION is true
+              disable_reg=$(kubectl -n "$ns" get $inline_secret -o yaml | yq '.data.service' | base64 -d | grep DISABLE_REGISTRATION | cut -d "=" -f 2)
+              [[ $disable_reg == "true" ]]
+
+              # Verify that registration is indeed impossible
+              # Unfortunately Forgejo will always return a 200 OK and only change its HTML, so we need to check for that instead
+              [[ $(curl "http://${svc}.${NAMESPACE}.svc:3000" | grep "Registration is disabled" | wc -l) -eq 1 ]]

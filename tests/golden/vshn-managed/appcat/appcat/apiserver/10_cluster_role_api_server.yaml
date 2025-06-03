@@ -89,12 +89,10 @@ rules:
   - apiGroups:
       - vshn.appcat.vshn.io
     resources:
-      - vshnkeycloaks
       - vshnmariadbs
       - vshnnextclouds
       - vshnpostgresqls
       - vshnredis
-      - xvshnkeycloaks
       - xvshnnextclouds
       - xvshnpostgresqls
     verbs:

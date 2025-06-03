@@ -1,0 +1,11 @@
+apiVersion: codey.io/v1
+kind: CodeyInstance
+metadata:
+  name: codey-e2e
+spec:
+  parameters:
+    service:
+      adminEmail: my-user@example.com
+      disableRegistration: true
+  writeConnectionSecretToRef:
+    name: codey-e2e

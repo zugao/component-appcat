@@ -1,0 +1,16 @@
+# Remove any leftover objects
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+timeout: 600
+delete:
+  - apiVersion: codey.io/v1
+    kind: CodeyInstance
+    name: codey-e2e
+  - apiVersion: batch/v1
+    kind: Job
+    labels:
+      e2e-test: codey-e2e
+  - apiVersion: v1
+    kind: Pod
+    labels:
+      e2e-test: codey-e2e
