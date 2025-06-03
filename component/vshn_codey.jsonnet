@@ -125,6 +125,7 @@ local composition =
                     comp.FromCompositeFieldPath('metadata.labels["crossplane.io/composite"]', 'metadata.name'),
                     comp.FromCompositeFieldPath('spec.parameters.service.adminEmail', 'spec.parameters.service.adminEmail'),
                     comp.FromCompositeFieldPath('spec.parameters.service.majorVersion', 'spec.parameters.service.majorVersion'),
+                    comp.FromCompositeFieldPath('spec.parameters.service.disableRegistration', 'spec.parameters.service.forgejoSettings.config.service."DISABLE_REGISTRATION"'),
                     comp.FromCompositeFieldPathWithTransform('metadata.labels["crossplane.io/claim-name"]', 'spec.parameters.service.fqdn[0]', '', '.app.codey.ch'),
                     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.parameters.size.cpu', codeyPlanMappings.cpu),
                     comp.FromCompositeFieldPathWithTransformMap('spec.parameters.size.plan', 'spec.parameters.size.requests.cpu', codeyPlanMappings.cpu),
