@@ -11,3 +11,9 @@ delete:
     kind: Pod
     labels:
       e2e-test: keycloak-e2e
+  - apiVersion: v1
+    kind: Secret
+    name: test-secret
+  - apiVersion: v1
+    kind: ConfigMap
+    name: test-cm
