@@ -22,7 +22,7 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat-master-fix-render-diff
+        name: function-appcat-master-v4-159-3
       input:
         apiVersion: v1
         data:
