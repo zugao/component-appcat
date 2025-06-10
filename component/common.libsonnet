@@ -46,6 +46,13 @@ local vshnMetaDBaaSExoscale(dbname) = {
 };
 
 local getAppCatImageTag() = std.strReplace(params.images.appcat.tag, '/', '_');
+local getAppCatVersion() = std.strReplace(inv.parameters.components.appcat.version, '/', '_');
+
+local truncateName(rev) =
+  if std.length(rev) > 63 then
+    std.substr(rev, 0, 56) + '-' + std.substr(std.md5(rev), 0, 5)
+  else
+    rev;
 
 local vshnMetaVshn(servicename, flavor, offered, plans) = {
   metadata+: {
@@ -60,7 +67,7 @@ local vshnMetaVshn(servicename, flavor, offered, plans) = {
     labels+: {
       'metadata.appcat.vshn.io/offered': offered,
       'metadata.appcat.vshn.io/serviceID': vshnServiceID(servicename),
-      'metadata.appcat.vshn.io/revision': inv.parameters.components.appcat.version + '-' + getAppCatImageTag(),
+      'metadata.appcat.vshn.io/revision': truncateName(getAppCatVersion() + '-' + getAppCatImageTag()),
     },
   },
 };
@@ -242,7 +249,10 @@ local getBucketRegion() =
 
     nonLocalRegions[0];
 
-local getCurrentFunctionName() = std.strReplace('function-appcat-' + inv.parameters.components.appcat.version + '-' + std.strReplace(getAppCatImageTag(), '_', '-'), '.', '-');
+local getCurrentFunctionName() =
+  truncateName(
+    std.strReplace('function-appcat-' + std.strReplace(getAppCatVersion(), '_', '-') + '-' + std.strReplace(getAppCatImageTag(), '_', '-'), '.', '-')
+  );
 
 local getDefaultInputs(name, serviceParams, plans, xrd, appuioManaged) = {
   serviceName: name,
@@ -289,6 +299,8 @@ local getDefaultInputs(name, serviceParams, plans, xrd, appuioManaged) = {
     openShiftTemplate(name, displayName, description, iconClass, tags, message, provider, docs),
   GetAppCatImageString():
     getAppCatImageString(),
+  GetAppCatVersion():
+    getAppCatVersion(),
   GetAppCatImageTag():
     getAppCatImageTag(),
   GetApiserverImageTag():
