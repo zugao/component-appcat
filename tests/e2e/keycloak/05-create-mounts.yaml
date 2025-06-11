@@ -1,0 +1,29 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  - script: |
+      cat <<EOF | kubectl apply -f -
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: test-secret
+        namespace: $NAMESPACE
+      type: Opaque
+      data:
+        username: dXNlcg==
+        password: cGFzc3dvcmQ=
+      EOF
+  - script: |
+      cat <<EOF | kubectl apply -f -
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: test-cm
+        namespace: $NAMESPACE
+      data:
+        config.json: |
+          {
+            "key": "value",
+            "anotherKey": 123
+          }
+      EOF

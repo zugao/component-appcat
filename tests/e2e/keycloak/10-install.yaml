@@ -1,3 +1,4 @@
+# Install keycloak with custom mounts
 apiVersion: vshn.appcat.vshn.io/v1
 kind: VSHNKeycloak
 metadata:
@@ -6,5 +7,10 @@ spec:
   parameters:
     service:
       fqdn: keycloak-e2e.example.com
+      customMounts:
+        - name: test-secret
+          type: secret
+        - name: test-cm
+          type: configMap
   writeConnectionSecretToRef:
     name: keycloak-e2e
