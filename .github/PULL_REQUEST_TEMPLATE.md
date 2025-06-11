@@ -8,9 +8,6 @@
       The PR has a meaningful description that sums up the change. It will be
       linked in the changelog.
 - [ ] PR contains a single logical change (to build a better changelog).
-- [ ] Categorize the PR by adding one of the labels:
-      `bug`, `enhancement`, `documentation`, `change`, `breaking`, `dependency`
-      as they show up in the changelog.
 - [ ] I run `make e2e-test` against local kindev and all checks passed
 - [ ] Link this PR to related issues or PRs.
 
