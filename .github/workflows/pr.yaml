@@ -15,10 +15,17 @@ jobs:
     name: Check labels
     runs-on: ubuntu-latest
     steps:
+      - name: Ignore from Changelog if merge to master
+        uses: actions-ecosystem/action-add-labels@v1
+        if: github.base_ref == 'master'
+        with:
+          labels: ignoreChangelog
+
       - uses: docker://agilepathway/pull-request-label-checker:v1.6.51
         with:
           one_of: enhancement,feature,minor,change,breaking,major,bug,fix,patch,documentation,dependency
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+
   create-release:
     if: github.event.pull_request.merged && github.base_ref == 'master'
     runs-on: ubuntu-latest
