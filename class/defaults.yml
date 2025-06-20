@@ -47,9 +47,9 @@ parameters:
         repository: vshn/provider-minio
         tag: v0.4.4
       provider-sql:
-        registry: xpkg.upbound.io
-        repository: crossplane-contrib/provider-sql
-        tag: v0.11.0
+        registry: ghcr.io
+        repository: vshn/provider-sql
+        tag: v0.11.0-vshn
       sloth:
         registry: ghcr.io
         image: slok/sloth
