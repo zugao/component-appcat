@@ -40,148 +40,29 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "uaI0iF84z"
-      },
       "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "max": 100,
-          "min": 0,
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 80
-              },
-              {
-                "color": "red",
-                "value": 90
-              }
-            ]
-          },
-          "unit": "percent"
-        },
+        "defaults": {},
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
+        "h": 4,
+        "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 47,
+      "id": 53,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "content": "# IMPORTANT\n\n<b>After each change please export this dashboard as JSON and update it in component-appcat repository</b>",
+        "mode": "markdown"
       },
       "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "uaI0iF84z"
-          },
-          "editorMode": "code",
-          "expr": "sum(jvm_memory_bytes_used{namespace=\"$instance_namespace\", container=\"keycloak\", area=\"heap\"})*100/sum(jvm_memory_bytes_max{namespace=\"$instance_namespace\" ,container=\"keycloak\", area=\"heap\"})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Current Memory HEAP",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "uaI0iF84z"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "max": 100,
-          "min": 0,
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 80
-              },
-              {
-                "color": "red",
-                "value": 90
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 6,
-        "x": 6,
-        "y": 0
-      },
-      "id": 23,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "uaI0iF84z"
-          },
-          "editorMode": "code",
-          "expr": "sum(jvm_memory_bytes_used{namespace=\"$instance_namespace\", container=\"keycloak\", area=\"nonheap\"})*100/sum(jvm_memory_bytes_max{namespace=\"$instance_namespace\" ,container=\"keycloak\", area=\"nonheap\"})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Current Memory nonHEAP",
-      "type": "gauge"
+      "title": "Important note",
+      "type": "text"
     },
     {
       "datasource": {
@@ -246,10 +127,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 0
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 4
       },
       "id": 12,
       "options": {
@@ -261,7 +142,7 @@
             "min"
           ],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true,
           "width": 70
         },
@@ -278,7 +159,7 @@
             "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_bytes_max{namespace=\"$instance_namespace\"})",
+          "expr": "sum(jvm_memory_max_bytes{namespace=\"$instance_namespace\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -293,7 +174,7 @@
             "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_bytes_used{namespace=\"$instance_namespace\"})",
+          "expr": "sum(jvm_memory_used_bytes{namespace=\"$instance_namespace\"})",
           "hide": false,
           "legendFormat": "USED",
           "range": true,
@@ -314,43 +195,68 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "mappings": []
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
+        "h": 8,
+        "w": 24,
         "x": 0,
-        "y": 7
+        "y": 10
       },
-      "id": 16,
+      "id": 50,
       "options": {
-        "displayLabels": [
-          "value",
-          "name"
-        ],
         "legend": {
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true,
-          "values": [
-            "value"
-          ]
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -365,16 +271,14 @@
             "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum by (realm)(increase(keycloak_logins_total[24h]))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "{{realm}}",
+          "expr": "base_cpu_systemLoadAverage{namespace=\"$instance_namespace\"}",
+          "legendFormat": "{{__name__}}",
           "range": true,
-          "refId": "B"
+          "refId": "A"
         }
       ],
-      "title": "Logins Per REALM for past 24h",
-      "type": "piechart"
+      "title": "Average Load in last minute (1m interval)",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -383,17 +287,99 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
           },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 18
+      },
+      "id": 23,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "uaI0iF84z"
           },
-          "mappings": []
+          "editorMode": "code",
+          "expr": "sum(jvm_memory_used_bytes{namespace=\"$instance_namespace\", container=\"keycloak\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{namespace=\"$instance_namespace\" ,container=\"keycloak\", area=\"nonheap\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Current Memory nonHEAP",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "uaI0iF84z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -401,27 +387,23 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 7
+        "y": 18
       },
-      "id": 44,
+      "id": 47,
       "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "mean"
           ],
           "fields": "",
           "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "11.4.0",
       "targets": [
@@ -431,21 +413,162 @@
             "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum by (realm)(increase(keycloak_registrations_total[24h]))",
+          "expr": "sum(jvm_memory_used_bytes{namespace=\"$instance_namespace\", container=\"keycloak\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{namespace=\"$instance_namespace\" ,container=\"keycloak\", area=\"heap\"})",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{realm}}",
+          "legendFormat": "",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Registrations Per REALM for past 24h",
-      "type": "piechart"
+      "title": "Current Memory HEAP",
+      "type": "gauge"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$Datasource"
+        "uid": "uaI0iF84z"
       },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 12,
+        "y": 18
+      },
+      "id": 52,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "uaI0iF84z"
+          },
+          "editorMode": "code",
+          "expr": "sum(jvm_memory_used_bytes{namespace=\"$instance_namespace\", container=\"keycloak\"})*100/sum(jvm_memory_max_bytes{namespace=\"$instance_namespace\" ,container=\"keycloak\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Current Memory HEAP + nonHEAP",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "uaI0iF84z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 18
+      },
+      "id": 51,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "uaI0iF84z"
+          },
+          "editorMode": "code",
+          "expr": "(base_cpu_systemLoadAverage{namespace=\"$instance_namespace\",container=\"keycloak\"}/base_cpu_availableProcessors{namespace=\"$instance_namespace\", container=\"keycloak\"})",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU percentage usage",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "uaI0iF84z"
+      },
+      "description": "Meaning: It shows how many Java classes are currently loaded into memory by the JVM’s class loader.\nWhy it matters:\nA high or steadily increasing value may indicate classloader leaks or excessive dynamic class generation.\nMonitoring this metric helps detect memory issues related to class loading/unloading.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -460,7 +583,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 10,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -474,7 +597,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
+            "showPoints": "auto",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -497,20 +620,18 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 7
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 25
       },
-      "id": 46,
+      "id": 49,
       "options": {
-        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -518,7 +639,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -526,17 +647,17 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$Datasource"
+            "type": "prometheus",
+            "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum by (code)(increase(keycloak_response_errors[30m]))",
-          "interval": "",
-          "legendFormat": "{{code}}",
+          "expr": "jvm_classes_loaded_classes{namespace=\"$instance_namespace\"}",
+          "legendFormat": "number of classes",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "4xx and 5xx Responses",
+      "title": "current number of classes loaded in the Java Virtual Machine (JVM)",
       "type": "timeseries"
     },
     {
@@ -558,7 +679,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 10,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -572,8 +693,8 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
-            "spanNulls": true,
+            "showPoints": "auto",
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -583,7 +704,6 @@
             }
           },
           "mappings": [],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -596,29 +716,26 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "none"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 7,
+        "w": 24,
         "x": 0,
-        "y": 14
+        "y": 32
       },
-      "id": 1,
+      "id": 48,
       "options": {
-        "alertThreshold": true,
         "legend": {
           "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "width": 100
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -630,123 +747,18 @@
             "uid": "uaI0iF84z"
           },
           "editorMode": "code",
-          "expr": "sum by (realm)(increase(keycloak_logins_total[30m]))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{realm}}",
+          "expr": "jvm_threads_live_threads{namespace=\"$instance_namespace\"}",
+          "legendFormat": "live Keycloak threads",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Logins per REALM",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$Datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 15
-      },
-      "id": 33,
-      "options": {
-        "alertThreshold": false,
-        "legend": {
-          "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "width": 100
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$Datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (realm)(increase(keycloak_registrations_total[30m]))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{realm}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Registrations per REALM",
+      "title": "Active threads currently running",
       "type": "timeseries"
     }
   ],
   "preload": false,
-  "refresh": "",
+  "refresh": "5s",
   "schemaVersion": 40,
   "tags": [
     "Appcat"
@@ -776,8 +788,8 @@
       },
       {
         "current": {
-          "text": "appcat-e2e",
-          "value": "appcat-e2e"
+          "text": "vshn-test",
+          "value": "vshn-test"
         },
         "datasource": {
           "type": "prometheus",
@@ -797,8 +809,8 @@
       },
       {
         "current": {
-          "text": "vshn-keycloak-keycloak-e2e-gnf5s",
-          "value": "vshn-keycloak-keycloak-e2e-gnf5s"
+          "text": "vshn-keycloak-widera-testing-t4fzm",
+          "value": "vshn-keycloak-widera-testing-t4fzm"
         },
         "datasource": {
           "type": "prometheus",
@@ -837,6 +849,6 @@
   "timezone": "Europe/Zurich",
   "title": "VSHNKeycloak",
   "uid": "keycloak-dashboard",
-  "version": 18,
+  "version": 27,
   "weekStart": "monday"
 }
