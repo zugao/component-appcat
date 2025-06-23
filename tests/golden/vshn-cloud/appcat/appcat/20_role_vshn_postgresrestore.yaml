@@ -19,7 +19,10 @@ rules:
   - apiGroups:
       - vshn.appcat.vshn.io
     resources:
+      - vshnkeycloaks
+      - xvshnkeycloaks
       - vshnpostgresqls
+      - xvshnpostgresqls
     verbs:
       - get
   - apiGroups:

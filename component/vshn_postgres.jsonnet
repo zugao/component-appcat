@@ -145,7 +145,7 @@ local restoreRole = kube.ClusterRole(restoreRoleName) {
     },
     {
       apiGroups: [ 'vshn.appcat.vshn.io' ],
-      resources: [ 'vshnpostgresqls' ],
+      resources: [ 'vshnkeycloaks', 'xvshnkeycloaks', 'vshnpostgresqls', 'xvshnpostgresqls' ],
       verbs: [ 'get' ],
     },
     {
