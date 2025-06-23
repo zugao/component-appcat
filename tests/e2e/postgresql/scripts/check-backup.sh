@@ -2,10 +2,10 @@
 
 set -e
 
-for ((i = 0 ; i < 10 ; i++ ));
+for ((i = 0 ; i < 40 ; i++ ));
 do
     echo "Waiting for backup to be created"
-    backup=$(kubectl -n "$NAMESPACE" get vshnkeycloakbackups.api.appcat.vshn.io -o json | jq -r '.items[] | .metadata.name')
+    backup=$(kubectl -n "$NAMESPACE" get vshnpostgresbackups.api.appcat.vshn.io -o json | jq -r '.items[] | .metadata.name')
     if [ "$backup" != "" ]; then
         break
     fi
@@ -14,7 +14,7 @@ done
 
 echo "checking backup status"
 
-backup_status=$(kubectl -n "$NAMESPACE" get vshnkeycloakbackups.api.appcat.vshn.io "$backup" -o json | jq -r '.status.databaseBackupStatus.process.status')
+backup_status=$(kubectl -n "$NAMESPACE" get vshnpostgresbackups.api.appcat.vshn.io "$backup" -o json | jq -r '.status.process.status')
 
 while [ "$backup_status" == "Running" ]; do
     backup_status=$(kubectl -n "$NAMESPACE" get vshnpostgresbackups.api.appcat.vshn.io "$backup" -o json | jq -r '.status.process.status')
