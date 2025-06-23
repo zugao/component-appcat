@@ -13,7 +13,7 @@ metadata:
     metadata.appcat.vshn.io/zone: lpg
   labels:
     metadata.appcat.vshn.io/offered: 'true'
-    metadata.appcat.vshn.io/revision: debug-fix_bucket-creds-ref
+    metadata.appcat.vshn.io/revision: debug-change_june_25_updates
     metadata.appcat.vshn.io/serviceID: vshn-mariadb
     name: vshnmariadb.vshn.appcat.vshn.io
   name: vshnmariadb.vshn.appcat.vshn.io
@@ -24,13 +24,13 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat-debug-fix-bucket-creds-ref
+        name: function-appcat-debug-change-june-25-updates
       input:
         apiVersion: v1
         data:
           bucketRegion: rma
           chartRepository: oci://registry-1.docker.io/bitnamicharts/mariadb-galera
-          chartVersion: 14.2.4
+          chartVersion: 14.2.9
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
           defaultPlan: standard-1
@@ -42,7 +42,7 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: docker.io
-          imageTag: fix_bucket-creds-ref
+          imageTag: change_june_25_updates
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           mode: standalone

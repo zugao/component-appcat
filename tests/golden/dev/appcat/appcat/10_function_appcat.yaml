@@ -4,9 +4,23 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '-40'
-  name: function-appcat-debug-fix-bucket-creds-ref
+  name: function-appcat-debug-change-june-25-updates
 spec:
-  package: ghcr.io/vshn/appcat:fix_bucket-creds-ref-func
+  package: ghcr.io/vshn/appcat:change_june_25_updates-func
+  packagePullPolicy: IfNotPresent
+  runtimeConfigRef:
+    name: enable-proxy
+  skipDependencyResolution: true
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '-40'
+  name: function-appcat-v3-47-2-v4-159-2
+spec:
+  package: ghcr.io/vshn/appcat:v4.159.2-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
