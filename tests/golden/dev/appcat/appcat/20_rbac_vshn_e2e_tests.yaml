@@ -120,6 +120,7 @@ rules:
       - api.appcat.vshn.io
     resources:
       - vshnkeycloakbackups
+      - vshnpostgresbackups
     verbs:
       - get
       - list
