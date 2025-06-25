@@ -10,9 +10,10 @@ metadata:
     metadata.appcat.vshn.io/flavor: distributed
     metadata.appcat.vshn.io/plans: '{"standard-1":{"size":{"cpu":"1","disk":"50Gi","enabled":true,"memory":"1Gi"}}}'
     metadata.appcat.vshn.io/product-description: https://products.docs.vshn.ch/products/appcat/minio.html
-    metadata.appcat.vshn.io/zone: rma1
+    metadata.appcat.vshn.io/zone: lpg
   labels:
     metadata.appcat.vshn.io/offered: 'false'
+    metadata.appcat.vshn.io/revision: debug-add_schema-grants
     metadata.appcat.vshn.io/serviceID: vshn-minio
     name: vshnminio.vshn.appcat.vshn.io
   name: vshnminio.vshn.appcat.vshn.io
@@ -23,13 +24,13 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat
+        name: function-appcat-debug-add-schema-grants
       input:
         apiVersion: v1
         data:
-          bucketRegion: ''
+          bucketRegion: rma
           chartRepository: https://charts.min.io
-          chartVersion: 5.0.13
+          chartVersion: 5.4.0
           controlNamespace: syn-appcat-control
           crossplaneNamespace: syn-crossplane
           defaultPlan: standard-1
@@ -41,13 +42,13 @@ spec:
           emailAlertingSmtpUsername: appcat@appuio.cloud
           ignoreNamespaceForBilling: vshn-test
           imageRegistry: ''
-          imageTag: v4.143.0
+          imageTag: add_schema-grants
           isOpenshift: 'false'
           maintenanceSA: helm-based-service-maintenance
           minioChartRepository: https://charts.min.io
-          minioChartVersion: 5.0.13
+          minioChartVersion: 5.4.0
           mode: distributed
-          ocpDefaultAppsDomain: ''
+          ocpDefaultAppsDomain: apps.lab-cloudscale-rma-0.appuio.cloud
           ownerGroup: vshn.appcat.vshn.io
           ownerKind: XVSHNMinio
           ownerVersion: v1
@@ -56,6 +57,7 @@ spec:
           providerEnabled: 'true'
           proxyEndpoint: 172.19.0.1:9443
           quotasEnabled: 'false'
+          releaseManagementEnabled: 'false'
           salesOrder: ''
           serviceID: vshn-minio
           serviceName: minio
