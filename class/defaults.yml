@@ -61,7 +61,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: add/schema-grants
+        tag: webhookEnhancements
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
