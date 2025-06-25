@@ -312,6 +312,7 @@ parameters:
           - secrets
         verbs:
           - get
+          - list
           - create
           - delete
       - apiGroups:
