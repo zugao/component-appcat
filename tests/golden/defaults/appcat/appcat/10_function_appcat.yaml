@@ -4,9 +4,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '-40'
-  name: function-appcat-master-change-june-25-updates
+  name: function-appcat-master-feat-kc-job
 spec:
-  package: ghcr.io/vshn/appcat:change_june_25_updates-func
+  package: ghcr.io/vshn/appcat:feat_kc-job-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: function-appcat
