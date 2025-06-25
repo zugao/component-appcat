@@ -61,7 +61,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: vshn/appcat
-        tag: add/schema-grants
+        tag: fix/bucket-creds-ref
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
@@ -312,6 +312,7 @@ parameters:
           - secrets
         verbs:
           - get
+          - list
           - create
           - delete
       - apiGroups:

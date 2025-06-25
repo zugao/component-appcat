@@ -32,7 +32,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-          image: ghcr.io/vshn/appcat:add_schema-grants
+          image: ghcr.io/vshn/appcat:fix_bucket-creds-ref
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
