@@ -24,6 +24,7 @@ spec:
       relativePath: /
       serviceLevel: besteffort
       useExternalPostgreSQL: true
+      existingPGConnectionSecret: nextcloud
     size:
       plan: standard-2
   writeConnectionSecretToRef:
