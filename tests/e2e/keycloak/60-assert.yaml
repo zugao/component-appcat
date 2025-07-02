@@ -1,0 +1,32 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+timeout: 600
+---
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNKeycloak
+metadata:
+  name: keycloak-e2e-restore
+  finalizers:
+  - finalizer.apiextensions.crossplane.io
+spec:
+  compositeDeletePolicy: Background
+  compositionRef:
+    name: vshnkeycloak.vshn.appcat.vshn.io
+  parameters:
+    restore:
+      claimName: keycloak-e2e
+    security:
+      deletionProtection: false
+    backup:
+      schedule: '0 22 * * *'
+    service:
+      version: "26"
+      fqdn: keycloak-e2e-restore.example.com
+    size:
+      plan: standard-2
+  writeConnectionSecretToRef:
+    name: keycloak-e2e-restore
+status:
+  conditions:
+    - status: "True"
+    - status: "True"

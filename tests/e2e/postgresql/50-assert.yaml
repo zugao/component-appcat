@@ -1,0 +1,42 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+timeout: 600
+---
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNPostgreSQL
+metadata:
+  name: postgresql-e2e-test-restore
+  finalizers:
+  - finalizer.apiextensions.crossplane.io
+spec:
+  compositeDeletePolicy: Background
+  compositionRef:
+    name: vshnpostgres.vshn.appcat.vshn.io
+  parameters:
+    restore:
+      claimName: postgresql-e2e-test
+    security:
+      deletionProtection: false
+    backup:
+      schedule: '0 22 * * *'
+    service:
+      majorVersion: "15"
+    size:
+      plan: standard-2
+  writeConnectionSecretToRef:
+    name: postgresql-e2e-test-restore-creds
+status:
+  conditions:
+    - status: "True"
+    - status: "True"
+
+---
+apiVersion: v1
+kind: Secret
+type: connection.crossplane.io/v1alpha1
+metadata:
+  name: postgresql-e2e-test-restore-creds
+  ownerReferences:
+    - apiVersion: vshn.appcat.vshn.io/v1
+      kind: VSHNPostgreSQL
+      name: postgresql-e2e-test-restore

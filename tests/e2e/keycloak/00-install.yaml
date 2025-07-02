@@ -11,3 +11,16 @@ spec:
       deletionProtection: false
   writeConnectionSecretToRef:
     name: keycloak-e2e
+---
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNKeycloak
+metadata:
+  name: keycloak-e2e-restore
+spec:
+  parameters:
+    service:
+      fqdn: keycloak-e2e-restore.example.com
+    security:
+      deletionProtection: false
+  writeConnectionSecretToRef:
+    name: keycloak-e2e-restore

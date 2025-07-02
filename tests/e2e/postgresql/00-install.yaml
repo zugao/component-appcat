@@ -13,3 +13,19 @@ spec:
       plan: standard-2
   writeConnectionSecretToRef:
     name: postgresql-e2e-test-creds
+---
+apiVersion: vshn.appcat.vshn.io/v1
+kind: VSHNPostgreSQL
+metadata:
+  name: postgresql-e2e-test-restore
+spec:
+  parameters:
+    security:
+      deletionProtection: false
+    service:
+      vacuumEnabled: true
+      repackEnabled: true
+    size:
+      plan: standard-2
+  writeConnectionSecretToRef:
+    name: postgresql-e2e-test-restore-creds

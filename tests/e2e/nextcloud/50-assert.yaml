@@ -23,6 +23,7 @@ spec:
         instances: 1
       relativePath: /
       serviceLevel: besteffort
+      useExternalPostgreSQL: true
     size:
       plan: standard-2
   writeConnectionSecretToRef:

@@ -7,6 +7,7 @@ spec:
     service:
       fqdn:
         - nextcloud-e2e.example.com
+      useExternalPostgreSQL: true
     security:
       deletionProtection: false
   writeConnectionSecretToRef:
