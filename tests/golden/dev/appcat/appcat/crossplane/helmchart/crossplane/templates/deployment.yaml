@@ -26,7 +26,7 @@ spec:
   template:
     metadata:
       annotations:
-        function-revision: fix/broken_mount
+        function-revision: v4.163.1
       labels:
         app: crossplane
         app.kubernetes.io/component: cloud-infrastructure-controller

@@ -21,7 +21,7 @@ spec:
   mode: Pipeline
   pipeline:
     - functionRef:
-        name: function-appcat-debug-fix-broken-mount
+        name: function-appcat-debug-v4-163-1
       input:
         apiVersion: v1
         data:
