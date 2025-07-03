@@ -27,7 +27,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/vshn/appcat:fix_cert_perm_nextcloud
+          image: ghcr.io/vshn/appcat:v4.163.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

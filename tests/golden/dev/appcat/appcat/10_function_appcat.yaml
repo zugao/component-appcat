@@ -4,9 +4,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '-40'
-  name: function-appcat-debug-fix-cert-perm-nextcloud
+  name: function-appcat-debug-v4-163-3
 spec:
-  package: ghcr.io/vshn/appcat:fix_cert_perm_nextcloud-func
+  package: ghcr.io/vshn/appcat:v4.163.3-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
