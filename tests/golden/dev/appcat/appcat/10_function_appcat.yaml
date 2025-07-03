@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '-40'
   name: function-appcat-debug-v4-163-3
 spec:
-  package: ghcr.io/vshn/appcat:v4.163.3-func
+  package: ghcr.io/vshn/appcat:v4.163.2-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
