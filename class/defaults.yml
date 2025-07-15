@@ -60,7 +60,7 @@ parameters:
         tag: v0.3.1
       appcat:
         registry: ghcr.io
-        repository: vshn/appcat
+        repository: zugao/appcat
         tag: another-pr
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
