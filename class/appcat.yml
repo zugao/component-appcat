@@ -3,7 +3,7 @@ parameters:
     dependencies:
       - type: git
         output_path: ${_base_directory}/dependencies/appcat/manifests/${appcat:images:appcat:tag}
-        source: https://github.com/vshn/appcat.git
+        source: https://github.com/zugao/appcat.git
         ref: ${appcat:images:appcat:tag}
       - type: git
         source: https://github.com/vshn/statefulset-resize-controller
