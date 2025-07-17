@@ -4,9 +4,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '-40'
-  name: function-appcat-debug-a119e9be04299ebe385a0e62ec87b92ad8640605
+  name: function-appcat-debug-a9f569850619664dd4ae5ee541f8d0706fcfcf29
 spec:
-  package: ghcr.io/zugao/appcat:a119e9be04299ebe385a0e62ec87b92ad8640605-func
+  package: ghcr.io/zugao/appcat:a9f569850619664dd4ae5ee541f8d0706fcfcf29-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
