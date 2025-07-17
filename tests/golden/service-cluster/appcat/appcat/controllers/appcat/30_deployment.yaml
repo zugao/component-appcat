@@ -32,7 +32,7 @@ spec:
               value: syn-appcat
             - name: CONTROL_PLANE_KUBECONFIG
               value: /config/config
-          image: ghcr.io/zugao/appcat:test-pr-2
+          image: ghcr.io/zugao/appcat:a9f569850619664dd4ae5ee541f8d0706fcfcf29
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
