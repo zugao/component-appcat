@@ -31,7 +31,7 @@ spec:
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
-          image: ghcr.io/zugao/appcat:a119e9be04299ebe385a0e62ec87b92ad8640605
+          image: ghcr.io/zugao/appcat:test-pr-2
           livenessProbe:
             failureThreshold: 3
             httpGet:
