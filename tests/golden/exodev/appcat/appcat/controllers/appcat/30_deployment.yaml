@@ -27,7 +27,7 @@ spec:
           env:
             - name: PLANS_NAMESPACE
               value: syn-appcat
-          image: ghcr.io/zugao/appcat:master
+          image: ghcr.io/zugao/appcat:test-dep
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

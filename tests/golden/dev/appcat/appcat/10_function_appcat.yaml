@@ -4,9 +4,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: '-40'
-  name: function-appcat-debug-master
+  name: function-appcat-debug-test-dep
 spec:
-  package: ghcr.io/zugao/appcat:master-func
+  package: ghcr.io/zugao/appcat:test-dep-func
   packagePullPolicy: IfNotPresent
   runtimeConfigRef:
     name: enable-proxy
