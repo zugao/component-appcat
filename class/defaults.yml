@@ -61,7 +61,7 @@ parameters:
       appcat:
         registry: ghcr.io
         repository: zugao/appcat
-        tag: 79238d3e9d58bbda5744649ad13977f221c1d4b1
+        tag: v4.164.0
       functionAppcat:
         registry: ${appcat:images:appcat:registry}
         repository: ${appcat:images:appcat:repository}
